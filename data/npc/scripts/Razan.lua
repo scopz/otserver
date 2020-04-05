@@ -268,7 +268,7 @@ elseif msgcontains(msg, 'create food') or msgcontains(msg, 'Create food') then
 	
 --System that does the job after confirm spell--
 elseif talk_state == 8754 and msgcontains(msg, 'yes') then
-if getPlayerVocation(cid) == 3 or getPlayerVocation(cid) == 4 or getPlayerVocation(cid) == 7 or getPlayerVocation(cid) == 8 then
+if isPaladin(cid) or isKnight(cid) then
 	if isInArray(spellvoc, getPlayerVocation(cid)) then
 		if getPlayerMagLevel(cid) >= spellmagiclevel then
 			if not getPlayerLearnedInstantSpell(cid, spellname) then
@@ -291,8 +291,8 @@ if getPlayerVocation(cid) == 3 or getPlayerVocation(cid) == 4 or getPlayerVocati
 		end
 	end
 else
-npcHandler:say("Sorry, I only teach spells to knights and paladins.", 1)
-talk_state = 0
+	npcHandler:say("Sorry, I only teach spells to knights and paladins.", 1)
+	talk_state = 0
 end
 elseif talk_state == 8754 and msgcontains(msg, '') then
 npcHandler:say("Maybe next time.", 1)

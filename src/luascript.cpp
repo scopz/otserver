@@ -41,6 +41,7 @@
 #include "movement.h"
 #include "tools.h"
 #include "guild.h"
+#include "vocation.h"
 #include <string>
 #include <iostream>
 #include <sstream>
@@ -52,6 +53,7 @@ extern ConfigManager g_config;
 extern MoveEvents* g_moveEvents;
 extern Spells* g_spells;
 extern Guilds g_guilds;
+extern Vocations g_vocations;
 
 enum{
 	EVENT_ID_LOADING = 1,
@@ -1183,6 +1185,15 @@ void LuaScriptInterface::registerFunctions()
 
 	//getConfigValue(key)
 	lua_register(m_luaState, "getConfigValue", LuaScriptInterface::luaGetConfigValue);
+
+	//getPromotedVocation(voc)
+	lua_register(m_luaState, "getPromotedVocation", LuaScriptInterface::luaGetPromotedVocation);
+
+	//getUnpromotedVocation(voc)
+	lua_register(m_luaState, "getUnpromotedVocation", LuaScriptInterface::luaGetUnpromotedVocation);
+
+	//getBaseVocation(voc)
+	lua_register(m_luaState, "getBaseVocation", LuaScriptInterface::luaGetBaseVocation);
 
 	//getPlayerFood(cid)
 	lua_register(m_luaState, "getPlayerFood", LuaScriptInterface::luaGetPlayerFood);
@@ -9678,5 +9689,53 @@ int LuaScriptInterface::luaDoPlayerOpenChannel(lua_State* L)
 
 	reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
 	lua_pushboolean(L, false);
+	return 1;
+}
+int LuaScriptInterface::luaGetPromotedVocation(lua_State* L)
+{
+	//getPromotedVocation(voc)
+	uint32_t voc = popNumber(L);
+
+	Vocation* vocation;
+	if (g_vocations.getVocation(voc, vocation)) {
+		lua_pushnumber(L, vocation->getPromotion());
+	} else {
+		reportErrorFunc(getErrorDesc(LUA_ERROR_VOCATION_NOT_FOUND));
+		lua_pushnumber(L, 0);
+	}
+
+	return 1;
+}
+
+int LuaScriptInterface::luaGetUnpromotedVocation(lua_State* L)
+{
+	//getUnpromotedVocation(voc)
+	uint32_t voc = popNumber(L);
+
+	uint32_t unpromoted;
+	if (g_vocations.getUnpromotedVocation(voc, unpromoted)) {
+		lua_pushnumber(L, unpromoted);
+
+	} else {
+		reportErrorFunc(getErrorDesc(LUA_ERROR_VOCATION_NOT_FOUND));
+		lua_pushnumber(L, 0);
+	}
+
+	return 1;
+}
+
+int LuaScriptInterface::luaGetBaseVocation(lua_State* L)
+{
+	//getBaseVocation(voc)
+	uint32_t voc = popNumber(L);
+
+	Vocation* vocation;
+	if (g_vocations.getVocation(voc, vocation)) {
+		lua_pushnumber(L, vocation->getBaseVocation());
+	} else {
+		reportErrorFunc(getErrorDesc(LUA_ERROR_VOCATION_NOT_FOUND));
+		lua_pushnumber(L, 0);
+	}
+	
 	return 1;
 }

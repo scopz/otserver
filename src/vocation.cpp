@@ -66,6 +66,10 @@ bool Vocations::loadFromXml(const std::string& datadir)
 				xmlNodePtr skillNode;
 				if(readXMLInteger(p, "id", intVal)){
 					voc_id = intVal;
+
+					voc->baseVocation = voc_id;
+					voc->promotesTo = 0;
+
 					if(readXMLString(p, "name", str)){
 						voc->name = str;
 					}
@@ -164,6 +168,14 @@ bool Vocations::loadFromXml(const std::string& datadir)
 								voc->armorDefense = floatVal;
 							}
 						}
+						else if(xmlStrcmp(skillNode->name, (const xmlChar*)"evolution") == 0){
+							if(readXMLInteger(skillNode, "base", intVal)){
+								voc->baseVocation = intVal;
+							}
+							if(readXMLInteger(skillNode, "promotes", intVal)){
+								voc->promotesTo = intVal;
+							}
+						}
 						skillNode = skillNode->next;
 					}
 
@@ -183,7 +195,7 @@ bool Vocations::loadFromXml(const std::string& datadir)
 	return true;
 }
 
-bool Vocations::getVocation(const uint32_t& vocationId, Vocation*& vocation)
+bool Vocations::getVocation(const uint32_t vocationId, Vocation*& vocation)
 {
 	VocationsMap::const_iterator it = vocationsMap.find(vocationId);
 	if(it != vocationsMap.end()){
@@ -199,6 +211,20 @@ bool Vocations::getVocationId(const std::string& name, int32_t& vocationId) cons
 	for(VocationsMap::const_iterator it = vocationsMap.begin(); it != vocationsMap.end(); ++it){
 		if(boost::algorithm::iequals(it->second->name, name)){
 			vocationId = it->first;
+			return true;
+		}
+	}
+	return false;
+}
+
+bool Vocations::getUnpromotedVocation(const uint32_t vocationId, uint32_t& unpromoted)
+{
+	bool found = false;
+	Vocation* vocation;
+	for(VocationsMap::iterator it = vocationsMap.begin(); it != vocationsMap.end(); ++it){
+		vocation = it->second;
+		if (vocation->getPromotion() == vocationId) {
+			unpromoted = it->first;
 			return true;
 		}
 	}

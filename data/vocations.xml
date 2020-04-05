@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <vocations>
-	<vocation id="0" name="None" description="none" gaincap="5" gainhp="5" gainmana="5" gainhpticks="6" gainhpamount="1" gainmanaticks="6" gainmanaamount="2" maxsoul="100" gainsoulticks="120" manamultiplier="4.0" attackspeed="2000">
+	<vocation id="0" name="None" description="none" gaincap="5" gainhp="5" gainmana="5" gainhpticks="6" gainhpamount="1"
+			gainmanaticks="6" gainmanaamount="2" maxsoul="100" gainsoulticks="120" manamultiplier="4.0" attackspeed="2000">
 		<damage magicDamage="1.0" wandDamage="1.0" healingDamage="1.0" />
 		<meleeDamage sword="1.0" axe="1.0" club="1.0" dist="1.0" fist="1.0" />
 		<defense baseDefense="1.0" armorDefense="1.0" />
@@ -12,7 +13,8 @@
 		<skill id="5" base="100" multiplier="1.5"/>
 		<skill id="6" base="20" multiplier="1.1"/>
 	</vocation>
-	<vocation id="1" name="Sorcerer" description="a sorcerer" gaincap="10" gainhp="5" gainmana="30" gainhpticks="6" gainhpamount="1" gainmanaticks="3" gainmanaamount="2" maxsoul="100" gainsoulticks="120" manamultiplier="1.1" attackspeed="2000">
+	<vocation id="1" name="Sorcerer" description="a sorcerer" gaincap="10" gainhp="5" gainmana="30" gainhpticks="6" gainhpamount="1"
+			gainmanaticks="3" gainmanaamount="2" maxsoul="100" gainsoulticks="120" manamultiplier="1.1" attackspeed="2000">
 		<damage magicDamage="1.0" wandDamage="1.0" healingDamage="1.0" />
 		<meleeDamage sword="1.0" axe="1.0" club="1.0" dist="1.0" fist="1.0" />
 		<defense baseDefense="1.0" armorDefense="1.0" />
@@ -23,8 +25,10 @@
 		<skill id="4" base="30" multiplier="2.0"/>
 		<skill id="5" base="100" multiplier="1.5"/>
 		<skill id="6" base="20" multiplier="1.1"/>
+		<evolution promotes="5"/>
 	</vocation>
-	<vocation id="2" name="Druid" description="a druid" gaincap="10" gainhp="5" gainmana="30" gainhpticks="6" gainhpamount="1" gainmanaticks="3" gainmanaamount="2" maxsoul="100" gainsoulticks="120" manamultiplier="1.1" attackspeed="2000">
+	<vocation id="2" name="Druid" description="a druid" gaincap="10" gainhp="5" gainmana="30" gainhpticks="6" gainhpamount="1"
+			gainmanaticks="3" gainmanaamount="2" maxsoul="100" gainsoulticks="120" manamultiplier="1.1" attackspeed="2000">
 		<damage magicDamage="1.0" wandDamage="1.0" healingDamage="1.0" />
 		<meleeDamage sword="1.0" axe="1.0" club="1.0" dist="1.0" fist="1.0" />
 		<defense baseDefense="1.0" armorDefense="1.0" />
@@ -35,8 +39,10 @@
 		<skill id="4" base="30" multiplier="1.8"/>
 		<skill id="5" base="100" multiplier="1.5"/>
 		<skill id="6" base="20" multiplier="1.1"/>
+		<evolution promotes="6"/>
 	</vocation>
-	<vocation id="3" name="Paladin" description="a paladin" gaincap="20" gainhp="10" gainmana="15" gainhpticks="4" gainhpamount="1" gainmanaticks="4" gainmanaamount="2" maxsoul="100" gainsoulticks="120" manamultiplier="1.4" attackspeed="2000">
+	<vocation id="3" name="Paladin" description="a paladin" gaincap="20" gainhp="10" gainmana="15" gainhpticks="4" gainhpamount="1"
+			gainmanaticks="4" gainmanaamount="2" maxsoul="100" gainsoulticks="120" manamultiplier="1.4" attackspeed="2000">
 		<damage magicDamage="1.0" wandDamage="1.0" healingDamage="1.0" />
 		<meleeDamage sword="1.0" axe="1.0" club="1.0" dist="1.0" fist="1.0" />
 		<defense baseDefense="1.0" armorDefense="1.0" />
@@ -47,8 +53,10 @@
 		<skill id="4" base="30" multiplier="1.1"/>
 		<skill id="5" base="100" multiplier="1.1"/>
 		<skill id="6" base="20" multiplier="1.1"/>
+		<evolution promotes="7"/>
 	</vocation>
-	<vocation id="4" name="Knight" description="a knight" gaincap="25" gainhp="15" gainmana="5" gainhpticks="3" gainhpamount="1" gainmanaticks="6" gainmanaamount="2" maxsoul="100" gainsoulticks="120" manamultiplier="3.0" attackspeed="2000">
+	<vocation id="4" name="Knight" description="a knight" gaincap="25" gainhp="15" gainmana="5" gainhpticks="3" gainhpamount="1"
+			gainmanaticks="6" gainmanaamount="2" maxsoul="100" gainsoulticks="120" manamultiplier="3.0" attackspeed="2000">
 		<damage magicDamage="1.0" wandDamage="1.0" healingDamage="1.0" />
 		<meleeDamage sword="1.0" axe="1.0" club="1.0" dist="1.0" fist="1.0" />
 		<defense baseDefense="1.0" armorDefense="1.0" />
@@ -59,8 +67,10 @@
 		<skill id="4" base="30" multiplier="1.4"/>
 		<skill id="5" base="100" multiplier="1.1"/>
 		<skill id="6" base="20" multiplier="1.1"/>
+		<evolution promotes="8"/>
 	</vocation>
-	<vocation id="5" name="Master Sorcerer" description="a master sorcerer" gaincap="10" gainhp="5" gainmana="30" gainhpticks="6" gainhpamount="1" gainmanaticks="2" gainmanaamount="2" maxsoul="200" gainsoulticks="15" manamultiplier="1.1" attackspeed="2000">
+	<vocation id="5" name="Master Sorcerer" description="a master sorcerer" gaincap="10" gainhp="5" gainmana="30" gainhpticks="6" gainhpamount="1"
+			gainmanaticks="2" gainmanaamount="2" maxsoul="200" gainsoulticks="15" manamultiplier="1.1" attackspeed="2000">
 		<damage magicDamage="1.0" wandDamage="1.0" healingDamage="1.0" />
 		<meleeDamage sword="1.0" axe="1.0" club="1.0" dist="1.0" fist="1.0" />
 		<defense baseDefense="1.0" armorDefense="1.0" />
@@ -71,8 +81,10 @@
 		<skill id="4" base="30" multiplier="2.0"/>
 		<skill id="5" base="100" multiplier="1.5"/>
 		<skill id="6" base="20" multiplier="1.1"/>
+		<evolution base="1"/>
 	</vocation>
-	<vocation id="6" name="Elder Druid" description="an elder druid" gaincap="10" gainhp="5" gainmana="30" gainhpticks="6" gainhpamount="1" gainmanaticks="2" gainmanaamount="2" maxsoul="200" gainsoulticks="15" manamultiplier="1.1" attackspeed="2000">
+	<vocation id="6" name="Elder Druid" description="an elder druid" gaincap="10" gainhp="5" gainmana="30" gainhpticks="6" gainhpamount="1"
+			gainmanaticks="2" gainmanaamount="2" maxsoul="200" gainsoulticks="15" manamultiplier="1.1" attackspeed="2000">
 		<damage magicDamage="1.0" wandDamage="1.0" healingDamage="1.0" />
 		<meleeDamage sword="1.0" axe="1.0" club="1.0" dist="1.0" fist="1.0" />
 		<defense baseDefense="1.0" armorDefense="1.0" />
@@ -83,8 +95,10 @@
 		<skill id="4" base="30" multiplier="1.8"/>
 		<skill id="5" base="100" multiplier="1.5"/>
 		<skill id="6" base="20" multiplier="1.1"/>
+		<evolution base="2"/>
 	</vocation>
-	<vocation id="7" name="Royal Paladin" description="a royal paladin" gaincap="20" gainhp="10" gainmana="15" gainhpticks="3" gainhpamount="1" gainmanaticks="3" gainmanaamount="2" maxsoul="200" gainsoulticks="15" manamultiplier="1.4" attackspeed="2000">
+	<vocation id="7" name="Royal Paladin" description="a royal paladin" gaincap="20" gainhp="10" gainmana="15" gainhpticks="3" gainhpamount="1"
+			gainmanaticks="3" gainmanaamount="2" maxsoul="200" gainsoulticks="15" manamultiplier="1.4" attackspeed="2000">
 		<damage magicDamage="1.0" wandDamage="1.0" healingDamage="1.0" />
 		<meleeDamage sword="1.0" axe="1.0" club="1.0" dist="1.0" fist="1.0" />
 		<defense baseDefense="1.0" armorDefense="1.0" />
@@ -95,8 +109,10 @@
 		<skill id="4" base="30" multiplier="1.1"/>
 		<skill id="5" base="100" multiplier="1.1"/>
 		<skill id="6" base="20" multiplier="1.1"/>
+		<evolution base="3"/>
 	</vocation>
-	<vocation id="8" name="Elite Knight" description="an elite knight" gaincap="25" gainhp="15" gainmana="5" gainhpticks="2" gainhpamount="1" gainmanaticks="6" gainmanaamount="2" maxsoul="200" gainsoulticks="15" manamultiplier="3.0" attackspeed="2000">
+	<vocation id="8" name="Elite Knight" description="an elite knight" gaincap="25" gainhp="15" gainmana="5" gainhpticks="2" gainhpamount="1"
+			gainmanaticks="6" gainmanaamount="2" maxsoul="200" gainsoulticks="15" manamultiplier="3.0" attackspeed="2000">
 		<damage magicDamage="1.0" wandDamage="1.0" healingDamage="1.0" />
 		<meleeDamage sword="1.0" axe="1.0" club="1.0" dist="1.0" fist="1.0" />
 		<defense baseDefense="1.0" armorDefense="1.0" />
@@ -107,5 +123,6 @@
 		<skill id="4" base="30" multiplier="1.4"/>
 		<skill id="5" base="100" multiplier="1.1"/>
 		<skill id="6" base="20" multiplier="1.1"/>
+		<evolution base="4"/>
 	</vocation>
 </vocations>

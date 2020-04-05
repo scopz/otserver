@@ -37,11 +37,6 @@ function onUse(cid, item, fromPosition, itemEx, toPosition)
 	player4pos = {x=32677, y=32089, z=8, stackpos=253} -- Where player4 will stand before pressing lever
 	player4 = getThingfromPos(player4pos)
  
-	knightvoc = getPlayerVocation(player1.uid)   -- The vocation of player1
-	paladinvoc = getPlayerVocation(player2.uid)  -- The vocation of player2
-	druidvoc = getPlayerVocation(player3.uid)    -- The vocation of player3
-	sorcerervoc = getPlayerVocation(player4.uid) -- The vocation of player4
- 
 	nplayer1pos = {x=32672, y=32070, z=8} -- The new position of player1
 	nplayer2pos = {x=32671, y=32070, z=8} -- The new position of player2
 	nplayer3pos = {x=32672, y=32069, z=8} -- The new position of player3
@@ -55,11 +50,8 @@ function onUse(cid, item, fromPosition, itemEx, toPosition)
  
  
 	-- Check if all players has the correct vocation
-	if knightvoc == 4 or knightvoc == 8 and
-	paladinvoc == 3 or paladinvoc == 7 and
-	druidvoc == 2 or druidvoc == 6 and
-	sorcerervoc == 1 or sorcerervoc == 5 then	
- 
+	if isKnight(player1.uid) and isPaladin(player2.uid) and
+	isDruid(player3.uid) and isSorcerer(player4.uid) then
  
 	-- Check if all players are standing on the correct positions
 	if player1.itemid > 0 and player2.itemid > 0 and player3.itemid > 0 and player4.itemid > 0 then

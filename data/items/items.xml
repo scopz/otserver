@@ -4756,12 +4756,12 @@
 		<attribute key="weaponType" value="axe"/>
 	</item>
 	<item id="2389" article="a" name="spear" plural="spears">
-		<attribute key="weight" value="2000"/>
+		<attribute key="weight" value="1000"/>
 		<attribute key="attack" value="25"/>
 		<attribute key="weaponType" value="distance"/>
 		<attribute key="shootType" value="spear"/>
-		<attribute key="range" value="3"/>
-		<attribute key="breakChance" value="3"/>
+		<attribute key="range" value="7"/>
+		<attribute key="breakChance" value="0"/>
 		<attribute key="ammoAction" value="move"/>
 	</item>
 	<item id="2390" article="a" name="magic longsword">
@@ -9452,11 +9452,13 @@
 		<attribute key="slotType" value="two-handed"/>
 	</item>
 	<item id="3965" article="a" name="hunting spear">
-		<attribute key="weight" value="8000"/>
-		<attribute key="defense" value="8"/>
-		<attribute key="attack" value="18"/>
-		<attribute key="weaponType" value="axe"/>
-		<attribute key="slotType" value="two-handed"/>
+		<attribute key="weight" value="2200"/>
+		<attribute key="attack" value="32"/>
+		<attribute key="weaponType" value="distance"/>
+		<attribute key="shootType" value="spear"/>
+		<attribute key="range" value="3"/>
+		<attribute key="breakChance" value="5"/>
+		<attribute key="ammoAction" value="moveback"/>
 	</item>
 	<item id="3966" article="a" name="banana staff">
 		<attribute key="weight" value="5000"/>

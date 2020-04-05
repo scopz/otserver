@@ -78,7 +78,7 @@ if(Modules == nil) then
 	
 	--Usage:
 		-- local node1 = keywordHandler:addKeyword({'promot'}, StdModule.say, {npcHandler = npcHandler, text = 'I can promote you for 20000 gold coins. Do you want me to promote you?'})
-		-- 		node1:addChildKeyword({'yes'}, StdModule.promotePlayer, {npcHandler = npcHandler, promotions = {[1] = 5, [2] = 6, [3] = 7, [4] = 8}, cost = 20000, level = 20}, text = 'Congratulations! You are now promoted.')
+		-- 		node1:addChildKeyword({'yes'}, StdModule.promotePlayer, {npcHandler = npcHandler, cost = 20000, level = 20}, text = 'Congratulations! You are now promoted.')
 		-- 		node1:addChildKeyword({'no'}, StdModule.say, {npcHandler = npcHandler, text = 'Allright then. Come back when you are ready.'}, reset = true)
 	function StdModule.promotePlayer(cid, message, keywords, parameters, node)
 		local npcHandler = parameters.npcHandler
@@ -90,7 +90,11 @@ if(Modules == nil) then
 		end
 		
 		local oldVoc = getPlayerVocation(cid)
-		if(parameters.promotions[oldVoc] == oldVoc or parameters.promotions[oldVoc] == nil) then
+		local prom = getPromotedVocation(oldVoc);
+
+		if oldVoc == 0 then
+			npcHandler:say('You can\'t promote!')
+		elseif(prom == 0) then
 			npcHandler:say('You are already promoted!')
 		elseif isPlayerPremiumCallback(cid) == false then
 			npcHandler:say('You need a premium account in order to promote.')
@@ -99,7 +103,7 @@ if(Modules == nil) then
 		elseif(doPlayerRemoveMoney(cid, parameters.cost) ~= true) then
 			npcHandler:say('You do not have enough money!')
 		else
-			doPlayerSetVocation(cid, parameters.promotions[oldVoc])
+			doPlayerSetVocation(cid, prom)
 			doSendMagicEffect(getCreaturePosition(cid), CONST_ME_MAGIC_BLUE)
 			npcHandler:say(parameters.text)
 		end

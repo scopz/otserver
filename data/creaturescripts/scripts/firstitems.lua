@@ -35,8 +35,8 @@ function onLogin(cid)
 		}
 	}
 	if not (lastLogin ~= 0) then
-		if getPlayerVocation(cid) < 11 and getPlayerVocation(cid) > 0 then
-			local common = config.voc_items[getPlayerVocation(cid)]
+		if not isNoneVocation(cid) then
+			local common = config.voc_items[getBaseVocation(getPlayerVocation(cid))]
 			if common ~= nil then
 				for _, v in ipairs(common) do
 					doPlayerAddItem(cid, v[1], v[2] or 1)
@@ -61,13 +61,13 @@ function onLogin(cid)
 			local weapons = config.knight_weapons
 			if weapons ~= nil then
 				for _, w in ipairs(weapons) do
-					if getPlayerVocation(cid) == 4 then
+					if isKnight(cid) then
 						doAddContainerItem(bp, w[1], w[2] or 1)
 					end
 				end
 			end
 			
-		elseif getPlayerVocation(cid) == 0 then 
+		else
 			if (getPlayerSex(cid) == 0) then
 				doPlayerAddItem(cid, 2651, 1)
 			else

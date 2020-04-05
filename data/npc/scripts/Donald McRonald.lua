@@ -30,7 +30,7 @@ function onThink()				npcHandler:onThink()					end
 	end
 
 function greetCallback(cid)
-	if getPlayerVocation(cid) == 2 or getPlayerVocation(cid) == 6 then
+	if isDruid(cid) then
 	npcHandler:setMessage(MESSAGE_GREET, "Hello, Druid ".. getPlayerName(cid) .."!")
 	return true
 	else
@@ -76,7 +76,7 @@ function creatureSayCallback(cid, type, msg)
 	end
 	
 if msgcontains(msg, 'bye') or msgcontains(msg, 'farewell') then
-	if getPlayerVocation(cid) == 2 or getPlayerVocation(cid) == 6 then
+	if isDruid(cid) then
 	npcHandler:say("May Crunor bless you, Druid ".. getPlayerName(cid) .."!", 1)
 	else
 	npcHandler:say("Yes, bye!", 1)
@@ -86,63 +86,63 @@ if msgcontains(msg, 'bye') or msgcontains(msg, 'farewell') then
 	npcHandler:resetNpc()
 			
 elseif msgcontains(msg, 'job') then
-	if getPlayerVocation(cid) == 2 or getPlayerVocation(cid) == 6 then
+	if isDruid(cid) then
 	npcHandler:say("My wife and I run this farm as good as we can.", 1)
 	else
 	npcHandler:say("I run a farm, what else?!", 1)
 	end
 
 elseif msgcontains(msg, 'wife') then
-	if getPlayerVocation(cid) == 2 or getPlayerVocation(cid) == 6 then
+	if isDruid(cid) then
 	npcHandler:say("Sherry is my beloved wife.", 1)
 	else
 	npcHandler:say("Sherry is my wife.", 1)
 	end
 
 elseif msgcontains(msg, 'donald') then
-	if getPlayerVocation(cid) == 2 or getPlayerVocation(cid) == 6 then
+	if isDruid(cid) then
 	npcHandler:say("I was named Donald, like my grandfather.", 1)
 	else
 	npcHandler:say("I am Donald.", 1)
 	end
 
 elseif msgcontains(msg, 'farm') then
-	if getPlayerVocation(cid) == 2 or getPlayerVocation(cid) == 6 then
+	if isDruid(cid) then
 	npcHandler:say("It's a hard but rewarding task to run this farm.", 1)
 	else
 	npcHandler:say("It is my farm, yes.", 1)
 	end
 
 elseif msgcontains(msg, 'time') then
-	if getPlayerVocation(cid) == 2 or getPlayerVocation(cid) == 6 then
+	if isDruid(cid) then
 	npcHandler:say("My name is Donald McRonald, noble druid.", 1)
 	else
 	npcHandler:say("Donald McRonald.", 1)
 	end
 
 elseif msgcontains(msg, 'time') then
-	if getPlayerVocation(cid) == 2 or getPlayerVocation(cid) == 6 then
+	if isDruid(cid) then
 	npcHandler:say("Unfortunately I can't help you with that, noble druid.", 1)
 	else
 	npcHandler:say("Who cares?", 1)
 	end
 	
 elseif msgcontains(msg, 'muriel') then
-	if getPlayerVocation(cid) == 1 or getPlayerVocation(cid) == 5 then
+	if isSorcerer(cid) then
 	npcHandler:say("I dont trust sorcerers like you.", 1)
 	else
 	npcHandler:say("I dont trust sorcerers.", 1)
 	end	
 	
 elseif msgcontains(msg, 'gregor') then
-	if getPlayerVocation(cid) == 4 or getPlayerVocation(cid) == 8 then
+	if isKnight(cid) then
 	npcHandler:say("Knights like you always feel superior to us farmers.", 1)
 	else
 	npcHandler:say("Knights always feel superior to us farmers.", 1)
 	end	
 	
 elseif msgcontains(msg, 'marvik') then
-	if getPlayerVocation(cid) == 2 or getPlayerVocation(cid) == 6 then
+	if isDruid(cid) then
 	npcHandler:say("Druids like you are a great help for us, they know much about nature.", 1)
 	else
 	npcHandler:say("Druids are a great help for us, they know much about nature.", 1)

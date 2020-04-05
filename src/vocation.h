@@ -67,6 +67,8 @@ public:
 	float getHealingBaseDamage() const {return healingBaseDamage;};
 	float getBaseDefense() const {return baseDefense;};
 	float getArmorDefense() const {return armorDefense;};
+	uint32_t getPromotion() const {return promotesTo;};
+	uint32_t getBaseVocation() const {return baseVocation;};
 
 	void debugVocation();
 
@@ -103,6 +105,9 @@ protected:
 	float baseDefense;
 	float armorDefense;
 
+	uint32_t promotesTo;
+	uint32_t baseVocation;
+
 	typedef std::map<uint32_t, uint64_t> manaCacheMap;
 	manaCacheMap cacheMana;
 
@@ -118,8 +123,10 @@ public:
 	~Vocations();
 
 	bool loadFromXml(const std::string& datadir);
-	bool getVocation(const uint32_t& vocationId, Vocation*& vocation);
+	bool getVocation(const uint32_t vocationId, Vocation*& vocation);
 	bool getVocationId(const std::string& name, int32_t& vocationId) const;
+
+	bool getUnpromotedVocation(const uint32_t vocationId, uint32_t& unpromoted);
 
 private:
 	typedef std::map<uint32_t, Vocation*> VocationsMap;

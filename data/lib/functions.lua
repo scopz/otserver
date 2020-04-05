@@ -161,13 +161,22 @@ function isNPC(cid)
 	return false
 end
 
+function isNoneVocation(cid)
+	if(isPlayer(cid) == false) then
+		debugPrint("isNoneVocation: Player not found.")
+		return false
+	end
+
+	return getPlayerVocation(cid) == 0
+end
+
 function isSorcerer(cid)
 	if(isPlayer(cid) == false) then
 		debugPrint("isSorcerer: Player not found.")
 		return false
 	end
-
-	return (isInArray({1,5}, getPlayerVocation(cid)) == true)
+	local base = getBaseVocation(getPlayerVocation(cid))
+	return base == 1
 end
 
 function isDruid(cid)
@@ -175,8 +184,8 @@ function isDruid(cid)
 		debugPrint("isDruid: Player not found.")
 		return false
 	end
-
-	return (isInArray({2,6}, getPlayerVocation(cid)) == true)
+	local base = getBaseVocation(getPlayerVocation(cid))
+	return base == 2
 end
 
 function isPaladin(cid)
@@ -184,8 +193,8 @@ function isPaladin(cid)
 		debugPrint("isPaladin: Player not found.")
 		return false
 	end
-
-	return (isInArray({3,7}, getPlayerVocation(cid)) == true)
+	local base = getBaseVocation(getPlayerVocation(cid))
+	return base == 3
 end
 
 function isKnight(cid)
@@ -193,8 +202,23 @@ function isKnight(cid)
 		debugPrint("isKnight: Player not found.")
 		return false
 	end
+	local base = getBaseVocation(getPlayerVocation(cid))
+	return base == 4
+end
 
-	return (isInArray({4,8}, getPlayerVocation(cid)) == true)
+function isPromoted(cid)
+	if(isPlayer(cid) == false) then
+		debugPrint("isPromoted: Player not found.")
+		return false
+	end
+
+	local voc = getPlayerVocation(cid)
+	if voc == 0 then
+		return false
+	end
+
+	local prom = getPromotedVocation(voc)
+	return prom == 0
 end
 
 function getDirectionTo(pos1, pos2)

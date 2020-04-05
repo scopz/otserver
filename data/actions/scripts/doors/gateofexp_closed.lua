@@ -19,11 +19,16 @@ function onUse(cid, item, fromPosition, itemEx, toPosition)
 
 	if(isVocationDoor) then
 		local doorVoc = item.actionid-2000
-		if (doorVoc == 1 and not(isSorcerer(cid))) or
-		   (doorVoc == 2 and not(isDruid(cid)))   or
-		   (doorVoc == 3 and not(isPaladin(cid))) or
-		   (doorVoc == 4 and not(isKnight(cid)))  or
-		   (doorVoc ~= getPlayerVocation(cid))     then
+		local requiresPromotion = doorVoc > 4
+
+		if (requiresPromotion) then
+			doorVoc = doorVoc - 4
+		end
+
+		if doorVoc ~= getBaseVocation(getPlayerVocation(cid)) then
+			canEnter = false
+
+		elseif requiresPromotion and not isPromoted(cid) then
 			canEnter = false
 		end
 	end

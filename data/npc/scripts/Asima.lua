@@ -83,20 +83,19 @@ function creatureSayCallback(cid, type, msg)
 
 if getPlayerStorageValue(cid, 999) == -1 and msgcontains(msg, 'rod') or getPlayerStorageValue(cid, 999) == -1 and msgcontains(msg, 'Rod') or getPlayerStorageValue(cid, 999) == -1 and msgcontains(msg, 'wand') or getPlayerStorageValue(cid, 999) == -1 and msgcontains(msg, 'Wand') then	
 	if getPlayerStorageValue(cid, 999) == -1 then
-	if getPlayerVocation(cid) == 1 or getPlayerVocation(cid) == 5 then
-    doPlayerAddItem(cid,2190,1)
-	npcHandler:say('Here\'s your wand!', 1)
-	setPlayerStorageValue(cid, 999, 1)
-	elseif getPlayerVocation(cid) == 2 or getPlayerVocation(cid) == 6 then
-    doPlayerAddItem(cid,2182,1)
-	npcHandler:say('Here\'s your rod!', 1)
-	setPlayerStorageValue(cid, 999, 1)
-	elseif getPlayerVocation(cid) < 1 or getPlayerVocation(cid) > 6 then
-	npcHandler:say('I\'m sorry, but you\'re neither sorcerer nor druid!', 1)
-	setPlayerStorageValue(cid, 999, 1)
-	elseif getPlayerVocation(cid) == 3 or getPlayerVocation(cid) == 4 then
-	npcHandler:say('I\'m sorry, but you\'re neither sorcerer nor druid!', 1)
-	setPlayerStorageValue(cid, 999, 1)	
+	if isSorcerer(cid) then
+    	doPlayerAddItem(cid,2190,1)
+		npcHandler:say('Here\'s your wand!', 1)
+		setPlayerStorageValue(cid, 999, 1)
+
+	elseif isDruid(cid) then
+    	doPlayerAddItem(cid,2182,1)
+		npcHandler:say('Here\'s your rod!', 1)
+		setPlayerStorageValue(cid, 999, 1)
+
+	else
+		npcHandler:say('I\'m sorry, but you\'re neither sorcerer nor druid!', 1)
+		setPlayerStorageValue(cid, 999, 1)
 	end	
 	talk_state = 0
 end

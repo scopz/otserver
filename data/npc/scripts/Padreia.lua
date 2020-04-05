@@ -49,7 +49,7 @@ function creatureSayCallback(cid, type, msg)
     talk_state = 2
 	end
 
-	if getPlayerVocation(cid) == 2 or getPlayerVocation(cid) == 6 then
+	if isDruid(cid) then
 	else
 		if msgcontains(msg, '') then
 		npcHandler:say("Sorry, I only teach druids!", 1)

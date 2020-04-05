@@ -499,7 +499,7 @@ elseif msgcontains(msg, 'rune') then
 	npcHandler:say("I don't sell this anymore, it sort of kept on confusing me to do that much work. Please talk to my assistant Asima in the next room to purchase magic goods.", 1)
 	talk_state = 0
 		
-	if getPlayerVocation(cid) == 1 or getPlayerVocation(cid) == 2 or getPlayerVocation(cid) == 5 or getPlayerVocation(cid) == 6 then
+	if isSorcerer(cid) or isDruid(cid) then
 	else
 		if msgcontains(msg, '') then
 		npcHandler:say("Sorry, I only teach sorcerers and druids!", 1)

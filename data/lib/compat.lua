@@ -95,7 +95,6 @@ function Player:getSkillLevel(skillid) return getPlayerSkillLevel(self.cid, skil
 function Player:getSkillTries(skillid) return getPlayerSkillTries(self.cid, skillid) end
 function Player:getTown() return getPlayerTown(self.cid) end
 function Player:getVocation() return getPlayerVocation(self.cid) end
-function Player:getBaseVocation() local vocation = self:getVocation(); return vocation > 4 and vocation - 4 or vocation end
 function Player:getIp() return getPlayerIp(self.cid) end
 function Player:getRequiredMana(magicLevel) return getPlayerRequiredMana(self.cid, magicLevel) end
 function Player:getRequiredSkillTries(skillId, skillLevel) return getPlayerRequiredSkillTries(self.cid, skillId, skillLevel) end

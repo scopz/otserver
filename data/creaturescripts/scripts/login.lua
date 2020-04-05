@@ -68,8 +68,8 @@ function onLogin(cid)
 
 	-- Promotes player if necessary
 	if(isPremium(cid)) then
-		if(getPlayerStorageValue(cid, STORAGE_PROMOTION) == 1 and getPlayerVocation(cid) <= 4) then
-			doPlayerSetVocation(cid, getPlayerVocation(cid)+4)
+		if(getPlayerStorageValue(cid, STORAGE_PROMOTION) == 1 and not isPromoted(cid)) then
+			doPlayerSetVocation(cid, getPromotedVocation(getPlayerVocation(cid)))
 			doPlayerRemoveSkillLossPercent(cid, 30)
 			setPlayerStorageValue(cid, STORAGE_PROMOTION, -1)
 		end
@@ -117,9 +117,9 @@ function onLogin(cid)
 	end
 
 	-- Remove promotion
-	local isPromo = (getPlayerVocation(cid) > 4 and isPremium(cid) == false)
+	local isPromo = (isPromoted(cid) and isPremium(cid) == false)
 	if(isPromo) then
-		doPlayerSetVocation(cid, getPlayerVocation(cid)-4)
+		doPlayerSetVocation(cid, getUnpromotedVocation(getPlayerVocation(cid)))
 		doPlayerRemoveSkillLossPercent(cid, -30)
 		setPlayerStorageValue(cid, STORAGE_PROMOTION, 1)
 	end

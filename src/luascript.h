@@ -244,6 +244,7 @@ enum ErrorCode_t{
 	LUA_ERROR_CREATURE_NOT_FOUND,
 	LUA_ERROR_ITEM_NOT_FOUND,
 	LUA_ERROR_THING_NOT_FOUND,
+	LUA_ERROR_VOCATION_NOT_FOUND,
 	LUA_ERROR_TILE_NOT_FOUND,
 	LUA_ERROR_HOUSE_NOT_FOUND,
 	LUA_ERROR_COMBAT_NOT_FOUND,
@@ -457,6 +458,11 @@ protected:
 	static int luaSetHouseAccessList(lua_State *L);
 	static int luaGetHouseList(lua_State *L);
 	static int luaCleanHouse(lua_State *L);
+
+	//vocations
+	static int luaGetPromotedVocation(lua_State *L);
+	static int luaGetUnpromotedVocation(lua_State *L);
+	static int luaGetBaseVocation(lua_State *L);
 
 	//get player info functions
 	static int luaGetPlayerFood(lua_State *L);
