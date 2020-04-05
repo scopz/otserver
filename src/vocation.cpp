@@ -195,6 +195,11 @@ bool Vocations::loadFromXml(const std::string& datadir)
 	return true;
 }
 
+bool Vocations::exists(const uint32_t& vocationId) const
+{
+	return vocationsMap.find(vocationId) != vocationsMap.end();
+}
+
 bool Vocations::getVocation(const uint32_t vocationId, Vocation*& vocation)
 {
 	VocationsMap::const_iterator it = vocationsMap.find(vocationId);

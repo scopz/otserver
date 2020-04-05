@@ -25,7 +25,7 @@ function onUse(cid, item, fromPosition, itemEx, toPosition)
 			doorVoc = doorVoc - 4
 		end
 
-		if doorVoc ~= getBaseVocation(getPlayerVocation(cid)) then
+		if doorVoc ~= getPlayerBaseVocation(cid) then
 			canEnter = false
 
 		elseif requiresPromotion and not isPromoted(cid) then

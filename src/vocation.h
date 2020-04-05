@@ -123,6 +123,7 @@ public:
 	~Vocations();
 
 	bool loadFromXml(const std::string& datadir);
+	bool exists(const uint32_t& vocationId) const;
 	bool getVocation(const uint32_t vocationId, Vocation*& vocation);
 	bool getVocationId(const std::string& name, int32_t& vocationId) const;
 

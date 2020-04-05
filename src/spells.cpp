@@ -534,6 +534,10 @@ bool Spell::configureSpell(xmlNodePtr p)
 	 	magLevel = intValue;
 	}
 
+	if(readXMLInteger(p, "price", intValue)){
+	 	price = intValue;
+	}
+
 	if(readXMLInteger(p, "mana", intValue)){
 	 	mana = intValue;
 	}
@@ -582,6 +586,10 @@ bool Spell::configureSpell(xmlNodePtr p)
 		range = intValue;
 	}
 
+	if(readXMLInteger(p, "promotion", intValue)){
+		promotion = intValue > 0;
+	}
+
 	if(readXMLInteger(p, "blocking", intValue)){
 		blockingSolid = (intValue == 1);
 		blockingCreature = (intValue == 1);
@@ -607,17 +615,14 @@ bool Spell::configureSpell(xmlNodePtr p)
 	xmlNodePtr vocationNode = p->children;
 	while(vocationNode){
 		if(xmlStrcmp(vocationNode->name,(const xmlChar*)"vocation") == 0){
-			if(readXMLString(vocationNode, "name", strValue)){
-				int32_t vocationId = 0;
-				if(g_vocations.getVocationId(strValue, vocationId)){
-					vocSpellMap[vocationId] = true;
-				}
-				else{
-					std::cout << "Warning: [Spell::configureSpell] Wrong vocation name: " << strValue << std::endl;
+			if(readXMLInteger(vocationNode, "id", intValue)){
+				if(g_vocations.exists(intValue)){
+					vocSpellMap[intValue] = true;
+				} else {
+					std::cout << "Warning: [Spell::configureSpell] Wrong vocation id: " << intValue << std::endl;
 				}
 			}
 		}
-
 		vocationNode = vocationNode->next;
 	}
 
@@ -684,14 +689,17 @@ bool Spell::playerSpellCheck(Player* player) const
 				return false;
 			}
 		}
-		else{
-			if(!vocSpellMap.empty()){
-				if(vocSpellMap.find(player->getVocationId()) == vocSpellMap.end()){
-					player->sendCancelMessage(RET_YOURVOCATIONCANNOTUSETHISSPELL);
-					g_game.addMagicEffect(player->getPosition(), NM_ME_PUFF);
-					return false;
-				}
-			}
+
+		Vocation* vocation = player->getVocation();
+		if (requiresPromotion() && vocation->getPromotion()>0) {
+			player->sendCancelMessage(RET_YOURVOCATIONCANNOTUSETHISSPELL);
+			g_game.addMagicEffect(player->getPosition(), NM_ME_PUFF);
+			return false;
+
+		} else if(!vocSpellMap.empty() && vocSpellMap.find(vocation->getBaseVocation()) == vocSpellMap.end()){
+			player->sendCancelMessage(RET_YOURVOCATIONCANNOTUSETHISSPELL);
+			g_game.addMagicEffect(player->getPosition(), NM_ME_PUFF);
+			return false;
 		}
 
 		if(needWeapon){
@@ -1719,6 +1727,7 @@ bool InstantSpell::Illusion(const InstantSpell* spell, Creature* creature, const
 	return (ret == RET_NOERROR);
 }
 
+// USED TO FILL SPELLBOOK
 bool InstantSpell::canCast(const Player* player) const
 {
 	if(player->hasFlag(PlayerFlag_CannotUseSpells)){
@@ -1733,16 +1742,43 @@ bool InstantSpell::canCast(const Player* player) const
 		if(player->hasLearnedInstantSpell(getName())){
 			return true;
 		}
-	}
-	else{
-		if(vocSpellMap.empty() || vocSpellMap.find(player->getVocationId()) != vocSpellMap.end()){
-			return true;
-		}
+
+	} else if(vocSpellMap.empty() || vocSpellMap.find(player->getVocation()->getBaseVocation()) != vocSpellMap.end()){
+		return true;
 	}
 
 	return false;
 }
 
+bool InstantSpell::canLearn(const Player* player) const
+{
+	if (!isLearnable()) {
+		return false;
+	}
+
+	if(player->hasFlag(PlayerFlag_CannotUseSpells)){
+		return false;
+	}
+
+	if(player->hasFlag(PlayerFlag_IgnoreSpellCheck)){
+		return true;
+	}
+
+	if(player->hasLearnedInstantSpell(getName())){
+		return false;
+	}
+
+	Vocation* vocation = player->getVocation();
+	if (requiresPromotion() && vocation->getPromotion()>0) {
+		return false;
+	}
+
+	if(!vocSpellMap.empty() && vocSpellMap.find(vocation->getBaseVocation()) == vocSpellMap.end()){
+		return false;
+	}
+
+	return player->getLevel() >= getLevel() && player->getMagicLevel() >= getMagicLevel();
+}
 
 
 ConjureSpell::ConjureSpell(LuaScriptInterface* _interface) :
@@ -1769,16 +1805,6 @@ bool ConjureSpell::configureEvent(xmlNodePtr p)
 	if(!InstantSpell::configureEvent(p)){
 		return false;
 	}
-
-	/*
-	if(!Spell::configureSpell(p)){
-		return false;
-	}
-
-	if(!TalkAction::configureEvent(p)){
-		return false;
-	}
-	*/
 
 	int intValue;
 

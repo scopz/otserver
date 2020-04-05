@@ -53,8 +53,7 @@ if(NpcHandler == nil) then
 	TAG_ITEMNAME = '|ITEMNAME|'
 	TAG_QUEUESIZE = '|QUEUESIZE|'
 	TAG_TIME = '|TIME|'
-	TAG_TRAVELCOST = '|TRAVELCOST|'
-	
+	TAG_TRAVELCOST = '|TRAVELCOST|'	
 	
 	NpcHandler = {
 		keywordHandler = nil,

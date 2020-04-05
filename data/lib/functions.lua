@@ -162,7 +162,7 @@ function isNPC(cid)
 end
 
 function isNoneVocation(cid)
-	if(isPlayer(cid) == false) then
+	if not isPlayer(cid) then
 		debugPrint("isNoneVocation: Player not found.")
 		return false
 	end
@@ -171,43 +171,47 @@ function isNoneVocation(cid)
 end
 
 function isSorcerer(cid)
-	if(isPlayer(cid) == false) then
+	if not isPlayer(cid) then
 		debugPrint("isSorcerer: Player not found.")
 		return false
 	end
-	local base = getBaseVocation(getPlayerVocation(cid))
+	local base = getPlayerBaseVocation(cid)
 	return base == 1
 end
 
 function isDruid(cid)
-	if(isPlayer(cid) == false) then
+	if not isPlayer(cid) then
 		debugPrint("isDruid: Player not found.")
 		return false
 	end
-	local base = getBaseVocation(getPlayerVocation(cid))
+	local base = getPlayerBaseVocation(cid)
 	return base == 2
 end
 
 function isPaladin(cid)
-	if(isPlayer(cid) == false) then
+	if not isPlayer(cid) then
 		debugPrint("isPaladin: Player not found.")
 		return false
 	end
-	local base = getBaseVocation(getPlayerVocation(cid))
+	local base = getPlayerBaseVocation(cid)
 	return base == 3
 end
 
 function isKnight(cid)
-	if(isPlayer(cid) == false) then
+	if not isPlayer(cid) then
 		debugPrint("isKnight: Player not found.")
 		return false
 	end
-	local base = getBaseVocation(getPlayerVocation(cid))
+	local base = getPlayerBaseVocation(cid)
 	return base == 4
 end
 
+function getPlayerBaseVocation(cid)
+	return getBaseVocation(getPlayerVocation(cid))
+end
+
 function isPromoted(cid)
-	if(isPlayer(cid) == false) then
+	if not isPlayer(cid) then
 		debugPrint("isPromoted: Player not found.")
 		return false
 	end

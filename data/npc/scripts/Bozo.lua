@@ -138,28 +138,28 @@ elseif talk_state == 2 and msgcontains(msg, '') then
 	talk_state = 0
 
 elseif msgcontains(msg, 'paladin') then	
-	if getPlayerVocation(cid) == 3 or getPlayerVocation(cid) == 7 then
+	if isPaladin(cid) then
 	npcHandler:say("I wanted to become a paladin, too, but I was overqualified!", 1)
 	else
 	npcHandler:say("They are the king's favourites, because they know how to 'bow'.", 1)
 	end
 	talk_state = 0	
 elseif msgcontains(msg, 'sorcerer') then	
-	if getPlayerVocation(cid) == 1 or getPlayerVocation(cid) == 5 then
+	if isSorcerer(cid) then
 	npcHandler:say("I wanted to become a sorcerer, too, but I was overqualified!", 1)
 	else
 	npcHandler:say("The good thing about them is that they can't be at two places at the same time.", 1)
 	end
 	talk_state = 0	
 elseif msgcontains(msg, 'druid') then	
-	if getPlayerVocation(cid) == 2 or getPlayerVocation(cid) == 6 then
+	if isDruid(cid) then
 	npcHandler:say("I wanted to become a Druid, too, but I was overqualified!", 1)
 	else
 	npcHandler:say("If you are in Druidville, do as the rabbits do.", 1)
 	end
 	talk_state = 0	
 elseif msgcontains(msg, 'knight') then	
-	if getPlayerVocation(cid) == 4 or getPlayerVocation(cid) == 8 then
+	if isKnight(cid) then
 	npcHandler:say("I wanted to become a knight, too, but I was overqualified!", 1)
 	else
 	npcHandler:say("Did you notice that old knights have their scars just on their backs?", 1)

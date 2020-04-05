@@ -12,13 +12,6 @@ function onCreatureDisappear(cid)		npcHandler:onCreatureDisappear(cid)			end
 function onCreatureSay(cid, type, msg)		npcHandler:onCreatureSay(cid, type, msg)		end
 function onThink()				npcHandler:onThink()					end
 
-local shopModule = ShopModule:new()
-npcHandler:addModule(shopModule)
-
-shopModule:addBuyableItem({'crossbow'}, 2455, 450)
-shopModule:addBuyableItem({'bow'}, 2456, 350)
-shopModule:addBuyableItem({'bolt'}, 2543, 3)
-
 keywordHandler:addKeyword({'job'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "I sell bows, arrows, crossbows and bolts. I also teach some spells."})
 keywordHandler:addKeyword({'name'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "I am known as Irea."})
 keywordHandler:addKeyword({'time'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "That's unimportant."})
@@ -41,115 +34,29 @@ keywordHandler:addKeyword({'crunor'}, StdModule.say, {npcHandler = npcHandler, o
 keywordHandler:addKeyword({'excalibug'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "Our people have a bugfarm in the southeast of Ab'Dendriel."})
 keywordHandler:addKeyword({'new'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "My news are not for your ears."})
 keywordHandler:addKeyword({'magic'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "I teach spells to create enchanted arrows."})
-keywordHandler:addKeyword({'spell'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "I teach 'Conjure Arrow', 'Poison Arrow', and 'Explosive Arrow'."})
 
-function creatureSayCallback(cid, type, msg) msg = string.lower(msg)
-	if(npcHandler.focus ~= cid) then
-		return false
-	end
---name the spell--
-if msgcontains(msg, 'conjure arrow') or msgcontains(msg, 'Conjure arrow') then
-	spellprice = 450
-	spellvoc = {3, 7}
-	spellname = "conjure arrow"
-	spellmagiclevel = 2
-		if isInArray(spellvoc, getPlayerVocation(cid)) then
-		npcHandler:say("Do you want to learn the spell '".. spellname .."' for ".. spellprice .." gold?", 1)
-		talk_state = 8754
-		else
-		npcHandler:say("I am sorry but this spell is only for paladins.", 1)
-		talk_state = 0
-		end
 
-elseif msgcontains(msg, 'explosive arrow') or msgcontains(msg, 'Explosive arrow') then
-	spellprice = 1000
-	spellvoc = {3, 7}
-	spellname = "explosive arrow"
-	spellmagiclevel = 10
-		if isInArray(spellvoc, getPlayerVocation(cid)) then
-		npcHandler:say("Do you want to learn the spell '".. spellname .."' for ".. spellprice .." gold?", 1)
-		talk_state = 8754
-		else
-		npcHandler:say("I am sorry but this spell is only for royal paladins.", 1)
-		talk_state = 0
-		end		
-		
-elseif msgcontains(msg, 'poison arrow') or msgcontains(msg, 'Poison arrow') then
-	spellprice = 700
-	spellvoc = {3, 7}
-	spellname = "poison arrow"
-	spellmagiclevel = 5
-		if isInArray(spellvoc, getPlayerVocation(cid)) then
-		npcHandler:say("Do you want to learn the spell '".. spellname .."' for ".. spellprice .." gold?", 1)
-		talk_state = 8754
-		else
-		npcHandler:say("I am sorry but this spell is only for paladins.", 1)
-		talk_state = 0
-		end
---End of Give spell--
-	
+local spellSellModule = SpellSellModule:new()
+npcHandler:addModule(spellSellModule)
 
-	
-	
---System that does the job after confirm spell--
-elseif talk_state == 8754 and msgcontains(msg, 'yes') then
-	if isInArray(spellvoc, getPlayerVocation(cid)) then
-		if getPlayerMagLevel(cid) >= spellmagiclevel then
-			if not getPlayerLearnedInstantSpell(cid, spellname) then
-				if doPlayerRemoveMoney(cid, spellprice) == true then
-				playerLearnInstantSpell(cid, spellname)
-				doSendMagicEffect(getPlayerPosition(cid), 14)
-				npcHandler:say("Here you are. Look in your spellbook for the pronounciation of this spell.", 1)
-				talk_state = 0
-				else
-				npcHandler:say("Oh. You do not have enough money.", 1)
-				talk_state = 0			
-				end
-			else
-			npcHandler:say("You already know how to cast this spell.", 1)
-			talk_state = 0	
-			end
-		else
-		npcHandler:say("You must have magic level ".. spellmagiclevel .." or better to learn this spell!", 1)
-		talk_state = 0
-		end
-	end
-elseif talk_state == 8754 and msgcontains(msg, '') then
-npcHandler:say("Maybe next time.", 1)
-talk_state = 0
---End of the System that does the job after confirm spell--
-	
-elseif msgcontains(msg, 'arrow') or msgcontains(msg, 'Arrow') then
-local amount = getCount(msg)
-	if amount >= 1 and amount <= 99 then
-	COUNTARROW = amount
-	npcHandler:say("would you like to buy ".. COUNTARROW .." arrows for ".. COUNTARROW*2 .." gold?", 1)
-	elseif amount < 1 then
-	COUNTARROW = 1
-	npcHandler:say("would you like to buy ".. COUNTARROW .." arrow for ".. COUNTARROW*2 .." gold?", 1)
-	elseif amount >= 100 then
-	COUNTARROW = 100
-	npcHandler:say("would you like to buy ".. COUNTARROW .." arrows for ".. COUNTARROW*2 .." gold?", 1)
-	end
-talk_state = 859
+spellSellModule.condition = function(cid) return isPaladin(cid) end
+spellSellModule.conditionFailText = "Sorry, I only sell spells to paladins."
+spellSellModule.listPreText = "I teach"
+spellSellModule:addSpellStock({
+	"Conjure Arrow",
+	"Conjure Poisoned Arrow",
+	"Conjure Explosive Arrow",
+})
 
-elseif talk_state == 859 and msgcontains(msg, 'yes') or talk_state == 859 and msgcontains(msg, 'Yes') then
-	if doPlayerRemoveMoney(cid, COUNTARROW*2) == true then
-	doPlayerAddItem(cid, 2544, COUNTARROW)
-	npcHandler:say("Here you are.", 1)
-	else
-	npcHandler:say("Sorry, you don't have enough money.", 1)
-	end
-talk_state = 0
 
-elseif talk_state == 859 and msgcontains(msg, '') then
-npcHandler:say("Then not.", 1)
 
-talk_state = 0
+local shopModule = ShopModule:new()
+npcHandler:addModule(shopModule)
 
-end		
-    return true
-end
+shopModule:addBuyableItem({'crossbow'}, 2455, 450)
+shopModule:addBuyableItem({'bow'}, 2456, 350)
+shopModule:addBuyableItem({'bolt'}, 2543, 3)
+shopModule:addBuyableItem({'arrow'}, 2544, 2)
 
-npcHandler:setCallback(CALLBACK_MESSAGE_DEFAULT, creatureSayCallback)
+
 npcHandler:addModule(FocusModule:new())

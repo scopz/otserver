@@ -81,6 +81,7 @@ if(Modules == nil) then
 		-- 		node1:addChildKeyword({'yes'}, StdModule.promotePlayer, {npcHandler = npcHandler, cost = 20000, level = 20}, text = 'Congratulations! You are now promoted.')
 		-- 		node1:addChildKeyword({'no'}, StdModule.say, {npcHandler = npcHandler, text = 'Allright then. Come back when you are ready.'}, reset = true)
 	function StdModule.promotePlayer(cid, message, keywords, parameters, node)
+		
 		local npcHandler = parameters.npcHandler
 		if(npcHandler == nil) then
 			error('StdModule.promotePlayer called without any npcHandler instance.')
@@ -88,7 +89,7 @@ if(Modules == nil) then
 		if(cid ~= npcHandler.focus) then
 			return false
 		end
-		
+
 		local oldVoc = getPlayerVocation(cid)
 		local prom = getPromotedVocation(oldVoc);
 
@@ -107,13 +108,12 @@ if(Modules == nil) then
 			doSendMagicEffect(getCreaturePosition(cid), CONST_ME_MAGIC_BLUE)
 			npcHandler:say(parameters.text)
 		end
-		
+
 		npcHandler:resetNpc()
 		return true
 		
 	end
-	
-	
+
 	
 	function StdModule.travel(cid, message, keywords, parameters, node)
 		local npcHandler = parameters.npcHandler
@@ -795,4 +795,216 @@ if(Modules == nil) then
 		module.npcHandler:resetNpc()
 		return true
 	end
+
+	SpellSellModule = {
+		yesNode = nil,
+		noNode = nil,
+		npcHandler = nil,
+		spellsList = nil,
+
+		askText = "Do you want to learn the spell '|ITEMNAME|' for |TOTALCOST| gold?",
+		okText = "Here you are, you can find it in your spellbook now. Cast it by pronouncing '|SPELLWORDS|'.",
+		alreadyKnownText = "You already know how to cast this spell. Just say '|SPELLWORDS|'.",
+		mlevelFailText = "You must have at least magic level |SPELLMLEVEL| to learn this spell.",
+		levelFailText = "You must have at least level |SPELLLEVEL| to learn this spell.",
+		cantLearnText = "I am sorry but you can not learn this spell.",
+		noText = "Maybe next time",
+		conditionFailText = "Sorry, I can not teach you spells.",
+		listPreText = "I sell",
+		condition = function() return true end
+	}
+	-- Add it to the parseable module list.
+	Modules.parseableModules['module_shop'] = SpellSellModule
+	
+	-- Creates a new instance of SpellSellModule
+	function SpellSellModule:new()
+		local obj = {}
+		setmetatable(obj, self)
+		self.__index = self
+		return obj
+	end
+	
+	-- Initializes the module and associates handler to it.
+	function SpellSellModule:init(handler)
+		self.npcHandler = handler
+		self.spellsList = {}
+		self.yesNode = KeywordNode:new(SHOP_YESWORD, SpellSellModule.onConfirm, {module = self})
+		self.noNode = KeywordNode:new(SHOP_NOWORD, SpellSellModule.onDecline, {module = self})
+		self.noText = handler:getMessage(MESSAGE_DECLINE)
+
+		handler.keywordHandler:addKeyword({ 'spells' }, SpellSellModule.listSpell, {module = self})
+		return true
+	end
+	
+	-- Resets the module-specific variables.
+	function SpellSellModule:reset()
+		self.amount = 0
+	end
+	
+	
+	-- Adds a new buyable item. 
+	--	names = A table containing one or more strings of alternative names to this item.
+	--	itemid = the itemid of the buyable item
+	--	cost = the price of one single item with item id itemid ^^
+	--	charges - The charges of each rune or fluidcontainer item. Can be left out if it is not a rune/fluidcontainer and no realname is needed. Default value is nil.
+	--	realname - The real, full name for the item. Will be used as ITEMNAME in MESSAGE_ONBUY and MESSAGE_ONSELL if defined. Default value is nil (keywords[1]/names will be used)
+	function SpellSellModule:addSpellStock(spells)
+		for i, name in pairs(spells) do
+			local parameters = {
+					name = name,
+					module = self
+				}
+
+			keywords = {}
+			table.insert(keywords, name:lower())
+			table.insert(self.spellsList, name)
+
+			local node = self.npcHandler.keywordHandler:addKeyword(keywords, SpellSellModule.buySpell, parameters)
+			node:addChildKeywordNode(self.yesNode)
+			node:addChildKeywordNode(self.noNode)
+		end
+	end
+	
+	
+	-- onModuleReset callback function. Calls SpellSellModule:reset()
+	function SpellSellModule:callbackOnModuleReset()
+		self:reset()
+		
+		return true
+	end
+	
+	
+	-- tradeItem callback function. Makes the npc say the message defined by MESSAGE_BUY or MESSAGE_SELL
+	function SpellSellModule.listSpell(cid, message, keywords, parameters, node)
+		local module = parameters.module
+		if(cid ~= module.npcHandler.focus) then
+			return false
+		end
+
+		module.npcHandler:say(module.listPreText .. " " .. table.concat(module.spellsList, "', '") .. "'.")
+		return true
+	end
+
+	-- tradeItem callback function. Makes the npc say the message defined by MESSAGE_BUY or MESSAGE_SELL
+	function SpellSellModule.buySpell(cid, message, keywords, parameters, node)
+		local module = parameters.module
+		if(cid ~= module.npcHandler.focus) then
+			return false
+		end
+
+		if not module.condition(cid) then
+			module.npcHandler:say(module.conditionFailText)
+			return false
+		end
+
+		local spell = getInstantSpellInfoByName(cid, parameters.name);
+		node.spell = spell
+		node.playerName = getPlayerName(cid)
+
+		local parseInfo = {
+				[TAG_PLAYERNAME] = node.playerName,
+				[TAG_TOTALCOST] = spell.price,
+				[TAG_ITEMNAME] = spell.name,
+				['|SPELLWORDS|'] = spell.words,
+				['|SPELLMLEVEL|'] = spell.mlevel,
+				['|SPELLLEVEL|'] = spell.level
+			}
+
+		if spell then
+			found = true
+
+			if spell.available==1 then
+				local msg = module.npcHandler:parseMessage(module.askText, parseInfo)
+				module.npcHandler:say(msg)
+				return true
+
+			elseif spell.known==1 then
+				local msg = module.npcHandler:parseMessage(module.alreadyKnownText, parseInfo)
+				module.npcHandler:say(msg)
+
+			elseif getPlayerMagLevel(cid) < spell.mlevel then
+				local msg = module.npcHandler:parseMessage(module.mlevelFailText, parseInfo)
+				module.npcHandler:say(msg)
+
+			elseif getPlayerLevel(cid) < spell.level then
+				local msg = module.npcHandler:parseMessage(module.levelFailText, parseInfo)
+				module.npcHandler:say(msg)
+
+			else
+				local msg = module.npcHandler:parseMessage(module.cantLearnText, parseInfo)
+				module.npcHandler:say(msg)
+
+			end
+		end
+
+		return false		
+	end
+	
+	
+	-- onConfirm keyword callback function. Sells/buys the actual item.
+	function SpellSellModule.onConfirm(cid, message, keywords, parameters, node)
+		local module = parameters.module
+		if(cid ~= module.npcHandler.focus) then
+			return false
+		end
+
+		local parentNode = node:getParent()
+		local spell = parentNode.spell
+
+		local parseInfo = {
+				[TAG_PLAYERNAME] = parentNode.playerName,
+				[TAG_TOTALCOST] = spell.price,
+				[TAG_ITEMNAME] = spell.name,
+				['|SPELLWORDS|'] = spell.words
+			}
+
+		if spell.available then
+			if doPlayerRemoveMoney(cid, spell.price) == true then
+				playerLearnInstantSpell(cid, spell.name)
+				doSendMagicEffect(getPlayerPosition(cid), 14)
+
+				local msg = module.npcHandler:parseMessage(module.okText, parseInfo)
+				module.npcHandler:say(msg)
+
+			else
+				local msg = module.npcHandler:getMessage(MESSAGE_NEEDMOREMONEY)
+				msg = module.npcHandler:parseMessage(msg, parseInfo)
+				module.npcHandler:say(msg)
+			end
+		end
+		
+		module.npcHandler:resetNpc()
+		return true
+	end
+	
+	-- onDecliune keyword callback function. Generally called when the player sais 'no' after wanting to buy an item. 
+	function SpellSellModule.onDecline(cid, message, keywords, parameters, node)
+		local module = parameters.module
+		if(cid ~= module.npcHandler.focus) then
+			return false
+		end
+		local parentNode = node:getParent()
+		local parseInfo = {
+				[TAG_PLAYERNAME] = parentNode.playerName,
+				[TAG_TOTALCOST] = parentNode.spell.price,
+				[TAG_ITEMNAME] = parentNode.spell.name
+			}
+		local msg = module.npcHandler:parseMessage(module.noText, parseInfo)
+		module.npcHandler:say(msg)
+		module.npcHandler:resetNpc()
+		return true
+	end
+
+
+
+
+
+
+
+
+
+
+
+
+
 end

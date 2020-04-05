@@ -125,6 +125,7 @@ public:
 	int32_t getSoulCost(const Player* player) const;
 	uint32_t getLevel() const {return level;}
 	uint32_t getMagicLevel() const {return magLevel;}
+	uint32_t getPrice() const {return price;}
 	int32_t getMana() const {return mana;}
 	static bool playerHasEnoughManaToCast(const Player *p, int32_t manaCost)
 	{
@@ -137,6 +138,7 @@ public:
 	void setArea(bool b) {areaSpell = b;}
 	virtual bool isInstant() const = 0;
 	bool isLearnable() const {return learnable;}
+	bool requiresPromotion() const {return promotion;}
 
 	static ReturnValue CreateIllusion(Creature* creature, const Outfit_t outfit, int32_t time);
 	static ReturnValue CreateIllusion(Creature* creature, const std::string& name, int32_t time);
@@ -153,6 +155,7 @@ protected:
 	bool premium;
 	uint32_t level;
 	uint32_t magLevel;
+	uint32_t price;
 
 	int32_t mana;
 	int32_t manaPercent;
@@ -170,6 +173,7 @@ protected:
 
 	typedef std::map<int32_t, bool> VocSpellMap;
 	VocSpellMap vocSpellMap;
+	bool promotion = false;
 
 private:
 	std::string name;
@@ -195,6 +199,7 @@ public:
 
 	virtual bool isInstant() const { return true;}
 	bool getHasParam() const { return hasParam;}
+	bool canLearn(const Player* player) const;
 	bool canCast(const Player* player) const;
 	bool canThrowSpell(const Creature* creature, const Creature* target) const;
 

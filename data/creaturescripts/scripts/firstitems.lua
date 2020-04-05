@@ -36,7 +36,7 @@ function onLogin(cid)
 	}
 	if not (lastLogin ~= 0) then
 		if not isNoneVocation(cid) then
-			local common = config.voc_items[getBaseVocation(getPlayerVocation(cid))]
+			local common = config.voc_items[getPlayerBaseVocation(cid)]
 			if common ~= nil then
 				for _, v in ipairs(common) do
 					doPlayerAddItem(cid, v[1], v[2] or 1)

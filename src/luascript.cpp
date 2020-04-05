@@ -2705,6 +2705,7 @@ int LuaScriptInterface::luaGetPlayerInstantSpellInfo(lua_State *L)
 	setField(L, "mlevel", spell->getMagicLevel());
 	setField(L, "mana", spell->getManaCost(player));
 	setField(L, "manapercent", spell->getManaPercent());
+	setField(L, "price", spell->getPrice());
 	return 1;
 }
 
@@ -2716,14 +2717,9 @@ int LuaScriptInterface::luaGetInstantSpellInfoByName(lua_State *L)
 
 	ScriptEnviroment* env = getScriptEnv();
 
-	Player* player = env->getPlayerByUID(cid);
-	if(!player && cid != 0){
-		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
-		lua_pushboolean(L, false);
-		return 1;
-	}
+	const Player* player = env->getPlayerByUID(cid);
 
-	InstantSpell* spell = g_spells->getInstantSpellByName(spellName);
+	const InstantSpell* spell = g_spells->getInstantSpellByName(spellName);
 	if(!spell){
 		reportErrorFunc(getErrorDesc(LUA_ERROR_SPELL_NOT_FOUND));
 		lua_pushboolean(L, false);
@@ -2735,8 +2731,17 @@ int LuaScriptInterface::luaGetInstantSpellInfoByName(lua_State *L)
 	setField(L, "words", spell->getWords());
 	setField(L, "level", spell->getLevel());
 	setField(L, "mlevel", spell->getMagicLevel());
-	setField(L, "mana", (player != NULL ? spell->getManaCost(player) : 0));
 	setField(L, "manapercent", spell->getManaPercent());
+	setField(L, "price", spell->getPrice());
+	if (player) {
+		setField(L, "mana", spell->getManaCost(player));
+		setField(L, "available", spell->canLearn(player));
+		setField(L, "known", player->hasLearnedInstantSpell(spell->getName()));
+	} else {
+		setField(L, "mana", spell->getMana());
+		setField(L, "available", false);
+		setField(L, "known", false);
+	}
 	return 1;
 }
 

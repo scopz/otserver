@@ -46,97 +46,8 @@ function creatureSayCallback(cid, type, msg)
 		return false
 	end
 	
-	if msgcontains(msg, 'spell') then
-		if getPlayerVocation(cid) >= 5 and getPlayerVocation(cid) <= 8 then
-			npcHandler:say("I can teach 'Enchant Staff' to sorcerers, 'Challenge' to knights, 'Wild Growth' to druids, and 'Power Bolt' to paladins.", 1)
-		else
-			npcHandler:say("I am sorry, but you are not promoted yet.", 1)
-		end
-			talk_state = 0
-	
-	elseif msgcontains(msg, 'enchant staff') or msgcontains(msg, 'Enchant Staff') then
-		spellprice = 2000
-		spellvoc = {5}
-		spellname = "Enchant Staff"
-		spellmagiclevel = 22
-		if isInArray(spellvoc, getPlayerVocation(cid)) then
-			npcHandler:say("Do you want to learn the spell '".. spellname .."' for ".. spellprice .." gold?", 1)
-			talk_state = 8754
-		else
-			npcHandler:say("I am sorry but this spell is only for master sorcerers", 1)
-			talk_state = 0
-		end
-		
-	elseif msgcontains(msg, 'challenge') or msgcontains(msg, 'Challenge') then
-		spellprice = 2000
-		spellvoc = {8}
-		spellname = "challenge"
-		spellmagiclevel = 4
-		if isInArray(spellvoc, getPlayerVocation(cid)) then
-			npcHandler:say("Do you want to learn the spell '".. spellname .."' for ".. spellprice .." gold?", 1)
-			talk_state = 8754
-		else
-			npcHandler:say("I am sorry but this spell is only for elite knights", 1)
-			talk_state = 0
-		end
-		
-	elseif msgcontains(msg, 'wild growth') or msgcontains(msg, 'Wild growth') then
-		spellprice = 2000
-		spellvoc = {6}
-		spellname = "wild growth"
-		spellmagiclevel = 13
-		if isInArray(spellvoc, getPlayerVocation(cid)) then
-			npcHandler:say("Do you want to learn the spell '".. spellname .."' for ".. spellprice .." gold?", 1)
-			talk_state = 8754
-		else
-			npcHandler:say("I am sorry but this spell is only for elder druids", 1)
-			talk_state = 0
-		end
-		
-	elseif msgcontains(msg, 'power bolt') or msgcontains(msg, 'Power bolt') then
-		spellprice = 2000
-		spellvoc = {7}
-		spellname = "conjure power bolt"
-		spellmagiclevel = 14
-		if isInArray(spellvoc, getPlayerVocation(cid)) then
-			npcHandler:say("Do you want to learn the spell '".. spellname .."' for ".. spellprice .." gold?", 1)
-			talk_state = 8754
-		else
-			npcHandler:say("I am sorry but this spell is only for royal paladins", 1)
-			talk_state = 0
-		end
--- end of spells
-
--- confirm spells
-	elseif talk_state == 8754 and msgcontains(msg, 'yes') then
-		if isInArray(spellvoc, getPlayerVocation(cid)) then
-			if getPlayerMagLevel(cid) >= spellmagiclevel then
-				if not getPlayerLearnedInstantSpell(cid, spellname) then
-					if doPlayerRemoveMoney(cid, spellprice) == true then
-						playerLearnInstantSpell(cid, spellname)
-						doSendMagicEffect(getPlayerPosition(cid), 14)
-						npcHandler:say("Here you are. Look in your spellbook for the pronounciation of this spell.", 1)
-						talk_state = 0
-					else
-						npcHandler:say("Oh. You do not have enough money.", 1)
-						talk_state = 0			
-					end
-				else
-					npcHandler:say("You already know how to cast this spell.", 1)
-					talk_state = 0	
-				end
-			else
-				npcHandler:say("You must have magic level ".. spellmagiclevel .." or better to learn this spell!", 1)
-				talk_state = 0
-			end
-		end
-	elseif talk_state == 8754 and msgcontains(msg, '') then
-		npcHandler:say("Maybe next time.", 1)
-		talk_state = 0
--- end of confirm spells
-
 -- teleport
-	elseif msgcontains(msg, 'teleport') or msgcontains(msg, 'pemaret') or msgcontains(msg, 'back') or msgcontains(msg, 'cormaya') or msgcontains(msg, 'edron') then
+	if msgcontains(msg, 'teleport') or msgcontains(msg, 'pemaret') or msgcontains(msg, 'back') or msgcontains(msg, 'cormaya') or msgcontains(msg, 'edron') then
 		npcHandler:say('Should I teleport you back to Pemaret?')
 		talk_state = 2
 	elseif msgcontains(msg, 'yes') and talk_state == 2 then
@@ -201,6 +112,22 @@ function creatureSayCallback(cid, type, msg)
 	
     return true
 end
+
+
+
+local spellSellModule = SpellSellModule:new()
+npcHandler:addModule(spellSellModule)
+
+spellSellModule.condition = function(cid) return isPromoted(cid) end
+spellSellModule.conditionFailText = "I am sorry, but you are not promoted yet."
+spellSellModule.listPreText = "I can teach"
+spellSellModule:addSpellStock({
+	"Enchant Staff",
+	"Challenge",
+	"Wild Growth",
+	"Conjure Power Bolt",
+})
+
 
 npcHandler:setCallback(CALLBACK_MESSAGE_DEFAULT, creatureSayCallback)
 npcHandler:addModule(FocusModule:new())
