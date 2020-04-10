@@ -748,14 +748,14 @@ void Player::addSkillAdvance(skills_t skill, uint32_t count, bool useMultiplier 
 	skills[skill][SKILL_TRIES] += count * g_config.getNumber(ConfigManager::RATE_SKILL);
 
 #ifdef __DEBUG__
-	std::cout << getName() << ", has the vocation: " << (int)getVocationId() << " and is training his " << Player::getSkillName(skill) << "(" << skill << "). Tries: " << skills[skill][SKILL_TRIES] << "(" << vocation->getReqSkillTries(skill, skills[skill][SKILL_LEVEL] + 1) << ")" << std::endl;
+	//std::cout << getName() << ", has the vocation: " << (int)getVocationId() << " and is training his " << Player::getSkillName(skill) << "(" << skill << "). Tries: " << skills[skill][SKILL_TRIES] << "(" << vocation->getReqSkillTries(skill, skills[skill][SKILL_LEVEL] + 1) << ")" << std::endl;
 	std::cout << "Current skill: " << skills[skill][SKILL_LEVEL] << std::endl;
 #endif
 
 	//Need skill up?
-	if(skills[skill][SKILL_TRIES] >= vocation->getReqSkillTries(skill, skills[skill][SKILL_LEVEL] + 1)){
+	uint32_t percent = vocation->getPercent(skill, skills[skill][SKILL_LEVEL], skills[skill][SKILL_TRIES]);
+	if(percent >= 100){
 		skills[skill][SKILL_LEVEL]++;
-		skills[skill][SKILL_TRIES] = 0;
 		skills[skill][SKILL_PERCENT] = 0;
 		std::stringstream advMsg;
 		advMsg << "You advanced in " << Player::getSkillName(skill) << ".";
@@ -769,9 +769,8 @@ void Player::addSkillAdvance(skills_t skill, uint32_t count, bool useMultiplier 
 	}
 	else{
 		//update percent
-		uint32_t newPercent = Player::getPercentLevel(skills[skill][SKILL_TRIES], vocation->getReqSkillTries(skill, skills[skill][SKILL_LEVEL] + 1));
-		if(skills[skill][SKILL_PERCENT] != newPercent){
-			skills[skill][SKILL_PERCENT] = newPercent;
+		if(skills[skill][SKILL_PERCENT] != percent){
+			skills[skill][SKILL_PERCENT] = percent;
 			sendSkills();
 		}
 	}
@@ -2508,35 +2507,17 @@ void Player::die()
 			magLevelPercent = Player::getPercentLevel(manaSpent, vocation->getReqMana(magLevel + 1));
 
 			//Skill loss
-			uint32_t lostSkillTries;
-			uint32_t sumSkillTries;
 			for(uint32_t i = 0; i <= 6; ++i){
-				lostSkillTries = 0;
-				sumSkillTries = 0;
+				uint32_t sumSkillTries = skills[i][SKILL_TRIES];
 
-				for(uint32_t c = 11; c <= skills[i][SKILL_LEVEL]; ++c) {
-					sumSkillTries += vocation->getReqSkillTries(i, c);
-				}
-
-				sumSkillTries += skills[i][SKILL_TRIES];
 				double lossPercentSkill = lostPercent * lossPercent[LOSS_SKILLTRIES] / 100;
-				lostSkillTries = (uint32_t)std::ceil(sumSkillTries * lossPercentSkill);
+				uint32_t lostSkillTries = (uint32_t)std::ceil(sumSkillTries * lossPercentSkill);
 
-				while(lostSkillTries > skills[i][SKILL_TRIES]){
-					lostSkillTries -= skills[i][SKILL_TRIES];
-					skills[i][SKILL_TRIES] = vocation->getReqSkillTries(i, skills[i][SKILL_LEVEL]);
-					if(skills[i][SKILL_LEVEL] > 10){
-						skills[i][SKILL_LEVEL]--;
-					}
-					else{
-						skills[i][SKILL_LEVEL] = 10;
-						skills[i][SKILL_TRIES] = 0;
-						lostSkillTries = 0;
-						break;
-					}
+				if (lostSkillTries < skills[i][SKILL_TRIES]){
+					skills[i][SKILL_TRIES] -= lostSkillTries;
+					skills[i][SKILL_LEVEL] = vocation->getSkillLevel(i, skills[i][SKILL_TRIES]);
+					skills[i][SKILL_PERCENT] = vocation->getPercent(i, skills[i][SKILL_LEVEL], skills[i][SKILL_TRIES]);
 				}
-
-				skills[i][SKILL_TRIES] = std::max((int32_t)0, (int32_t)(skills[i][SKILL_TRIES] - lostSkillTries));
 			}
 		}
 

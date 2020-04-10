@@ -236,7 +236,7 @@ bool IOPlayer::loadPlayer(Player* player, const std::string& name, bool preload 
 	// we need to find out our skills
 	// so we query the skill table
 	query.str("");
-	query << "SELECT `skillid`, `value`, `count` FROM `player_skills` WHERE `player_id` = " << player->getGUID();
+	query << "SELECT `skillid`, `count` FROM `player_skills` WHERE `player_id` = " << player->getGUID();
 	if((result = db->storeQuery(query.str()))){
 		loadSkills(player, result);
 		db->freeResult(result);
@@ -316,19 +316,15 @@ void IOPlayer::loadSkills(Player* player, DBResult* result)
 	//now iterate over the skills
 	do{
 		int skillid = result->getDataInt("skillid");
-		if(skillid >= SKILL_FIRST && skillid <= SKILL_LAST){
-			uint32_t skillLevel = result->getDataInt("value");
-			uint64_t skillCount = result->getDataInt("count");
+		Vocation *voc = player->vocation;
 
-			uint64_t nextSkillCount = player->vocation->getReqSkillTries(skillid, skillLevel + 1);
-			if(skillCount > nextSkillCount){
-				//make sure its not out of bound
-				skillCount = 0;
-			}
+		if(skillid >= SKILL_FIRST && skillid <= SKILL_LAST){
+			uint64_t skillCount = result->getDataInt("count");
+			uint32_t skillLevel = voc->getSkillLevel(skillid, skillCount);
 
 			player->skills[skillid][SKILL_LEVEL] = skillLevel;
 			player->skills[skillid][SKILL_TRIES] = skillCount;
-			player->skills[skillid][SKILL_PERCENT] = Player::getPercentLevel(skillCount, nextSkillCount);
+			player->skills[skillid][SKILL_PERCENT] = voc->getPercent(skillid, skillLevel, skillCount);
 		}
 	}while(result->next());
 }
@@ -559,7 +555,7 @@ bool IOPlayer::savePlayer(Player* player, bool shallow)
 
 	//skills
 	for(int32_t i = 0; i <= 6; ++i){
-		query << "UPDATE `player_skills` SET `value` = " << player->skills[i][SKILL_LEVEL] << ", `count` = " << player->skills[i][SKILL_TRIES] << " WHERE `player_id` = " << player->getGUID() << " AND `skillid` = " << i;
+		query << "UPDATE `player_skills` SET `count` = " << player->skills[i][SKILL_TRIES] << " WHERE `player_id` = " << player->getGUID() << " AND `skillid` = " << i;
 
 		if(!db->executeQuery(query.str())){
 			return false;

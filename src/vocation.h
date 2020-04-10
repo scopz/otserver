@@ -35,7 +35,8 @@ public:
 	const std::string& getName() const {return name;}
 	const std::string& getDescription() const {return description;}
 
-	uint64_t getReqSkillTries(int32_t skill, int32_t level);
+	int32_t getPercent(const int32_t &skill, const uint64_t &level, uint64_t count);
+	uint32_t getSkillLevel(const int32_t &skill, const uint64_t &count);
 	uint64_t getReqMana(int32_t magLevel);
 	uint32_t getHPGain() const {return gainHP;};
 	uint32_t getManaGain() const {return gainMana;};
@@ -113,6 +114,8 @@ protected:
 
 	typedef std::map<uint32_t, uint32_t> skillCacheMap;
 	skillCacheMap cacheSkill[SKILL_LAST + 1];
+
+	void loadCacheSkillValues();
 };
 
 

@@ -182,6 +182,7 @@ bool Vocations::loadFromXml(const std::string& datadir)
 					//std::cout << "Voc id: " << voc_id << std::endl;
 					//voc->debugVocation();
 					vocationsMap[voc_id] = voc;
+					voc->loadCacheSkillValues();
 
 				}
 				else{
@@ -191,6 +192,7 @@ bool Vocations::loadFromXml(const std::string& datadir)
 			p = p->next;
 		}
 		xmlFreeDoc(doc);
+
 	}
 	return true;
 }
@@ -289,19 +291,53 @@ Vocation::~Vocation()
 	}
 }
 
-uint64_t Vocation::getReqSkillTries(int32_t skill, int32_t level)
+void Vocation::loadCacheSkillValues()
 {
-	if(skill < SKILL_FIRST || skill > SKILL_LAST){
-		return 0;
+	for (int skill = SKILL_FIRST; skill<=SKILL_LAST; skill++) {
+		skillCacheMap& skillMap = cacheSkill[skill];
+		const float &mult = skillMultipliers[skill];
+
+		double value = skillBases[skill]*std::pow(mult,(double)-11);
+		skillMap[0] = 0;
+		for (int level=1; level<=200; level++) {
+			value *= mult;
+			uint64_t accValue = (uint64_t) (skillMap[level-1]+value);
+			if (accValue < UINT_MAX) {
+				skillMap[level] = accValue;
+			} else {
+				break;
+			}
+		}
 	}
+}
+
+int32_t Vocation::getPercent(const int32_t &skill, const uint64_t &level, uint64_t count)
+{
+	const uint32_t &baseCount = cacheSkill[skill][level];
+	uint32_t endValue = cacheSkill[skill][level+1]-baseCount;
+	count -= baseCount;
+
+	if(endValue > 0){
+		if (count >= endValue) {
+			return 100;
+		} else {
+			return (int32_t)((double)count / endValue * 100);
+		}
+	}
+
+	return 0;
+}
+
+uint32_t Vocation::getSkillLevel(const int32_t &skill, const uint64_t &count)
+{
 	skillCacheMap& skillMap = cacheSkill[skill];
-	skillCacheMap::iterator it = skillMap.find(level);
-	if(it != cacheSkill[skill].end()){
-		return it->second;
+
+	for(std::map<uint32_t, uint32_t>::iterator it = skillMap.begin(); it != skillMap.end();it++){
+		if (count < it->second) {
+			return it->first-1;
+		}
 	}
-	uint64_t tries = (uint64_t)(skillBases[skill] * std::pow((float)skillMultipliers[skill], (float)(level - 11)));
-	skillMap[level] = tries;
-	return tries;
+	return 0;
 }
 
 uint64_t Vocation::getReqMana(int32_t magLevel)
