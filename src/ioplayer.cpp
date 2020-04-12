@@ -99,23 +99,35 @@ bool IOPlayer::loadPlayer(Player* player, const std::string& name, bool preload 
 	// Getting all player properties
 	player->setSex((PlayerSex_t)result->getDataInt("sex"));
 	player->setDirection((Direction)result->getDataInt("direction"));
-	player->level = std::max((uint32_t)1, (uint32_t)result->getDataInt("level"));
 
-	uint64_t currExpCount = Player::getExpForLevel(player->level);
-	uint64_t nextExpCount = Player::getExpForLevel(player->level + 1);
+	player->experience = (uint64_t)result->getDataLong("experience");
+	player->level = player->getLevelFromExp(player->experience);
+
+	uint64_t currExpCount = player->getExpForLevel(player->level);
+	uint64_t nextExpCount = player->getExpForLevel(player->level + 1);
 	uint64_t experience = (uint64_t)result->getDataLong("experience");
 	if(experience < currExpCount || experience  > nextExpCount){
 		experience = currExpCount;
 	}
-	player->experience = experience;
+
 	player->levelPercent = Player::getPercentLevel(player->experience - currExpCount, nextExpCount - currExpCount);
 	player->soul = result->getDataInt("soul");
-	player->capacity = result->getDataInt("cap");
 	player->lastLoginSaved = result->getDataInt("lastlogin");
 	player->lastLogout = result->getDataInt("lastlogout");
 
 	player->health = result->getDataInt("health");
-	player->healthMax = result->getDataInt("healthmax");
+	player->mana = result->getDataInt("mana");
+
+	player->magLevel = result->getDataInt("maglevel");
+
+	uint64_t nextManaCount = (uint64_t)player->vocation->getReqMana(player->magLevel + 1);
+	uint64_t manaSpent = (uint64_t)result->getDataInt("manaspent");
+	if(manaSpent > nextManaCount){
+		//make sure its not out of bound
+		manaSpent = 0;
+	}
+	player->manaSpent = manaSpent;
+	player->magLevelPercent = Player::getPercentLevel(player->manaSpent, nextManaCount);
 
 	loadOutfit(player, result);
 
@@ -135,19 +147,6 @@ bool IOPlayer::loadPlayer(Player* player, const std::string& name, bool preload 
 	if(!player->setVocation(result->getDataInt("vocation"))){
 		return false;
 	}
-	// this stuff has to go after the vocation is set
-	player->mana = result->getDataInt("mana");
-	player->manaMax = result->getDataInt("manamax");
-	player->magLevel = result->getDataInt("maglevel");
-
-	uint64_t nextManaCount = (uint64_t)player->vocation->getReqMana(player->magLevel + 1);
-	uint64_t manaSpent = (uint64_t)result->getDataInt("manaspent");
-	if(manaSpent > nextManaCount){
-		//make sure its not out of bound
-		manaSpent = 0;
-	}
-	player->manaSpent = manaSpent;
-	player->magLevelPercent = Player::getPercentLevel(player->manaSpent, nextManaCount);
 
 	player->setLossPercent(LOSS_EXPERIENCE, result->getDataInt("loss_experience"));
 	player->setLossPercent(LOSS_MANASPENT, result->getDataInt("loss_mana"));

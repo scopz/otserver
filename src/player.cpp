@@ -55,6 +55,7 @@ extern Guilds g_guilds;
 AutoList<Player> Player::listPlayer;
 MuteCountMap Player::muteCountMap;
 ChannelStatementMap Player::channelStatementMap;
+std::map<int32_t, uint64_t> Player::experienceMap;
 uint32_t Player::channelStatementGuid = 0;
 
 #ifdef __ENABLE_SERVER_DIAGNOSTIC__
@@ -236,6 +237,18 @@ bool Player::setVocation(uint32_t vocId)
 	//Set the player's max soul according to their vocation
 	soulMax = vocation->getSoulMax();
 
+	Vocation *noneVoc;
+	g_vocations.getVocation(0, noneVoc);
+
+	healthMax = 150 + std::min((uint32_t)7,level-1) * noneVoc->getHPGain();
+	manaMax   =       std::min((uint32_t)7,level-1) * noneVoc->getManaGain();
+	capacity  = 400 + std::min((uint32_t)7,level-1) * noneVoc->getCapGain();
+
+	if (level > 8) {
+		healthMax += (level-8) * vocation->getHPGain();
+		manaMax   += (level-8) * vocation->getManaGain();
+		capacity  += (level-8) * vocation->getCapGain();
+	}
 	return true;
 }
 
@@ -2120,8 +2133,8 @@ void Player::addExperience(uint64_t exp)
 	uint32_t prevLevel = getLevel();
 	uint32_t newLevel = getLevel();
 
-	uint64_t currLevelExp = Player::getExpForLevel(newLevel);
-	uint64_t nextLevelExp = Player::getExpForLevel(newLevel + 1);
+	uint64_t currLevelExp = getExpForLevel(newLevel);
+	uint64_t nextLevelExp = getExpForLevel(newLevel + 1);
 	if(nextLevelExp < currLevelExp) {
 		// Cannot gain more experience
 		// Perhaps some sort of notice should be printed here?
@@ -2136,7 +2149,7 @@ void Player::addExperience(uint64_t exp)
 		manaMax += vocation->getManaGain();
 		mana += vocation->getManaGain();
 		capacity += vocation->getCapGain();
-		nextLevelExp = Player::getExpForLevel(newLevel + 1);
+		nextLevelExp = getExpForLevel(newLevel + 1);
 	}
 
 	if(prevLevel != newLevel){
@@ -2161,10 +2174,10 @@ void Player::addExperience(uint64_t exp)
 		onAdvanceEvent(LEVEL_EXPERIENCE, prevLevel, newLevel);
 	}
 
-	currLevelExp = Player::getExpForLevel(level);
-	nextLevelExp = Player::getExpForLevel(level + 1);
+	currLevelExp = getExpForLevel(level);
+	nextLevelExp = getExpForLevel(level + 1);
 	if(nextLevelExp > currLevelExp) {
-		uint32_t newPercent = Player::getPercentLevel(getExperience() - currLevelExp, Player::getExpForLevel(level + 1) - currLevelExp);
+		uint32_t newPercent = Player::getPercentLevel(getExperience() - currLevelExp, getExpForLevel(level + 1) - currLevelExp);
 		levelPercent = newPercent;
 	}
 	else {
@@ -2180,7 +2193,7 @@ void Player::removeExperience(uint64_t exp, bool updateStats /*= true*/)
 	uint32_t prevLevel = getLevel();
 	uint32_t newLevel = getLevel();
 
-	while(newLevel > 1 && experience < Player::getExpForLevel(newLevel)){
+	while(newLevel > 1 && experience < getExpForLevel(newLevel)){
 		newLevel--;
 		healthMax -= vocation->getHPGain();
 		manaMax -= vocation->getManaGain();
@@ -2206,10 +2219,10 @@ void Player::removeExperience(uint64_t exp, bool updateStats /*= true*/)
 	if(updateStats){
 		bool sentStats = false;
 
-		uint64_t currLevelExp = Player::getExpForLevel(level);
-		uint64_t nextLevelExp = Player::getExpForLevel(level + 1);
+		uint64_t currLevelExp = getExpForLevel(level);
+		uint64_t nextLevelExp = getExpForLevel(level + 1);
 		if(nextLevelExp > currLevelExp){
-			uint32_t newPercent = Player::getPercentLevel(getExperience() - currLevelExp, Player::getExpForLevel(level + 1) - currLevelExp);
+			uint32_t newPercent = Player::getPercentLevel(getExperience() - currLevelExp, getExpForLevel(level + 1) - currLevelExp);
 			levelPercent = newPercent;
 		}
 		else{
@@ -2662,6 +2675,46 @@ void Player::kickPlayer()
 	else{
 		g_game.removeCreature(this);
 	}
+}
+
+uint64_t Player::getExpForLevel(int32_t level) const
+{
+	int32_t maxLevel = g_config.getNumber(ConfigManager::MAX_LEVEL);
+	if (maxLevel > 0 && level > maxLevel) {
+		return UINT64_MAX;
+	}
+
+	if (experienceMap.find(level) == experienceMap.end()) {
+		for (int32_t i = experienceMap.rbegin()->first+1; i<=level; i++) {
+			experienceMap[i] = experienceFormula(i);
+		}
+	}
+
+	return experienceMap[level];
+}
+
+int32_t Player::getLevelFromExp(uint64_t exp) const
+{
+	int32_t level = 1;
+	for(std::map<int32_t, uint64_t>::iterator it = experienceMap.begin(); it != experienceMap.end();it++){
+		level = it->first;
+		if (exp < it->second) {
+			return it->first-1;
+		}
+	}
+
+	if (experienceMap.size() == 0) {
+		experienceMap[1] = 0;
+	}
+
+	uint64_t expI = 0;
+	while (expI <= exp) {
+		level++;
+		expI = experienceFormula(level);
+		experienceMap[level] = expI;
+	}
+
+	return level-1;
 }
 
 uint32_t Player::getGuildId() const

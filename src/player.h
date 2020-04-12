@@ -130,22 +130,28 @@ public:
 	void addList();
 	void kickPlayer();
 
-	static uint64_t getExpForLevel(int32_t level)
-    {
+	uint64_t getExpForLevel(int32_t level) const;
+	int32_t getLevelFromExp(uint64_t exp) const;
+	static uint64_t experienceFormula(int32_t level)
+	{
+		level--;
+		//"nosgia"
+		uint64_t exp = (level*level * (level*level + 30ULL*level  + 380ULL))/18ULL;
+		int32_t mod = std::fmod(exp,20);
+		return mod <= 10? exp-mod : exp-mod+20;
 
-        level--;
-        //"original"
-            return ((50ULL * level * level * level) - (150ULL * level * level) + (400ULL * level))/3ULL;
+		//"original"
+		//return ((50ULL * level * level * level) - (150ULL * level * level) + (400ULL * level))/3ULL;
 
+		//"retrocores"
+		//return ((50ULL * level * level * level) - (150ULL * level * level) + (400ULL * level))/6ULL;
 
-        //"tibianic"
-        //   return (level * 35ULL) * (level * level * level) / 500ULL + 10ULL * level;
+		//"tibianic"
+		//return (level * 35ULL) * (level * level * level) / 500ULL + 10ULL * level;
 
-
-        //"mastercores"
-        //    return ((level * 50ULL) * (level * level * level) / 500ULL)+10ULL;
-
-      }
+		//"mastercores"
+		//return ((level * 50ULL) * (level * level * level) / 500ULL)+10ULL;
+	}
 
 	//[ guild settings
 	void setGuild(Guild* _guild) { guild = _guild; }
@@ -219,7 +225,7 @@ public:
 
 	void setSex(PlayerSex_t player_sex);
 	int32_t getPlayerInfo(playerinfo_t playerinfo) const;
-	int64_t getExperience() const {return experience;}
+	uint64_t getExperience() const {return experience;}
 
 	time_t getLastLoginSaved() const {return lastLoginSaved;}
 	const Position& getLoginPosition() const {return loginPosition;}
@@ -831,6 +837,7 @@ protected:
 	typedef std::set<uint32_t> AttackedSet;
 	AttackedSet attackedSet;
 #endif
+	static std::map<int32_t, uint64_t> experienceMap;
 
 	void updateItemsLight(bool internal = false);
 	virtual int32_t getStepSpeed() const;
