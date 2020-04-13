@@ -297,9 +297,10 @@ void Vocation::loadCacheSkillValues()
 		skillCacheMap& skillMap = cacheSkill[skill];
 		const float &mult = skillMultipliers[skill];
 
-		double value = skillBases[skill]*std::pow(mult,(double)-11);
-		skillMap[0] = 0;
-		for (int level=1; level<=200; level++) {
+		double value = skillBases[skill];
+		skillMap[10] = 0;
+		skillMap[11] = value;
+		for (int level=12; level<=200; level++) {
 			value *= mult;
 			uint64_t accValue = (uint64_t) (skillMap[level-1]+value);
 			if (accValue < UINT_MAX) {
