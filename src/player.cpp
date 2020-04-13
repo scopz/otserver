@@ -62,9 +62,11 @@ uint32_t Player::channelStatementGuid = 0;
 uint32_t Player::playerCount = 0;
 #endif
 
-Player::Player(const std::string& _name, ProtocolGame* p) :
-Creature()
+Player::Player(const std::string& _name, ProtocolGame* p) : Creature()
 {
+	if (experienceMap.size() == 0) {
+		loadCacheExperienceValues();
+	}
 	client = p;
 	isConnecting = false;
 	if(client){
@@ -766,7 +768,7 @@ void Player::addSkillAdvance(skills_t skill, uint32_t count, bool useMultiplier 
 #endif
 
 	//Need skill up?
-	uint32_t percent = vocation->getPercent(skill, skills[skill][SKILL_LEVEL], skills[skill][SKILL_TRIES]);
+	uint32_t percent = vocation->getSkillPercent(skill, skills[skill][SKILL_LEVEL], skills[skill][SKILL_TRIES]);
 	if(percent >= 100){
 		skills[skill][SKILL_LEVEL]++;
 		skills[skill][SKILL_PERCENT] = 0;
@@ -2095,7 +2097,7 @@ void Player::drainMana(Creature* attacker, int32_t points)
 
 void Player::addManaSpent(uint64_t amount, bool useMultiplier /*= true*/)
 {
-	if(amount != 0 && !hasFlag(PlayerFlag_NotGainMana)){
+	if(amount != 0 && !hasFlag(PlayerFlag_NotGainMana) && vocation->adjustMaxManaSpent(manaSpent, magLevelPercent)){
 		if(useMultiplier){
 			amount = uint32_t(amount * getRateValue(LEVEL_MAGIC));
 		}
@@ -2103,14 +2105,11 @@ void Player::addManaSpent(uint64_t amount, bool useMultiplier /*= true*/)
 
 		uint32_t origLevel = magLevel;
 
-		uint64_t reqMana = vocation->getReqMana(origLevel + 1);
-		if(reqMana == 0)
-			return;
+		int32_t mlPercent = vocation->getMagicLevelPercent(origLevel, manaSpent);
 
-		while(manaSpent >= reqMana){
-			manaSpent -= reqMana;
+		while(mlPercent >= 100){
 			magLevel++;
-			reqMana = vocation->getReqMana(magLevel + 1);
+			mlPercent = vocation->getMagicLevelPercent(magLevel, manaSpent);
 		}
 
 		if (magLevel != origLevel){
@@ -2122,34 +2121,41 @@ void Player::addManaSpent(uint64_t amount, bool useMultiplier /*= true*/)
 			onAdvanceEvent(LEVEL_MAGIC, origLevel, magLevel);
 		}
 
-		magLevelPercent = Player::getPercentLevel(manaSpent, reqMana);
+		if (mlPercent < 0) {
+			vocation->adjustMaxManaSpent(manaSpent, magLevelPercent);
+		} else {
+			magLevelPercent = mlPercent;
+		}
 		sendStats();
 	}
 }
 
 void Player::addExperience(uint64_t exp)
 {
+	if (!adjustMaxExperience(experience, levelPercent)){
+		return;
+	}
 	experience += exp;
 	uint32_t prevLevel = getLevel();
 	uint32_t newLevel = getLevel();
 
-	uint64_t currLevelExp = getExpForLevel(newLevel);
-	uint64_t nextLevelExp = getExpForLevel(newLevel + 1);
-	if(nextLevelExp < currLevelExp) {
+	int32_t lPercent = getLevelPercent(prevLevel, experience);
+	if (lPercent < 0) {
 		// Cannot gain more experience
 		// Perhaps some sort of notice should be printed here?
 		levelPercent = 0;
 		sendStats();
 		return;
 	}
-	while(experience >= nextLevelExp) {
-		++newLevel;
+
+	while(lPercent >= 100){
+		newLevel++;
 		healthMax += vocation->getHPGain();
 		health += vocation->getHPGain();
 		manaMax += vocation->getManaGain();
 		mana += vocation->getManaGain();
 		capacity += vocation->getCapGain();
-		nextLevelExp = getExpForLevel(newLevel + 1);
+		lPercent = getLevelPercent(newLevel, experience);
 	}
 
 	if(prevLevel != newLevel){
@@ -2174,14 +2180,10 @@ void Player::addExperience(uint64_t exp)
 		onAdvanceEvent(LEVEL_EXPERIENCE, prevLevel, newLevel);
 	}
 
-	currLevelExp = getExpForLevel(level);
-	nextLevelExp = getExpForLevel(level + 1);
-	if(nextLevelExp > currLevelExp) {
-		uint32_t newPercent = Player::getPercentLevel(getExperience() - currLevelExp, getExpForLevel(level + 1) - currLevelExp);
-		levelPercent = newPercent;
-	}
-	else {
-		levelPercent = 0;
+	if (lPercent < 0) {
+		adjustMaxExperience(experience, levelPercent);
+	} else {
+		levelPercent = lPercent;
 	}
 
 	sendStats();
@@ -2219,15 +2221,8 @@ void Player::removeExperience(uint64_t exp, bool updateStats /*= true*/)
 	if(updateStats){
 		bool sentStats = false;
 
-		uint64_t currLevelExp = getExpForLevel(level);
-		uint64_t nextLevelExp = getExpForLevel(level + 1);
-		if(nextLevelExp > currLevelExp){
-			uint32_t newPercent = Player::getPercentLevel(getExperience() - currLevelExp, getExpForLevel(level + 1) - currLevelExp);
-			levelPercent = newPercent;
-		}
-		else{
-			levelPercent = 0;
-		}
+		int32_t newPercent = getLevelPercent(level, experience);
+		levelPercent = newPercent<0? 0:newPercent;
 
 		if(prevLevel != newLevel){
 			int32_t healthChange = health > healthMax ? (health - healthMax) : 0;
@@ -2498,26 +2493,19 @@ void Player::die()
 			double lostPercent = 1. - (double(experience - expLost) / double(experience)); // 0.1 if 10% was lost
 
 			//Magic level loss
-			uint64_t sumMana = 0;
-			uint64_t lostMana = 0;
-
-			for(uint32_t i = 1; i <= magLevel; ++i){
-				sumMana += vocation->getReqMana(i);
-			}
-
-			sumMana += manaSpent;
-
 			double lostPercentMana = lostPercent * lossPercent[LOSS_MANASPENT] / 100;
-			lostMana = (uint64_t)std::ceil(sumMana * lostPercentMana);
+			uint64_t lostMana = (uint64_t)std::ceil(manaSpent * lostPercentMana);
 
-			while((uint64_t)lostMana > manaSpent && magLevel > 0){
-				lostMana -= manaSpent;
-				manaSpent = vocation->getReqMana(magLevel);
-				magLevel--;
+			if (lostMana < manaSpent){
+				manaSpent -= lostMana;
+				magLevel = vocation->getMagicLevel(manaSpent);
+				int32_t magPercent = vocation->getMagicLevelPercent(magLevel, manaSpent);
+				magLevelPercent = magPercent < 0? 0 : magPercent;
+			} else {
+				manaSpent = 0;
+				magLevel = 0;
+				magLevelPercent = 0;
 			}
-
-			manaSpent = std::max((uint64_t)0, (uint64_t)manaSpent - lostMana);
-			magLevelPercent = Player::getPercentLevel(manaSpent, vocation->getReqMana(magLevel + 1));
 
 			//Skill loss
 			for(uint32_t i = 0; i <= 6; ++i){
@@ -2529,7 +2517,11 @@ void Player::die()
 				if (lostSkillTries < skills[i][SKILL_TRIES]){
 					skills[i][SKILL_TRIES] -= lostSkillTries;
 					skills[i][SKILL_LEVEL] = vocation->getSkillLevel(i, skills[i][SKILL_TRIES]);
-					skills[i][SKILL_PERCENT] = vocation->getPercent(i, skills[i][SKILL_LEVEL], skills[i][SKILL_TRIES]);
+					skills[i][SKILL_PERCENT] = vocation->getSkillPercent(i, skills[i][SKILL_LEVEL], skills[i][SKILL_TRIES]);
+				} else {
+					skills[i][SKILL_TRIES] = 0;
+					skills[i][SKILL_LEVEL] = vocation->getSkillLevel(i, skills[i][SKILL_TRIES]);
+					skills[i][SKILL_PERCENT] = 0;
 				}
 			}
 		}
@@ -2679,42 +2671,69 @@ void Player::kickPlayer()
 
 uint64_t Player::getExpForLevel(int32_t level) const
 {
-	int32_t maxLevel = g_config.getNumber(ConfigManager::MAX_LEVEL);
-	if (maxLevel > 0 && level > maxLevel) {
-		return UINT64_MAX;
-	}
-
-	if (experienceMap.find(level) == experienceMap.end()) {
-		for (int32_t i = experienceMap.rbegin()->first+1; i<=level; i++) {
-			experienceMap[i] = experienceFormula(i);
-		}
-	}
-
 	return experienceMap[level];
 }
 
-int32_t Player::getLevelFromExp(uint64_t exp) const
+
+void Player::loadCacheExperienceValues()
 {
-	int32_t level = 1;
+	int32_t maxLevel = g_config.getNumber(ConfigManager::MAX_LEVEL);
+	if (maxLevel <= 0) {
+		maxLevel = 1000;
+	}
+
+	experienceMap[1] = 0;
+	for (int32_t i = 2; i<=maxLevel; i++) {
+		experienceMap[i] = experienceFormula(i);
+	}
+}
+
+int32_t Player::getLevelFromExp(const uint64_t &exp) const
+{
 	for(std::map<int32_t, uint64_t>::iterator it = experienceMap.begin(); it != experienceMap.end();it++){
-		level = it->first;
 		if (exp < it->second) {
 			return it->first-1;
 		}
 	}
+	std::map<int32_t, uint64_t>::reverse_iterator it = experienceMap.rbegin();
+	if (exp >= it->second) {
+		return it->first;
+	}
+	return 0;
+}
 
-	if (experienceMap.size() == 0) {
-		experienceMap[1] = 0;
+int32_t Player::getLevelPercent(const int32_t &level, uint64_t exp) const
+{
+	std::map<int32_t, uint64_t>::iterator it = experienceMap.find(level+1);
+	if (it == experienceMap.end()) {
+		return -1;
 	}
 
-	uint64_t expI = 0;
-	while (expI <= exp) {
-		level++;
-		expI = experienceFormula(level);
-		experienceMap[level] = expI;
+	const uint64_t &baseCount = experienceMap[level];
+	const uint64_t endValue = it->second - baseCount;
+	exp -= baseCount;
+
+	if(endValue > 0){
+		if (exp >= endValue) {
+			return 100;
+		} else {
+			return (int32_t)((double)exp / endValue * 100);
+		}
 	}
 
-	return level-1;
+	return 0;
+}
+
+bool Player::adjustMaxExperience(uint64_t &exp, uint32_t &lPercent)
+{
+	uint64_t maxExp = experienceMap.rbegin()->second;
+	if (exp >= maxExp) {
+		exp = maxExp;
+		lPercent = 0;
+		return false;
+	} else {
+		return true;
+	}
 }
 
 uint32_t Player::getGuildId() const

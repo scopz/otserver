@@ -102,32 +102,16 @@ bool IOPlayer::loadPlayer(Player* player, const std::string& name, bool preload 
 
 	player->experience = (uint64_t)result->getDataLong("experience");
 	player->level = player->getLevelFromExp(player->experience);
+	int32_t levelPercent = player->getLevelPercent(player->level, player->experience);
+	player->levelPercent = levelPercent < 0? 0 : levelPercent;
+	player->adjustMaxExperience(player->experience, player->levelPercent);
 
-	uint64_t currExpCount = player->getExpForLevel(player->level);
-	uint64_t nextExpCount = player->getExpForLevel(player->level + 1);
-	uint64_t experience = (uint64_t)result->getDataLong("experience");
-	if(experience < currExpCount || experience  > nextExpCount){
-		experience = currExpCount;
-	}
-
-	player->levelPercent = Player::getPercentLevel(player->experience - currExpCount, nextExpCount - currExpCount);
 	player->soul = result->getDataInt("soul");
 	player->lastLoginSaved = result->getDataInt("lastlogin");
 	player->lastLogout = result->getDataInt("lastlogout");
 
 	player->health = result->getDataInt("health");
 	player->mana = result->getDataInt("mana");
-
-	player->magLevel = result->getDataInt("maglevel");
-
-	uint64_t nextManaCount = (uint64_t)player->vocation->getReqMana(player->magLevel + 1);
-	uint64_t manaSpent = (uint64_t)result->getDataInt("manaspent");
-	if(manaSpent > nextManaCount){
-		//make sure its not out of bound
-		manaSpent = 0;
-	}
-	player->manaSpent = manaSpent;
-	player->magLevelPercent = Player::getPercentLevel(player->manaSpent, nextManaCount);
 
 	loadOutfit(player, result);
 
@@ -147,6 +131,13 @@ bool IOPlayer::loadPlayer(Player* player, const std::string& name, bool preload 
 	if(!player->setVocation(result->getDataInt("vocation"))){
 		return false;
 	}
+
+	// needs to have vocation to put the correct values
+	player->manaSpent = (uint64_t)result->getDataLong("manaspent");
+	player->magLevel = player->vocation->getMagicLevel(player->manaSpent);
+	int32_t magPercent = player->vocation->getMagicLevelPercent(player->magLevel, player->manaSpent);
+	player->magLevelPercent = magPercent < 0? 0 : magPercent;
+	player->vocation->adjustMaxManaSpent(player->manaSpent, player->magLevelPercent);
 
 	player->setLossPercent(LOSS_EXPERIENCE, result->getDataInt("loss_experience"));
 	player->setLossPercent(LOSS_MANASPENT, result->getDataInt("loss_mana"));
@@ -323,7 +314,7 @@ void IOPlayer::loadSkills(Player* player, DBResult* result)
 
 			player->skills[skillid][SKILL_LEVEL] = skillLevel;
 			player->skills[skillid][SKILL_TRIES] = skillCount;
-			player->skills[skillid][SKILL_PERCENT] = voc->getPercent(skillid, skillLevel, skillCount);
+			player->skills[skillid][SKILL_PERCENT] = voc->getSkillPercent(skillid, skillLevel, skillCount);
 		}
 	}while(result->next());
 }
@@ -511,7 +502,7 @@ bool IOPlayer::savePlayer(Player* player, bool shallow)
 		<< ", `health` = " << player->health
 		<< ", `healthmax` = " << player->healthMax
 		<< ", `direction` = " << 2
-		<< ", `experience` = " << player->experience
+		<< ", `experience` = " << (int64_t)player->experience
 		<< ", `lookbody` = " << (int32_t)player->defaultOutfit.lookBody
 		<< ", `lookfeet` = " << (int32_t)player->defaultOutfit.lookFeet
 		<< ", `lookhead` = " << (int32_t)player->defaultOutfit.lookHead
@@ -520,7 +511,7 @@ bool IOPlayer::savePlayer(Player* player, bool shallow)
 		<< ", `maglevel` = " << player->magLevel
 		<< ", `mana` = " << player->mana
 		<< ", `manamax` = " << player->manaMax
-		<< ", `manaspent` = " << player->manaSpent
+		<< ", `manaspent` = " << (int64_t)player->manaSpent
 		<< ", `soul` = " << player->soul
 		<< ", `town_id` = " << player->town
 		<< ", `posx` = " << player->getLoginPosition().x

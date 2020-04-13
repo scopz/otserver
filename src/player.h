@@ -131,7 +131,9 @@ public:
 	void kickPlayer();
 
 	uint64_t getExpForLevel(int32_t level) const;
-	int32_t getLevelFromExp(uint64_t exp) const;
+	int32_t getLevelFromExp(const uint64_t &exp) const;
+	int32_t getLevelPercent(const int32_t &level, uint64_t exp) const;
+	bool adjustMaxExperience(uint64_t &exp, uint32_t &lPercent);
 	static uint64_t experienceFormula(int32_t level)
 	{
 		level--;
@@ -860,6 +862,9 @@ protected:
 	friend class Actions;
 	friend class IOPlayer;
 	friend class ProtocolGame;
+
+private:
+	void loadCacheExperienceValues();
 };
 
 #endif

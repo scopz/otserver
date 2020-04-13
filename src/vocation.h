@@ -35,9 +35,11 @@ public:
 	const std::string& getName() const {return name;}
 	const std::string& getDescription() const {return description;}
 
-	int32_t getPercent(const int32_t &skill, const uint64_t &level, uint64_t count);
+	int32_t getSkillPercent(const int32_t &skill, const uint64_t &level, uint64_t count);
 	uint32_t getSkillLevel(const int32_t &skill, const uint64_t &count);
-	uint64_t getReqMana(int32_t magLevel);
+	int32_t getMagicLevelPercent(const uint64_t &mLevel, uint64_t manaUsed);
+	uint32_t getMagicLevel(const uint64_t &manaUsed);
+	bool adjustMaxManaSpent(uint64_t &manaUsed, uint32_t &magLevelPercent);
 	uint32_t getHPGain() const {return gainHP;};
 	uint32_t getManaGain() const {return gainMana;};
 	uint32_t getCapGain() const {return gainCap;};
@@ -92,6 +94,7 @@ protected:
 
 	uint32_t skillBases[SKILL_LAST + 1];
 	float skillMultipliers[SKILL_LAST + 1];
+	uint32_t manaBase;
 	float manaMultiplier;
 	uint32_t attackSpeed;
 

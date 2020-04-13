@@ -103,15 +103,20 @@ bool Vocations::loadFromXml(const std::string& datadir)
 					if(readXMLInteger(p, "gainsoulticks", intVal)){
 						voc->gainSoulTicks = intVal;
 					}
-					if(readXMLFloat(p, "manamultiplier", floatVal)){
-						voc->manaMultiplier = floatVal;
-					}
 					if(readXMLInteger(p, "attackspeed", intVal)){
 						voc->attackSpeed = intVal;
 					}
 					skillNode = p->children;
 					while(skillNode){
-						if(xmlStrcmp(skillNode->name, (const xmlChar*)"skill") == 0){
+						if(xmlStrcmp(skillNode->name, (const xmlChar*)"magic") == 0){
+							if(readXMLInteger(skillNode, "base", intVal)){
+								voc->manaBase = intVal;
+							}
+							if(readXMLFloat(skillNode, "multiplier", floatVal)){
+								voc->manaMultiplier = floatVal;
+							}
+						}
+						else if(xmlStrcmp(skillNode->name, (const xmlChar*)"skill") == 0){
 							int32_t skill_id;
 							if(readXMLInteger(skillNode, "id", intVal)){
 								skill_id = intVal;
@@ -250,6 +255,7 @@ Vocation::Vocation()
 	gainHP = 5;
 	maxSoul = 100;
 	gainSoulTicks = 120;
+	manaBase = 1600;
 	manaMultiplier = 4.0;
 	attackSpeed = 1500;
 
@@ -293,6 +299,7 @@ Vocation::~Vocation()
 
 void Vocation::loadCacheSkillValues()
 {
+	// SKILLS
 	for (int skill = SKILL_FIRST; skill<=SKILL_LAST; skill++) {
 		skillCacheMap& skillMap = cacheSkill[skill];
 		const float &mult = skillMultipliers[skill];
@@ -302,7 +309,7 @@ void Vocation::loadCacheSkillValues()
 		skillMap[11] = value;
 		for (int level=12; level<=200; level++) {
 			value *= mult;
-			uint64_t accValue = (uint64_t) (skillMap[level-1]+value);
+			uint64_t accValue = skillMap[level-1]+(uint64_t)value;
 			if (accValue < UINT_MAX) {
 				skillMap[level] = accValue;
 			} else {
@@ -310,9 +317,22 @@ void Vocation::loadCacheSkillValues()
 			}
 		}
 	}
+
+	// MAGIC LEVEL
+	double value = manaBase;
+	cacheMana[0] = 0;
+	cacheMana[1] = value;
+	for (int level=2; level<=200; level++) {
+		value *= manaMultiplier;
+		if (value < UINT64_MAX && cacheMana[level-1] < UINT64_MAX-(uint64_t)value) {
+			cacheMana[level] = cacheMana[level-1]+(uint64_t)value;
+		} else {
+			break;
+		}
+	}
 }
 
-int32_t Vocation::getPercent(const int32_t &skill, const uint64_t &level, uint64_t count)
+int32_t Vocation::getSkillPercent(const int32_t &skill, const uint64_t &level, uint64_t count)
 {
 	const uint32_t &baseCount = cacheSkill[skill][level];
 	uint32_t endValue = cacheSkill[skill][level+1]-baseCount;
@@ -341,17 +361,53 @@ uint32_t Vocation::getSkillLevel(const int32_t &skill, const uint64_t &count)
 	return 0;
 }
 
-uint64_t Vocation::getReqMana(int32_t magLevel)
+int32_t Vocation::getMagicLevelPercent(const uint64_t &mLevel, uint64_t manaUsed)
 {
-	manaCacheMap::iterator it = cacheMana.find(magLevel);
-	if(it != cacheMana.end()){
-		return it->second;
+	std::map<uint32_t, uint64_t>::iterator it = cacheMana.find(mLevel+1);
+	if (it == cacheMana.end()) {
+		return -1;
 	}
 
-	uint64_t reqMana = (uint64_t)(1600*std::pow(manaMultiplier, magLevel-1));
-	cacheMana[magLevel] = reqMana;
+	const uint64_t &baseCount = cacheMana[mLevel];
+	const uint64_t endValue = it->second - baseCount;
+	manaUsed -= baseCount;
 
-	return reqMana;
+	if(endValue > 0){
+		if (manaUsed >= endValue) {
+			return 100;
+		} else {
+			return (int32_t)((double)manaUsed / endValue * 100);
+		}
+	}
+
+	return 0;
+}
+
+uint32_t Vocation::getMagicLevel(const uint64_t &manaUsed)
+{
+	for(std::map<uint32_t, uint64_t>::iterator it = cacheMana.begin(); it != cacheMana.end();it++){
+		if (manaUsed < it->second) {
+			return it->first-1;
+		}
+	}
+	std::map<uint32_t, uint64_t>::reverse_iterator it = cacheMana.rbegin();
+	if (manaUsed >= it->second) {
+		return it->first;
+	}
+	return 0;
+}
+
+
+bool Vocation::adjustMaxManaSpent(uint64_t &manaUsed, uint32_t &magLevelPercent)
+{
+	uint64_t maxMana = cacheMana.rbegin()->second;
+	if (manaUsed >= maxMana) {
+		manaUsed = maxMana;
+		magLevelPercent = 0;
+		return false;
+	} else {
+		return true;
+	}
 }
 
 void Vocation::debugVocation()
