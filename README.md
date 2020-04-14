@@ -4,16 +4,15 @@ OTServ is a free MMORPG emulation, that creates a own gameworld server,
 based on the CIPSoft's Tibia.
 
 This version of OpenTibia is based on the revscriptsys branch of OTServ,
-and is as such NOT backwards-compatible with old distributions like TFS or
-OTServ 0.6.3. This has been done to greatly enhance the scripting system,
-moving to a much more flexible and dynamic system that allows much more
-control.
+and is as such NOT backwards-compatible with old distributions like TFS.
+This has been done to greatly enhance the scripting system, moving to a
+much more flexible and dynamic system that allows much more control.
 
 # How does it work?
 
-This version of OTServ is targeted towards Tibia 8.7.
+This version of OTServ is targeted towards Tibia 7.72.
 
-You have to execute some sql queries from schema.mysql, schema.pgsql or even schema.sqlite.
+You have to execute some sql queries from schema.sql.
 And check it out. Once you are done, have a look around in the folders
 and take a look at the config.lua
 
@@ -23,63 +22,63 @@ Then you are logged in.
 
 # Contributors
 
-- Project Admins
+- Currently active:
 
-    - iryont (inactive)
-    - marksamman (inactive)
-    - Remere / hjnilsson (inactive)
-
+    - scopp - Nosgia Server
 
 - Inactive Developers
-
-    - assassina
-    - hackerpotato
-    - kilouco / aseverino
-    - SimOne / xeroc81
-    - Tliff
-    - Spin
-    - Shi'Voc
-    - Nostradamus
-    - rafaelhamdan
-    - Acrimon
-    - Haktivex
-    - Fandoras
-    - Reebow
-    - Privateer
-    - Aire
-    - Anstice
-    - Arkold Thos
-    - bruno
-    - Heliton
-    - Jiddo
-    - Winghawk
+    - Acrimon - Initial project developer
+    - Aire - Developer
+    - Anstice - Developer
+    - Arkold Thos - Linux porter
+    - assassina - OpenTibia
+    - bruno - ODBC driver
+    - Decar - Fansite
+    - Fandoras - Developer
+    - GriZzm0 - Scripting
+    - hackerpotato - OpenTibia
+    - Haktivex - Developer
+    - Heliton - Scripting
+    - iryont - OpenTibia
+    - j4K3xBl4sT3r - Developer
+    - Jiddo - Scripting
+    - marksamman - OpenTibia
+    - Matkus - Developer
+    - Nostradamus - Scripting
+    - Nuker - Forum administrator
+    - Pedro B. - Developer
+    - Pekay - README Documentation, Forum administrator
+    - Peonso - Tibia Legacy Server & OTHire
+    - Primer - Developer
+    - Privateer - Documentation on the protocol
+    - Reebow - Developer, special protocol support
+    - Remere / hjnilsson - Developer
+    - Shi'Voc - Initial project developer
+    - SimOne / xeroc81 - Developer
+    - Smygflik - Developer
+    - Snack - Developer
+    - Spin - Developer
+    - the fike - Developer (advisory/optimization)
+    - TiMMit - Developer
+    - Tliff - Developer, OpenTibia leader, Forum administrator
+    - Torvik - Item list
+    - TwistedScorpio - OTHire
+    - verkon - Forum administrator
+    - Vitor - Developer (advisory/optimization)
+    - Winghawk - Item list, Scripts
+    - Wrzasq - Developer
+    - Yorick - Fansite, Forum administrator
     - Blackdemon
+    - Evo
     - FightingElf
     - Gecko
-    - Pedro B.
-    - Matkus
-    - OsoSangre
-    - Smygflik
-    - Snack
-    - TiMMit
-    - Primer
-    - j4K3xBl4sT3r
-    - Wrzasq
-    - nfries88
-    - the fike
-    - Vitor
-    - Decar
-    - Torvik
-    - GriZzm0
-    - Stormer
+    - kilouco / aseverino
     - Mackan
+    - nfries88
+    - OsoSangre
+    - rafaelhamdan
+    - Stormer
     - Tythor Zeth
-    - Tliff
-    - Yorick
-    - Pekay
-    - Nuker
-    - verkon
-    - Evo
 
 
 - Contributors
@@ -102,3 +101,11 @@ No other websites are officialy affiliated with OTServ.
 Yes! There are utilities available as a seperate projects under the opentibia organization
 
 This includes an IP changer, a remote administration tool, an item editor and more.
+
+# Eclipse (Linux)
+If you are willing to use Eclipse in Linux, remember to set the required libraries in:
+Project properties -> C/C++ General -> Paths and Symbols
+
+The libraries you have to set are:
+/usr/include/libxml2
+/usr/include/lua5.1
