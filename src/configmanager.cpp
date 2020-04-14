@@ -141,6 +141,8 @@ bool ConfigManager::loadFile(const std::string& _filename)
 	m_confInteger[RATE_SPAWN] = getGlobalNumber(L, "rate_spawn", 1);
 	m_confInteger[LEVEL_TO_ROOK] = getGlobalNumber(L, "level_to_rook", 0);
 	m_confInteger[MAX_LEVEL] = getGlobalNumber(L, "max_level", -1);
+	m_confInteger[MAX_SKILL] = getGlobalNumber(L, "max_skill", -1);
+	m_confInteger[MAX_MAGIC] = getGlobalNumber(L, "max_magic", -1);
 	m_confInteger[ROOK_TEMPLE_ID] = getGlobalNumber(L, "rook_temple_id", 1);
 	m_confInteger[STORAGE_SENDROOK] = getGlobalNumber(L, "storage_sendrook", 49786);
 	m_confInteger[MAX_MESSAGEBUFFER] = getGlobalNumber(L, "maxmessagebuffer", 4);
@@ -388,6 +390,7 @@ void ConfigManager::moveValue(lua_State* from, lua_State* to)
 				lua_insert(to, -2); // Move key above value
 				lua_settable(to, -3); // Set the key
 			}
+			break;
 		default:
 			break;
 	}

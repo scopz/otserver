@@ -50,7 +50,6 @@ extern Vocations g_vocations;
 extern MoveEvents* g_moveEvents;
 extern Weapons* g_weapons;
 extern CreatureEvents* g_creatureEvents;
-extern Guilds g_guilds;
 
 AutoList<Player> Player::listPlayer;
 MuteCountMap Player::muteCountMap;
@@ -136,9 +135,9 @@ Player::Player(const std::string& _name, ProtocolGame* p) : Creature()
 	}
 
 	for(int32_t i = SKILL_FIRST; i <= SKILL_LAST; ++i){
-		skills[i][SKILL_LEVEL]= 10;
-		skills[i][SKILL_TRIES]= 0;
-		skills[i][SKILL_PERCENT] = 0;
+		skills[i].level = 10;
+		skills[i].tries = 0;
+		skills[i].percent = 0;
 	}
 
 	for(int32_t i = SKILL_FIRST; i <= SKILL_LAST; ++i){
@@ -447,6 +446,7 @@ Item* Player::getWeapon(bool ignoreAmmu /*= false*/)
 						return item;
 					}
 				}
+				break;
 			}
 
 			default:
@@ -470,7 +470,7 @@ WeaponType_t Player::getWeaponType()
 int32_t Player::getWeaponSkill(const Item* item) const
 {
 	if(!item){
-		return getSkill(SKILL_FIST, SKILL_LEVEL);
+		return getSkillLevel(SKILL_FIST);
 	}
 
 	WeaponType_t weaponType = item->getWeaponType();
@@ -478,24 +478,24 @@ int32_t Player::getWeaponSkill(const Item* item) const
 
 	switch(weaponType){
 		case WEAPON_SWORD:
-			attackSkill = getSkill(SKILL_SWORD, SKILL_LEVEL);
+			attackSkill = getSkillLevel(SKILL_SWORD);
 			break;
 
 		case WEAPON_CLUB:
 		{
-			attackSkill = getSkill(SKILL_CLUB, SKILL_LEVEL);
+			attackSkill = getSkillLevel(SKILL_CLUB);
 			break;
 		}
 
 		case WEAPON_AXE:
 		{
-			attackSkill = getSkill(SKILL_AXE, SKILL_LEVEL);
+			attackSkill = getSkillLevel(SKILL_AXE);
 			break;
 		}
 
 		case WEAPON_DIST:
 		{
-			attackSkill = getSkill(SKILL_DIST, SKILL_LEVEL);
+			attackSkill = getSkillLevel(SKILL_DIST);
 			break;
 		}
 		default:
@@ -568,7 +568,7 @@ int32_t Player::getDefense() const
 
 	if(shield && shield->getDefense() >= defenseValue){
 		defenseValue = shield->getDefense() + extraDef;
-		defenseSkill = getSkill(SKILL_SHIELD, SKILL_LEVEL);
+		defenseSkill = getSkillLevel(SKILL_SHIELD);
 	}
 
 	if(defenseSkill == 0)
@@ -712,15 +712,16 @@ uint64_t Player::getLostExperience() const
 	return xp_to_lose * lossPercent[LOSS_EXPERIENCE] / 100;
 }
 
-int32_t Player::getSkill(skills_t skilltype, skillsid_t skillinfo) const
+uint32_t Player::getSkillLevel(skills_t skilltype) const
 {
-	int32_t n = skills[skilltype][skillinfo];
-
-	if(skillinfo == SKILL_LEVEL){
-		n += varSkills[skilltype];
-	}
+	uint32_t n = skills[skilltype].level + varSkills[skilltype];
 
 	return std::max((int32_t)0, (int32_t)n);
+}
+
+Skill Player::getSkill(skills_t skilltype) const
+{
+	return skills[skilltype];
 }
 
 std::string Player::getSkillName(int skillid)
@@ -757,38 +758,46 @@ std::string Player::getSkillName(int skillid)
 
 void Player::addSkillAdvance(skills_t skill, uint32_t count, bool useMultiplier /*= true*/)
 {
+	if (!vocation->adjustMaxSkillCount(skill, skills[skill].tries, skills[skill].percent)) {
+		return;
+	}
+
 	if(useMultiplier){
 		count = uint32_t(count * getRateValue((levelTypes_t)skill));
 	}
-	skills[skill][SKILL_TRIES] += count * g_config.getNumber(ConfigManager::RATE_SKILL);
+	skills[skill].tries += count * g_config.getNumber(ConfigManager::RATE_SKILL);
 
 #ifdef __DEBUG__
-	//std::cout << getName() << ", has the vocation: " << (int)getVocationId() << " and is training his " << Player::getSkillName(skill) << "(" << skill << "). Tries: " << skills[skill][SKILL_TRIES] << "(" << vocation->getReqSkillTries(skill, skills[skill][SKILL_LEVEL] + 1) << ")" << std::endl;
-	std::cout << "Current skill: " << skills[skill][SKILL_LEVEL] << std::endl;
+	//std::cout << getName() << ", has the vocation: " << (int)getVocationId() << " and is training his " << Player::getSkillName(skill) << "(" << skill << "). Tries: " << skills[skill].tries << "(" << vocation->getReqSkillTries(skill, skills[skill].level + 1) << ")" << std::endl;
+	std::cout << getName() << " voc:" << getVocationId() << " Current skill: " << skills[skill].level << std::endl;
 #endif
 
-	//Need skill up?
-	uint32_t percent = vocation->getSkillPercent(skill, skills[skill][SKILL_LEVEL], skills[skill][SKILL_TRIES]);
-	if(percent >= 100){
-		skills[skill][SKILL_LEVEL]++;
-		skills[skill][SKILL_PERCENT] = 0;
+	uint32_t initialSkill = skills[skill].level;
+
+	int32_t percent = vocation->getSkillPercent(skill, initialSkill, skills[skill].tries);
+	while(percent >= 100){
+		skills[skill].level++;
+		percent = vocation->getSkillPercent(skill, skills[skill].level, skills[skill].tries);
+	}
+
+	if (percent < 0) {
+		vocation->adjustMaxSkillCount(skill, skills[skill].tries, skills[skill].percent);
+	}
+
+	if (initialSkill != skills[skill].level) {
 		std::stringstream advMsg;
 		advMsg << "You advanced in " << Player::getSkillName(skill) << ".";
-
 		sendTextMessage(MSG_EVENT_ADVANCE, advMsg.str());
 
 		//scripting event - onAdvance
-		onAdvanceEvent((levelTypes_t)skill, (skills[skill][SKILL_LEVEL] - 1), skills[skill][SKILL_LEVEL]);
+		onAdvanceEvent((levelTypes_t)skill, (skills[skill].level - 1), skills[skill].level);
+		sendSkills();
 
+	} else if(skills[skill].percent != (uint32_t)percent){
+		skills[skill].percent = percent<0? 0:percent;
 		sendSkills();
 	}
-	else{
-		//update percent
-		if(skills[skill][SKILL_PERCENT] != percent){
-			skills[skill][SKILL_PERCENT] = percent;
-			sendSkills();
-		}
-	}
+
 }
 
 void Player::setVarStats(stats_t stat, int32_t modifier)
@@ -2380,8 +2389,8 @@ void Player::sendToRook()
 	experience = 0;
 
 	for (int32_t i = SKILL_FIRST; i <= SKILL_LAST; ++i) {
-		skills[i][SKILL_LEVEL]= 10;
-		skills[i][SKILL_TRIES]= 0;
+		skills[i].level = 10;
+		skills[i].tries = 0;
 	}
 
 	for (int32_t i = SLOT_FIRST; i < SLOT_LAST; ++i) {
@@ -2509,19 +2518,19 @@ void Player::die()
 
 			//Skill loss
 			for(uint32_t i = 0; i <= 6; ++i){
-				uint32_t sumSkillTries = skills[i][SKILL_TRIES];
+				uint32_t sumSkillTries = skills[i].tries;
 
 				double lossPercentSkill = lostPercent * lossPercent[LOSS_SKILLTRIES] / 100;
 				uint32_t lostSkillTries = (uint32_t)std::ceil(sumSkillTries * lossPercentSkill);
 
-				if (lostSkillTries < skills[i][SKILL_TRIES]){
-					skills[i][SKILL_TRIES] -= lostSkillTries;
-					skills[i][SKILL_LEVEL] = vocation->getSkillLevel(i, skills[i][SKILL_TRIES]);
-					skills[i][SKILL_PERCENT] = vocation->getSkillPercent(i, skills[i][SKILL_LEVEL], skills[i][SKILL_TRIES]);
+				if (lostSkillTries < skills[i].tries){
+					skills[i].tries -= lostSkillTries;
+					skills[i].level = vocation->getSkillLevel(i, skills[i].tries);
+					skills[i].percent = vocation->getSkillPercent(i, skills[i].level, skills[i].tries);
 				} else {
-					skills[i][SKILL_TRIES] = 0;
-					skills[i][SKILL_LEVEL] = vocation->getSkillLevel(i, skills[i][SKILL_TRIES]);
-					skills[i][SKILL_PERCENT] = 0;
+					skills[i].tries = 0;
+					skills[i].level = vocation->getSkillLevel(i, skills[i].tries);
+					skills[i].percent = 0;
 				}
 			}
 		}

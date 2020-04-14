@@ -87,6 +87,8 @@ Creature()
 	yellTicks = 0;
 	timeOfLastHit = 0;
 	hadRecentBattleVar = false;
+	resetTicks = false;
+	extraMeleeAttack = false;
 
 	strDescription = mType->nameDescription;
 	toLowerCaseString(strDescription);

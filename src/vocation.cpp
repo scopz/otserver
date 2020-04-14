@@ -19,6 +19,7 @@
 //////////////////////////////////////////////////////////////////////
 #include "otpch.h"
 
+#include "configmanager.h"
 #include "vocation.h"
 #include "tools.h"
 #include <libxml/xmlmemory.h>
@@ -26,6 +27,8 @@
 #include <iostream>
 #include <cmath>
 #include <boost/algorithm/string/predicate.hpp>
+
+extern ConfigManager g_config;
 
 Vocations::Vocations()
 {
@@ -287,6 +290,9 @@ Vocation::Vocation()
 
 	baseDefense = 1.;
 	armorDefense = 1.;
+
+	promotesTo = 0;
+	baseVocation = 0;
 }
 
 Vocation::~Vocation()
@@ -300,6 +306,11 @@ Vocation::~Vocation()
 void Vocation::loadCacheSkillValues()
 {
 	// SKILLS
+	int32_t maxSkill = g_config.getNumber(ConfigManager::MAX_SKILL);
+	if (maxSkill <= 0) {
+		maxSkill = 1000;
+	}
+
 	for (int skill = SKILL_FIRST; skill<=SKILL_LAST; skill++) {
 		skillCacheMap& skillMap = cacheSkill[skill];
 		const float &mult = skillMultipliers[skill];
@@ -307,7 +318,7 @@ void Vocation::loadCacheSkillValues()
 		double value = skillBases[skill];
 		skillMap[10] = 0;
 		skillMap[11] = value;
-		for (int level=12; level<=200; level++) {
+		for (int level=12; level<=maxSkill; level++) {
 			value *= mult;
 			uint64_t accValue = skillMap[level-1]+(uint64_t)value;
 			if (accValue < UINT_MAX) {
@@ -319,10 +330,15 @@ void Vocation::loadCacheSkillValues()
 	}
 
 	// MAGIC LEVEL
+	int32_t maxMagic = g_config.getNumber(ConfigManager::MAX_MAGIC);
+	if (maxMagic <= 0) {
+		maxMagic = 1000;
+	}
+
 	double value = manaBase;
 	cacheMana[0] = 0;
 	cacheMana[1] = value;
-	for (int level=2; level<=200; level++) {
+	for (int level=2; level<=maxMagic; level++) {
 		value *= manaMultiplier;
 		if (value < UINT64_MAX && cacheMana[level-1] < UINT64_MAX-(uint64_t)value) {
 			cacheMana[level] = cacheMana[level-1]+(uint64_t)value;
@@ -334,8 +350,15 @@ void Vocation::loadCacheSkillValues()
 
 int32_t Vocation::getSkillPercent(const int32_t &skill, const uint64_t &level, uint64_t count)
 {
-	const uint32_t &baseCount = cacheSkill[skill][level];
-	uint32_t endValue = cacheSkill[skill][level+1]-baseCount;
+	skillCacheMap& skillMap = cacheSkill[skill];
+
+	skillCacheMap::iterator it = skillMap.find(level+1);
+	if (it == skillMap.end()) {
+		return -1;
+	}
+
+	const uint64_t &baseCount = skillMap[level];
+	const uint64_t &endValue = it->second - baseCount;
 	count -= baseCount;
 
 	if(endValue > 0){
@@ -353,12 +376,25 @@ uint32_t Vocation::getSkillLevel(const int32_t &skill, const uint64_t &count)
 {
 	skillCacheMap& skillMap = cacheSkill[skill];
 
-	for(std::map<uint32_t, uint32_t>::iterator it = skillMap.begin(); it != skillMap.end();it++){
+	for(skillCacheMap::iterator it = skillMap.begin(); it != skillMap.end();it++){
 		if (count < it->second) {
 			return it->first-1;
 		}
 	}
 	return 0;
+}
+
+bool Vocation::adjustMaxSkillCount(const int32_t &skill, uint64_t &count, uint32_t &skillPercent)
+{
+	skillCacheMap& skillMap = cacheSkill[skill];
+	uint64_t maxCount = skillMap.rbegin()->second;
+	if (count >= maxCount) {
+		count = maxCount;
+		skillPercent = 0;
+		return false;
+	} else {
+		return true;
+	}
 }
 
 int32_t Vocation::getMagicLevelPercent(const uint64_t &mLevel, uint64_t manaUsed)

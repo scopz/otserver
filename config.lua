@@ -172,6 +172,8 @@ level_to_rook = 5
 
 -- Maximum level
 max_level = 200
+max_skill = 200
+max_magic = 200
 
 -- rook_temple_id newbie island temple id
 rook_temple_id = 11

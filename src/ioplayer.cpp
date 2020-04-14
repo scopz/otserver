@@ -31,7 +31,6 @@
 #include <iomanip>
 
 extern ConfigManager g_config;
-extern Game g_game;
 extern Guilds g_guilds;
 
 #ifndef __GNUC__
@@ -311,10 +310,14 @@ void IOPlayer::loadSkills(Player* player, DBResult* result)
 		if(skillid >= SKILL_FIRST && skillid <= SKILL_LAST){
 			uint64_t skillCount = result->getDataInt("count");
 			uint32_t skillLevel = voc->getSkillLevel(skillid, skillCount);
+			int32_t percent = voc->getSkillPercent(skillid, skillLevel, skillCount);
 
-			player->skills[skillid][SKILL_LEVEL] = skillLevel;
-			player->skills[skillid][SKILL_TRIES] = skillCount;
-			player->skills[skillid][SKILL_PERCENT] = voc->getSkillPercent(skillid, skillLevel, skillCount);
+			Skill &skills = player->skills[skillid];
+			skills.percent = percent<0? 0:percent;
+			skills.level = skillLevel;
+			skills.tries = skillCount;
+
+			voc->adjustMaxSkillCount(skillid, skills.tries, skills.percent);
 		}
 	}while(result->next());
 }
@@ -545,7 +548,7 @@ bool IOPlayer::savePlayer(Player* player, bool shallow)
 
 	//skills
 	for(int32_t i = 0; i <= 6; ++i){
-		query << "UPDATE `player_skills` SET `count` = " << player->skills[i][SKILL_TRIES] << " WHERE `player_id` = " << player->getGUID() << " AND `skillid` = " << i;
+		query << "UPDATE `player_skills` SET `count` = " << player->skills[i].tries << " WHERE `player_id` = " << player->getGUID() << " AND `skillid` = " << i;
 
 		if(!db->executeQuery(query.str())){
 			return false;

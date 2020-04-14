@@ -72,6 +72,7 @@ Game::Game()
 	checkLightEvent = 0;
 	checkCreatureEvent = 0;
 	checkDecayEvent = 0;
+	checkCreatureLastIndex = 0;
 
 	last_bucket = 0;
 	int daycycle = 3600;

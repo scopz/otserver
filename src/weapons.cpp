@@ -436,7 +436,7 @@ bool Weapon::useFist(Player* player, Creature* target)
 
 	if(Position::areInRange<1,1>(playerPos, targetPos)){
 		float attackFactor = player->getAttackFactor();
-		int32_t attackSkill = player->getSkill(SKILL_FIST, SKILL_LEVEL);
+		int32_t attackSkill = player->getSkillLevel(SKILL_FIST);
 		int32_t attackValue = g_config.getNumber(ConfigManager::FIST_STRENGTH);
 
 		int32_t maxDamage = Weapons::getMaxWeaponDamage(player->getLevel(), attackSkill, attackValue, attackFactor);
@@ -875,7 +875,7 @@ bool WeaponDistance::useWeapon(Player* player, Item* item, Creature* target) con
 	int32_t chance;
 	if(hitChance == -1){
 		//hit chance is based on distance to target and distance skill
-		uint32_t skill = player->getSkill(SKILL_DIST, SKILL_LEVEL);
+		uint32_t skill = player->getSkillLevel(SKILL_DIST);
 		const Position& playerPos = player->getPosition();
 		const Position& targetPos = target->getPosition();
 		uint32_t distance = std::max(std::abs(playerPos.x - targetPos.x), std::abs(playerPos.y - targetPos.y));
@@ -1001,7 +1001,7 @@ int32_t WeaponDistance::getWeaponDamage(const Player* player, const Creature* ta
 		}
 	}
 
-	int32_t attackSkill = player->getSkill(SKILL_DIST, SKILL_LEVEL);
+	int32_t attackSkill = player->getSkillLevel(SKILL_DIST);
 	float attackFactor = player->getAttackFactor();
 	int32_t maxValue = Weapons::getMaxWeaponDamage(player->getLevel(), attackSkill, attackValue, attackFactor);
 	int32_t minValue = 0;

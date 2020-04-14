@@ -42,12 +42,6 @@ class Party;
 class SchedulerTask;
 class Guild;
 
-enum skillsid_t {
-	SKILL_LEVEL=0,
-	SKILL_TRIES=1,
-	SKILL_PERCENT=2
-};
-
 enum playerinfo_t {
 	PLAYERINFO_LEVEL,
 	PLAYERINFO_LEVELPERCENT,
@@ -83,6 +77,12 @@ enum tradestate_t {
 	TRADE_ACCEPT,
 	TRADE_ACKNOWLEDGE,
 	TRADE_TRANSFER
+};
+
+struct Skill {
+	uint32_t level;
+	uint32_t percent;
+	uint64_t tries;
 };
 
 typedef std::pair<uint32_t, Container*> containervector_pair;
@@ -365,7 +365,8 @@ public:
 	virtual bool hasExtraSwing() {return lastAttack > 0 && ((OTSYS_TIME() - lastAttack) >= getAttackSpeed());}
 	int32_t getShootRange() const {return shootRange;}
 
-	int32_t getSkill(skills_t skilltype, skillsid_t skillinfo) const;
+	uint32_t getSkillLevel(skills_t skilltype) const;
+	Skill getSkill(skills_t skilltype) const;
 	static std::string getSkillName(int skillid);
 
 	bool getAddAttackSkill() const {return addAttackSkillPoint;}
@@ -784,7 +785,7 @@ protected:
 	bool inventoryAbilities[11];
 
 	//player advances variables
-	uint32_t skills[SKILL_LAST + 1][3];
+	Skill skills[SKILL_LAST + 1];
 
 	//extra skill modifiers
 	int32_t varSkills[SKILL_LAST + 1];
