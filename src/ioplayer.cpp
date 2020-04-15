@@ -45,12 +45,12 @@ bool IOPlayer::loadPlayer(Player* player, const std::string& name, bool preload 
 	DBResult* result;
 
 	query << "SELECT `players`.`id` AS `id`, `players`.`name` AS `name`, \
-		`account_id`, `sex`, `vocation`, `experience`, `level`, `maglevel`, `health`, \
+		`account_id`, `sex`, `vocation`, `experience`, `health`, \
 		`groups`.`name` AS `groupname`, `groups`.`flags` AS `groupflags`, `groups`.`access` AS `access`, \
 		`groups`.`maxviplist` AS `maxviplist`, `groups`.`maxdepotitems` AS `maxdepotitems`, `groups`.`violation` AS `violation`, \
-		`healthmax`, `mana`, `manamax`, `manaspent`, `soul`, `direction`, `lookbody`, \
+		`mana`, `manaspent`, `soul`, `direction`, `lookbody`, \
 		`lookfeet`, `lookhead`, `looklegs`, `looktype`, `posx`, `posy`, \
-		`posz`, `cap`, `lastlogin`, `lastlogout`, `lastip`, `conditions`, `skull_time`, \
+		`posz`, `lastlogin`, `lastlogout`, `lastip`, `conditions`, `skull_time`, \
 		`skull_type`, `loss_experience`, `loss_mana`, `loss_skills`, ";
 
 #ifdef __OLD_GUILD_SYSTEM__
@@ -503,7 +503,6 @@ bool IOPlayer::savePlayer(Player* player, bool shallow)
 	query << "UPDATE `players` SET `level` = " << player->level
 		<< ", `vocation` = " << (int32_t)player->getVocationId()
 		<< ", `health` = " << player->health
-		<< ", `healthmax` = " << player->healthMax
 		<< ", `direction` = " << 2
 		<< ", `experience` = " << (int64_t)player->experience
 		<< ", `lookbody` = " << (int32_t)player->defaultOutfit.lookBody
@@ -511,16 +510,13 @@ bool IOPlayer::savePlayer(Player* player, bool shallow)
 		<< ", `lookhead` = " << (int32_t)player->defaultOutfit.lookHead
 		<< ", `looklegs` = " << (int32_t)player->defaultOutfit.lookLegs
 		<< ", `looktype` = " << (int32_t)player->defaultOutfit.lookType
-		<< ", `maglevel` = " << player->magLevel
 		<< ", `mana` = " << player->mana
-		<< ", `manamax` = " << player->manaMax
 		<< ", `manaspent` = " << (int64_t)player->manaSpent
 		<< ", `soul` = " << player->soul
 		<< ", `town_id` = " << player->town
 		<< ", `posx` = " << player->getLoginPosition().x
 		<< ", `posy` = " << player->getLoginPosition().y
 		<< ", `posz` = " << player->getLoginPosition().z
-		<< ", `cap` = " << player->getCapacity()
 		<< ", `sex` = " << player->sex
 		<< ", `conditions` = " << db->escapeBlob(conditions, conditionsSize)
 		<< ", `loss_experience` = " << (int32_t)player->getLossPercent(LOSS_EXPERIENCE)

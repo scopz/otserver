@@ -413,12 +413,9 @@ CREATE TABLE `players` (
   `vocation` int(10) unsigned NOT NULL DEFAULT '0',
   `experience` bigint(20) NOT NULL DEFAULT '0',
   `level` int(10) unsigned NOT NULL DEFAULT '1',
-  `maglevel` int(10) unsigned NOT NULL DEFAULT '0',
   `health` int(11) NOT NULL DEFAULT '100',
-  `healthmax` int(11) NOT NULL DEFAULT '100',
   `mana` int(11) NOT NULL DEFAULT '100',
   `manamax` int(11) NOT NULL DEFAULT '100',
-  `manaspent` bigint(20) NOT NULL DEFAULT '0',
   `soul` int(10) unsigned NOT NULL DEFAULT '0',
   `direction` int(10) unsigned NOT NULL DEFAULT '0',
   `lookbody` int(10) unsigned NOT NULL DEFAULT '10',
@@ -429,7 +426,6 @@ CREATE TABLE `players` (
   `posx` int(11) NOT NULL DEFAULT '0',
   `posy` int(11) NOT NULL DEFAULT '0',
   `posz` int(11) NOT NULL DEFAULT '0',
-  `cap` int(11) NOT NULL DEFAULT '0',
   `lastlogin` int(10) unsigned NOT NULL DEFAULT '0',
   `lastlogout` int(10) unsigned NOT NULL DEFAULT '0',
   `lastip` int(10) unsigned NOT NULL DEFAULT '0',
@@ -466,8 +462,8 @@ CREATE TABLE `players` (
 -- Dumping data for table `players`
 --
 
-INSERT INTO `players` (`id`, `name`, `account_id`, `group_id`, `sex`, `vocation`, `experience`, `level`, `maglevel`, `health`, `healthmax`, `mana`, `manamax`, `manaspent`, `soul`, `direction`, `lookbody`, `lookfeet`, `lookhead`, `looklegs`, `looktype`, `posx`, `posy`, `posz`, `cap`, `lastlogin`, `lastlogout`, `lastip`, `save`, `conditions`, `skull_type`, `skull_time`, `loss_experience`, `loss_mana`, `loss_skills`, `loss_items`, `loss_containers`, `town_id`, `balance`, `online`, `rank_id`, `guildnick`) VALUES
-(1, 'GM Legacy', 123456, 5, 1, 0, 100, 2, 2, 185, 185, 35, 35, 1130, 100, 2, 68, 76, 78, 58, 75, 32874, 31952, 11, 10000, 1467754551, 1467754550, 16777343, 1, 0x010001000002000000000338020c001b001c0000000010d7000000110a00000012102700001374850100fe0110000000020000000003b03600001b001c000000000b3e0200000c3333333f0d000060c20e3333333f0f000060c2fe, 0, 0, 100, 100, 100, 10, 100, 5, 0, 0, 0, '');
+INSERT INTO `players` (`id`, `name`, `account_id`, `group_id`, `sex`, `vocation`, `experience`, `level`, `health`, `mana`, `manaspent`, `soul`, `direction`, `lookbody`, `lookfeet`, `lookhead`, `looklegs`, `looktype`, `posx`, `posy`, `posz`, `lastlogin`, `lastlogout`, `lastip`, `save`, `conditions`, `skull_type`, `skull_time`, `loss_experience`, `loss_mana`, `loss_skills`, `loss_items`, `loss_containers`, `town_id`, `balance`, `online`, `rank_id`, `guildnick`) VALUES
+(1, 'GM Legacy', 123456, 5, 1, 0, 100, 2, 185, 35, 1130, 100, 2, 68, 76, 78, 58, 75, 32874, 31952, 11, 1467754551, 1467754550, 16777343, 1, 0x010001000002000000000338020c001b001c0000000010d7000000110a00000012102700001374850100fe0110000000020000000003b03600001b001c000000000b3e0200000c3333333f0d000060c20e3333333f0f000060c2fe, 0, 0, 100, 100, 100, 10, 100, 5, 0, 0, 0, '');
 
 --
 -- Triggers `players`
