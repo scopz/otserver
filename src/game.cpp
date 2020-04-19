@@ -3259,7 +3259,7 @@ bool Game::playerSetFightModes(uint32_t playerId, fightMode_t fightMode, chaseMo
 	if(!player || player->isRemoved())
 		return false;
 
-	player->setLastAttackAsNow();
+	//player->setLastAttackAsNow();
 	player->setFightMode(fightMode);
 	player->setChaseMode(chaseMode);
 	player->setSafeMode(safeMode);
