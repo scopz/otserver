@@ -15,6 +15,6 @@ function onUse(cid, item, fromPosition, itemEx, toPosition)
 	
 	doPlayerFeed(cid, size)
 	doRemoveItem(item.uid, 1)
-	doPlayerSay(cid, sound, TALKTYPE_SAY)
+	doPlayerSay(cid, sound, TALKTYPE_ORANGE)
 	return true
 end
