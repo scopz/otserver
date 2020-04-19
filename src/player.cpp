@@ -785,6 +785,8 @@ void Player::addSkillAdvance(skills_t skill, uint32_t count, bool useMultiplier 
 	}
 
 	if (initialSkill != skills[skill].level) {
+		skills[skill].percent = percent<0? 0:percent;
+
 		std::stringstream advMsg;
 		advMsg << "You advanced in " << Player::getSkillName(skill) << ".";
 		sendTextMessage(MSG_EVENT_ADVANCE, advMsg.str());
