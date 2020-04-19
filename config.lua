@@ -269,10 +269,10 @@ pvp_damage = 50
 min_pvp_level_applies_to_summons = true
 
 -- How many milliseconds (1 sec = 1000) we should wait until the player will be pushed by another player.
-push_interval = 2000
+push_interval = 400
 
 -- How many milliseconds a player should wait until he can move another item after moving one (0 disables it)
-move_item_interval = 500
+move_item_interval = 0
 
 -- max number of messages a player can say before getting muted (default 4), set to 0 to disable muting
 maxmessagebuffer = 4
