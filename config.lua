@@ -62,7 +62,7 @@ worldname = "Legacy Server"
 worldtype = "pvp"
 
 -- Auto Stack items in containers (like in newer Tibia versions)
-container_items_auto_stack = false
+container_items_auto_stack = true
 
 -- does player rate (from lua functions) count on experience gained from killings players on pvp-e worlds?
 rates_for_player_killing = false
