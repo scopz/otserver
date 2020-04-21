@@ -3113,7 +3113,7 @@ void Monster::updateLookDirection()
 {
 	Direction newDir = getDirection();
 
-	if(attackedCreature){
+	if(attackedCreature && getWalkDelay() <= 0){
 		const Position& pos = getPosition();
 		const Position& attackedCreaturePos = attackedCreature->getPosition();
 		int32_t dx = attackedCreaturePos.x - pos.x;
