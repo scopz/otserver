@@ -86,5 +86,5 @@ spellSellModule:addSpellStock({
 	"Light",
 })
 
-
+keywordHandler:sortKeywords()
 npcHandler:addModule(FocusModule:new())

@@ -881,7 +881,7 @@ if(Modules == nil) then
 			return false
 		end
 
-		module.npcHandler:say(module.listPreText .. " " .. table.concat(module.spellsList, "', '") .. "'.")
+		module.npcHandler:say(module.listPreText .. " '" .. table.concat(module.spellsList, "', '") .. "'.")
 		return true
 	end
 
@@ -937,7 +937,7 @@ if(Modules == nil) then
 			end
 		end
 
-		return false		
+		return true		
 	end
 	
 	

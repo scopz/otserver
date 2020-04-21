@@ -85,4 +85,5 @@ shopModule:addBuyableItem({'bow'}, 2456, 400)
 shopModule:addBuyableItem({'bolt'}, 2543, 3)
 shopModule:addBuyableItem({'arrow'}, 2544, 2)
 
+keywordHandler:sortKeywords()
 npcHandler:addModule(FocusModule:new())

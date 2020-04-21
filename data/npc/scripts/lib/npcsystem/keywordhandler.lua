@@ -92,7 +92,18 @@ if(KeywordHandler == nil) then
 		childNode.parent = self
 		return childNode
 	end
-	
+
+	function KeywordNode:sort()
+		table.sort(self.children, sorterFunction)
+
+		for i, name in pairs(self.children) do
+			name:sort()
+		end
+	end
+
+	function sorterFunction(kNode1, kNode2)
+		return string.len(kNode1:getKeywords()[1]) > string.len(kNode2:getKeywords()[1])
+	end
 	
 	
 	
@@ -223,5 +234,7 @@ if(KeywordHandler == nil) then
 		return self.lastNode
 	end
 	
-	
+	function KeywordHandler:sortKeywords()
+		self:getRoot():sort()
+	end
 end

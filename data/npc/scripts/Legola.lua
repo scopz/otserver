@@ -65,4 +65,5 @@ spellSellModule:addSpellStock({
 	"Food",
 })
 
+keywordHandler:sortKeywords()
 npcHandler:addModule(FocusModule:new())
