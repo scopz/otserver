@@ -175,6 +175,9 @@ max_level = 200
 max_skill = 200
 max_magic = 200
 
+-- Multiplies the walking cost when moving in diagonal
+diagonal_walk_factor = 1
+
 -- rook_temple_id newbie island temple id
 rook_temple_id = 11
 storage_sendrook = 31009

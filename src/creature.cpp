@@ -617,8 +617,8 @@ void Creature::onCreatureMove(const Creature* creature, const Tile* newTile, con
 				lastStepCost = 1;
 			}
 			else if(std::abs(newPos.x - oldPos.x) >=1 && std::abs(newPos.y - oldPos.y) >= 1){
-				//diagonal extra cost
-				lastStepCost = 3;
+				int32_t diagonalWalkFactor = g_config.getNumber(ConfigManager::DIAGONAL_WALK_FACTOR);
+				lastStepCost = std::max(1, diagonalWalkFactor);
 			}
 		}
 
