@@ -64,7 +64,7 @@ Creature::Creature() :
 	manaMax = 0;
 
 	lastStep = 0;
-	lastStepCost = 1;
+	lastStepCost = 100;
 	baseSpeed = 220;
 	varSpeed = 0;
 
@@ -606,7 +606,7 @@ void Creature::onCreatureMove(const Creature* creature, const Tile* newTile, con
 {
 	if(creature == this){
 		lastStep = OTSYS_TIME();
-		lastStepCost = 1;
+		lastStepCost = 100;
 
 		if(teleport){
 			stopEventWalk();
@@ -614,11 +614,11 @@ void Creature::onCreatureMove(const Creature* creature, const Tile* newTile, con
 		else{
 			if(oldPos.z != newPos.z){
 				//floor change extra cost
-				lastStepCost = 1;
+				lastStepCost = 100;
 			}
 			else if(std::abs(newPos.x - oldPos.x) >=1 && std::abs(newPos.y - oldPos.y) >= 1){
-				int32_t diagonalWalkFactor = g_config.getNumber(ConfigManager::DIAGONAL_WALK_FACTOR);
-				lastStepCost = std::max(1, diagonalWalkFactor);
+				float diagonalWalkFactor = g_config.getNumber(ConfigManager::DIAGONAL_WALK_FACTOR);
+				lastStepCost = std::max(lastStepCost, diagonalWalkFactor);
 			}
 		}
 
@@ -1670,7 +1670,7 @@ int32_t Creature::getStepDuration() const
 	
 	
 
-	return duration * lastStepCost;
+	return duration * lastStepCost / 100.;
 }
 
 int64_t Creature::getEventStepTicks(bool onlyDelay) const

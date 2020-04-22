@@ -1819,6 +1819,7 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 				}
 
 				AddMapDescription(msg, pos);
+				AddServerParams(msg);
 
 				if (isLoggingIn){
 					AddMagicEffect(msg, player->getPosition(), NM_ME_TELEPORT);
@@ -2155,6 +2156,13 @@ void ProtocolGame::sendVIP(uint32_t guid, const std::string& name, bool isOnline
 }
 
 ////////////// Add common messages
+void ProtocolGame::AddServerParams(NetworkMessage_ptr msg)
+{
+	msg->AddByte(0x0C);
+	int diagonalCost = g_config.getNumber(ConfigManager::DIAGONAL_WALK_FACTOR);
+	msg->AddU16(diagonalCost);
+}
+
 void ProtocolGame::AddMapDescription(NetworkMessage_ptr msg, const Position& pos)
 {
 	msg->AddByte(0x64);

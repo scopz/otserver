@@ -447,7 +447,7 @@ protected:
 	Position masterPos;
 	int32_t masterRadius;
 	uint64_t lastStep;
-	uint32_t lastStepCost;
+	float lastStepCost;
 	uint32_t baseSpeed;
 	int32_t varSpeed;
 	bool skillLoss;

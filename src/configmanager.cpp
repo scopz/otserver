@@ -143,7 +143,7 @@ bool ConfigManager::loadFile(const std::string& _filename)
 	m_confInteger[MAX_LEVEL] = getGlobalNumber(L, "max_level", -1);
 	m_confInteger[MAX_SKILL] = getGlobalNumber(L, "max_skill", -1);
 	m_confInteger[MAX_MAGIC] = getGlobalNumber(L, "max_magic", -1);
-	m_confInteger[DIAGONAL_WALK_FACTOR] = getGlobalNumber(L, "diagonal_walk_factor", 2);
+	m_confInteger[DIAGONAL_WALK_FACTOR] = getGlobalNumber(L, "diagonal_walk_factor", 200);
 	m_confInteger[ROOK_TEMPLE_ID] = getGlobalNumber(L, "rook_temple_id", 1);
 	m_confInteger[STORAGE_SENDROOK] = getGlobalNumber(L, "storage_sendrook", 49786);
 	m_confInteger[MAX_MESSAGEBUFFER] = getGlobalNumber(L, "maxmessagebuffer", 4);

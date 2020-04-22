@@ -228,6 +228,7 @@ private:
 	void GetMapDescription(int32_t x, int32_t y, int32_t z,
 		int32_t width, int32_t height, NetworkMessage_ptr msg);
 
+	void AddServerParams(NetworkMessage_ptr msg);
 	void AddMapDescription(NetworkMessage_ptr msg, const Position& pos);
 	void AddTextMessage(NetworkMessage_ptr msg,MessageClasses mclass, const std::string& message);
 	void AddAnimatedText(NetworkMessage_ptr msg,const Position& pos, unsigned char color, const std::string& text);

@@ -1067,7 +1067,8 @@ int32_t AStarNodes::getMapWalkCost(const Creature* creature, AStarNode* node,
 	int cost = 0;
 	if(std::abs((int)node->x - neighbourPos.x) == std::abs((int)node->y - neighbourPos.y)){
 		//diagonal movement extra cost
-		cost = MAP_DIAGONALWALKCOST;
+		float diagonalWalkFactor = g_config.getNumber(ConfigManager::DIAGONAL_WALK_FACTOR);
+		cost = MAP_NORMALWALKCOST*diagonalWalkFactor/100.;
 	}
 	else{
 		cost = MAP_NORMALWALKCOST;
@@ -1105,8 +1106,9 @@ int32_t AStarNodes::getEstimatedDistance(int32_t x, int32_t y, int32_t xGoal, in
 {
 	int32_t h_diagonal = std::min(std::abs(x - xGoal), std::abs(y - yGoal));
 	int32_t h_straight = (std::abs(x - xGoal) + std::abs(y - yGoal));
+	float diagonalWalkFactor = g_config.getNumber(ConfigManager::DIAGONAL_WALK_FACTOR);
 
-	return MAP_DIAGONALWALKCOST * h_diagonal + MAP_NORMALWALKCOST * (h_straight - 2 * h_diagonal);
+	return MAP_NORMALWALKCOST * h_diagonal * diagonalWalkFactor/100. + MAP_NORMALWALKCOST * (h_straight - 2 * h_diagonal);
 	//return (std::abs(x - xGoal) + std::abs(y - yGoal)) * MAP_NORMALWALKCOST;
 }
 
