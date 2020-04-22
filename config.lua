@@ -98,7 +98,7 @@ last_hit_pzblock_only = true
 minactioninterval = 200
 
 -- minimum amount of time between extended actions ('Use with...') (1000 = 1 second)
-minactionexinterval = 1000
+minactionexinterval = 500
 
 -- house rent period
 -- options: daily, weekly, monthly
