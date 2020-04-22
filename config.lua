@@ -55,7 +55,7 @@ ownername = "peonso"
 owneremail = ""
 
 -- world name
-worldname = "Legacy Server"
+worldname = "Nosgia"
 
 -- world type
 -- options: openpvp/pvp, optionalpvp/no-pvp, hardcorepvp/pvp-enforced
@@ -289,7 +289,7 @@ motd = "Welcome to Tibia Legacy Server."
 motdnum = "1"
 
 -- login message
-loginmsg = "Welcome to Tibia."
+loginmsg = "Welcome to Nosgia."
 
 -- how many logins attempts until ip is temporary disabled
 -- set to 0 to disable
