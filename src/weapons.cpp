@@ -1040,11 +1040,6 @@ bool WeaponDistance::getSkillType(const Player* player, const Item* item,
 	if(player->getAddAttackSkill()){
 		switch(player->getLastAttackBlockType()){
 			case BLOCK_NONE:
-			{
-				skillpoint = 2;
-				break;
-			}
-
 			case BLOCK_DEFENSE:
 			case BLOCK_ARMOR:
 			{

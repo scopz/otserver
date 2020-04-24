@@ -145,7 +145,7 @@
 	<instant name="Berserk" words="exori" price="2500" maglv="5" needlearn="1" lvl="35" levelpercent="400" selftarget="1" script="attack/berserk.lua">
 		<vocation id="4"/>
 	</instant>
-	<instant name="Invisibility" words="utana vid" price="1000" maglv="15" needlearn="1" lvl="35" mana="440" prem="1" selftarget="1" aggressive="0" script="support/invisible.lua">
+	<instant name="Invisibility" words="utana vid" price="1000" maglv="15" needlearn="1" lvl="35" mana="350" prem="1" selftarget="1" aggressive="0" script="support/invisible.lua">
 		<vocation id="1"/>
 		<vocation id="2"/>
 		<vocation id="3"/>
@@ -174,7 +174,7 @@
 		<vocation id="1"/>
 		<vocation id="2"/>
 	</conjure>
-	<conjure name="Food" words="exevo pan" price="150" maglv="0" needlearn="1" lvl="14" mana="120" soul="1" selftarget="1" aggressive="0" function="conjureFood">
+	<conjure name="Food" words="exevo pan" price="150" maglv="0" needlearn="1" lvl="14" mana="60" soul="1" selftarget="1" aggressive="0" function="conjureFood">
 		<vocation id="2"/>
 		<vocation id="3"/>
 	</conjure>
@@ -196,7 +196,7 @@
 	<conjure name="Convince Creature" words="adeta sio" price="1500" maglv="10" needlearn="1" lvl="16" mana="200" soul="3" reagentId="2260" conjureId="2290" conjureCount="1" function="conjureRune">
 		<vocation id="2"/>
 	</conjure>
-	<conjure name="Conjure Poisoned Arrow" words="exevo con pox" maglv="5" price="700" needlearn="1" lvl="16" mana="130" soul="2" conjureId="2545" conjureCount="10" function="conjureItem">
+	<conjure name="Conjure Poisoned Arrow" words="exevo con pox" maglv="5" price="700" needlearn="1" lvl="16" mana="140" soul="2" conjureId="2545" conjureCount="12" function="conjureItem">
 		<vocation id="3"/>
 	</conjure>
 	<conjure name="Destroy Field" words="adito grav" price="350" maglv="6" needlearn="1" lvl="17" mana="120" soul="2" reagentId="2260" conjureId="2261" conjureCount="3" function="conjureRune">
@@ -204,7 +204,7 @@
 		<vocation id="2"/>
 		<vocation id="3"/>
 	</conjure>
-	<conjure name="Conjure Bolt" words="exevo con mort" price="750" maglv="6" needlearn="1" lvl="17" mana="140" soul="2" conjureId="2543" conjureCount="5" function="conjureItem">
+	<conjure name="Conjure Bolt" words="exevo con mort" price="750" maglv="6" needlearn="1" lvl="17" mana="140" soul="2" conjureId="2543" conjureCount="10" function="conjureItem">
 		<vocation id="3"/>
 	</conjure>
 	<conjure name="Energy Field" words="adevo grav vis" price="700" maglv="5" needlearn="1" lvl="18" mana="320" soul="2" reagentId="2260" conjureId="2277" conjureCount="3" function="conjureRune">
@@ -227,7 +227,7 @@
 		<vocation id="2"/>
 		<vocation id="3"/>
 	</conjure>
-	<conjure name="Conjure Explosive Arrow" words="exevo con flam" price="1000" maglv="10" needlearn="1" lvl="25" mana="290" soul="3" conjureId="2546" conjureCount="5" function="conjureItem">
+	<conjure name="Conjure Explosive Arrow" words="exevo con flam" price="1000" maglv="10" needlearn="1" lvl="25" mana="240" soul="3" conjureId="2546" conjureCount="5" function="conjureItem">
 		<vocation id="3"/>
 	</conjure>
 	<conjure name="Poison Bomb" words="adevo mas pox" price="1000" maglv="8" needlearn="1" lvl="25" mana="520" soul="2" reagentId="2260" conjureId="2286" conjureCount="2" function="conjureRune">
@@ -285,10 +285,10 @@
 	<conjure name="Paralyze" words="adana ani" price="1900" maglv="35" needlearn="1" lvl="54" mana="1400" soul="3" reagentId="2260" conjureId="2278" conjureCount="1" function="conjureRune">
 		<vocation id="2"/>
 	</conjure>
-	<conjure name="Conjure Power Bolt" words="exevo con vis" price="2000" maglv="14" promotion="1" needlearn="1" lvl="59" mana="800" soul="3" conjureId="2547" conjureCount="1" function="conjureItem">
+	<conjure name="Conjure Power Bolt" words="exevo con vis" price="2000" maglv="14" promotion="1" needlearn="1" lvl="59" mana="400" soul="3" conjureId="2547" conjureCount="1" function="conjureItem">
 		<vocation id="3"/>
 	</conjure>
-	<conjure name="Conjure Arrow" words="exevo con" price="450" maglv="2" needlearn="1" lvl="13" mana="100" soul="1" conjureId="2544" conjureCount="10" function="conjureItem">
+	<conjure name="Conjure Arrow" words="exevo con" price="450" maglv="2" needlearn="1" lvl="13" mana="80" soul="1" conjureId="2544" conjureCount="15" function="conjureItem">
 		<vocation id="3"/>
 	</conjure>
 	
