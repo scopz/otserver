@@ -55,9 +55,8 @@ public:
 	virtual void postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t index, cylinderlink_t link = LINK_OWNER, bool isNewItem = true);
 	virtual void postRemoveNotification(Thing* thing, const Cylinder* newParent, int32_t index, bool isCompleteRemoval, cylinderlink_t link = LINK_OWNER);
 
-	static bool getDepotId(const std::string& strTown, uint32_t& depotId);
-	static bool getRepicient(Item* item, std::string& name, uint32_t& depotId);
-	static bool sendItemTo(const std::string& name, uint32_t depotId, Item* item);
+	static bool getRepicient(Item* item, std::string& name);
+	static bool sendItemTo(const std::string& name, Item* item);
 	static bool sendItem(Item* item);
 	static bool canSend(const Item* item);
 };

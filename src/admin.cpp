@@ -497,7 +497,7 @@ void ProtocolAdmin::adminCommandPayHouses()
 	}
 }
 
-Item* ProtocolAdmin::createMail(const std::string& xmlData, std::string& name, uint32_t& depotId)
+Item* ProtocolAdmin::createMail(const std::string& xmlData, std::string& name)
 {
 	xmlDocPtr doc = xmlParseMemory(xmlData.c_str(), strlen(xmlData.c_str()));
 	if(!doc){
@@ -517,18 +517,6 @@ Item* ProtocolAdmin::createMail(const std::string& xmlData, std::string& name, u
 
 	if(readXMLString(root, "to", strValue)){
 		name = strValue;
-	}
-
-	if(readXMLString(root, "town", strValue)){
-		if(!Mailbox::getDepotId(strValue, depotId)){
-			return NULL;
-		}
-	}
-	else{
-		//use the players default town
-		if(!IOPlayer::instance()->getDefaultTown(name, depotId)){
-			return NULL;
-		}
 	}
 
 	if(readXMLInteger(root, "id", intValue)){
@@ -565,11 +553,10 @@ void ProtocolAdmin::adminCommandSendMail(const std::string& xmlData)
 		TRACK_MESSAGE(output);
 
 		std::string name;
-		uint32_t depotId;
-		Item* mailItem = createMail(xmlData, name, depotId);
+		Item* mailItem = createMail(xmlData, name);
 
 		if(mailItem){
-			if(Mailbox::sendItemTo(name, depotId, mailItem)){
+			if(Mailbox::sendItemTo(name, mailItem)){
 				output->AddByte(AP_MSG_COMMAND_OK);
 			}
 			else{

@@ -87,7 +87,6 @@ struct Skill {
 
 typedef std::pair<uint32_t, Container*> containervector_pair;
 typedef std::vector<containervector_pair> ContainerVector;
-typedef std::map<uint32_t, Depot*> DepotMap;
 typedef std::map<uint32_t, int32_t> StorageMap;
 typedef std::set<uint32_t> VIPListSet;
 typedef std::map<uint32_t, uint32_t> MuteCountMap;
@@ -302,8 +301,8 @@ public:
 		lossPercent[lossType] = newPercent;
 	}
 
-	Depot* getDepot(uint32_t depotId, bool autoCreateDepot);
-	bool addDepot(Depot* depot, uint32_t depotId);
+	Depot* getDepot(bool autoCreateDepot);
+	bool addDepot(Depot* depot);
 	bool isNearDepotBox(uint32_t depotId);
 
 	virtual bool canSee(const Position& pos) const;
@@ -667,8 +666,8 @@ public:
 	ContainerVector containerVec;
 	void preSave();
 
-	//depots
-	DepotMap depots;
+	//depot
+	Depot* mainDepot = NULL;
 	uint32_t maxDepotLimit;
 
 protected:

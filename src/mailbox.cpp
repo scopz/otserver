@@ -108,7 +108,7 @@ void Mailbox::postRemoveNotification(Thing* thing, const Cylinder* newParent, in
 	getParent()->postRemoveNotification(thing, newParent, index, isCompleteRemoval, LINK_PARENT);
 }
 
-bool Mailbox::sendItemTo(const std::string& name, uint32_t depotId, Item* item)
+bool Mailbox::sendItemTo(const std::string& name, Item* item)
 {
 	uint32_t guid;
 	std::string dbname = name;
@@ -122,7 +122,7 @@ bool Mailbox::sendItemTo(const std::string& name, uint32_t depotId, Item* item)
 	}
 
 	bool result = false;
-	Depot* depot = player->getDepot(depotId, true);
+	Depot* depot = player->getDepot(true);
 	if(depot){
 		if(g_game.internalMoveItem(item->getParent(), depot, INDEX_WHEREEVER,
 			item, item->getItemCount(), NULL, FLAG_NOLIMIT) == RET_NOERROR)
@@ -146,33 +146,19 @@ bool Mailbox::sendItemTo(const std::string& name, uint32_t depotId, Item* item)
 bool Mailbox::sendItem(Item* item)
 {
 	std::string name;
-	uint32_t depotId = 0;
 
-	if(!getRepicient(item, name, depotId)){
+	if(!getRepicient(item, name)){
 		return false;
 	}
 
-	if(name == "" || depotId == 0){
+	if(name == ""){
 		return false;
 	}
 
-	return sendItemTo(name, depotId, item);
+	return sendItemTo(name, item);
 }
 
-bool Mailbox::getDepotId(const std::string& strTown, uint32_t& depotId)
-{
-	Town* town = Towns::getInstance().getTown(strTown);
-	if(town){
-		depotId = town->getTownID();
-	}
-	else{
-		return false;
-	}
-
-	return true;
-}
-
-bool Mailbox::getRepicient(Item* item, std::string& name, uint32_t& depotId)
+bool Mailbox::getRepicient(Item* item, std::string& name)
 {
 	if(!item){
 		return false;
@@ -205,31 +191,13 @@ bool Mailbox::getRepicient(Item* item, std::string& name, uint32_t& depotId)
 	std::string temp;
 	std::istringstream iss(item->getText(), std::istringstream::in);
 
-	std::string strTown = "";
-	uint32_t curLine = 1;
-
-	while(getline(iss, temp, '\n')){
-		if(curLine == 1){
-			name = temp;
-		}
-		else if(curLine == 2){
-			strTown = temp;
-		}
-		else{
-			break;
-		}
-
-		++curLine;
-	}
-
-	if(strTown.empty()){
-		return false;
+	if(getline(iss, temp, '\n')){
+		name = temp;
 	}
 
 	trim(name);
-	trim(strTown);
 
-	return getDepotId(strTown, depotId);
+	return true;
 }
 
 bool Mailbox::canSend(const Item* item)

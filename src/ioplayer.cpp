@@ -336,7 +336,7 @@ void IOPlayer::loadDepot(Player* player, DBResult* result)
 		if(pid >= 0 && pid < 100){
 			if(Container* c = item->getContainer()){
 				if(Depot* depot = c->getDepot())
-					player->addDepot(depot, pid);
+					player->addDepot(depot);
 				else
 					std::cout << "Error loading depot "<< pid << " for player " << player->getGUID() << std::endl;
 			}
@@ -622,8 +622,8 @@ bool IOPlayer::savePlayer(Player* player, bool shallow)
 	}
 
 	itemList.clear();
-	for(DepotMap::iterator it = player->depots.begin(); it != player->depots.end(); ++it){
-		itemList.push_back(itemBlock(it->first, it->second));
+	if(player->mainDepot){
+		itemList.push_back(itemBlock(1, player->mainDepot));
 	}
 
 	//save depot items
@@ -958,7 +958,7 @@ bool IOPlayer::getGuidByNameEx(uint32_t& guid, bool& specialVip, std::string& na
 	return true;
 }
 
-bool IOPlayer::getDefaultTown(std::string& name, uint32_t& depotId)
+bool IOPlayer::getDefaultTown(std::string& name, uint32_t& townId)
 {
 	Database* db = Database::instance();
 	DBResult* result;
@@ -967,7 +967,7 @@ bool IOPlayer::getDefaultTown(std::string& name, uint32_t& depotId)
 	if(!(result = db->storeQuery("SELECT `town_id` FROM `players` WHERE `name`= " + db->escapeString(name))))
 		return false;
 
-	depotId = result->getDataInt("town_id");
+	townId = result->getDataInt("town_id");
 	db->freeResult(result);
 	return true;
 }

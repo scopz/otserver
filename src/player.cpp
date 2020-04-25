@@ -203,9 +203,8 @@ Player::~Player()
 		}
 	}
 
-	DepotMap::iterator it;
-	for(it = depots.begin();it != depots.end(); ++it){
-		it->second->releaseThing2();
+	if (mainDepot){
+		mainDepot->releaseThing2();
 	}
 
 	//std::cout << "Player destructor " << this << std::endl;
@@ -1163,45 +1162,42 @@ bool Player::isNearDepotBox(uint32_t depotId)
 	return false;
 }
 
-Depot* Player::getDepot(uint32_t depotId, bool autoCreateDepot)
+Depot* Player::getDepot(bool autoCreateDepot)
 {
-	DepotMap::iterator it = depots.find(depotId);
-	if(it != depots.end()){
-		return it->second;
+	if(mainDepot){
+		return mainDepot;
 	}
 
 	//depot does not yet exist
 
 	//create a new depot?
 	if(autoCreateDepot){
-		Depot* depot = NULL;
-		Item* tmpDepot = Item::CreateItem(ITEM_LOCKER1);
-		if(tmpDepot->getContainer() && (depot = tmpDepot->getContainer()->getDepot())){
+		Depot* newDepot = NULL;
+		Item* locker1 = Item::CreateItem(ITEM_LOCKER1);
+		if(locker1->getContainer() && (newDepot = locker1->getContainer()->getDepot())){
 			Item* depotChest = Item::CreateItem(ITEM_DEPOT);
-			depot->__internalAddThing(depotChest);
+			newDepot->__internalAddThing(depotChest);
 
-			addDepot(depot, depotId);
-			return depot;
+			addDepot(newDepot);
+			return mainDepot;
 		}
 		else{
-			g_game.FreeThing(tmpDepot);
-			std::cout << "Failure: Creating a new depot with id: "<< depotId <<
-				", for player: " << getName() << std::endl;
+			g_game.FreeThing(locker1);
+			std::cout << "Failure: Creating a new depot for player: " << getName() << std::endl;
 		}
 	}
 
 	return NULL;
 }
 
-bool Player::addDepot(Depot* depot, uint32_t depotId)
+bool Player::addDepot(Depot* newDepot)
 {
-	Depot* depot2 = getDepot(depotId, false);
-	if(depot2){
+	if (mainDepot){
 		return false;
 	}
 
-	depots[depotId] = depot;
-	depot->setMaxDepotLimit(maxDepotLimit);
+	mainDepot = newDepot;
+	newDepot->setMaxDepotLimit(maxDepotLimit);
 	return true;
 }
 
@@ -3614,16 +3610,11 @@ void Player::postRemoveNotification(Thing* thing, const Cylinder* newParent, int
 				//moved the backpack
 				if(const Depot* depot = dynamic_cast<const Depot*>(topContainer)){
 					//moved into a depot
-					bool isOwner = false;
-					for(DepotMap::iterator it = depots.begin(); it != depots.end(); ++it){
-						if(it->second == depot){
-							//the player is the owner of the depot
-							isOwner = true;
-							onSendContainer(container);
-						}
-					}
 
-					if(!isOwner){
+					//the player is the owner of the depot
+					if(mainDepot == depot){
+						onSendContainer(container);
+					} else {
 						autoCloseContainers(container);
 					}
 				}

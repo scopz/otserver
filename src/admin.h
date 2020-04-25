@@ -210,7 +210,7 @@ protected:
 	void adminCommandSendMail(const std::string& xmlData);
 	void adminCommandKickPlayer(const std::string& name);
 
-	Item* createMail(const std::string& xmlData, std::string& name, uint32_t& depotId);
+	Item* createMail(const std::string& xmlData, std::string& name);
 
 	enum ConnectionState_t{
 		NO_CONNECTED,

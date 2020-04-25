@@ -84,7 +84,7 @@ bool IOMapSerialize::loadMapRelational(Map* map)
 					if(house->getPendingDepotTransfer()){
 						Player* player = g_game.getPlayerByGuidEx(house->getOwner());
 						if(player){
-							Depot* depot = player->getDepot(player->getTown(), true);
+							Depot* depot = player->getDepot(true);
 
 							loadItems(db, result_items, depot, true);
 
@@ -138,7 +138,7 @@ bool IOMapSerialize::loadMapRelational(Map* map)
 						if(house->getPendingDepotTransfer()){
 							Player* player = g_game.getPlayerByGuidEx(house->getOwner());
 							if(player){
-								Depot* depot = player->getDepot(player->getTown(), true);
+								Depot* depot = player->getDepot(true);
 
 								loadItems(db, result_items, depot);
 
@@ -438,7 +438,7 @@ bool IOMapSerialize::loadMapBinary(Map* map)
 			if(house && house->getPendingDepotTransfer()){
 				Player* player = g_game.getPlayerByGuidEx(house->getOwner());
 				if(player){
-					Depot* depot = player->getDepot(player->getTown(), true);
+					Depot* depot = player->getDepot(true);
 
 					propStream.GET_UINT32(item_count);
 					while(item_count--){

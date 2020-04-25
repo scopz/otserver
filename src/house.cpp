@@ -224,7 +224,7 @@ bool House::transferToDepot()
 		return false;
 	}
 
-	Depot* depot = player->getDepot(townid, true);
+	Depot* depot = player->getDepot(true);
 
 	std::list<Item*> moveItemList;
 	Container* tmpContainer = NULL;
@@ -920,7 +920,7 @@ bool Houses::payRent(Player* player, House* house, time_t time /*= 0*/)
 	}
 
 	bool hasEnoughMoney = false;
-	Depot* depot = player->getDepot(town->getTownID(), true);
+	Depot* depot = player->getDepot(true);
 	if(depot){
 		if(g_config.getNumber(ConfigManager::USE_BALANCE_HOUSE_PAYING)){
 			if(player->balance >= house->getRent()){
@@ -1010,7 +1010,7 @@ bool Houses::payHouse(House* house, time_t time)
 			savePlayerHere = false;
 		}
 		else{
-			Depot* depot = player->getDepot(town->getTownID(), true);
+			Depot* depot = player->getDepot(true);
 			if(depot){
 				int daysLeft = 7 - house->getPayRentWarnings();
 

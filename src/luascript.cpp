@@ -1249,7 +1249,7 @@ void LuaScriptInterface::registerFunctions()
 	//getPlayerItemById(cid, deepSearch, itemId, <optional> subType)
 	lua_register(m_luaState, "getPlayerItemById", LuaScriptInterface::luaGetPlayerItemById);
 
-	//getPlayerDepotItems(cid, depotid)
+	//getPlayerDepotItems(cid)
 	lua_register(m_luaState, "getPlayerDepotItems", LuaScriptInterface::luaGetPlayerDepotItems);
 
 	//getPlayerGuildId(cid)
@@ -7077,14 +7077,13 @@ int LuaScriptInterface::luaSetGlobalStorageValue(lua_State *L)
 
 int LuaScriptInterface::luaGetPlayerDepotItems(lua_State *L)
 {
-	//getPlayerDepotItems(cid, depotid)
-	uint32_t depotid = popNumber(L);
+	//getPlayerDepotItems(cid)
 	uint32_t cid = popNumber(L);
 
 	ScriptEnviroment* env = getScriptEnv();
 	Player* player = env->getPlayerByUID(cid);
 	if(player){
-		const Depot* depot = player->getDepot(depotid, true);
+		const Depot* depot = player->getDepot(true);
 		if(depot){
 			lua_pushnumber(L, depot->getItemHoldingCount());
 		}
@@ -8035,8 +8034,8 @@ int LuaScriptInterface::luaDoPlayerSetDepotLimit(lua_State *L)
 	Player* player = env->getPlayerByUID(cid);
 	if(player){
 		player->maxDepotLimit = quantity;
-		for(DepotMap::iterator it = player->depots.begin(); it != player->depots.end(); ++it){
-			it->second->setMaxDepotLimit(player->maxDepotLimit);
+		if (player->mainDepot) {
+			player->mainDepot->setMaxDepotLimit(player->maxDepotLimit);
 		}
 		lua_pushboolean(L, true);
 	}

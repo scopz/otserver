@@ -34,7 +34,7 @@ function onStepIn(cid, item, pos)
 				pos.y = pos.y + y
 				depot = getTileItemByType(pos, ITEM_TYPE_DEPOT)
 				if(depot.uid > 0) then
-					local depotItems = getPlayerDepotItems(cid, getDepotId(depot.uid))
+					local depotItems = getPlayerDepotItems(cid)
 					local depotStr = "Your depot contains " .. depotItems .. " items."
 					if(depotItems == 1) then
 						depotStr = "Your depot contains 1 item."
