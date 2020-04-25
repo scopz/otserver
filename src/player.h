@@ -217,6 +217,7 @@ public:
 	uint32_t getAccountId() const {return accountId;}
 	uint32_t getLevel() const {return level;}
 	uint32_t getMagicLevel() const {return getPlayerInfo(PLAYERINFO_MAGICLEVEL);}
+	int32_t getRebirthsTo() const {return rebirthsTo;}
 	int16_t getAccessLevel() const {return accessLevel;}
 	int16_t getViolationLevel() const {return violationLevel;}
 	std::string getGroupName() const {return groupName;}
@@ -693,6 +694,7 @@ protected:
 	void setNextActionTask(SchedulerTask* task);
 
 	void sendToRook();
+	bool rebirth(const uint32_t &voc);
 	void onDie();
 	void die();
 	virtual Item* dropCorpse();
@@ -741,6 +743,7 @@ protected:
 	uint32_t conditionSuppressions;
 	uint32_t condition;
 	uint64_t manaSpent;
+	int32_t rebirthsTo;
 	Vocation_t vocation_id;
 	Vocation* vocation;
 	PlayerSex_t sex;
@@ -877,6 +880,7 @@ protected:
 
 private:
 	void loadCacheExperienceValues();
+	void moveEquipmentToDepot();
 };
 
 #endif

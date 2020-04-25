@@ -411,11 +411,13 @@ CREATE TABLE `players` (
   `group_id` int(10) unsigned NOT NULL COMMENT 'users group',
   `sex` int(10) unsigned NOT NULL DEFAULT '0',
   `vocation` int(10) unsigned NOT NULL DEFAULT '0',
+  `rebirth_voc` int(10) unsigned NOT NULL DEFAULT '0',
   `experience` bigint(20) NOT NULL DEFAULT '0',
   `level` int(10) unsigned NOT NULL DEFAULT '1',
   `health` int(11) NOT NULL DEFAULT '100',
   `mana` int(11) NOT NULL DEFAULT '100',
-  `manamax` int(11) NOT NULL DEFAULT '100',
+  `manaspent` bigint(20) NOT NULL DEFAULT '0',
+  `manafreeze` bigint(20) NOT NULL DEFAULT '0',
   `soul` int(10) unsigned NOT NULL DEFAULT '0',
   `direction` int(10) unsigned NOT NULL DEFAULT '0',
   `lookbody` int(10) unsigned NOT NULL DEFAULT '10',
@@ -610,7 +612,9 @@ CREATE TABLE `player_skills` (
   `player_id` int(10) unsigned NOT NULL,
   `skillid` int(10) unsigned NOT NULL,
   `count` int(10) unsigned NOT NULL DEFAULT '0',
-  KEY `player_id` (`player_id`)
+  `freeze` bit(1) NOT NULL DEFAULT b'0',
+  KEY `player_id` (`player_id`),
+  UNIQUE KEY `player_skills` (`player_id`,`skillid`,`freeze`) 
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --

@@ -1192,6 +1192,9 @@ void LuaScriptInterface::registerFunctions()
 	//getUnpromotedVocation(voc)
 	lua_register(m_luaState, "getUnpromotedVocation", LuaScriptInterface::luaGetUnpromotedVocation);
 
+	//getRebirthVocation(voc)
+	lua_register(m_luaState, "getRebirthVocation", LuaScriptInterface::luaGetRebirthVocation);
+
 	//getBaseVocation(voc)
 	lua_register(m_luaState, "getBaseVocation", LuaScriptInterface::luaGetBaseVocation);
 
@@ -1224,6 +1227,9 @@ void LuaScriptInterface::registerFunctions()
 
 	//getPlayerVocation(cid)
 	lua_register(m_luaState, "getPlayerVocation", LuaScriptInterface::luaGetPlayerVocation);
+
+	//getPlayerRebirthsTo(cid)
+	lua_register(m_luaState, "getPlayerRebirthsTo", LuaScriptInterface::luaGetPlayerRebirthsTo);
 
 	//getPlayerItemCount(cid, itemid, subtype)
 	lua_register(m_luaState, "getPlayerItemCount", LuaScriptInterface::luaGetPlayerItemCount);
@@ -1566,6 +1572,9 @@ void LuaScriptInterface::registerFunctions()
 
 	//doPlayerSetVocation(cid, voc)
 	lua_register(m_luaState, "doPlayerSetVocation", LuaScriptInterface::luaDoPlayerSetVocation);
+
+	//doPlayerRebirth(cid, voc)
+	lua_register(m_luaState, "doPlayerRebirth", LuaScriptInterface::luaDoPlayerRebirth);
 
 	//doPlayerSetSex(cid, sex)
 	lua_register(m_luaState, "doPlayerSetSex", LuaScriptInterface::luaDoPlayerSetSex);
@@ -2146,6 +2155,11 @@ int LuaScriptInterface::internalGetPlayerInfo(lua_State *L, PlayerInfo_t info)
 			lua_pushnumber(L, player->getMaxMana());
 			return 1;
 		}
+		case PlayerInfoRebirthsTo:
+		{
+			lua_pushnumber(L, player->getRebirthsTo());
+			return 1;
+		}
 		case PlayerInfoMasterPos:
 		{
 			Position pos;
@@ -2341,6 +2355,11 @@ int LuaScriptInterface::luaGetPlayerMaxMana(lua_State *L)
 int LuaScriptInterface::luaGetPlayerVocation(lua_State *L)
 {
 	return internalGetPlayerInfo(L, PlayerInfoVocation);
+}
+
+int LuaScriptInterface::luaGetPlayerRebirthsTo(lua_State *L)
+{
+	return internalGetPlayerInfo(L, PlayerInfoRebirthsTo);
 }
 
 int LuaScriptInterface::luaGetPlayerMasterPos(lua_State *L)
@@ -4872,6 +4891,20 @@ int LuaScriptInterface::luaDoPlayerSetVocation(lua_State *L)
 		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
 	}
 	lua_pushboolean(L, result);
+
+	return 1;
+}
+
+int LuaScriptInterface::luaDoPlayerRebirth(lua_State *L)
+{
+	//doPlayerRebirth(cid, voc)
+	uint32_t voc = popNumber(L);
+	uint32_t cid = popNumber(L);
+
+	ScriptEnviroment* env = getScriptEnv();
+	Player* player = env->getPlayerByUID(cid);
+
+	lua_pushboolean(L, player->rebirth(voc));
 
 	return 1;
 }
@@ -9786,6 +9819,22 @@ int LuaScriptInterface::luaGetBaseVocation(lua_State* L)
 	Vocation* vocation;
 	if (g_vocations.getVocation(voc, vocation)) {
 		lua_pushnumber(L, vocation->getBaseVocation());
+	} else {
+		reportErrorFunc(getErrorDesc(LUA_ERROR_VOCATION_NOT_FOUND));
+		lua_pushnumber(L, 0);
+	}
+	
+	return 1;
+}
+
+int LuaScriptInterface::luaGetRebirthVocation(lua_State* L)
+{
+	//getRebirthVocation(voc)
+	uint32_t voc = popNumber(L);
+
+	Vocation* vocation;
+	if (g_vocations.getVocation(voc, vocation)) {
+		lua_pushnumber(L, vocation->getRebirth());
 	} else {
 		reportErrorFunc(getErrorDesc(LUA_ERROR_VOCATION_NOT_FOUND));
 		lua_pushnumber(L, 0);

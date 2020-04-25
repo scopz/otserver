@@ -178,6 +178,9 @@ max_magic = 200
 -- Multiplies the walking cost when moving in diagonal (originalWalkCost is afected by this percentage)
 diagonal_walk_factor = 200
 
+-- Rebirth enabled
+rebirth_system_enabled = true
+
 -- rook_temple_id newbie island temple id
 rook_temple_id = 11
 storage_sendrook = 31009

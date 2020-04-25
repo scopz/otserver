@@ -74,6 +74,7 @@ public:
 	float getBaseDefense() const {return baseDefense;};
 	float getArmorDefense() const {return armorDefense;};
 	uint32_t getPromotion() const {return promotesTo;};
+	uint32_t getRebirth() const {return rebirthsTo;};
 	uint32_t getBaseVocation() const {return baseVocation;};
 
 	void debugVocation();
@@ -113,6 +114,7 @@ protected:
 	float armorDefense;
 
 	uint32_t promotesTo;
+	uint32_t rebirthsTo;
 	uint32_t baseVocation;
 
 	typedef std::map<uint32_t, uint64_t> manaCacheMap;

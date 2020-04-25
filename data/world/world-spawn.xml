@@ -169,6 +169,9 @@
 	<spawn centerx="33193" centery="31783" centerz="3" radius="1">
 		<npc name="Pino" x="-1" y="0" z="3" spawntime="60" direction="2" />
 	</spawn>
+	<spawn centerx="33166" centery="31825" centerz="3" radius="3">
+		<npc name="Solaire" x="0" y="0" z="3" spawntime="60" direction="2" />
+	</spawn>
 	<spawn centerx="33256" centery="31839" centerz="3" radius="1">
 		<npc name="Alexander" x="0" y="0" z="3" spawntime="60" direction="2" />
 	</spawn>

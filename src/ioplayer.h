@@ -60,6 +60,8 @@ public:
 	  * \return true if the player was successfully saved
 	  */
 	bool savePlayer(Player* player, bool shallow = false);
+	bool freezeCurrentSkills(const uint32_t &guid);
+	bool addFrozenSkills(Player* player);
 
 	bool addPlayerDeath(Player* dying_player, const DeathList& dl);
 	int32_t getPlayerUnjustKillCount(const Player* player, UnjustKillPeriod_t period);

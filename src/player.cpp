@@ -91,6 +91,7 @@ Player::Player(const std::string& _name, ProtocolGame* p) : Creature()
 	conditionSuppressions = 0;
 	accessLevel = 0;
 	violationLevel = 0;
+	rebirthsTo = 0;
 	lastip = 0;
 	lastLoginSaved = 0;
 	lastLogout = 0;
@@ -2442,6 +2443,63 @@ void Player::sendToRook()
 	if (town) {
 		setTown(town->getTownID());
 		loginPosition = town->getTemplePosition();
+	}
+}
+
+bool Player::rebirth(const uint32_t &voc)
+{
+	if (g_config.getBoolean(ConfigManager::REBIRTH_SYSTEM_ENABLED)) {
+		Town* town = Towns::getInstance().getTown(g_config.getNumber(ConfigManager::ROOK_TEMPLE_ID));
+		if (town) {
+			if (!IOPlayer::instance()->freezeCurrentSkills(getGUID())){
+				return false;
+			}
+
+			rebirthsTo = voc;
+
+			experience = 0;
+			level = getLevelFromExp(0);
+			setVocation(VOCATION_NONE);
+
+			health = healthMax;
+			mana = manaMax;
+
+			manaSpent = 0;
+			magLevel = vocation->getMagicLevel(0);
+			magLevelPercent = 0;
+
+			for (int32_t i = SKILL_FIRST; i <= SKILL_LAST; ++i) {
+				skills[i].tries = 0;
+				skills[i].level = vocation->getSkillLevel(i, 0);
+				skills[i].percent = 0;
+			}
+
+			moveEquipmentToDepot();
+
+			setTown(town->getTownID());
+			loginPosition = town->getTemplePosition();
+			g_game.internalTeleport(this, loginPosition);
+
+			sendSkills();
+			sendStats();
+
+			return true;
+		}
+	}
+	return false;
+}
+
+void Player::moveEquipmentToDepot()
+{
+	Depot* depot = getDepot(true);
+
+	for (int32_t i = SLOT_FIRST; i < SLOT_LAST; ++i) {
+		Item* item = inventory[i];
+
+		if (item) {
+			g_game.internalMoveItem(item->getParent(), depot, INDEX_WHEREEVER,
+				item, item->getItemCount(), NULL, FLAG_NOLIMIT);
+		}
 	}
 }
 

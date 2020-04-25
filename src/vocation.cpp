@@ -72,6 +72,7 @@ bool Vocations::loadFromXml(const std::string& datadir)
 
 					voc->baseVocation = voc_id;
 					voc->promotesTo = 0;
+					voc->rebirthsTo = 0;
 
 					if(readXMLString(p, "name", str)){
 						voc->name = str;
@@ -182,6 +183,9 @@ bool Vocations::loadFromXml(const std::string& datadir)
 							}
 							if(readXMLInteger(skillNode, "promotes", intVal)){
 								voc->promotesTo = intVal;
+							}
+							if(readXMLInteger(skillNode, "rebirths", intVal)){
+								voc->rebirthsTo = intVal;
 							}
 						}
 						skillNode = skillNode->next;

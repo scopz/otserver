@@ -115,6 +115,44 @@ if(Modules == nil) then
 		
 	end
 
+	function StdModule.rebirthPlayer(cid, message, keywords, parameters, node)
+		
+		local npcHandler = parameters.npcHandler
+		if(npcHandler == nil) then
+			error('StdModule.promotePlayer called without any npcHandler instance.')
+		end
+		if(cid ~= npcHandler.focus) then
+			return false
+		end
+
+		local oldVoc = getPlayerVocation(cid)
+		local reb = getRebirthVocation(oldVoc)
+
+
+		if oldVoc == 0 then
+			npcHandler:say('You can\'t rebirth!')
+		elseif(reb == 0) then
+			npcHandler:say('You are already reborn!')
+		elseif isPlayerPremiumCallback(cid) == false then
+			npcHandler:say('You need a premium account in order to rebirth.')
+		elseif(getPlayerLevel(cid) < 110) then
+			npcHandler:say('You need to be at least level 110 in order to be reborn.')
+		elseif(doPlayerRemoveMoney(cid, 100000) ~= true) then
+			npcHandler:say('You do not have 100000 gold!')
+		else
+			doSendMagicEffect(getCreaturePosition(cid), CONST_ME_MAGIC_RED)
+			if doPlayerRebirth(cid, reb) then
+				doSendMagicEffect(getCreaturePosition(cid), CONST_ME_MAGIC_RED)
+				setFirstItems(cid);
+			end
+			npcHandler:say(parameters.text)
+			npcHandler:releaseFocus()
+		end
+
+		return true
+		
+	end
+
 	
 	function StdModule.travel(cid, message, keywords, parameters, node)
 		local npcHandler = parameters.npcHandler
@@ -998,14 +1036,189 @@ if(Modules == nil) then
 
 
 
+	OracleModule = {
+		yesNode = nil,
+		noNode = nil,
+		npcHandler = nil,
+		spellsList = nil,
+
+		askText = "Do you want to learn the spell '|ITEMNAME|' for |TOTALCOST| gold?",
+		okText = "Here you are, you can find it in your spellbook now. Cast it by pronouncing '|SPELLWORDS|'.",
+		alreadyKnownText = "You already know how to cast this spell. Just say '|SPELLWORDS|'.",
+		mlevelFailText = "You must have at least magic level |SPELLMLEVEL| to learn this spell.",
+		levelFailText = "You must have at least level |SPELLLEVEL| to learn this spell.",
+		cantLearnText = "I am sorry but you can not learn this spell.",
+		noText = "Maybe next time",
+		conditionFailText = "Sorry, I can not teach you spells.",
+		listPreText = "I sell",
+		condition = function() return true end
+	}
+	-- Add it to the parseable module list.
+	
+	-- Creates a new instance of OracleModule
+	function OracleModule:new(premmy)
+		local obj = {}
+		self.premmy = premmy
+		setmetatable(obj, self)
+		self.__index = self
+		return obj
+	end
+	
+	-- Initializes the module and associates handler to it.
+	function OracleModule:init(handler)
+		self.npcHandler = handler
+
+		local node1 = handler.keywordHandler:addKeyword({ 'yes' }, OracleModule.askTown, {module = self})
+
+		if self.premmy then
+
+			addCityNode(self, node1,'edron',        9, {x=33217, y=31814, z=8}, 'EDRON')
+			addCityNode(self, node1,'ankrahmun',    6, {x=33194, y=32853, z=8}, 'ANKRAHMUN')
+			addCityNode(self, node1,'port',         8, {x=32595, y=32745, z=7}, 'PORT HOPE')
+			addCityNode(self, node1,'hope',         8, {x=32595, y=32745, z=7}, 'PORT HOPE')
+			addCityNode(self, node1,'darashia',     7, {x=33213, y=32454, z=1}, 'DARASHIA')
+
+		else
+
+			addCityNode(self, node1,'carlin',       5, {x=32360, y=31782, z=7}, 'CARLIN')
+			addCityNode(self, node1,'thais',        3, {x=32369, y=32241, z=7}, 'THAIS')
+			addCityNode(self, node1,'venore',       4, {x=32957, y=32076, z=7}, 'VENORE')
+			addCityNode(self, node1,'ab\'dendriel', 1, {x=32732, y=31634, z=7}, 'AB\'DENDRIEL')
+			addCityNode(self, node1,'kazordoon',    2, {x=32649, y=31925, z=11}, 'KAZORDOON')
+
+		end
+
+		return true
+	end
+
+	function addCityNode(module, parentNode, keyword, townId, destinadion, town)
+		local node = parentNode:addChildKeyword({keyword}, OracleModule.askVocation, {module = module, townId = townId, destination = destinadion, town = town})
+		addVocationNode(module, node, 'sorcerer', 1, 'SORCERER')
+		addVocationNode(module, node, 'druid',    2, 'DRUID')
+		addVocationNode(module, node, 'paladin',  3, 'PALADIN')
+		addVocationNode(module, node, 'knight',   4, 'KNIGHT')
+		andConfirmNode(module, node)
+	end
+
+	function addVocationNode(module, parentNode, keyword, vocId, vocName)
+		local node = parentNode:addChildKeyword({keyword}, OracleModule.chooseVocation, {module = module, vocId = vocId, vocName = vocName})
+		andConfirmNode(module, node)
+	end
+
+	function andConfirmNode(module, parentNode)
+		parentNode:addChildKeyword({'yes'}, OracleModule.onConfirm, {module = module})
+		parentNode:addChildKeyword({'no'}, OracleModule.onCancel, {module = module})
+	end
+	
+	
+	-- tradeItem callback function. Makes the npc say the message defined by MESSAGE_BUY or MESSAGE_SELL
+	function OracleModule.askTown(cid, message, keywords, parameters, node)
+		local module = parameters.module
+		if(cid ~= module.npcHandler.focus) then
+			return false
+		end
+
+		if module.premmy then
+			module.npcHandler:say('IN WHICH TOWN DO YOU WANT TO LIVE: EDRON, ANKRAHMUN, PORT HOPE OR DARASHIA?')
+		else
+			module.npcHandler:say('IN WHICH TOWN DO YOU WANT TO LIVE: CARLIN, THAIS, VENORE, AB\'DENDRIEL OR KAZORDOON?')
+		end
+
+		return true
+	end
+
+	-- tradeItem callback function. Makes the npc say the message defined by MESSAGE_BUY or MESSAGE_SELL
+	function OracleModule.askVocation(cid, message, keywords, parameters, node)
+		local module = parameters.module
+
+		if(cid ~= module.npcHandler.focus) then
+			return false
+		end
+
+		local mustRebirth = getPlayerRebirthsTo(cid)
+
+		if (mustRebirth>0) then
+			local vocName = "DOOMCASTER"
+			if mustRebirth==10     then vocName = "SAGE"
+			elseif mustRebirth==11 then vocName = "TEMPLAR"
+			elseif mustRebirth==12 then vocName = "GUARDIAN"
+			end
+
+			parameters.vocId = mustRebirth
+			parameters.vocName = vocName
+			parameters.rebirth = true
+
+			module.npcHandler:say('IN ' .. parameters.town .. '! AND YOUR PROFESSION WILL BE ' .. vocName .. '! ARE YOU SURE? THIS DECISION IS IRREVERSIBLE!')
+		else
+			parameters.rebirth = false
+			module.npcHandler:say('IN ' .. parameters.town .. '! AND WHAT PROFESSION HAVE YOU CHOSEN: KNIGHT, PALADIN, SORCERER, OR DRUID?')
+		end
+
+		return true
+	end
 
 
+	-- tradeItem callback function. Makes the npc say the message defined by MESSAGE_BUY or MESSAGE_SELL
+	function OracleModule.chooseVocation(cid, message, keywords, parameters, node)
+		local module = parameters.module
+		if(cid ~= module.npcHandler.focus) then
+			return false
+		end
+
+		if node:getParent():getParameters().rebirth then
+			return false
+		end
 
 
+		node:getParent():getParameters().vocId = parameters.vocId;
+		node:getParent():getParameters().vocName = parameters.vocName;
 
 
+		module.npcHandler:say('A ' .. parameters.vocName .. '! ARE YOU SURE? THIS DECISION IS IRREVERSIBLE!')
 
+		return true
+	end
 
+	function OracleModule.onConfirm(cid, message, keywords, parameters, node)
+		local module = parameters.module
+		if(cid ~= module.npcHandler.focus) then
+			return false
+		end
+
+		local vocNode =	node:getParent()
+
+		if not vocNode:getParameters().rebirth then
+			vocNode = vocNode:getParent()
+		end
+
+		if not vocNode:getParameters().vocId then
+			return false;
+		end
+
+		if getPlayerLevel(cid) < 8 then
+			module.npcHandler:say('CHILD! COME BACK WHEN YOU HAVE GROWN UP!')
+
+		else
+			module.npcHandler:say('SO BE IT!')
+			doPlayerSetVocation(cid,vocNode:getParameters().vocId)
+			doPlayerSetTown(cid,vocNode:getParameters().townId)
+			doTeleportThing(cid,vocNode:getParameters().destination)
+			doSendMagicEffect(vocNode:getParameters().destination, CONST_ME_MAGIC_BLUE)
+
+		end
+
+		return true
+	end
+
+	function OracleModule.onCancel(cid, message, keywords, parameters, node)
+		local module = parameters.module
+		if(cid ~= module.npcHandler.focus) then
+			return false
+		end
+		module.npcHandler:say('COME BACK WHEN YOU ARE PREPARED TO FACE YOUR DESTINY!')
+		return true
+	end
 
 
 end
+

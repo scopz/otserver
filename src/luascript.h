@@ -213,6 +213,7 @@ enum PlayerInfo_t{
 	PlayerInfoMana,
 	PlayerInfoMaxMana,
 	PlayerInfoVocation,
+	PlayerInfoRebirthsTo,
 	PlayerInfoMasterPos,
 	PlayerInfoSoul,
 	PlayerInfoFreeCap,
@@ -390,6 +391,7 @@ protected:
 	static int luaDoPlayerSetMasterPos(lua_State *L);
 	static int luaDoPlayerSetTown(lua_State *L);
 	static int luaDoPlayerSetVocation(lua_State *L);
+	static int luaDoPlayerRebirth(lua_State *L);
 	static int luaDoPlayerSetSex(lua_State *L);
 	static int luaDoPlayerRemoveItem(lua_State *L);
 	static int luaDoPlayerAddSoul(lua_State *L);
@@ -463,6 +465,7 @@ protected:
 	static int luaGetPromotedVocation(lua_State *L);
 	static int luaGetUnpromotedVocation(lua_State *L);
 	static int luaGetBaseVocation(lua_State *L);
+	static int luaGetRebirthVocation(lua_State *L);
 
 	//get player info functions
 	static int luaGetPlayerFood(lua_State *L);
@@ -473,6 +476,7 @@ protected:
 	static int luaGetPlayerMaxMana(lua_State *L);
 	static int luaGetPlayerSkill(lua_State *L);
 	static int luaGetPlayerVocation(lua_State *L);
+	static int luaGetPlayerRebirthsTo(lua_State *L);
 	static int luaGetPlayerMasterPos(lua_State *L);
 	static int luaGetPlayerTown(lua_State *L);
 	static int luaGetPlayerItemCount(lua_State *L);
