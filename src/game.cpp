@@ -3589,7 +3589,7 @@ bool Game::kickPlayer(uint32_t playerId)
 
 //--
 bool Game::canThrowObjectTo(const Position& fromPos, const Position& toPos, bool checkLineOfSight /*= true*/,
-	int32_t rangex /*= Map::maxClientViewportX*/, int32_t rangey /*= Map::maxClientViewportY*/)
+	int32_t rangex /*= Map::Map::clientViewport.sizeW*/, int32_t rangey /*= Map::Map::clientViewport.sizeH*/)
 {
 	return map->canThrowObjectTo(fromPos, toPos, checkLineOfSight, rangex, rangey);
 }

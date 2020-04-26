@@ -179,7 +179,8 @@ max_magic = 200
 diagonal_walk_factor = 100
 
 -- Extra tiles in each side visibles by the player. Default is 0 and max value is 4
-extra_map_size = 1
+extra_clientW_viewport = 3
+extra_clientH_viewport = 1
 
 -- rook_temple_id newbie island temple id
 rook_temple_id = 11

@@ -41,10 +41,28 @@
 
 extern ConfigManager g_config;
 
+
+Viewport Map::viewport = {
+	DEFAULT_VIEWPORT_W,
+	DEFAULT_VIEWPORT_H,
+	(DEFAULT_VIEWPORT_W+1)*2,
+	(DEFAULT_VIEWPORT_H+1)*2
+};
+
+Viewport Map::clientViewport = viewport;
+
 Map::Map()
 {
 	mapWidth = 0;
 	mapHeight = 0;
+
+	uint8_t extraClientWViewport = g_config.getNumber(ConfigManager::EXTRA_CLIENTW_VIEWPORT);
+	uint8_t extraClientHViewport = g_config.getNumber(ConfigManager::EXTRA_CLIENTH_VIEWPORT);
+
+	clientViewport.sizeW = (extraClientWViewport>4? 4:extraClientWViewport) + DEFAULT_VIEWPORT_W;
+	clientViewport.sizeH = (extraClientHViewport>4? 4:extraClientHViewport) + DEFAULT_VIEWPORT_H;
+	clientViewport.width = (clientViewport.sizeW + 1) * 2;
+	clientViewport.height = (clientViewport.sizeH + 1) * 2;
 }
 
 Map::~Map()
@@ -819,7 +837,7 @@ bool Map::getPathMatching(const Creature* creature, std::list<Direction>& dirLis
 	const Tile* tile = NULL;
 	AStarNode* found = NULL;
 
-	while(fpp.maxSearchDist != -1 || nodes.countClosedNodes() < 100){
+	while(fpp.maxSearchDist != -1 || nodes.countClosedNodes() < 400){
 		AStarNode* n = nodes.getBestNode();
 		if(!n){
 			if(found){

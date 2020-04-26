@@ -58,6 +58,9 @@ struct AStarNode{
 
 #define MAP_NORMALWALKCOST 10
 
+#define DEFAULT_VIEWPORT_W 8
+#define DEFAULT_VIEWPORT_H 6
+
 class AStarNodes{
 public:
 	AStarNodes();
@@ -146,7 +149,12 @@ protected:
 	friend class QTreeNode;
 };
 
-
+struct Viewport {
+	uint8_t sizeW;
+	uint8_t sizeH;
+	uint8_t width;
+	uint8_t height;
+};
 
 /**
   * Map class.
@@ -163,6 +171,9 @@ public:
 	static const int32_t maxViewportY = 11;		//min value: maxClientViewportY + 1
 	static const int32_t maxClientViewportX = 8;
 	static const int32_t maxClientViewportY = 6;
+
+	static Viewport viewport;
+	static Viewport clientViewport;
 
 	/**
 	* Load a map.
