@@ -57,6 +57,7 @@ struct AStarNode{
 #define GET_NODE_INDEX(a) (a - &nodes[0])
 
 #define MAP_NORMALWALKCOST 10
+#define MAP_DIAGONALWALKCOST 25
 
 #define DEFAULT_VIEWPORT_W 8
 #define DEFAULT_VIEWPORT_H 6

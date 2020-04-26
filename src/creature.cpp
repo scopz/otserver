@@ -349,7 +349,8 @@ bool Creature::getNextStep(Direction& dir, uint32_t& flags)
 bool Creature::startAutoWalk(std::list<Direction>& listDir)
 {
 	listWalkDir = listDir;
-	addEventWalk(listDir.size() == 1);
+	//addEventWalk(listDir.size() == 1);
+	addEventWalk(true);
 	return true;
 }
 

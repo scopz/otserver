@@ -1085,8 +1085,7 @@ int32_t AStarNodes::getMapWalkCost(const Creature* creature, AStarNode* node,
 	int cost = 0;
 	if(std::abs((int)node->x - neighbourPos.x) == std::abs((int)node->y - neighbourPos.y)){
 		//diagonal movement extra cost
-		float diagonalWalkFactor = g_config.getNumber(ConfigManager::DIAGONAL_WALK_FACTOR);
-		cost = MAP_NORMALWALKCOST*diagonalWalkFactor/100.;
+		cost = MAP_DIAGONALWALKCOST;
 	}
 	else{
 		cost = MAP_NORMALWALKCOST;

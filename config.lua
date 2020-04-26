@@ -176,7 +176,7 @@ max_skill = 200
 max_magic = 200
 
 -- Multiplies the walking cost when moving in diagonal (originalWalkCost is afected by this percentage)
-diagonal_walk_factor = 100
+diagonal_walk_factor = 200
 
 -- Extra tiles in each side visibles by the player. Default is 0 and max value is 4
 extra_clientW_viewport = 3
