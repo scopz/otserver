@@ -3446,8 +3446,8 @@ bool Game::playerWhisper(Player* player, const std::string& text)
 	SpectatorVec list;
 	SpectatorVec::iterator it;
 	getSpectators(list, player->getPosition(), false, false,
-		Map::maxClientViewportX, Map::maxClientViewportX,
-		Map::maxClientViewportY, Map::maxClientViewportY);
+		Map::clientViewportX, Map::clientViewportX,
+		Map::clientViewportY, Map::clientViewportY);
 
 	//send to client
 	Player* tmpPlayer = NULL;
@@ -3589,7 +3589,7 @@ bool Game::kickPlayer(uint32_t playerId)
 
 //--
 bool Game::canThrowObjectTo(const Position& fromPos, const Position& toPos, bool checkLineOfSight /*= true*/,
-	int32_t rangex /*= Map::Map::clientViewport.sizeW*/, int32_t rangey /*= Map::Map::clientViewport.sizeH*/)
+	int32_t rangex /*= Map::clientViewportX*/, int32_t rangey /*= Map::clientViewportY*/)
 {
 	return map->canThrowObjectTo(fromPos, toPos, checkLineOfSight, rangex, rangey);
 }
@@ -3640,8 +3640,8 @@ bool Game::internalCreatureSay(Creature* creature, SpeakClasses type, const std:
 	}
 	else{
 		getSpectators(list, creature->getPosition(), false, false,
-			Map::maxClientViewportX, Map::maxClientViewportX,
-			Map::maxClientViewportY, Map::maxClientViewportY);
+			Map::clientViewportX, Map::clientViewportX,
+			Map::clientViewportY, Map::clientViewportY);
 	}
 
 	//send to client

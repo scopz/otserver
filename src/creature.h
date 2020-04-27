@@ -422,8 +422,8 @@ public:
 	static bool canSee(const Position& myPos, const Position& pos, uint32_t viewRangeX, uint32_t viewRangeY);
 
 protected:
-	static const int32_t mapWalkWidth = Map::maxViewportX * 2 + 1;
-	static const int32_t mapWalkHeight = Map::maxViewportY * 2 + 1;
+	static const int32_t mapWalkWidth = Map::viewportX * 2 + 1;
+	static const int32_t mapWalkHeight = Map::viewportY * 2 + 1;
 	bool localMapCache[mapWalkHeight][mapWalkWidth];
 
 	virtual bool useCacheMap() const {return false;}

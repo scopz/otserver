@@ -3356,8 +3356,8 @@ void Monster::getPathSearchParams(const Creature* creature, FindPathParams& fpp)
 	}
 	else{
 		if(isFleeing()){
-			//Distance should be higher than the client view range (Map::maxClientViewportX/Map::maxClientViewportY)
-			fpp.maxTargetDist = Map::maxViewportX;
+			//Distance should be higher than the client view range (Map::clientViewportX/Map::clientViewportY)
+			fpp.maxTargetDist = Map::viewportX;
 			fpp.clearSight = false;
 			fpp.keepDistance = true;
 			fpp.fullPathSearch = false;

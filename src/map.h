@@ -59,9 +59,6 @@ struct AStarNode{
 #define MAP_NORMALWALKCOST 10
 #define MAP_DIAGONALWALKCOST 25
 
-#define DEFAULT_VIEWPORT_W 8
-#define DEFAULT_VIEWPORT_H 6
-
 class AStarNodes{
 public:
 	AStarNodes();
@@ -150,12 +147,8 @@ protected:
 	friend class QTreeNode;
 };
 
-struct Viewport {
-	uint8_t sizeW;
-	uint8_t sizeH;
-	uint8_t width;
-	uint8_t height;
-};
+#define EXTRA_W 3
+#define EXTRA_H 1
 
 /**
   * Map class.
@@ -168,13 +161,14 @@ public:
 	Map();
 	~Map();
 
-	static const int32_t maxViewportX = 11;		//min value: maxClientViewportX + 1
-	static const int32_t maxViewportY = 11;		//min value: maxClientViewportY + 1
-	static const int32_t maxClientViewportX = 8;
-	static const int32_t maxClientViewportY = 6;
+	static const int32_t clientViewportX = 8 + EXTRA_W;		//default value is 8
+	static const int32_t clientViewportY = 6 + EXTRA_H;		//default value is 6
 
-	static Viewport viewport;
-	static Viewport clientViewport;
+	static const int32_t clientViewportW = (clientViewportX + 1) * 2;
+	static const int32_t clientViewportH = (clientViewportY + 1) * 2;
+
+	static const int32_t viewportX = clientViewportX + 1;	//min value: clientViewportX + 1
+	static const int32_t viewportY = clientViewportY + 1;	//min value: clientViewportY + 1
 
 	/**
 	* Load a map.
@@ -234,7 +228,7 @@ public:
 	*	\return The result if you can throw there or not
 	*/
 	bool canThrowObjectTo(const Position& fromPos, const Position& toPos, bool checkLineOfSight = true,
-		int32_t rangex = Map::maxClientViewportX, int32_t rangey = Map::maxClientViewportY);
+		int32_t rangex = Map::clientViewportX, int32_t rangey = Map::clientViewportY);
 
 	/**
 	* Checks if path is clear from fromPos to toPos

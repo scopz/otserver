@@ -464,7 +464,7 @@ public:
 	void FreeThing(Thing* thing);
 
 	bool canThrowObjectTo(const Position& fromPos, const Position& toPos, bool checkLineOfSight = true,
-		int32_t rangex = Map::clientViewport.sizeW, int32_t rangey = Map::clientViewport.sizeH);
+		int32_t rangex = Map::clientViewportX, int32_t rangey = Map::clientViewportY);
 	bool isSightClear(const Position& fromPos, const Position& toPos, bool sameFloor);
 
 	bool getPathTo(const Creature* creature, const Position& destPos,

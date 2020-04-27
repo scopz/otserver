@@ -178,10 +178,6 @@ max_magic = 200
 -- Multiplies the walking cost when moving in diagonal (originalWalkCost is afected by this percentage)
 diagonal_walk_factor = 200
 
--- Extra tiles in each side visibles by the player. Default is 0 and max value is 4
-extra_clientW_viewport = 3
-extra_clientH_viewport = 1
-
 -- rook_temple_id newbie island temple id
 rook_temple_id = 11
 storage_sendrook = 31009

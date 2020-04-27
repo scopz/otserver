@@ -620,7 +620,7 @@ bool Item::serializeAttr(PropWriteStream& propWriteStream) const
 }
 
 int Item::getThrowRange() const {
-	return isPickupable()? Map::clientViewport.width-3 : 2;
+	return isPickupable()? Map::clientViewportW-3 : 2;
 };
 
 bool Item::hasProperty(enum ITEMPROPERTY prop) const

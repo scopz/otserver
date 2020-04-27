@@ -367,8 +367,8 @@ bool Monsters::deserializeSpell(xmlNodePtr node, spellBlock_t& sb, MonsterType* 
 			intValue = 0;
 		}
 
-		if(intValue > Map::maxViewportX * 2){
-			intValue = Map::maxViewportX * 2;
+		if(intValue > Map::viewportX * 2){
+			intValue = Map::viewportX * 2;
 		}
 
 		sb.range = intValue;

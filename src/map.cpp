@@ -42,27 +42,10 @@
 extern ConfigManager g_config;
 
 
-Viewport Map::viewport = {
-	DEFAULT_VIEWPORT_W,
-	DEFAULT_VIEWPORT_H,
-	(DEFAULT_VIEWPORT_W+1)*2,
-	(DEFAULT_VIEWPORT_H+1)*2
-};
-
-Viewport Map::clientViewport = viewport;
-
 Map::Map()
 {
 	mapWidth = 0;
 	mapHeight = 0;
-
-	uint8_t extraClientWViewport = g_config.getNumber(ConfigManager::EXTRA_CLIENTW_VIEWPORT);
-	uint8_t extraClientHViewport = g_config.getNumber(ConfigManager::EXTRA_CLIENTH_VIEWPORT);
-
-	clientViewport.sizeW = (extraClientWViewport>4? 4:extraClientWViewport) + DEFAULT_VIEWPORT_W;
-	clientViewport.sizeH = (extraClientHViewport>4? 4:extraClientHViewport) + DEFAULT_VIEWPORT_H;
-	clientViewport.width = (clientViewport.sizeW + 1) * 2;
-	clientViewport.height = (clientViewport.sizeH + 1) * 2;
 }
 
 Map::~Map()
@@ -425,10 +408,10 @@ void Map::getSpectators(SpectatorVec& list, const Position& centerPos,
 		}
 
 		if(!foundCache){
-			minRangeX = (minRangeX == 0 ? -maxViewportX : -minRangeX);
-			maxRangeX = (maxRangeX == 0 ? maxViewportX : maxRangeX);
-			minRangeY = (minRangeY == 0 ? -maxViewportY : -minRangeY);
-			maxRangeY = (maxRangeY == 0 ? maxViewportY : maxRangeY);
+			minRangeX = (minRangeX == 0 ? -viewportX : -minRangeX);
+			maxRangeX = (maxRangeX == 0 ? viewportX : maxRangeX);
+			minRangeY = (minRangeY == 0 ? -viewportY : -minRangeY);
+			maxRangeY = (maxRangeY == 0 ? viewportY : maxRangeY);
 
 			int32_t minRangeZ;
 			int32_t maxRangeZ;
@@ -484,10 +467,10 @@ const SpectatorVec& Map::getSpectators(const Position& centerPos)
 			spectatorCache[centerPos] = p;
 			SpectatorVec& list = *p;
 
-			int32_t minRangeX = -maxViewportX;
-			int32_t maxRangeX = maxViewportX;
-			int32_t minRangeY = -maxViewportY;
-			int32_t maxRangeY = maxViewportY;
+			int32_t minRangeX = -viewportX;
+			int32_t maxRangeX = viewportX;
+			int32_t minRangeY = -viewportY;
+			int32_t maxRangeY = viewportY;
 
 			int32_t minRangeZ;
 			int32_t maxRangeZ;
@@ -534,7 +517,7 @@ void Map::clearSpectatorCache()
 }
 
 bool Map::canThrowObjectTo(const Position& fromPos, const Position& toPos, bool checkLineOfSight /*= true*/,
-	int32_t rangex /*= Map::maxClientViewportX*/, int32_t rangey /*= Map::maxClientViewportY*/)
+	int32_t rangex /*= Map::clientViewportX*/, int32_t rangey /*= Map::clientViewportY*/)
 {
 	//z checks
 	//underground 8->15
