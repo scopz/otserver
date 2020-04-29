@@ -93,7 +93,7 @@ if mustRebirth > 0 then
 			node2:addChildKeywordNode(yesNode)
 			node2:addChildKeywordNode(noNode)
 				
-		local node2 = node1:addChildKeyword({'darashia'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, townid = 7, destination = {x=33213, y=32454, z=1}, text = 'IN DARASHIA! AND YOUR PROFESSION WILL BE ' .. vocName .. '.ARE YOU SURE? THIS DECISION IS IRREVERSIBLE!'})
+		local node2 = node1:addChildKeyword({'darashia'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, townid = 7, destination = {x=33215, y=32456, z=1}, text = 'IN DARASHIA! AND YOUR PROFESSION WILL BE ' .. vocName .. '.ARE YOU SURE? THIS DECISION IS IRREVERSIBLE!'})
 			node2:addChildKeywordNode(yesNode)
 			node2:addChildKeywordNode(noNode)
 
@@ -157,7 +157,7 @@ else
 				node3:addChildKeywordNode(yesNode)
 				node3:addChildKeywordNode(noNode)
 				
-		local node2 = node1:addChildKeyword({'darashia'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, townid = 7, destination = {x=33213, y=32454, z=1}, text = 'IN DARASHIA! AND WHAT PROFESSION HAVE YOU CHOSEN: KNIGHT, PALADIN, SORCERER, OR DRUID?'})
+		local node2 = node1:addChildKeyword({'darashia'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, townid = 7, destination = {x=33215, y=32456, z=1}, text = 'IN DARASHIA! AND WHAT PROFESSION HAVE YOU CHOSEN: KNIGHT, PALADIN, SORCERER, OR DRUID?'})
 			local node3 = node2:addChildKeyword({'sorcerer'}, StdModule.say, {npcHandler = npcHandler, voc = 1, onlyFocus = true, text = 'A SORCERER! ARE YOU SURE? THIS DECISION IS IRREVERSIBLE!'})
 				node3:addChildKeywordNode(yesNode)
 				node3:addChildKeywordNode(noNode)

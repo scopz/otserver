@@ -398,6 +398,8 @@
 	<action actionid="25010" script="tibia/lever_brightswordring.lua"/>
 	<action actionid="25011" script="tibia/lever_brightswordbarrel.lua"/>
 	<action actionid="25014" script="tibia/lever_demonhelmet.lua"/>
+	<action actionid="25015" script="tibia/lever_triangletower.lua"/>
+	<action actionid="25016" script="tibia/lever_draconiaexit.lua"/>
 	<action uniqueid="2469" script="tibia/kazz_lever.lua"/>
 	<action uniqueid="33210" script="tibia/banuta.lua"/>
 	<action uniqueid="7000" script="tibia/lever_annihilator.lua"/>	<!-- The Annihilator Quest -->

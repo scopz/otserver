@@ -1076,7 +1076,7 @@ if(Modules == nil) then
 			addCityNode(self, node1,'ankrahmun',    6, {x=33194, y=32853, z=8}, 'ANKRAHMUN')
 			addCityNode(self, node1,'port',         8, {x=32595, y=32745, z=7}, 'PORT HOPE')
 			addCityNode(self, node1,'hope',         8, {x=32595, y=32745, z=7}, 'PORT HOPE')
-			addCityNode(self, node1,'darashia',     7, {x=33213, y=32454, z=1}, 'DARASHIA')
+			addCityNode(self, node1,'darashia',     7, {x=33215, y=32456, z=1}, 'DARASHIA')
 
 		else
 

@@ -1572,7 +1572,7 @@
 		<attribute key="shootType" value="smallstone"/>
 		<attribute key="range" value="5"/>
 		<attribute key="breakChance" value="7"/>
-		<attribute key="ammoAction" value="moveback"/>
+		<attribute key="ammoAction" value="move"/>
 	</item>
 	<item id="1295" article="a" name="stone">
 		<attribute key="weight" value="78000"/>
