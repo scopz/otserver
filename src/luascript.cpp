@@ -1757,6 +1757,9 @@ void LuaScriptInterface::registerFunctions()
 	//doTargetCombatHealth(cid, target, type, min, max, effect)
 	lua_register(m_luaState, "doTargetCombatHealth", LuaScriptInterface::luaDoTargetCombatHealth);
 
+	//doTargetCombatHealth(cid, target, type, min, max, effect)
+	lua_register(m_luaState, "doTargetCombatFreeze", LuaScriptInterface::luaDoTargetCombatFreeze);
+
 	//doAreaCombatMana(cid, pos, area, min, max, effect)
 	lua_register(m_luaState, "doAreaCombatMana", LuaScriptInterface::luaDoAreaCombatMana);
 
@@ -6197,6 +6200,53 @@ int LuaScriptInterface::luaDoTargetCombatHealth(lua_State *L)
 		params.impactEffect = effect;
 		Combat::doCombatHealth(creature, target, minChange, maxChange, params);
 
+		lua_pushboolean(L, true);
+	}
+	else{
+		reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
+		lua_pushboolean(L, false);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaDoTargetCombatFreeze(lua_State *L)
+{
+	//doTargetCombatHealth(cid, target, creatureFreeze, playerFreeze, itemRef)
+	uint32_t itemRef = popNumber(L);
+	int32_t pFreezeTime = (int32_t)popNumber(L);
+	int32_t freezeTime = (int32_t)popNumber(L);
+	uint32_t targetCid = popNumber(L);
+	uint32_t cid = popNumber(L);
+
+	ScriptEnviroment* env = getScriptEnv();
+
+
+	Item* item = NULL;
+	if(itemRef != 0){
+		item = env->getItemByUID(itemRef);
+	}
+
+	if (cid == 0 && item) {
+		cid = item->getOwner();
+	}
+
+	Creature* creature = NULL;
+	if(cid != 0){
+		creature = env->getCreatureByUID(cid);
+
+		if(!creature){
+			reportErrorFunc(getErrorDesc(LUA_ERROR_CREATURE_NOT_FOUND));
+			lua_pushboolean(L, false);
+			return 1;
+		}
+	}
+
+	Creature* target = env->getCreatureByUID(targetCid);
+	if(target){
+		if (target->getPlayer()) {
+			freezeTime = pFreezeTime;
+		}
+		target->addCondition(new ConditionFrozen(CONDITIONID_COMBAT, CONDITION_FROZEN, freezeTime, item));
 		lua_pushboolean(L, true);
 	}
 	else{

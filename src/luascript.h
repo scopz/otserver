@@ -584,6 +584,7 @@ protected:
 
 	static int luaDoAreaCombatHealth(lua_State *L);
 	static int luaDoTargetCombatHealth(lua_State *L);
+	static int luaDoTargetCombatFreeze(lua_State *L);
 
 	//
 	static int luaDoAreaCombatMana(lua_State *L);

@@ -638,6 +638,10 @@ void ProtocolGame::parsePacket(NetworkMessage &msg)
 		parseDebugAssert(msg);
 		break;
 
+	case 0x34:
+		parseSayTargeted(msg);
+		break;
+
 	default:
 		std::cout << "Unknown packet header: " << std::hex << (int)recvbyte << std::dec << ", player " << player->getName() << std::endl;
 		disconnectClient(0x14, "Unknown packet sent.");
@@ -1107,6 +1111,26 @@ void ProtocolGame::parseSay(NetworkMessage& msg)
 	addGameTaskTimed(DISPATCHER_TASK_EXPIRATION, &Game::playerSay, player->getID(), channelId, type, receiver, text);
 }
 
+void ProtocolGame::parseSayTargeted(NetworkMessage& msg)
+{
+	uint8_t targetType = msg.GetByte(); // 1 position , 2 creature
+
+	if (targetType == 0x01) { // position
+		uint16_t x = msg.GetU16();
+		uint16_t y = msg.GetU16();
+		uint16_t z = msg.GetU16();
+		std::string text = msg.GetString();
+
+		addGameTaskTimed(DISPATCHER_TASK_EXPIRATION, &Game::playerSayTargetPosition, player->getID(), Position(x,y,z), text);
+
+	} else if (targetType == 0x02) { // creature
+		uint32_t creatureId = msg.GetU32();
+		std::string text = msg.GetString();
+
+		addGameTaskTimed(DISPATCHER_TASK_EXPIRATION, &Game::playerSayTarget, player->getID(), creatureId, text);
+	}
+}
+
 void ProtocolGame::parseFightModes(NetworkMessage& msg)
 {
 	uint8_t rawFightMode = msg.GetByte(); //1 - offensive, 2 - balanced, 3 - defensive
@@ -1507,7 +1531,18 @@ void ProtocolGame::sendIcons(uint16_t icons)
 	if(msg){
 		TRACK_MESSAGE(msg);
 		msg->AddByte(0xA2);
-		msg->AddByte(icons);
+		msg->AddU16(icons);
+	}
+}
+
+void ProtocolGame::sendTargetRequirement(const uint8_t &reason, const std::string &text)
+{
+	NetworkMessage_ptr msg = (NetworkMessage_ptr) getOutputBuffer();
+	if(msg){
+		TRACK_MESSAGE(msg);
+		msg->AddByte(0x34);
+		msg->AddByte(reason);
+		msg->AddString(text);
 	}
 }
 

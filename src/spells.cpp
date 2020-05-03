@@ -60,7 +60,14 @@ TalkActionResult_t Spells::playerSaySpell(Player* player, SpeakClasses type, std
 
 	InstantSpell* instantSpell = getInstantSpell(str_words);
 	if (!instantSpell){
+		instantSpell = getAimSpell(str_words);
+		if (instantSpell && instantSpell->isAimSpell()) {
+			return TALKACTION_REQUIRES_TARGET;
+		}
 		return TALKACTION_CONTINUE;
+
+	} else if (instantSpell->isAimSpell()){
+		return TALKACTION_REQUIRES_TARGET;
 	}
 	std::string param = "";
 
@@ -131,6 +138,9 @@ Event* Spells::getEvent(const std::string& nodeName)
 	else if(asLowerCaseString(nodeName) == "conjure"){
 		return new ConjureSpell(&m_scriptInterface);
 	}
+	else if(asLowerCaseString(nodeName) == "aim"){
+		return new AimSpell(&m_scriptInterface);
+	}
 	else{
 		return NULL;
 	}
@@ -138,10 +148,21 @@ Event* Spells::getEvent(const std::string& nodeName)
 
 bool Spells::registerEvent(Event* event, xmlNodePtr p)
 {
+	AimSpell* aim = dynamic_cast<AimSpell*>(event);
 	InstantSpell* instant = dynamic_cast<InstantSpell*>(event);
 	RuneSpell* rune = dynamic_cast<RuneSpell*>(event);
 
-	if(instant){
+	if(aim){
+			if(aimables.find(aim->getWords()) != aimables.end())
+			{
+				std::cout << "[Warning - Spells::registerEvent] Duplicate registered aim spell with id: " << aim->getWords() << std::endl;
+				return false;
+			}
+
+			aimables[aim->getWords()] = aim;
+			return true;
+		}
+	else if(instant){
 		if(instants.find(instant->getWords()) != instants.end())
 		{
 			std::cout << "[Warning - Spells::registerEvent] Duplicate registered instant spell with words: " << instant->getWords() << std::endl;
@@ -262,6 +283,30 @@ InstantSpell* Spells::getInstantSpell(const std::string& words)
     return result;
 }
 
+AimSpell* Spells::getAimSpell(const std::string& words)
+{
+	AimSpell* result = NULL;
+    for(AimablesMap::iterator it = aimables.begin(); it != aimables.end(); ++it)
+    {
+        AimSpell* aimSpell = it->second;
+        if(!asLowerCaseString(words).compare(0, aimSpell->getWords().length(),
+            asLowerCaseString(aimSpell->getWords())))
+        {
+            if(!result || aimSpell->getWords().length() > result->getWords().length())
+                result = aimSpell;
+        }
+    }
+
+    if(result && words.length() > result->getWords().length())
+    {
+        std::string param = words.substr(result->getWords().length(), words.length());
+        if(param[0] != ' ' || (param.length() > 1 && param[1] != '"'))
+            return NULL;
+    }
+
+    return result;
+}
+
 uint32_t Spells::getInstantSpellCount(const Player* player)
 {
 	uint32_t count = 0;
@@ -298,6 +343,11 @@ InstantSpell* Spells::getInstantSpellByName(std::string name)
 {
 	toLowerCaseString(name);
 	for(InstantsMap::iterator it = instants.begin(); it != instants.end(); ++it){
+		if(asLowerCaseString(it->second->getName()) == name){
+			return it->second;
+		}
+	}
+	for(AimablesMap::iterator it = aimables.begin(); it != aimables.end(); ++it){
 		if(asLowerCaseString(it->second->getName()) == name){
 			return it->second;
 		}
@@ -1018,6 +1068,7 @@ TalkAction(_interface)
 	hasParam = false;
 	checkLineOfSight = true;
 	function = NULL;
+	aimSpell = false;
 }
 
 InstantSpell::~InstantSpell()
@@ -2340,4 +2391,88 @@ bool RuneSpell::executeCastSpell(Creature* creature, const LuaVariant& var)
 		return false;
 	}
 	return(result);
+}
+
+AimSpell::AimSpell(LuaScriptInterface* _interface) :
+		InstantSpell(_interface)
+{
+	useType = NONE;
+	aimSpell = true;
+}
+
+AimSpell::~AimSpell()
+{
+}
+
+bool AimSpell::castSpell(Creature* creature)
+{
+	return castSpell(creature, creature);
+}
+bool AimSpell::castSpell(Creature* creature, Creature* target)
+{
+	if (useType == POSITION) {
+		return castSpell(creature->getPlayer(), target->getPosition());
+	}
+	return true;
+}
+
+bool AimSpell::configureEvent(xmlNodePtr p)
+{
+	if(!Spell::configureSpell(p)){
+		return false;
+	}
+
+	if(!TalkAction::configureEvent(p)){
+		return false;
+	}
+
+	std::string content;
+	if(readXMLString(p, "uses", content)){
+		if (content == "position") useType = POSITION;
+	}
+
+	return true;
+}
+
+bool AimSpell::castSpell(Player* player, const Position &toPos)
+{
+	if (!player || !playerSpellCheck(player)) return false;
+
+	Tile* tile = g_game.getTile(toPos.x, toPos.y, toPos.z);
+	if(!tile){
+		player->sendCancelMessage(RET_NOTPOSSIBLE);
+		g_game.addMagicEffect(player->getPosition(), NM_ME_PUFF);
+		return false;
+	}
+
+	if(range != -1){
+		if(!g_game.canThrowObjectTo(player->getPosition(), toPos, true, range, range)){
+			player->sendCancelMessage(RET_DESTINATIONOUTOFREACH);
+			g_game.addMagicEffect(player->getPosition(), NM_ME_PUFF);
+			return false;
+		}
+	}
+
+	LuaVariant var;
+	var.type = VARIANT_POSITION;
+	var.pos = toPos;
+
+	bool result = internalCastSpell(player, var);
+
+	if(result){
+		Spell::postCastSpell(player);
+	}
+
+	return result;
+}
+
+bool AimSpell::internalCastSpell(Creature* creature, const LuaVariant& var)
+{
+	bool result = false;
+
+	if(m_scripted){
+		result = executeCastSpell(creature, var);
+	}
+
+	return result;
 }

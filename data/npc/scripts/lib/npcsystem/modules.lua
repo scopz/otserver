@@ -897,7 +897,7 @@ if(Modules == nil) then
 			return false
 		end
 
-		local spell = getInstantSpellInfoByName(cid, parameters.name);
+		local spell = getInstantSpellInfoByName(cid, parameters.name)
 		node.spell = spell
 		node.playerName = getPlayerName(cid)
 

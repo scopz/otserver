@@ -629,6 +629,8 @@ public:
 		{if(client) client->sendLockRuleViolation();}
 	void sendRuleViolationCancel(const std::string& name)
 		{if(client) client->sendRuleViolationCancel(name);}
+	void sendTargetRequirement(const uint8_t &reason, const std::string &text)
+		{if(client) client->sendTargetRequirement(reason, text);}
 
 	void receivePing() {last_pong = OTSYS_TIME();}
 

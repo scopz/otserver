@@ -93,6 +93,7 @@ private:
 
 	void parseSetOutfit(NetworkMessage& msg);
 	void parseSay(NetworkMessage& msg);
+	void parseSayTargeted(NetworkMessage& msg);
 	void parseLookAt(NetworkMessage& msg);
 	void parseFightModes(NetworkMessage& msg);
 	void parseAttack(NetworkMessage& msg);
@@ -154,6 +155,7 @@ private:
 	void sendLockRuleViolation();
 	void sendRuleViolationCancel(const std::string& name);
 	void sendIcons(uint16_t icons);
+	void sendTargetRequirement(const uint8_t &reason, const std::string &text);
 
 	void sendDistanceShoot(const Position& from, const Position& to, unsigned char type);
 	void sendMagicEffect(const Position& pos, unsigned char type);

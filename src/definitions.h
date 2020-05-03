@@ -22,8 +22,8 @@
 #define __OTSERV_DEFINITIONS_H__
 
 #define OTSERV_VERSION "1.0"
-#define OTSERV_NAME "OTHire"
-#define OTSERV_CLIENT_VERSION "7.72"
+#define OTSERV_NAME "Nosgia"
+#define OTSERV_CLIENT_VERSION "7.73"
 
 #define CURRENT_SCHEMA_VERSION 24
 

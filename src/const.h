@@ -193,7 +193,8 @@ enum Icons_t{
 	ICON_MANASHIELD = 16,
 	ICON_PARALYZE   = 32,
 	ICON_HASTE      = 64,
-	ICON_SWORDS     = 128
+	ICON_SWORDS     = 128,
+	ICON_FROZEN     = 256
 };
 
 enum WeaponType_t {

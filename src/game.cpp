@@ -1049,6 +1049,10 @@ ReturnValue Game::internalMoveCreature(Creature* creature, Cylinder* fromCylinde
 		}
 	}
 
+	if (creature->hasCondition(CONDITION_FROZEN, true)) {
+		return RET_NOTPOSSIBLE;
+	}
+
 	fromCylinder->getTile()->moveCreature(creature, toCylinder);
 
 	if(creature->getParent() == toCylinder){
@@ -3427,6 +3431,37 @@ bool Game::playerSay(uint32_t playerId, uint16_t channelId, SpeakClasses type,
 	return false;
 }
 
+bool Game::playerSayTarget(const uint32_t &playerId, const uint32_t &targetId, const std::string& text)
+{
+	Player* player = getPlayerByID(playerId);
+	if(!player || player->isRemoved())
+		return false;
+
+	AimSpell* spell = g_spells->getAimSpell(text);
+	if (spell && spell->isAimSpell()) {
+		Creature* creature = getCreatureByID(targetId);
+		if (spell->castSpell(player, creature)) {
+			return internalCreatureSay(player, SPEAK_SAY, text);
+		}
+	}
+	return true;
+}
+
+bool Game::playerSayTargetPosition(const uint32_t &playerId, const Position &pos, const std::string& text)
+{
+	Player* player = getPlayerByID(playerId);
+	if(!player || player->isRemoved())
+		return false;
+
+	AimSpell* spell = g_spells->getAimSpell(text);
+	if (spell && spell->isAimSpell()) {
+		if (spell->castSpell(player, pos)) {
+			return internalCreatureSay(player, SPEAK_SAY, text);
+		}
+	}
+	return false;
+}
+
 bool Game::playerSaySpell(Player* player, SpeakClasses type, const std::string& text)
 {
 	std::string words = text;
@@ -3435,6 +3470,10 @@ bool Game::playerSaySpell(Player* player, SpeakClasses type, const std::string& 
 		return internalCreatureSay(player, SPEAK_SAY, words);
 	}
 	else if(result == TALKACTION_FAILED){
+		return true;
+	}
+	else if(result == TALKACTION_REQUIRES_TARGET){
+		player->sendTargetRequirement(0x01, text);
 		return true;
 	}
 

@@ -23,6 +23,7 @@
 
 #include "definitions.h"
 #include "fileloader.h"
+#include "item.h"
 #include "enums.h"
 #include <list>
 #include <vector>
@@ -59,7 +60,8 @@ enum ConditionType_t {
 	CONDITION_PACIFIED       = 1 << 23, // Cannot attack anything
 	CONDITION_HUNTING        = 1 << 24, // Killing monsters
 	CONDITION_TRADE_MUTED    = 1 << 25, // Cannot talk on trade channels
-	CONDITION_EXHAUST_OTHERS = 1 << 26
+	CONDITION_EXHAUST_OTHERS = 1 << 26, // 65536 -> maxValue
+	CONDITION_FROZEN         = 1 << 27
 };
 
 enum ConditionEnd_t{
@@ -98,6 +100,7 @@ enum ConditionAttr_t{
 	CONDITIONATTR_SKILLSPERCENT = 26,
 	CONDITIONATTR_ISBUFF = 27,
 	CONDITIONATTR_SUBID = 28,
+	CONDITIONATTR_RELATEDITEM = 29,
 
 	//reserved for serialization
 	CONDITIONATTR_END      = 254
@@ -417,6 +420,27 @@ protected:
 	LightInfo lightInfo;
 	uint32_t internalLightTicks;
 	uint32_t lightChangeInterval;
+};
+
+class ConditionFrozen: public Condition
+{
+public:
+	ConditionFrozen(ConditionId_t _id, ConditionType_t _type, int32_t _duration, Item* _item);
+	virtual ~ConditionFrozen(){};
+
+	virtual bool startCondition(Creature* creature);
+	uint16_t getIcons() const;
+	virtual bool executeCondition(Creature* creature, int32_t interval)
+		{ return Condition::executeCondition(creature, interval); };
+	virtual void endCondition(Creature* creature, ConditionEnd_t reason) {};
+	virtual void addCondition(Creature* creature, const Condition* addCondition) {};
+	virtual bool setParam(ConditionParam_t param, int32_t value) { return true; };
+
+	virtual ConditionFrozen* clone()  const { return new ConditionFrozen(*this); }
+
+
+protected:
+	Item* relatedItem;
 };
 
 #endif

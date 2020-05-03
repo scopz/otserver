@@ -169,6 +169,11 @@
 		<vocation id="2"/> 
 	</instant>
 
+	<!-- Target Requirement Spells -->
+	<aim name="Deploy Trap" words="osevo ani" price="500" maglv="7" needlearn="1" lvl="20" mana="40" exhaustion="1000" range="6" uses="position" script="support/deploy_trap.lua">
+		<vocation id="3"/>
+	</aim>
+
 	<!-- Conjure Spells -->
 	<conjure name="Poison Field" words="adevo grav pox" price="300" maglv="2" needlearn="1" lvl="14" mana="200" soul="1" aggressive="0" reagentId="2260" conjureId="2285" conjureCount="3" function="conjureRune">
 		<vocation id="1"/>

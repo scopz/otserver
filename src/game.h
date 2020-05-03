@@ -97,7 +97,7 @@ typedef std::map< uint32_t, shared_ptr<RuleViolation> > RuleViolationsMap;
 typedef std::vector<Player*> PlayerVector;
 
 #define EVENT_LIGHTINTERVAL  10000
-#define EVENT_DECAYINTERVAL  1000
+#define EVENT_DECAYINTERVAL  250
 #define EVENT_DECAY_BUCKETS  16
 
 /**
@@ -447,6 +447,8 @@ public:
 	bool playerRequestOutfit(uint32_t playerId);
 	bool playerSay(uint32_t playerId, uint16_t channelId, SpeakClasses type,
 		const std::string& receiver, const std::string& text);
+	bool playerSayTarget(const uint32_t &playerId, const uint32_t &targetId, const std::string& text);
+	bool playerSayTargetPosition(const uint32_t &playerId, const Position &pos, const std::string& text);
 	bool checkPlayerMute(uint16_t channelId, SpeakClasses type);
 	bool playerChangeOutfit(uint32_t playerId, Outfit_t outfit);
 	bool playerInviteToParty(uint32_t playerId, uint32_t invitedId);

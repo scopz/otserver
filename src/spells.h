@@ -32,10 +32,12 @@
 class InstantSpell;
 class ConjureSpell;
 class RuneSpell;
+class AimSpell;
 class Spell;
 
 typedef std::map<uint32_t, RuneSpell*> RunesMap;
 typedef std::map<std::string, InstantSpell*> InstantsMap;
+typedef std::map<std::string, AimSpell*> AimablesMap;
 
 class Spells : public BaseEvents
 {
@@ -48,6 +50,7 @@ public:
 	RuneSpell* getRuneSpellByName(const std::string& name);
 
 	InstantSpell* getInstantSpell(const std::string& words);
+	AimSpell* getAimSpell(const std::string& words);
 	InstantSpell* getInstantSpellByName(std::string name);
 
 	uint32_t getInstantSpellCount(const Player* player);
@@ -67,6 +70,7 @@ protected:
 
 	RunesMap runes;
 	InstantsMap instants;
+	AimablesMap aimables;
 
 	friend class CombatSpell;
 	LuaScriptInterface m_scriptInterface;
@@ -202,6 +206,7 @@ public:
 	bool canLearn(const Player* player) const;
 	bool canCast(const Player* player) const;
 	bool canThrowSpell(const Creature* creature, const Creature* target) const;
+	bool isAimSpell() const { return aimSpell; }
 
 protected:
 	virtual std::string getScriptEventName();
@@ -223,6 +228,7 @@ protected:
 	bool hasParam;
 	bool checkLineOfSight;
 	bool casterTargetOrDirection;
+	bool aimSpell;
 	InstantSpellFunction* function;
 };
 
@@ -301,6 +307,29 @@ protected:
 	uint32_t runeId;
 
 	RuneSpellFunction* function;
+};
+
+class AimSpell : public InstantSpell
+{
+public:
+	AimSpell(LuaScriptInterface* _interface);
+	virtual ~AimSpell();
+
+	virtual bool castSpell(Creature* creature);
+	virtual bool castSpell(Creature* creature, Creature* target);
+	virtual bool castSpell(Player* player, const Position& toPos);
+
+	virtual bool configureEvent(xmlNodePtr p);
+
+protected:
+
+	bool internalCastSpell(Creature* creature, const LuaVariant& var);
+
+	enum AimUseType {
+		NONE = 0,
+		POSITION
+	};
+	AimUseType useType;
 };
 
 #endif

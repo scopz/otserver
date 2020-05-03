@@ -44,6 +44,7 @@ spellSellModule.conditionFailText = "Sorry, I only sell spells to paladins."
 spellSellModule.listPreText = "I teach"
 spellSellModule:addSpellStock({
 	"Conjure Arrow",
+	"Deploy Trap",
 	"Conjure Poisoned Arrow",
 	"Conjure Explosive Arrow",
 })
