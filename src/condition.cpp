@@ -1887,7 +1887,8 @@ bool ConditionLight::startCondition(Creature* creature)
 	}
 
 	internalLightTicks = 0;
-	lightChangeInterval = ticks/lightInfo.level;
+	lightChangeInterval = ticks-lightInfo.level*1000;
+//	lightChangeInterval = ticks/lightInfo.level;
 	creature->setCreatureLight(lightInfo);
 	g_game.changeLight(creature);
 	return true;
@@ -1897,7 +1898,7 @@ bool ConditionLight::executeCondition(Creature* creature, int32_t interval)
 {
 	internalLightTicks += interval;
 	if(internalLightTicks >= lightChangeInterval){
-		internalLightTicks = 0;
+//		internalLightTicks = 0;
 		LightInfo creatureLight;
 		creature->getCreatureLight(creatureLight);
 		if(creatureLight.level > 0){
@@ -1925,7 +1926,8 @@ void ConditionLight::addCondition(Creature* creature, const Condition* addCondit
 		//replace old light values with the new ones
 		lightInfo.level = conditionLight.lightInfo.level;
 		lightInfo.color = conditionLight.lightInfo.color;
-		lightChangeInterval = getTicks()/lightInfo.level;
+		lightChangeInterval = getTicks()-lightInfo.level*1000;
+//		lightChangeInterval = getTicks()/lightInfo.level;
 		internalLightTicks = 0;
 		creature->setCreatureLight(lightInfo);
 		g_game.changeLight(creature);

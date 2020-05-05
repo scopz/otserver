@@ -585,7 +585,7 @@ protected:
 	size_t last_bucket;
 
 	static const int LIGHT_LEVEL_DAY = 250;
-	static const int LIGHT_LEVEL_NIGHT = 40;
+	static const int LIGHT_LEVEL_NIGHT = 5;
 	static const int SUNSET = 1305;
 	static const int SUNRISE = 430;
 	int lightlevel;
