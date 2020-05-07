@@ -35,9 +35,11 @@
 		<summon name="ghoul" chance="8" max="2"/>
 	</summons>
 	<elements>
-		<element firePercent="100"/>
-		<element earthPercent="100"/>
-		<element energyPercent="100"/>
+		<element firePercent="40"/>
+		<element earthPercent="20"/>
+		<element deathPercent="20"/>
+		<element physicalPercent="-13"/>
+		<element holyPercent="-10"/>
 	</elements>
 	<immunities>
 		<immunity invisible="1"/>

@@ -24,6 +24,7 @@
 	</defenses>
 	<elements>
 		<element earthPercent="100"/>
+		<element firePercent="-10"/>
 	</elements>
 	<immunities>
 	</immunities>

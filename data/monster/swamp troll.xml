@@ -23,6 +23,8 @@
 	<defenses armor="6" defense="10">
 	</defenses>
 	<elements>
+		<element earthPercent="20"/>
+		<element firePercent="-10"/>
 	</elements>
 	<immunities>
 	</immunities>

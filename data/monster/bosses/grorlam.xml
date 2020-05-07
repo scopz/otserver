@@ -29,9 +29,13 @@
 		</defense>
 		<defense name="haste_grorlam" chance="6"/>
 	</defenses>
-		<elements>
-		<element firePercent="100"/>
+	<elements>
 		<element earthPercent="100"/>
+		<element physicalPercent="30"/>
+		<element energyPercent="20"/>
+		<element holyPercent="20"/>
+		<element deathPercent="-1"/>
+		<element firePercent="-10"/>
 	</elements>
 	<immunities>
 		<immunity paralyze="1"/>

@@ -27,7 +27,11 @@
 		</defense>
 	</defenses>
 	<elements>
-		<element earthPercent="100"/>
+		<element deathPercent="100"/>
+		<element energyPercent="20"/>
+		<element earthPercent="20"/>
+		<element icePercent="10"/>
+		<element holyPercent="-25"/>
 	</elements>
 	<immunities>
 		<immunity lifedrain="1"/>

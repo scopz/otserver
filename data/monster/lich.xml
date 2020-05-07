@@ -42,8 +42,10 @@
 		<summon name="bonebeast" chance="17" max="4"/>
 	</summons>
 	<elements>
-		<element firePercent="100"/>
+		<element deathPercent="100"/>
 		<element earthPercent="100"/>
+		<element energyPercent="80"/>
+		<element holyPercent="-35"/>
 	</elements>
 	<immunities>
 		<immunity lifedrain="1"/>

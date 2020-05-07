@@ -49,9 +49,13 @@
 		<summon name="demon" chance="12" max="1"/>
 	</summons>
 	<elements>
-		<element firePercent="100"/>
+		<element deathPercent="100"/>
 		<element earthPercent="100"/>
-		<element energyPercent="100"/>
+		<element icePercent="100"/>
+		<element energyPercent="95"/>
+		<element firePercent="95"/>
+		<element physicalPercent="-40"/>
+		<element holyPercent="-1"/>
 	</elements>
 	<immunities>
 		<immunity lifedrain="1"/>

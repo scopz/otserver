@@ -41,8 +41,12 @@
 	</summons>
 	<elements>
 		<element firePercent="100"/>
-		<element earthPercent="100"/>
-		<element energyPercent="100"/>
+		<element physicalPercent="25"/>
+		<element earthPercent="20"/>
+		<element energyPercent="20"/>
+		<element deathPercent="20"/>
+		<element icePercent="-25"/>
+		<element holyPercent="-10"/>
 	</elements>
 	<immunities>
 		<immunity lifedrain="1"/>

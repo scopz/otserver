@@ -385,9 +385,13 @@ inline std::string CombatTypeName(CombatType_t combat) {
 	switch(combat){
 		case COMBAT_NONE: return "unknown";
 		case COMBAT_PHYSICALDAMAGE: return "physical";
+		case COMBAT_POISONDAMAGE: return "poison";
 		case COMBAT_ENERGYDAMAGE: return "energy";
 		case COMBAT_EARTHDAMAGE: return "earth";
 		case COMBAT_FIREDAMAGE: return "fire";
+		case COMBAT_ICEDAMAGE: return "ice";
+		case COMBAT_HOLYDAMAGE: return "holy";
+		case COMBAT_DEATHDAMAGE: return "death";
 		case COMBAT_UNDEFINEDDAMAGE: return "undefined";
 		case COMBAT_LIFEDRAIN: return "life drain";
 		case COMBAT_MANADRAIN: return "mana drain";

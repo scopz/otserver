@@ -49,7 +49,10 @@
 	<elements>
 		<element firePercent="100"/>
 		<element earthPercent="100"/>
-		<element energyPercent="100"/>
+		<element deathPercent="50"/>
+		<element physicalPercent="20"/>
+		<element icePercent="-1"/>
+		<element holyPercent="-1"/>
 	</elements>
 	<immunities>
 		<immunity lifedrain="1"/>

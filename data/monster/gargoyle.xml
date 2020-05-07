@@ -26,8 +26,10 @@
 		</defense>
 	</defenses>
 	<elements>
-		<element firePercent="100"/>
 		<element earthPercent="100"/>
+		<element physicalPercent="22"/>
+		<element deathPercent="20"/>
+		<element firePercent="-10"/>
 	</elements>
 	<immunities>
 		<immunity lifedrain="1"/>

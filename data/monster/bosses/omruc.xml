@@ -44,8 +44,12 @@
 		<summon name="stalkers" chance="1000"/>
 	</summons>
 	<elements>
-		<element firePercent="100"/>
-		<element earthPercent="100"/>
+		<element deathPercent="100"/>
+		<element earthPercent="20"/>
+		<element firePercent="20"/>
+		<element energyPercent="-5"/>
+		<element icePercent="-5"/>
+		<element holyPercent="-10"/>
 	</elements>
 	<immunities>
 		<immunity lifedrain="1"/>

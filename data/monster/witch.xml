@@ -29,8 +29,10 @@
 	<defenses armor="8" defense="10">
 	</defenses>
 	<elements>
-		<element earthPercent="100"/>
 		<element energyPercent="100"/>
+		<element earthPercent="30"/>
+		<element deathPercent="-5"/>
+		<element physicalPercent="-14"/>
 	</elements>
 	<immunities>
 		<immunity invisible="1"/>

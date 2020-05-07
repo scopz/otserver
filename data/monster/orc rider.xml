@@ -24,6 +24,10 @@
 		<defense name="haste_orcrider" chance="7"/>
 	</defenses>
 	<elements>
+		<element energyPercent="20"/>
+		<element holyPercent="10"/>
+		<element earthPercent="-10"/>
+		<element deathPercent="-5"/>
 	</elements>
 	<immunities>
 	</immunities>

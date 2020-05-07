@@ -47,9 +47,12 @@
 		<summon name="blue djinn" chance="15" max="2"/>
 	</summons>
 	<elements>
-		<element firePercent="100"/>
-		<element earthPercent="100"/>
-		<element energyPercent="100"/>
+		<element firePercent="90"/>
+		<element earthPercent="70"/>
+		<element energyPercent="60"/>
+		<element holyPercent="30"/>
+		<element icePercent="-20"/>
+		<element deathPercent="-15"/>
 	</elements>
 	<immunities>
 		<immunity lifedrain="1"/>

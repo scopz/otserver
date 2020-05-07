@@ -23,6 +23,8 @@
 	<defenses armor="10" defense="14">
 	</defenses>
 	<elements>
+		<element physicalPercent="-12"/>
+		<element deathPercent="-5"/>
 	</elements>
 	<immunities>
 	</immunities>

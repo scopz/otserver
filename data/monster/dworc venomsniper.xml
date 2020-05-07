@@ -27,6 +27,10 @@
 	</defenses>
 	<elements>
 		<element earthPercent="100"/>
+		<element holyPercent="18"/>
+		<element firePercent="-15"/>
+		<element deathPercent="-9"/>
+		<element icePercent="-6"/>
 	</elements>
 	<immunities>
 	</immunities>

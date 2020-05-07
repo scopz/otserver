@@ -1031,7 +1031,11 @@ bool Items::loadFromXml(const std::string& datadir)
 							if(readXMLInteger(itemAttributesNode, "value", intValue)){
 								it.abilities.absorb.resistances[CombatTypeToIndex(COMBAT_ENERGYDAMAGE)] = intValue;
 								it.abilities.absorb.resistances[CombatTypeToIndex(COMBAT_FIREDAMAGE)] = intValue;
+								it.abilities.absorb.resistances[CombatTypeToIndex(COMBAT_POISONDAMAGE)] = intValue;
 								it.abilities.absorb.resistances[CombatTypeToIndex(COMBAT_EARTHDAMAGE)] = intValue;
+								it.abilities.absorb.resistances[CombatTypeToIndex(COMBAT_ICEDAMAGE)] = intValue;
+								it.abilities.absorb.resistances[CombatTypeToIndex(COMBAT_DEATHDAMAGE)] = intValue;
+								it.abilities.absorb.resistances[CombatTypeToIndex(COMBAT_HOLYDAMAGE)] = intValue;
 								it.abilities.absorb.resistances[CombatTypeToIndex(COMBAT_PHYSICALDAMAGE)] = intValue;
 								it.abilities.absorb.resistances[CombatTypeToIndex(COMBAT_LIFEDRAIN)] = intValue;
 								it.abilities.absorb.resistances[CombatTypeToIndex(COMBAT_MANADRAIN)] = intValue;
@@ -1041,7 +1045,11 @@ bool Items::loadFromXml(const std::string& datadir)
 							if(readXMLInteger(itemAttributesNode, "value", intValue)){
 								it.abilities.absorb.resistances[CombatTypeToIndex(COMBAT_ENERGYDAMAGE)] = intValue;
 								it.abilities.absorb.resistances[CombatTypeToIndex(COMBAT_FIREDAMAGE)] = intValue;
+								it.abilities.absorb.resistances[CombatTypeToIndex(COMBAT_POISONDAMAGE)] = intValue;
 								it.abilities.absorb.resistances[CombatTypeToIndex(COMBAT_EARTHDAMAGE)] = intValue;
+								it.abilities.absorb.resistances[CombatTypeToIndex(COMBAT_ICEDAMAGE)] = intValue;
+								it.abilities.absorb.resistances[CombatTypeToIndex(COMBAT_DEATHDAMAGE)] = intValue;
+								it.abilities.absorb.resistances[CombatTypeToIndex(COMBAT_HOLYDAMAGE)] = intValue;
 								it.abilities.absorb.resistances[CombatTypeToIndex(COMBAT_PHYSICALDAMAGE)] = intValue;
 							}
 						}
@@ -1055,9 +1063,25 @@ bool Items::loadFromXml(const std::string& datadir)
 								it.abilities.absorb.resistances[CombatTypeToIndex(COMBAT_FIREDAMAGE)] = intValue;
 							}
 						}
+						else if(asLowerCaseString(strValue) == "absorbpercentice"){
+							if(readXMLInteger(itemAttributesNode, "value", intValue)){
+								it.abilities.absorb.resistances[CombatTypeToIndex(COMBAT_ICEDAMAGE)] = intValue;
+							}
+						}
+						else if(asLowerCaseString(strValue) == "absorbpercentdeath"){
+							if(readXMLInteger(itemAttributesNode, "value", intValue)){
+								it.abilities.absorb.resistances[CombatTypeToIndex(COMBAT_DEATHDAMAGE)] = intValue;
+							}
+						}
+						else if(asLowerCaseString(strValue) == "absorbpercentholy"){
+							if(readXMLInteger(itemAttributesNode, "value", intValue)){
+								it.abilities.absorb.resistances[CombatTypeToIndex(COMBAT_HOLYDAMAGE)] = intValue;
+							}
+						}
 						else if(asLowerCaseString(strValue) == "absorbpercentpoison" ||
 								asLowerCaseString(strValue) == "absorbpercentearth"){
 							if(readXMLInteger(itemAttributesNode, "value", intValue)){
+								it.abilities.absorb.resistances[CombatTypeToIndex(COMBAT_POISONDAMAGE)] = intValue;
 								it.abilities.absorb.resistances[CombatTypeToIndex(COMBAT_EARTHDAMAGE)] = intValue;
 							}
 						}
@@ -1163,7 +1187,7 @@ bool Items::loadFromXml(const std::string& datadir)
 								}
 								else if(asLowerCaseString(strValue) == "poison"){
 									conditionDamage = new ConditionDamage(CONDITIONID_COMBAT, CONDITION_POISON);
-									combatType = COMBAT_EARTHDAMAGE;
+									combatType = COMBAT_POISONDAMAGE;
 								}
 								else{
 									std::cout << "Warning: [Items::loadFromXml] " << "Unknown field value " << strValue  << std::endl;
@@ -1295,6 +1319,24 @@ bool Items::loadFromXml(const std::string& datadir)
 							if(readXMLInteger(itemAttributesNode, "value", intValue)){
 								it.abilities.elementDamage = intValue;
 								it.abilities.elementType = COMBAT_ENERGYDAMAGE;
+							}
+						}
+						else if(asLowerCaseString(strValue) == "elementice"){
+							if(readXMLInteger(itemAttributesNode, "value", intValue)){
+								it.abilities.elementDamage = intValue;
+								it.abilities.elementType = COMBAT_ICEDAMAGE;
+							}
+						}
+						else if(asLowerCaseString(strValue) == "elementdeath"){
+							if(readXMLInteger(itemAttributesNode, "value", intValue)){
+								it.abilities.elementDamage = intValue;
+								it.abilities.elementType = COMBAT_DEATHDAMAGE;
+							}
+						}
+						else if(asLowerCaseString(strValue) == "elementholy"){
+							if(readXMLInteger(itemAttributesNode, "value", intValue)){
+								it.abilities.elementDamage = intValue;
+								it.abilities.elementType = COMBAT_HOLYDAMAGE;
 							}
 						}
 						else if(asLowerCaseString(strValue) == "currency"){

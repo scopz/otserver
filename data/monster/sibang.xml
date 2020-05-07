@@ -27,6 +27,10 @@
 		<defense name="haste_sibang" chance="12"/>
 	</defenses>
 	<elements>
+		<element firePercent="25"/>
+		<element holyPercent="10"/>
+		<element icePercent="-15"/>
+		<element deathPercent="-5"/>
 	</elements>
 	<immunities>
 		<immunity invisible="1"/>

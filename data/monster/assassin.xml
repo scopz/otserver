@@ -34,6 +34,8 @@
 		<defense name="haste_assassin" chance="9"/>
 	</defenses>
 	<elements>
+		<element physicalPercent="-12"/>
+		<element deathPercent="-5"/>
 	</elements>
 	<immunities>
 		<immunity invisible="1"/>

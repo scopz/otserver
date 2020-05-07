@@ -31,6 +31,7 @@
 	</defenses>
 	<elements>
 		<element energyPercent="100"/>
+		<element earthPercent="-20"/>
 	</elements>
 	<immunities>
 		<immunity invisible="1"/>

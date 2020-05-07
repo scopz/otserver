@@ -37,9 +37,11 @@
 	<defenses armor="20" defense="75">
 	</defenses>
 	<elements>
-		<element firePercent="100"/>
-		<element earthPercent="100"/>
-		<element energyPercent="100"/>
+		<element firePercent="80"/>
+		<element energyPercent="50"/>
+		<element holyPercent="20"/>
+		<element icePercent="-10"/>
+		<element deathPercent="-10"/>
 	</elements>
 	<immunities>
 		<immunity lifedrain="1"/>

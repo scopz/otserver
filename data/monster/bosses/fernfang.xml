@@ -42,6 +42,10 @@
 	<summons maxSummons="3">
 		<summon name="War Wolf" chance="13" max="3"/>
 	</summons>
+	<elements>
+		<element icePercent="70"/>
+		<element earthPercent="50"/>
+	</elements>
 	<immunities>
 		<immunity paralyze="1"/>
 		<immunity invisible="1"/>

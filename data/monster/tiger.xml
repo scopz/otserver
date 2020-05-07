@@ -24,6 +24,8 @@
 		<defense name="haste_tiger" chance="11"/>
 	</defenses>
 	<elements>
+		<element deathPercent="-10"/>
+		<element icePercent="-8"/>
 	</elements>
 	<immunities>
 	</immunities>

@@ -57,6 +57,7 @@
 	</summons>
 	<elements>
 		<element earthPercent="100"/>
+		<element holyPercent="-1"/>
 	</elements>
 	<immunities>
 		<immunity lifedrain="1"/>

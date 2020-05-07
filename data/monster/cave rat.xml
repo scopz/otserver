@@ -23,6 +23,7 @@
 	<defenses armor="1" defense="3">
 	</defenses>
 	<elements>
+		<element firePercent="-13"/>
 	</elements>
 	<immunities>
 	</immunities>

@@ -27,6 +27,9 @@
 		<defense name="haste_monk" chance="10"/>
 	</defenses>
 	<elements>
+		<element holyPercent="50"/>
+		<element deathPercent="50"/>
+		<element physicalPercent="-15"/>
 	</elements>
 	<immunities>
 		<immunity invisible="1"/>

@@ -2,7 +2,7 @@ local traps = {
 	[1510] = {transformTo = 1511, damage = {-50, -100}},
 	[1513] = {damage = {-50, -100}},
 	[2579] = {transformTo = 2578, damage = {-15, -30}},
-	[4208] = {transformTo = 4209, damage = {-15, -30}, type = COMBAT_EARTHDAMAGE}
+	[4208] = {transformTo = 4209, damage = {-15, -30}, type = COMBAT_POISONDAMAGE}
 }
 
 function onStepIn(cid, item, position, fromPosition)

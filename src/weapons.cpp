@@ -1091,6 +1091,15 @@ bool WeaponWand::configureEvent(xmlNodePtr p)
 		else if(asLowerCaseString(strValue) == "fire"){
 			params.combatType = COMBAT_FIREDAMAGE;
 		}
+		else if(asLowerCaseString(strValue) == "ice"){
+			params.combatType = COMBAT_ICEDAMAGE;
+		}
+		else if(asLowerCaseString(strValue) == "death"){
+			params.combatType = COMBAT_DEATHDAMAGE;
+		}
+		else if(asLowerCaseString(strValue) == "holy"){
+			params.combatType = COMBAT_HOLYDAMAGE;
+		}
 	}
 
 	return true;

@@ -41,8 +41,11 @@
 		<summon name="priestess" chance="15" max="3"/>
 	</summons>
 	<elements>
-		<element physicalPercent="100"/><element deathPercent="100"/>
-		<element earthPercent="100"/>
+		<element physicalPercent="100"/>
+		<element deathPercent="100"/>
+		<element earthPercent="20"/>
+		<element energyPercent="20"/>
+		<element holyPercent="-10"/>
 	</elements>
 	<immunities>
 		<immunity lifedrain="1"/>

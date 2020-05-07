@@ -42,8 +42,7 @@
 		<summon name="demon skeleton" chance="6" max="2"/>
 	</summons>
 	<elements>
-		<element firePercent="100"/>
-		<element earthPercent="100"/>
+		<element holyPercent="10"/>
 	</elements>
 	<immunities>
 		<immunity lifedrain="1"/>	

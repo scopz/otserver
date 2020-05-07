@@ -24,7 +24,8 @@
 	<defenses armor="2" defense="8">
 	</defenses>
 	<elements>
-		<element earthPercent="100"/>
+		<element deathPercent="100"/>
+		<element holyPercent="-25"/>
 	</elements>
 	<immunities>
 		<immunity lifedrain="1"/>

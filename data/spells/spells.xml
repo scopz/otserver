@@ -79,10 +79,6 @@
 		<vocation id="3"/>
 		<vocation id="4"/>
 	</instant>
-	<instant name="Energy Strike" words="exori vis" price="800" maglv="3" needlearn="1" lvl="11" mana="20" direction="1" exhaustion="1000" script="attack/energy_strike.lua">
-		<vocation id="1"/>
-		<vocation id="2"/>
-	</instant>
 	<instant name="Summon Creature" words="utevo res" price="2000" maglv="16" needlearn="1" lvl="25" params="1" function="summonMonster">
 		<vocation id="1"/>
 		<vocation id="2"/>
@@ -99,13 +95,32 @@
 		<vocation id="3"/>
 	</instant>
 	<instant name="Haste" words="utani hur" price="600" maglv="4" needlearn="1" lvl="14" prem="1" mana="60" selftarget="1" aggressive="0" script="support/haste.lua" />
+	<instant name="Force Strike" words="exori corp" price="600" maglv="2" needlearn="1" lvl="11" prem="1" mana="20" direction="1" exhaustion="1000" script="attack/force_strike.lua">
+		<vocation id="1"/>
+		<vocation id="2"/>
+	</instant>
+	<instant name="Energy Strike" words="exori vis" price="800" maglv="3" needlearn="1" lvl="12" mana="20" direction="1" exhaustion="1000" script="attack/energy_strike.lua">
+		<vocation id="1"/>
+		<vocation id="2"/>
+	</instant>
 	<instant name="Flame Strike" words="exori flam" price="800" maglv="3" needlearn="1" lvl="12" prem="1" mana="20" direction="1" exhaustion="1000" script="attack/flame_strike.lua">
 		<vocation id="1"/>
 		<vocation id="2"/>
 	</instant>
-	<instant name="Force Strike" words="exori mort" price="600" maglv="2" needlearn="1" lvl="11" prem="1" mana="20" direction="1" exhaustion="1000" script="attack/force_strike.lua">
+	<instant name="Death Strike" words="exori mort" price="800" maglv="3" needlearn="1" lvl="12" prem="1" mana="20" direction="1" exhaustion="1000" script="attack/death_strike.lua">
 		<vocation id="1"/>
 		<vocation id="2"/>
+	</instant>
+	<instant name="Ice Strike" words="exori frigo" price="800" maglv="3" needlearn="1" lvl="12" prem="1" mana="20" direction="1" exhaustion="1000" script="attack/ice_strike.lua">
+		<vocation id="1"/>
+		<vocation id="2"/>
+	</instant>
+	<instant name="Earth Strike" words="exori tera" price="800" maglv="3" needlearn="1" lvl="12" prem="1" mana="20" direction="1" exhaustion="1000" script="attack/earth_strike.lua">
+		<vocation id="1"/>
+		<vocation id="2"/>
+	</instant>
+	<instant name="Holy Strike" words="exori san" price="800" maglv="3" needlearn="1" lvl="12" prem="1" mana="20" direction="1" exhaustion="1000" script="attack/holy_strike.lua">
+		<vocation id="3"/>
 	</instant>
 	<instant name="Fire Wave" words="exevo flam hur" price="850" maglv="7" needlearn="1" lvl="18" mana="80" direction="1" script="attack/fire_wave.lua">
 		<vocation id="1"/>

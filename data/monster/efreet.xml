@@ -47,9 +47,12 @@
 		<summon name="green djinn" chance="15" max="2"/>
 	</summons>
 	<elements>
-		<element firePercent="100"/>
-		<element earthPercent="100"/>
-		<element energyPercent="100"/>
+		<element firePercent="90"/>
+		<element energyPercent="60"/>
+		<element earthPercent="40"/>
+		<element deathPercent="30"/>
+		<element icePercent="-10"/>
+		<element holyPercent="-10"/>
 	</elements>
 	<immunities>
 		<immunity lifedrain="1"/>

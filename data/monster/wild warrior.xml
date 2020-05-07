@@ -24,6 +24,9 @@
 		<defense name="haste_wildwarrior" chance="6"/>
 	</defenses>
 	<elements>
+		<element holyPercent="10"/>
+		<element physicalPercent="-12"/>
+		<element deathPercent="-5"/>
 	</elements>
 	<immunities>
 	</immunities>

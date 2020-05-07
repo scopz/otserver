@@ -33,8 +33,12 @@
 		<summon name="banshee" chance="20" max="3"/>
 	</summons>
 	<elements>
-		<element firePercent="100"/>
-		<element earthPercent="100"/>
+		<element deathPercent="100"/>
+		<element earthPercent="20"/>
+		<element energyPercent="20"/>
+		<element icePercent="20"/>
+		<element firePercent="20"/>
+		<element holyPercent="-10"/>
 	</elements>
 	<immunities>
 		<immunity lifedrain="1"/>

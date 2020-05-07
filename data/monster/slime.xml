@@ -27,6 +27,9 @@
 	</summons>
 	<elements>
 		<element earthPercent="100"/>
+		<element icePercent="20"/>
+		<element firePercent="-10"/>
+		<element energyPercent="-10"/>
 	</elements>
 	<immunities>
 	</immunities>

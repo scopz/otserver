@@ -38,8 +38,10 @@
 		<summon name="giant spider" chance="13" max="2"/>
 	</summons>
 	<elements>
-		<element firePercent="100"/>
 		<element earthPercent="100"/>
+		<element physicalPercent="20"/>
+		<element firePercent="20"/>
+		<element energyPercent="10"/>
 	</elements>
 	<immunities>
 		<immunity lifedrain="1"/>

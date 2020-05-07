@@ -37,8 +37,10 @@
 		<summon name="snake" chance="25" max="4"/>
 	</summons>
 	<elements>
-		<element earthPercent="100"/>
-		<element energyPercent="100"/>
+		<element energyPercent="50"/>
+		<element holyPercent="25"/>
+		<element earthPercent="-5"/>
+		<element deathPercent="-5"/>
 	</elements>
 	<immunities>
 		<immunity invisible="1"/>

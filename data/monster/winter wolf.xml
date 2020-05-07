@@ -23,6 +23,11 @@
 	<defenses armor="2" defense="6">
 	</defenses>
 	<elements>
+		<element icePercent="20"/>
+		<element firePercent="10"/>
+		<element holyPercent="10"/>
+		<element energyPercent="-5"/>
+		<element deathPercent="-5"/>
 	</elements>
 	<immunities>
 	</immunities>

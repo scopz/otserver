@@ -177,7 +177,7 @@ CombatType_t Combat::ConditionToDamageType(ConditionType_t type)
 			break;
 
 		case CONDITION_POISON:
-			return COMBAT_EARTHDAMAGE;
+			return COMBAT_POISONDAMAGE;
 			break;
 
 		default:
@@ -198,7 +198,7 @@ ConditionType_t Combat::DamageToConditionType(CombatType_t type)
 			return CONDITION_ENERGY;
 			break;
 
-		case COMBAT_EARTHDAMAGE:
+		case COMBAT_POISONDAMAGE:
 			return CONDITION_POISON;
 			break;
 

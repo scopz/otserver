@@ -30,8 +30,10 @@
 		<summon name="poison spider" chance="10" max="2"/>
 	</summons>
 	<elements>
-		<element firePercent="100"/>
 		<element earthPercent="100"/>
+		<element energyPercent="20"/>
+		<element icePercent="20"/>
+		<element firePercent="-10"/>
 	</elements>
 	<immunities>
 		<immunity lifedrain="1"/>

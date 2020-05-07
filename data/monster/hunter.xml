@@ -19,13 +19,15 @@
 	</flags>
 	<attacks>
 		<attack name="melee" skill="18" attack="13"/>
-		<attack name="physical" checkshield="1" chance="50" range="7" min="-50" max="-100">
+		<attack name="physical" checkshield="1" chance="30" range="7" min="-0" max="-100">
 			<attribute key="shootEffect" value="arrow"/>
 		</attack>
 	</attacks>
 	<defenses armor="8" defense="9">
 	</defenses>
 	<elements>
+		<element holyPercent="20"/>
+		<element physicalPercent="-20"/>
 	</elements>
 	<immunities>
 	</immunities>

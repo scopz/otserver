@@ -31,6 +31,8 @@
 			<attribute key="areaEffect" value="redshimmer"/>
 		</defense>
 	</defenses>
+	<elements>
+	</elements>
 	<immunities>
 		<immunity lifedrain="1"/>
 		<immunity outfit="1"/>

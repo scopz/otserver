@@ -56,6 +56,14 @@ enum MagicEffectClasses {
 	NM_ME_SOUND_PURPLE     = 0x16, //22
 	NM_ME_SOUND_BLUE       = 0x17, //23
 	NM_ME_SOUND_WHITE      = 0x18, //24
+	NM_ME_HITBY_DEATH      = 0x19, //25
+	NM_ME_HITBY_HOLY       = 0x1A, //26
+	NM_ME_HOLY_AREA        = 0x1A, //26
+	NM_ME_HITBY_ICE        = 0x1B, //27
+	NM_ME_HITBY_EARTH      = 0x1C, //28
+	NM_ME_ENERGY_AREA      = 0x1D, //29
+	NM_ME_ICE_AREA         = 0x1E, //30
+	NM_ME_EARTH_AREA       = 0x1F, //31
 
 	//for internal use, dont send to client
 	NM_ME_NONE             = 0xFF,
@@ -73,11 +81,20 @@ enum ShootType_t {
 	NM_SHOOT_THROWINGSTAR   = 0x07,
 	NM_SHOOT_THROWINGKNIFE  = 0x08,
 	NM_SHOOT_SMALLSTONE     = 0x09,
-	NM_SHOOT_DEATH          = 0x0A, //10
+	NM_SHOOT_DEATH_NOSKULL  = 0x0A, //10
 	NM_SHOOT_LARGEROCK      = 0x0B, //11
 	NM_SHOOT_SNOWBALL       = 0x0C, //12
 	NM_SHOOT_POWERBOLT      = 0x0D, //13
 	NM_SHOOT_POISONFIELD    = 0x0E, //14
+	NM_SHOOT_DEATH          = 0x0F, //15
+	NM_SHOOT_ICE            = 0x10, //16
+	NM_SHOOT_HOLY           = 0x11, //17
+	NM_SHOOT_EARTH          = 0x12, //18
+	NM_SHOOT_ICE_BIG        = 0x13, //19
+	NM_SHOOT_EARTH_BIG      = 0x14, //20
+	NM_SHOOT_HOLY_BIG       = 0x15, //21
+	NM_SHOOT_DEATH_BIG      = 0x16, //22
+	NM_SHOOT_ENERGY_BIG     = 0x17, //23
 
 	//for internal use, dont send to client
 	NM_SHOOT_WEAPONTYPE     = 0xFE, //254
