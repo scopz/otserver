@@ -419,11 +419,7 @@ bool Actions::useItem(Player* player, const Position& pos, uint8_t index,
 bool Actions::executeUseEx(Action* action, Player* player, Item* item, const PositionEx& fromPosEx,
 	const PositionEx& toPosEx, uint32_t creatureId)
 {
-	if(!action->executeUse(player, item, fromPosEx, toPosEx, true, creatureId)){
-		return false;
-	}
-
-	return true;
+	return action->executeUse(player, item, fromPosEx, toPosEx, true, creatureId);
 }
 
 ReturnValue Actions::internalUseItemEx(Player* player, const PositionEx& fromPosEx, const PositionEx& toPosEx,

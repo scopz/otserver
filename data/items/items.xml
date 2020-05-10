@@ -11552,10 +11552,12 @@
 		<attribute key="description" value="It contains a butterfly."/>
 		<attribute key="weight" value="800"/>
 	</item>
-	<item id="5090" article="a" name="trap"/>
+	<item id="5090" article="a" name="trap"> <!-- closed trap -->
+		<attribute key="type" value="magicfield"/>
+		<attribute key="replaceable" value="0"/>
+	</item>
 	<item id="5091" article="a" name="trap">
 		<attribute key="description" value="Step on it and you will be trapped."/>
-		<attribute key="replaceable" value="0"/>
 		<attribute key="type" value="magicfield"/>
 		<attribute key="decayTo" value="0"/>
 		<attribute key="duration" value="7"/>

@@ -3241,10 +3241,19 @@ Cylinder* Player::__queryDestination(int32_t& index, const Thing* thing, Item** 
 			return this;
 		}
 
+		bool autoStack = item->isStackable() && g_config.getBoolean(ConfigManager::CONTAINER_ITEMS_AUTO_STACK);
+
 		//find a appropiate slot
 		for(int i = SLOT_FIRST; i < SLOT_LAST; ++i){
-			if(inventory[i] == NULL){
-				if(__queryAdd(i, item, item->getItemCount(), 0) == RET_NOERROR){
+			if (i != SLOT_NECKLACE && i != SLOT_RING) {
+				if(inventory[i] == NULL){
+					if(__queryAdd(i, item, item->getItemCount(), 0) == RET_NOERROR){
+						index = i;
+						return this;
+					}
+				}
+				else if (autoStack && inventory[i]->getID() == item->getID() && inventory[i]->getItemCount() < 100) {
+					*destItem = inventory[i];
 					index = i;
 					return this;
 				}
@@ -3259,7 +3268,14 @@ Cylinder* Player::__queryDestination(int32_t& index, const Thing* thing, Item** 
 			}
 
 			if(Container* subContainer = dynamic_cast<Container*>(inventory[i])){
-				if(subContainer->__queryAdd(-1, item, item->getItemCount(), 0) == RET_NOERROR){
+				index = INDEX_WHEREEVER;
+				// find item to stack with
+				subContainer->__queryDestination(index, thing, destItem, flags);
+				if (*destItem != NULL) {
+					return subContainer;
+				}
+				// has space for the new item?
+				else if(subContainer->__queryAdd(-1, item, item->getItemCount(), 0) == RET_NOERROR){
 					index = INDEX_WHEREEVER;
 					*destItem = NULL;
 					return subContainer;
@@ -3276,11 +3292,19 @@ Cylinder* Player::__queryDestination(int32_t& index, const Thing* thing, Item** 
 					continue;
 				}
 
-				Container* subContainer = dynamic_cast<Container*>(*iit);
-				if(subContainer && subContainer->__queryAdd(-1, item, item->getItemCount(), 0) == RET_NOERROR){
+				if(Container* subContainer = dynamic_cast<Container*>(*iit)){
 					index = INDEX_WHEREEVER;
-					*destItem = NULL;
-					return subContainer;
+					// find item to stack with
+					subContainer->__queryDestination(index, thing, destItem, flags);
+					if (*destItem != NULL) {
+						return subContainer;
+					}
+					// has space for the new item?
+					else if(subContainer->__queryAdd(-1, item, item->getItemCount(), 0) == RET_NOERROR){
+						index = INDEX_WHEREEVER;
+						*destItem = NULL;
+						return subContainer;
+					}
 				}
 			}
 		}

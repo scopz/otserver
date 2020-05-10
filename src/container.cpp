@@ -415,9 +415,25 @@ ReturnValue Container::__queryMaxCount(int32_t index, const Thing* thing, uint32
 			if(destItem && destItem->getID() == item->getID()){
 				n = 100 - destItem->getItemCount();
 			}
-		}
 
-		maxQueryCount = freeSlots * 100 + n;
+			maxQueryCount = freeSlots * 100 + n;
+		}
+		else {
+			maxQueryCount = 0;
+			if (g_config.getBoolean(ConfigManager::CONTAINER_ITEMS_AUTO_STACK)) {
+				if(item->getParent() != this){
+					//try find a suitable item to stack with
+					for(ItemList::const_iterator cit = itemlist.begin(); cit != itemlist.end(); ++cit){
+						if((*cit)->getID() == item->getID()){
+							maxQueryCount += 100 - (*cit)->getItemCount();
+						}
+					}
+				}
+			}
+			else {
+				maxQueryCount = freeSlots * 100;
+			}
+		}
 
 		if(maxQueryCount < count){
 			return RET_CONTAINERNOTENOUGHROOM;
