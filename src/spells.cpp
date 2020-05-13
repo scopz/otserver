@@ -356,49 +356,18 @@ InstantSpell* Spells::getInstantSpellByName(std::string name)
 	return NULL;
 }
 
-Position Spells::getCasterPosition(Creature* creature, Direction dir)
+Position Spells::getFrontPosition(Position pos, Direction dir)
 {
-	Position pos = creature->getPosition();
-
 	switch(dir){
-		case NORTH:
-			pos.y -= 1;
-			break;
-
-		case SOUTH:
-			pos.y += 1;
-			break;
-
-		case EAST:
-			pos.x += 1;
-			break;
-
-		case WEST:
-			pos.x -= 1;
-			break;
-
-		case SOUTHWEST:
-			pos.x -= 1;
-			pos.y += 1;
-		break;
-
-		case NORTHWEST:
-			pos.x -= 1;
-			pos.y -= 1;
-		break;
-
-		case NORTHEAST:
-			pos.x += 1;
-			pos.y -= 1;
-		break;
-
-		case SOUTHEAST:
-			pos.x += 1;
-			pos.y += 1;
-		break;
-
-		default:
-			break;
+		case NORTH: pos.y -= 1; break;
+		case SOUTH: pos.y += 1; break;
+		case EAST:  pos.x += 1; break;
+		case WEST:  pos.x -= 1; break;
+		case SOUTHWEST: pos.x -= 1; pos.y += 1; break;
+		case NORTHWEST: pos.x -= 1; pos.y -= 1; break;
+		case NORTHEAST: pos.x += 1; pos.y -= 1; break;
+		case SOUTHEAST: pos.x += 1; pos.y += 1; break;
+		default: break;
 	}
 
 	return pos;
@@ -1719,7 +1688,7 @@ bool InstantSpell::Levitate(const InstantSpell* spell, Creature* creature, const
 	}
 
 	const Position& currentPos = creature->getPosition();
-	const Position& destPos = Spells::getCasterPosition(creature, creature->getDirection());
+	Position destPos = Spells::getCasterPosition(creature, creature->getDirection());
 
 	ReturnValue ret = RET_NOTPOSSIBLE;
 	if(asLowerCaseString(param) == "up"){
@@ -1730,6 +1699,20 @@ bool InstantSpell::Levitate(const InstantSpell* spell, Creature* creature, const
 				if(tmpTile && tmpTile->ground && !tmpTile->hasProperty(IMMOVABLEBLOCKSOLID) && !tmpTile->floorChange()){
 					ret = g_game.internalMoveCreature(player, player->getTile(),
 						tmpTile, FLAG_IGNOREBLOCKITEM | FLAG_IGNOREBLOCKCREATURE);
+				}
+				else {
+					tmpTile = g_game.getTile(destPos.x, destPos.y, destPos.z);
+					if (tmpTile) {
+						Item* item = tmpTile->getTopTopItem();
+						if(item && item->getID() > 4460 && item->getID() < 4502){
+							destPos = Spells::getFrontPosition(destPos, creature->getDirection());
+							tmpTile = g_game.getTile(destPos.x, destPos.y, destPos.z - 1);
+							if(tmpTile && item && !tmpTile->hasProperty(IMMOVABLEBLOCKSOLID) && !tmpTile->floorChange()){
+								ret = g_game.internalMoveCreature(player, player->getTile(),
+									tmpTile, FLAG_IGNOREBLOCKITEM | FLAG_IGNOREBLOCKCREATURE);
+							}
+						}
+					}
 				}
 			}
 		}
@@ -1742,6 +1725,17 @@ bool InstantSpell::Levitate(const InstantSpell* spell, Creature* creature, const
 				if(tmpTile && tmpTile->ground && !tmpTile->hasProperty(IMMOVABLEBLOCKSOLID) && !tmpTile->floorChange()){
 					ret = g_game.internalMoveCreature(player, player->getTile(),
 						tmpTile, FLAG_IGNOREBLOCKITEM | FLAG_IGNOREBLOCKCREATURE);
+				}
+				else if (tmpTile) {
+					Item* item = tmpTile->getTopTopItem();
+					if(item && item->getID() > 4460 && item->getID() < 4502){
+						destPos = Spells::getFrontPosition(destPos, creature->getDirection());
+						tmpTile = g_game.getTile(destPos.x, destPos.y, destPos.z + 1);
+						if(tmpTile && item && !tmpTile->hasProperty(IMMOVABLEBLOCKSOLID) && !tmpTile->floorChange()){
+							ret = g_game.internalMoveCreature(player, player->getTile(),
+								tmpTile, FLAG_IGNOREBLOCKITEM | FLAG_IGNOREBLOCKCREATURE);
+						}
+					}
 				}
 			}
 		}

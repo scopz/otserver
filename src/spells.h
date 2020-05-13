@@ -58,7 +58,9 @@ public:
 
 	TalkActionResult_t playerSaySpell(Player* player, SpeakClasses type, std::string& words);
 
-	static Position getCasterPosition(Creature* creature, Direction dir);
+	static Position getCasterPosition(Creature* creature, Direction dir) { return getFrontPosition(creature->getPosition(), dir); }
+	static Position getFrontPosition(Position pos, Direction dir);
+
 	virtual std::string getScriptBaseName();
 
 protected:

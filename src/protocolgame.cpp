@@ -1955,22 +1955,38 @@ void ProtocolGame::sendMoveCreature(const Creature* creature, const Tile* newTil
 					MoveUpCreature(msg, creature, newPos, oldPos, oldStackPos);
 				}
 
-				if(oldPos.y > newPos.y){ // north, for old x
-					msg->AddByte(0x65);
-					GetMapDescription(oldPos.x - Map::clientViewportX, newPos.y - Map::clientViewportY, newPos.z, Map::clientViewportW, 1, msg);
+
+				int8_t dy = oldPos.y - newPos.y;
+				int8_t dx = oldPos.x - newPos.x;
+
+				if (dy > 0) { // north, for old x
+					int8_t y = 1;
+					do {
+						msg->AddByte(0x65);
+						GetMapDescription(oldPos.x - Map::clientViewportX, oldPos.y - y - Map::clientViewportY, newPos.z, Map::clientViewportW, 1, msg);
+					} while (dy >= ++y);
 				}
-				else if(oldPos.y < newPos.y){ // south, for old x
-					msg->AddByte(0x67);
-					GetMapDescription(oldPos.x - Map::clientViewportX, newPos.y + 1 + Map::clientViewportY, newPos.z, Map::clientViewportW, 1, msg);
+				else if (dy < 0) { // south, for old x
+					int8_t y = -1;
+					do {
+						msg->AddByte(0x67);
+						GetMapDescription(oldPos.x - Map::clientViewportX, oldPos.y - y + 1 + Map::clientViewportY, newPos.z, Map::clientViewportW, 1, msg);
+					} while (--y >= dy);
 				}
 
-				if(oldPos.x < newPos.x){ // east, [with new y]
-					msg->AddByte(0x66);
-					GetMapDescription(newPos.x + 1 + Map::clientViewportX, newPos.y - Map::clientViewportY, newPos.z, 1, Map::clientViewportH, msg);
+				if (dx < 0) { // east, [with new y]
+					int8_t x = -1;
+					do {
+						msg->AddByte(0x66);
+						GetMapDescription(oldPos.x - x +  1 + Map::clientViewportX, newPos.y - Map::clientViewportY, newPos.z, 1, Map::clientViewportH, msg);
+					} while (--x >= dx);
 				}
-				else if(oldPos.x > newPos.x){ // west, [with new y]
-					msg->AddByte(0x68);
-					GetMapDescription(newPos.x - Map::clientViewportX, newPos.y - Map::clientViewportY, newPos.z, 1, Map::clientViewportH, msg);
+				else if (dx > 0) { // west, [with new y]
+					int8_t x = 1;
+					do {
+						msg->AddByte(0x68);
+						GetMapDescription(oldPos.x - x - Map::clientViewportX, newPos.y - Map::clientViewportY, newPos.z, 1, Map::clientViewportH, msg);
+					} while (dx >= ++x);
 				}
 			}
 		}
