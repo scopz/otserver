@@ -769,8 +769,6 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 	}
 
 	if (it.isRune()){
-		uint32_t charges = std::max((uint32_t)1, (uint32_t)(item == NULL ? it.charges : item->getCharges()));
-
 		if (it.runeLevel > 0 || it.runeMagLevel > 0){
 			if (it.runeLevel > 0){
 				s << " for level " << it.runeLevel;
@@ -782,7 +780,14 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 				s << " for magic level " << it.runeMagLevel;
 			}
 		}
-		s << ". It's an \"" << it.runeSpellName << "\"-spell (" << charges << "x). ";
+		if (!it.runeSpellName.empty()) {
+			s << ". It's an \"" << it.runeSpellName << "\"-spell";
+		}
+		if (it.showCharges) {
+			s << " (" << it.charges << "x).";
+		} else {
+			s << ".";
+		}
 	}
 	else if ((it.id == ITEM_GATE_EXPERTISE_1 ||
 					  it.id == ITEM_GATE_EXPERTISE_2 ||

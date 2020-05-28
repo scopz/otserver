@@ -282,11 +282,7 @@ Action* Actions::getAction(const Item* item, ActionType_t type /* = ACTION_ANY*/
 bool Actions::executeUse(Action* action, Player* player, Item* item,
 	const PositionEx& posEx, uint32_t creatureId)
 {
-	if(!action->executeUse(player, item, posEx, posEx, false, creatureId)){
-		return false;
-	}
-
-	return true;
+	return action->executeUse(player, item, posEx, posEx, false, creatureId);
 }
 
 ReturnValue Actions::internalUseItem(Player* player, const Position& pos,
