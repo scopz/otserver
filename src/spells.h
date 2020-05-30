@@ -124,7 +124,7 @@ public:
 	bool configureSpell(xmlNodePtr xmlspell);
 	const std::string& getName() const {return name;}
 
-	void postCastSpell(Player* player, bool finishedSpell = true, bool payCost = true) const;
+	void postCastSpell(Player* player, bool finishedSpell = true, uint8_t payCost = 1) const;
 	void postCastSpell(Player* player, uint32_t manaCost, uint32_t soulCost) const;
 
 	int32_t getManaCost(const Player* player) const;
@@ -256,7 +256,7 @@ protected:
 	virtual std::string getScriptEventName();
 
 	static ReturnValue internalConjureItem(Player* player, uint32_t conjureId, uint32_t conjureCount);
-	static ReturnValue internalConjureItem(Player* player, uint32_t conjureId, uint32_t conjureCount, uint32_t reagentId, slots_t slot, bool test = false);
+	static ReturnValue internalConjureItem(Player* player, const ConjureSpell* spell, slots_t slot, uint8_t &numCasts);
 
 	static ConjureSpellFunction ConjureItem;
 	static ConjureSpellFunction ConjureFood;

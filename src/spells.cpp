@@ -903,7 +903,7 @@ bool Spell::playerRuneSpellCheck(Player* player, const Position& toPos)
 	return true;
 }
 
-void Spell::postCastSpell(Player* player, bool finishedCast /*= true*/, bool payCost /*= true*/) const
+void Spell::postCastSpell(Player* player, bool finishedCast /*= true*/, uint8_t payCost /*= 1*/) const
 {
 	if(finishedCast){
 		if(!player->hasFlag(PlayerFlag_HasNoExhaustion)){
@@ -924,9 +924,9 @@ void Spell::postCastSpell(Player* player, bool finishedCast /*= true*/, bool pay
 		}
 	}
 
-	if(payCost){
-		int32_t manaCost = getManaCost(player);
-		int32_t soulCost = getSoulCost(player);
+	if(payCost > 0){
+		int32_t manaCost = getManaCost(player) * payCost;
+		int32_t soulCost = getSoulCost(player) * payCost;
 		postCastSpell(player, (uint32_t)manaCost, (uint32_t)soulCost);
 	}
 }
@@ -1911,24 +1911,44 @@ ReturnValue ConjureSpell::internalConjureItem(Player* player, uint32_t conjureId
 	return result;
 }
 
-ReturnValue ConjureSpell::internalConjureItem(Player* player, uint32_t conjureId,
-	uint32_t conjureCount, uint32_t reagentId, slots_t slot, bool test /*= false*/)
+ReturnValue ConjureSpell::internalConjureItem(Player* player, const ConjureSpell* spell, slots_t slot, uint8_t &numCasts /*=1*/)
 {
+	uint32_t reagentId = spell->getReagentId();
 	if (reagentId != 0){
 		Item* item = player->getInventoryItem(slot);
 		if (item && item->getID() == reagentId){
-			if (item->isStackable() && item->getItemCount() != 1){ //TODO? reagentCount
-				return RET_YOUNEEDTOSPLITYOURSPEARS;
-			}
 
-			if (test){
+			if (numCasts == 0){
 				return RET_NOERROR;
 			}
 
-			Item* newItem = g_game.transformItem(item, conjureId, conjureCount);
-			if (newItem){
-				g_game.startDecay(newItem);
+			if (item->isStackable() && item->getItemCount() != 1){
+				numCasts = player->getMana() / spell->getManaCost(player);
+				if (item->getItemCount() < numCasts) {
+					numCasts = item->getItemCount();
+				}
 			}
+
+			//Item* newItem = g_game.transformItem(item, spell->getConjureId(), spell->getConjureCount()*numCasts);
+			g_game.internalRemoveItem(item, numCasts);
+
+			uint32_t conjureCount = spell->getConjureCount()*numCasts;
+			while (conjureCount > 0) {
+				Item* newItem;
+				if (conjureCount > 100) {
+					newItem = Item::CreateItem(spell->getConjureId(), 100);
+					conjureCount -= 100;
+				} else {
+					newItem = Item::CreateItem(spell->getConjureId(), conjureCount);
+					conjureCount = 0;
+				}
+				g_game.internalPlayerAddItem(player, newItem);
+
+				if (newItem){
+					g_game.startDecay(newItem);
+				}
+			}
+
 
 			player->updateInventoryWeight();
 			return RET_NOERROR;
@@ -1956,8 +1976,8 @@ bool ConjureSpell::ConjureItem(const ConjureSpell* spell, Creature* creature, co
 	ReturnValue result = RET_NOERROR;
 	if (spell->getReagentId() != 0){
 		//Test if we can cast the conjure spell on left hand
-		ReturnValue result1 = internalConjureItem(player, spell->getConjureId(), spell->getConjureCount(),
-			spell->getReagentId(), SLOT_LEFT, true);
+		uint8_t onlyTestAction = 0;
+		ReturnValue result1 = internalConjureItem(player, spell, SLOT_LEFT, onlyTestAction);
 
 		if (result1 == RET_NOERROR){
 			//Check level/mana etc.
@@ -1965,17 +1985,16 @@ bool ConjureSpell::ConjureItem(const ConjureSpell* spell, Creature* creature, co
 				return false;
 			}
 
-			result1 = internalConjureItem(player, spell->getConjureId(), spell->getConjureCount(),
-				spell->getReagentId(), SLOT_LEFT);
+			uint8_t numCasts = 1;
+			result1 = internalConjureItem(player, spell, SLOT_LEFT, numCasts);
 
 			if (result1 == RET_NOERROR){
-				spell->postCastSpell(player, false);
+				spell->postCastSpell(player, false, numCasts);
 			}
 		}
 
 		//Check if we can cast the conjure spell on the right hand
-		ReturnValue result2 = internalConjureItem(player, spell->getConjureId(), spell->getConjureCount(),
-			spell->getReagentId(), SLOT_RIGHT, true);
+		ReturnValue result2 = internalConjureItem(player, spell, SLOT_RIGHT, onlyTestAction);
 
 		if (result2 == RET_NOERROR){
 			//Check level/mana etc.
@@ -1985,11 +2004,11 @@ bool ConjureSpell::ConjureItem(const ConjureSpell* spell, Creature* creature, co
 				return false;
 			}
 
-			result2 = internalConjureItem(player, spell->getConjureId(), spell->getConjureCount(),
-				spell->getReagentId(), SLOT_RIGHT);
+			uint8_t numCasts = 1;
+			result2 = internalConjureItem(player, spell, SLOT_RIGHT, numCasts);
 
 			if (result2 == RET_NOERROR){
-				spell->postCastSpell(player, false);
+				spell->postCastSpell(player, false, numCasts);
 			}
 		}
 
@@ -2276,7 +2295,7 @@ bool RuneSpell::Soulfire(const RuneSpell* spell, Creature* creature, Item* item,
 	soulfireCondition->addDamage(std::ceil((player->getLevel()+player->getMagicLevel()) / 3.), 9000, -10);
 	g_game.addDistanceEffect(player->getPosition(), hitCreature->getPosition(), NM_SHOOT_FIRE);
 	hitCreature->addCondition(soulfireCondition);
-	spell->postCastSpell(player, true, false);
+	spell->postCastSpell(player, true, 0);
 	return true;
 }
 
