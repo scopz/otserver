@@ -235,7 +235,7 @@ ReturnValue Actions::canUseFar(const Creature* creature, const Position& toPos, 
 	else if(creaturePos.z < toPos.z){
 		return RET_FIRSTGODOWNSTAIRS;
 	}
-	else if(!Position::areInRange<7,5,0>(toPos, creaturePos)){
+	else if(!Position::areInRange<Map::clientViewportX-1,Map::clientViewportY-1,0>(toPos, creaturePos)){
 		return RET_TOOFARAWAY;
 	}
 

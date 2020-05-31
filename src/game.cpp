@@ -2270,7 +2270,14 @@ bool Game::playerUseItemEx(uint32_t playerId, const Position& fromPos, uint8_t f
 	if(ret == RET_NOERROR){
 		ret = g_actions->canUse(player, toPos, item);
 		if(ret == RET_TOOFARAWAY){
-			walkToPos = toPos;
+			// do not walk to destination when using a rune
+			if (item->isRune()) {
+				player->sendCancelMessage(RET_TOOFARAWAY);
+				return false;
+
+			} else {
+				walkToPos = toPos;
+			}
 		}
 	}
 	if(ret != RET_NOERROR){
