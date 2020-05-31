@@ -36,13 +36,25 @@ npcHandler:addModule(spellSellModule)
 spellSellModule.listPreText = "I have"
 spellSellModule:addSpellStock({
 	"Magic Rope",
-	"Flame Strike",
-	"Energy Strike",
 	"Force Strike",
+	"Energy Strike",
+	"Flame Strike",
+	"Death Strike",
+	"Ice Strike",
+	"Earth Strike",
+	"Holy Strike",
+	"Target Force Strike",
+	"Target Energy Strike",
+	"Target Flame Strike",
+	"Target Death Strike",
+	"Target Ice Strike",
+	"Target Earth Strike",
+	"Target Holy Strike",
 	"Berserk",
 	"Haste",
 	"Levitate",
 	--"Whirlwind Throw",
 })
 
+keywordHandler:sortKeywords()
 npcHandler:addModule(FocusModule:new())

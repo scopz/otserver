@@ -329,7 +329,8 @@ protected:
 
 	enum AimUseType {
 		NONE = 0,
-		POSITION
+		POSITION,
+		CREATURE
 	};
 	AimUseType useType;
 };

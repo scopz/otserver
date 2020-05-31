@@ -96,8 +96,7 @@
 	</instant>
 	<instant name="Haste" words="utani hur" price="600" maglv="4" needlearn="1" lvl="14" prem="1" mana="60" selftarget="1" aggressive="0" script="support/haste.lua" />
 	<instant name="Force Strike" words="exori corp" price="600" maglv="2" needlearn="1" lvl="11" prem="1" mana="20" direction="1" exhaustion="1000" script="attack/force_strike.lua">
-		<vocation id="1"/>
-		<vocation id="2"/>
+		<vocation id="4"/>
 	</instant>
 	<instant name="Energy Strike" words="exori vis" price="800" maglv="3" needlearn="1" lvl="12" mana="20" direction="1" exhaustion="1000" script="attack/energy_strike.lua">
 		<vocation id="1"/>
@@ -186,6 +185,32 @@
 
 	<!-- Target Requirement Spells -->
 	<aim name="Deploy Trap" words="osevo ani" price="500" maglv="7" needlearn="1" lvl="20" mana="40" exhaustion="1000" range="6" uses="position" script="support/deploy_trap.lua">
+		<vocation id="3"/>
+	</aim>
+	<aim name="Target Force Strike" words="osori corp" price="600" maglv="1" needlearn="1" lvl="20" mana="20" exhaustion="2000" range="6" uses="creature" script="attack/target_force_strike.lua">
+		<vocation id="4"/>
+	</aim>
+	<aim name="Target Energy Strike" words="osori vis" price="800" maglv="3" needlearn="1" lvl="12" mana="20" exhaustion="2000" range="6" uses="creature" script="attack/target_energy_strike.lua">
+		<vocation id="1"/>
+		<vocation id="2"/>
+	</aim>
+	<aim name="Target Flame Strike" words="osori flam" price="800" maglv="3" needlearn="1" lvl="12" mana="20" exhaustion="2000" range="6" uses="creature" script="attack/target_flame_strike.lua">
+		<vocation id="1"/>
+		<vocation id="2"/>
+	</aim>
+	<aim name="Target Death Strike" words="osori mort" price="800" maglv="3" needlearn="1" lvl="12" mana="20" exhaustion="2000" range="6" uses="creature" script="attack/target_death_strike.lua">
+		<vocation id="1"/>
+		<vocation id="2"/>
+	</aim>
+	<aim name="Target Ice Strike" words="osori frigo" price="800" maglv="3" needlearn="1" lvl="12" mana="20" exhaustion="2000" range="6" uses="creature" script="attack/target_ice_strike.lua">
+		<vocation id="1"/>
+		<vocation id="2"/>
+	</aim>
+	<aim name="Target Earth Strike" words="osori tera" price="800" maglv="3" needlearn="1" lvl="12" mana="20" exhaustion="2000" range="6" uses="creature" script="attack/target_earth_strike.lua">
+		<vocation id="1"/>
+		<vocation id="2"/>
+	</aim>
+	<aim name="Target Holy Strike" words="osori san" price="800" maglv="3" needlearn="1" lvl="12" mana="20" exhaustion="2000" range="6" uses="creature" script="attack/target_holy_strike.lua">
 		<vocation id="3"/>
 	</aim>
 

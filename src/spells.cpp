@@ -2421,7 +2421,7 @@ bool AimSpell::castSpell(Creature* creature)
 }
 bool AimSpell::castSpell(Creature* creature, Creature* target)
 {
-	if (useType == POSITION) {
+	if (useType == POSITION || useType == CREATURE) {
 		return castSpell(creature->getPlayer(), target->getPosition());
 	}
 	return true;
@@ -2440,6 +2440,7 @@ bool AimSpell::configureEvent(xmlNodePtr p)
 	std::string content;
 	if(readXMLString(p, "uses", content)){
 		if (content == "position") useType = POSITION;
+		if (content == "creature") useType = CREATURE;
 	}
 
 	return true;
@@ -2465,8 +2466,22 @@ bool AimSpell::castSpell(Player* player, const Position &toPos)
 	}
 
 	LuaVariant var;
-	var.type = VARIANT_POSITION;
-	var.pos = toPos;
+
+	if (useType == CREATURE) {
+		if (tile->getCreatureCount() < 1) {
+			player->sendCancelMessage(RET_CANONLYUSETHISRUNEONCREATURES);
+			g_game.addMagicEffect(player->getPosition(), NM_ME_PUFF);
+			return false;
+		} else {
+			Creature* creature = tile->getCreatures()->front();
+			var.type = VARIANT_NUMBER;
+			var.number = creature->getID();
+		}
+
+	} else if (useType == POSITION) {
+		var.type = VARIANT_POSITION;
+		var.pos = toPos;
+	}
 
 	bool result = internalCastSpell(player, var);
 
