@@ -259,7 +259,7 @@ float box_muller(float m, float s)
 	return( m + y1 * s );
 }
 
-int random_range(int lowest_number, int highest_number, DistributionType_t type /*= DISTRO_UNIFORM*/, float deviation /*= 0.25*/)
+int random_range(int lowest_number, int highest_number, DistributionType_t type /*= DISTRO_UNIFORM*/, float deviation /*= 0.25*/, float maxDeviation /*= 0*/)
 {
 	if(highest_number == lowest_number){
 		return lowest_number;
@@ -287,6 +287,13 @@ int random_range(int lowest_number, int highest_number, DistributionType_t type 
 		}
 
 		return lowest_number + (int)((float)range * value);
+	}
+	else if(type == DISTRO_CUSTOM_ATTACK){
+		float value = rand()/(float)RAND_MAX;
+		if (value < 1-maxDeviation) {
+			value = value / (1-maxDeviation) * (1-deviation-maxDeviation) + deviation;
+		}
+		return (int) (value*(range+1) + lowest_number);
 	}
 	else{
 		float r = 1.f - sqrt((1.f*rand24b())/RAND_MAX24);

@@ -747,7 +747,10 @@ int32_t WeaponMelee::getWeaponDamage(const Player* player, const Creature* targe
 		return -maxValue;
 	}
 
-	return -random_range(0, maxValue);
+	if (player->getFightMode() == FIGHTMODE_ATTACK)
+		return -random_range(0, maxValue, DISTRO_CUSTOM_ATTACK, 0.45, 0.1);
+	else
+		return -random_range(0, maxValue);
 }
 
 WeaponDistance::WeaponDistance(LuaScriptInterface* _interface) :
