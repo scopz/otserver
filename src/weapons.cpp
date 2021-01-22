@@ -551,7 +551,10 @@ void Weapon::onUsedAmmo(Player* player, Item* item, Tile* destTile) const
 		g_game.transformItem(item, item->getID(), newCharge);
 	}
 	else if(ammoAction == AMMOACTION_MOVE){
-		g_game.internalMoveItem(item->getParent(), destTile, INDEX_WHEREEVER, item, 1, NULL, FLAG_NOLIMIT);
+		uint32_t distance = std::max(std::abs(player->getPosition().x - destTile->getPosition().x), std::abs(player->getPosition().y - destTile->getPosition().y));
+		if (distance > 1) {
+			g_game.internalMoveItem(item->getParent(), destTile, INDEX_WHEREEVER, item, 1, NULL, FLAG_NOLIMIT);
+		}
 	}
 	else if(ammoAction == AMMOACTION_MOVEBACK){
 		//do nothing
