@@ -95,6 +95,7 @@ enum ShootType_t {
 	NM_SHOOT_HOLY_BIG       = 0x15, //21
 	NM_SHOOT_DEATH_BIG      = 0x16, //22
 	NM_SHOOT_ENERGY_BIG     = 0x17, //23
+	NM_SHOOT_ROYAL_SPEAR    = 0x18, //24
 
 	//for internal use, dont send to client
 	NM_SHOOT_WEAPONTYPE     = 0xFE, //254

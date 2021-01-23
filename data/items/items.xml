@@ -11496,6 +11496,15 @@
 		<attribute key="decayTo" value="0"/>
 		<attribute key="duration" value="7"/>
 	</item>
+	<item id="5092" article="a" name="royal spear" plural="royal spears">
+		<attribute key="weight" value="1250"/>
+		<attribute key="attack" value="36"/>
+		<attribute key="weaponType" value="distance"/>
+		<attribute key="shootType" value="royalspear"/>
+		<attribute key="range" value="7"/>
+		<attribute key="breakChance" value="0"/>
+		<attribute key="ammoAction" value="move"/>
+	</item>
 	
 	<item id="20001" name="water" fluidClient="1"/>
 	<item id="20002" name="blood" fluidClient="2"/>

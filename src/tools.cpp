@@ -495,6 +495,7 @@ MagicEffectNames magicEffectNames[] = {
 
 ShootTypeNames shootTypeNames[] = {
 	{"spear",             NM_SHOOT_SPEAR},
+	{"royalspear",        NM_SHOOT_ROYAL_SPEAR},
 	{"bolt",              NM_SHOOT_BOLT},
 	{"arrow",             NM_SHOOT_ARROW},
 	{"fire",              NM_SHOOT_FIRE},

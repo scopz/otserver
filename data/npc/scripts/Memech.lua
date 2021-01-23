@@ -46,6 +46,7 @@ shopModule:addSellableItem({'steel shield'}, 2509, 80)
 
 shopModule:addBuyableItem({'dagger'}, 2379, 5)
 shopModule:addBuyableItem({'hand axe'}, 2380, 8)
+shopModule:addBuyableItem({'royal spear'}, 5092, 25)
 shopModule:addBuyableItem({'spear'}, 2389, 10)
 shopModule:addBuyableItem({'rapier'}, 2384, 15)
 shopModule:addBuyableItem({'axe'}, 2386, 20)

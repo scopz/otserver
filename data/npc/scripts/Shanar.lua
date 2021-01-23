@@ -59,6 +59,7 @@ shopModule:addSellableItem({'mace'}, 2398, 23)
 
 
 shopModule:addBuyableItem({'dagger'}, 2379, 5)
+shopModule:addBuyableItem({'royal spear'}, 5092, 25)
 shopModule:addBuyableItem({'spear'}, 2389, 10)
 shopModule:addBuyableItem({'rapier'}, 2384, 15)
 shopModule:addBuyableItem({'sabre'}, 2385, 35)
