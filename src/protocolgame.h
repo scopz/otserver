@@ -143,6 +143,8 @@ private:
 	void parseDebug(NetworkMessage& msg);
 
 	//Send functions
+	void sendPingBack();
+	
 	void sendClosePrivate(uint16_t channelId);
 	void sendCreatePrivateChannel(uint16_t channelId, const std::string& channelName);
 

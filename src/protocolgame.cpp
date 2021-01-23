@@ -410,6 +410,10 @@ void ProtocolGame::parsePacket(NetworkMessage &msg)
 		g_dispatcher.addTask(createTask(boost::bind(&Game::playerReceivePing, &g_game, player->getID())));
 		break;
 
+	case 0x1D: // ping
+		player->sendPingBack();
+		break;
+
 	case 0x64: // move with steps
 		parseAutoWalk(msg);
 		break;
@@ -1321,6 +1325,16 @@ void ProtocolGame::parseDebugAssert(NetworkMessage& msg)
 }
 
 //********************** Send methods  *******************************
+void ProtocolGame::sendPingBack()
+{
+	NetworkMessage_ptr msg = (NetworkMessage_ptr) getOutputBuffer();
+	if(msg){
+		TRACK_MESSAGE(msg);
+		msg->AddByte(0x1D);
+	}
+}
+
+
 void ProtocolGame::sendOpenPrivateChannel(const std::string& receiver)
 {
 	NetworkMessage_ptr msg = (NetworkMessage_ptr) getOutputBuffer();
