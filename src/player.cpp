@@ -231,6 +231,10 @@ bool Player::setVocation(uint32_t vocId)
 	if(condition){
 		condition->setParam(CONDITIONPARAM_HEALTHGAIN, vocation->getHealthGainAmount());
 		condition->setParam(CONDITIONPARAM_HEALTHTICKS, vocation->getHealthGainTicks() * 1000);
+	}
+
+	condition = getCondition(CONDITION_REGENERATION_MANA, CONDITIONID_DEFAULT, 0);
+	if(condition){
 		condition->setParam(CONDITIONPARAM_MANAGAIN, vocation->getManaGainAmount());
 		condition->setParam(CONDITIONPARAM_MANATICKS, vocation->getManaGainTicks() * 1000);
 	}
@@ -1601,14 +1605,18 @@ void Player::onCreatureAppear(const Creature* creature, bool isLogin)
 				if((*it)->getType() == CONDITION_REGENERATION && (*it)->getSubId() == 0){
 					(*it)->setParam(CONDITIONPARAM_HEALTHGAIN, vocation->getHealthGainAmount());
 					(*it)->setParam(CONDITIONPARAM_HEALTHTICKS, vocation->getHealthGainTicks() * 1000);
-					(*it)->setParam(CONDITIONPARAM_MANAGAIN, vocation->getManaGainAmount());
-					(*it)->setParam(CONDITIONPARAM_MANATICKS, vocation->getManaGainTicks() * 1000);
 				}
 				addCondition(*it);
 			}
 
 			storedConditionList.clear();
 		}
+
+		// add default mana regeneration
+		Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_REGENERATION_MANA, -1, 0);
+		condition->setParam(CONDITIONPARAM_MANAGAIN, vocation->getManaGainAmount());
+		condition->setParam(CONDITIONPARAM_MANATICKS, vocation->getManaGainTicks() * 1000);
+		addCondition(condition);
 
 		//[ added for beds system
 		BedItem* bed = Beds::instance().getBedBySleeper(getGUID());
@@ -2651,20 +2659,17 @@ void Player::addInFightTicks(uint32_t ticks, bool pzlock /*= false*/)
 	}
 }
 
-void Player::addDefaultRegeneration(uint32_t addTicks)
+void Player::addFoodRegeneration(uint32_t addTicks)
 {
 	Condition* condition = getCondition(CONDITION_REGENERATION, CONDITIONID_DEFAULT, 0);
 
 	if(condition){
 		condition->setTicks(condition->getTicks() + addTicks);
-	}
-	else{
+
+	} else {
 		condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_REGENERATION, addTicks, 0);
 		condition->setParam(CONDITIONPARAM_HEALTHGAIN, vocation->getHealthGainAmount());
 		condition->setParam(CONDITIONPARAM_HEALTHTICKS, vocation->getHealthGainTicks() * 1000);
-		condition->setParam(CONDITIONPARAM_MANAGAIN, vocation->getManaGainAmount());
-		condition->setParam(CONDITIONPARAM_MANATICKS, vocation->getManaGainTicks() * 1000);
-
 		addCondition(condition);
 	}
 }

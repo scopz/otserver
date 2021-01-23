@@ -395,7 +395,7 @@ public:
 	void addCombatExhaust(uint32_t ticks);
 	void addHealExhaust(uint32_t ticks);
 	void addInFightTicks(uint32_t ticks, bool pzlock = false);
-	void addDefaultRegeneration(uint32_t addTicks);
+	void addFoodRegeneration(uint32_t addTicks);
 
 	virtual uint64_t getGainedExperience(Creature* attacker) const;
 	void getGainExperience(uint64_t& gainExp, bool fromMonster);

@@ -237,6 +237,7 @@ Condition* Condition::createCondition(ConditionId_t _id, ConditionType_t _type, 
 		}
 
 		case CONDITION_REGENERATION:
+		case CONDITION_REGENERATION_MANA:
 		{
 			return new ConditionRegeneration(_id, _type, _ticks);
 			break;
@@ -333,7 +334,7 @@ bool Condition::isPersistent() const
 		return false;
 	}
 
-	if(!(id == CONDITIONID_DEFAULT || id == CONDITIONID_COMBAT)){
+	if(id != CONDITIONID_DEFAULT && id != CONDITIONID_COMBAT){
 		return false;
 	}
 
@@ -370,6 +371,7 @@ bool Condition::canBeAggressive(ConditionType_t type) //static
 		case CONDITION_INVISIBLE:
 		case CONDITION_LIGHT:
 		case CONDITION_REGENERATION:
+		case CONDITION_REGENERATION_MANA:
 			return false;
 			break;
 		default:

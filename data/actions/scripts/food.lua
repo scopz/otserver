@@ -1,11 +1,11 @@
-local MAX_FOOD = 1200
+local MAX_FOOD = 1200/15
 
 function onUse(cid, item, fromPosition, itemEx, toPosition)
 	if (FOODS[item.itemid] == nil) then
 		return false
 	end
 
-	local size = FOODS[item.itemid][1]
+	local size = math.ceil(FOODS[item.itemid][1]/15)
 	local sound = FOODS[item.itemid][2]
 
 	if (getPlayerFood(cid) + size > MAX_FOOD) then

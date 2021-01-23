@@ -2843,7 +2843,7 @@ int LuaScriptInterface::luaDoFeedPlayer(lua_State *L)
 
 	Player* player = env->getPlayerByUID(cid);
 	if(player){
-		player->addDefaultRegeneration(food * 1000);
+		player->addFoodRegeneration(food * 1000);
 		lua_pushboolean(L, true);
 	}
 	else{

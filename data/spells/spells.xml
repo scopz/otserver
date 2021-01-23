@@ -56,7 +56,7 @@
 		<vocation id="3"/>
 		<vocation id="4"/>
 	</instant>
-	<instant name="Light Healing" words="exura" price="170" maglv="1" needlearn="1" lvl="9" mana="25" selftarget="1" aggressive="0" script="healing/light_healing.lua">
+	<instant name="Light Healing" words="exura" price="170" maglv="1" needlearn="1" lvl="9" mana="22" selftarget="1" aggressive="0" script="healing/light_healing.lua">
 		<vocation id="1"/>
 		<vocation id="2"/>
 		<vocation id="3"/>
