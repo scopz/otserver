@@ -780,6 +780,11 @@ void Creature::onCreatureMove(const Creature* creature, const Tile* newTile, con
 	}
 }
 
+bool Creature::onStepOnItem(Item* item)
+{
+	return false;
+}
+
 void Creature::onCreatureChangeVisible(const Creature* creature, bool visible)
 {
 	//

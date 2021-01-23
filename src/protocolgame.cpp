@@ -1138,32 +1138,23 @@ void ProtocolGame::parseSayTargeted(NetworkMessage& msg)
 void ProtocolGame::parseFightModes(NetworkMessage& msg)
 {
 	uint8_t rawFightMode = msg.GetByte(); //1 - offensive, 2 - balanced, 3 - defensive
-	uint8_t rawChaseMode = msg.GetByte(); // 0 - stand while fightning, 1 - chase opponent
+	uint8_t rawChaseMode = msg.GetByte(); //0 - stand while fighting, 1 - chase opponent
+	uint8_t rawPickUpMode = msg.GetByte(); //0 - no pickup, 1 - pickup ammo
 	uint8_t rawSafeMode = msg.GetByte();
 
 	bool safeMode = (rawSafeMode == 1);
-	chaseMode_t chaseMode = CHASEMODE_STANDSTILL;
 
-	if(rawChaseMode == 0){
-		chaseMode = CHASEMODE_STANDSTILL;
-	}
-	else if(rawChaseMode == 1){
-		chaseMode = CHASEMODE_FOLLOW;
-	}
+	chaseMode_t                chaseMode = CHASEMODE_STANDSTILL;
+	if(rawChaseMode == 1)      chaseMode = CHASEMODE_FOLLOW;
 
-	fightMode_t fightMode = FIGHTMODE_ATTACK;
+	pickUpMode_t               pickUpMode = PICKUPMODE_OFF;
+	if(rawPickUpMode==1)       pickUpMode = PICKUPMODE_AMMUNITION;
 
-	if(rawFightMode == 1){
-		fightMode = FIGHTMODE_ATTACK;
-	}
-	else if(rawFightMode == 2){
-		fightMode = FIGHTMODE_BALANCED;
-	}
-	else if(rawFightMode == 3){
-		fightMode = FIGHTMODE_DEFENSE;
-	}
+	fightMode_t                fightMode = FIGHTMODE_ATTACK;
+	if(rawFightMode == 2)      fightMode = FIGHTMODE_BALANCED;
+	else if(rawFightMode == 3) fightMode = FIGHTMODE_DEFENSE;
 
-	addGameTaskTimed(DISPATCHER_TASK_EXPIRATION, &Game::playerSetFightModes, player->getID(), fightMode, chaseMode, safeMode);
+	addGameTaskTimed(DISPATCHER_TASK_EXPIRATION, &Game::playerSetFightModes, player->getID(), fightMode, chaseMode, pickUpMode, safeMode);
 }
 
 void ProtocolGame::parseAttack(NetworkMessage& msg)

@@ -3237,7 +3237,7 @@ bool Game::playerLeaveParty(uint32_t playerId)
 	return player->getParty()->leaveParty(player);
 }
 
-bool Game::playerSetFightModes(uint32_t playerId, fightMode_t fightMode, chaseMode_t chaseMode, bool safeMode)
+bool Game::playerSetFightModes(uint32_t playerId, fightMode_t fightMode, chaseMode_t chaseMode, pickUpMode_t pickUpMode, bool safeMode)
 {
 	Player* player = getPlayerByID(playerId);
 	if(!player || player->isRemoved())
@@ -3246,6 +3246,7 @@ bool Game::playerSetFightModes(uint32_t playerId, fightMode_t fightMode, chaseMo
 	//player->setLastAttackAsNow();
 	player->setFightMode(fightMode);
 	player->setChaseMode(chaseMode);
+	player->setPickUpMode(pickUpMode);
 	player->setSafeMode(safeMode);
 	return true;
 }

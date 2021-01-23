@@ -334,6 +334,7 @@ public:
 	bool isMoveable() const {return items[id].moveable;}
 	bool isPickupable() const {return items[id].pickupable;}
 	bool isWeapon() const {return (items[id].weaponType != WEAPON_NONE);}
+	bool isMoveDistanceWeapon() const {return (items[id].ammoAction == AMMOACTION_MOVE);}
 	bool isUseable() const {return items[id].useable;}
 	bool isHangable() const {return items[id].isHangable;}
 	bool isRoteable() const {const ItemType& it = items[id]; return it.rotable && it.rotateTo;}

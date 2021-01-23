@@ -523,6 +523,14 @@ void Tile::moveCreature(Creature* creature, Cylinder* toCylinder, bool teleport 
 		(*it)->onCreatureMove(creature, newTile, newPos, this, oldPos, teleport);
 	}
 
+	//onStep on item
+	if(TileItemVector* newTileItems = newTile->getItemList()){
+		TileItemVector itemsCopy = *newTileItems; // copy because the iteration can remove an item
+		for(ItemVector::iterator it = itemsCopy.getBeginDownItem(); it != itemsCopy.getEndDownItem(); ++it){
+			creature->onStepOnItem((*it));
+		}
+	}
+
 	postRemoveNotification(creature, toCylinder, oldStackPos, true);
 	newTile->postAddNotification(creature, this, newStackPos);
 }
@@ -1427,6 +1435,8 @@ void Tile::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t 
 	//add a reference to this item, it may be deleted after being added (mailbox for example)
 	thing->useThing2();
 
+	Item* item = NULL;
+
 	if(link == LINK_OWNER){
 		//calling movement scripts
 		Creature* creature = thing->getCreature();
@@ -1439,7 +1449,7 @@ void Tile::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t 
 			g_moveEvents->onCreatureMove(creature, fromTile, this, true);
 		}
 		else{
-			Item* item = thing->getItem();
+			item = thing->getItem();
 			if(item){
 				g_moveEvents->onAddTileItem(this, item);
 				g_moveEvents->onItemMove(item, this, true);
@@ -1466,9 +1476,25 @@ void Tile::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t 
 		}
 	}
 
+	//execute onStepOnItem if a item has been moved/modified in a creature tile
+	if (item) {
+		CreatureVector* creatures = getCreatures();
+
+		if (creatures && creatures->size() > 0) {
+			g_dispatcher.addTask(createTask([creatures, item, this](){
+				for(CreatureVector::iterator it = creatures->begin(); it != creatures->end(); ++it){
+					if (!(*it)->getNpc() && item->getParent() == this) {
+						(*it)->onStepOnItem(item);
+					}
+				}
+			}));
+		}
+	}
+
 	//release the reference to this item onces we are finished
 	g_game.FreeThing(thing);
 }
+
 
 void Tile::postRemoveNotification(Thing* thing,  const Cylinder* newParent, int32_t index, bool isCompleteRemoval, cylinderlink_t link /*= LINK_OWNER*/)
 {

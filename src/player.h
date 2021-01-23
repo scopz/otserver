@@ -71,6 +71,11 @@ enum fightMode_t {
 	FIGHTMODE_DEFENSE
 };
 
+enum pickUpMode_t {
+	PICKUPMODE_OFF,
+	PICKUPMODE_AMMUNITION
+};
+
 enum tradestate_t {
 	TRADE_NONE,
 	TRADE_INITIATED,
@@ -340,7 +345,8 @@ public:
 
 	void setChaseMode(chaseMode_t mode);
 	chaseMode_t getChaseMode() const {return chaseMode;}
-	void setFightMode(fightMode_t mode);
+	void setFightMode(fightMode_t mode) {fightMode = mode;};
+	void setPickUpMode(pickUpMode_t _pickUpMode) {pickUpMode = _pickUpMode;};
 	fightMode_t getFightMode() const {return fightMode;}
 	void setSafeMode(bool _safeMode) {safeMode = _safeMode;}
 	bool hasSafeMode() const {return safeMode;}
@@ -550,6 +556,7 @@ public:
 	virtual void onCreatureMove(const Creature* creature, const Tile* newTile, const Position& newPos,
 		const Tile* oldTile, const Position& oldPos, bool teleport);
 
+	virtual bool onStepOnItem(Item* item);
 	virtual void onAttackedCreatureDissapear(bool isLogout);
 	virtual void onFollowCreatureDissapear(bool isLogout);
 
@@ -769,6 +776,7 @@ protected:
 
 	chaseMode_t chaseMode;
 	fightMode_t fightMode;
+	pickUpMode_t pickUpMode;
 	bool safeMode;
 
 	//

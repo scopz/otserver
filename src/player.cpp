@@ -112,6 +112,7 @@ Player::Player(const std::string& _name, ProtocolGame* p) : Creature()
 
 	chaseMode = CHASEMODE_STANDSTILL;
 	fightMode = FIGHTMODE_ATTACK;
+	pickUpMode = PICKUPMODE_OFF;
 	safeMode = true;
 
 	gmInvisible = false;
@@ -1791,6 +1792,49 @@ void Player::onCreatureMove(const Creature* creature, const Tile* newTile, const
 			}
 		}
 	}
+}
+
+bool Player::onStepOnItem(Item* item)
+{
+	if (Creature::onStepOnItem(item)) {
+		return true;
+	}
+
+	if (pickUpMode == PICKUPMODE_AMMUNITION) {
+		if (item->isWeapon() && item->getWeaponType() == WEAPON_DIST && item->isMoveDistanceWeapon()) {
+			uint32_t count = 100;
+			int32_t index = INDEX_WHEREEVER;
+
+			Item* itL = getInventoryItem(SLOT_LEFT);
+			Item* itR = getInventoryItem(SLOT_RIGHT);
+
+			if (itL) {
+				if (itL->getID() == item->getID()) {
+					count -= itL->getItemCount();
+					index = SLOT_LEFT;
+				} else if(itR) {
+					if (itR->getID() == item->getID()) {
+						count -= itR->getItemCount();
+						index = SLOT_RIGHT;
+					}
+				} else index = SLOT_RIGHT;
+			} else if (itR && itR->getID() == item->getID()) {
+				count -= itR->getItemCount();
+				index = SLOT_RIGHT;
+			} else index = SLOT_LEFT;
+
+			if (index != INDEX_WHEREEVER) {
+				if (item->getItemCount() < count)
+					count = item->getItemCount();
+
+				if (count > 0) {
+					g_game.internalMoveItem(item->getParent(), this, index, item, count, NULL);
+				}
+			}
+		}
+	}
+
+	return false;
 }
 
 //container
@@ -3839,11 +3883,6 @@ void Player::setChaseMode(chaseMode_t mode)
 			cancelNextWalk = true;
 		}
 	}
-}
-
-void Player::setFightMode(fightMode_t mode)
-{
-	fightMode = mode;
 }
 
 void Player::onWalkAborted()

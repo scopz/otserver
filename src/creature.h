@@ -376,6 +376,7 @@ public:
 	virtual void onCreatureMove(const Creature* creature, const Tile* newTile, const Position& newPos,
 		const Tile* oldTile, const Position& oldPos, bool teleport);
 
+	virtual bool onStepOnItem(Item* item);
 	virtual void onAttackedCreatureDissapear(bool isLogout) {};
 	virtual void onFollowCreatureDissapear(bool isLogout) {};
 
