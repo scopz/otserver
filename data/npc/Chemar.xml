@@ -7,6 +7,6 @@
 <parameter key="message_walkaway" value="Daraman's blessings!"/>
 <parameter key="message_farewell" value="Daraman's blessings!"/>
 <parameter key="message_idletimeout" value="Daraman's blessings!"/>
-<parameter key="message_needmoremoney" value="Oh, you have not enough copper to buy a letter."/>
+<parameter key="message_needmoremoney" value="Oh, you have not enough money to buy a letter."/>
 	</parameters>
 </npc>

@@ -4,6 +4,6 @@
 	<parameters>
 <parameter key="message_greet" value="Hello, hello, |PLAYERNAME|! Please come in, look, and buy!" />
 <parameter key="message_farewell" value="Bye, bye." />
-<parameter key="message_needmoremoney" value="Sorry, you do not have enough copper." />
+<parameter key="message_needmoremoney" value="Sorry, you do not have enough money." />
 	</parameters>
 </npc>

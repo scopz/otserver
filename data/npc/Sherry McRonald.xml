@@ -10,6 +10,6 @@
 <parameter key="message_idletimeout" value="Grace our home with another visit soon."/>
 
 <parameter key="message_decline" value="Maybe another time."/>
-<parameter key="message_needmoremoney" value="I am sorry, but you do not have enough copper."/>
+<parameter key="message_needmoremoney" value="I am sorry, but you do not have enough money."/>
 	</parameters>
 </npc>

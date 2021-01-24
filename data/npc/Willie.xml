@@ -8,6 +8,6 @@
 
 <parameter key="message_decline" value="Then not."/>
 <parameter key="message_nothaveitem" value="Hm, you don't have it."/>
-<parameter key="message_needmoremoney" value="I am sorry, but you do not have enough copper."/>
+<parameter key="message_needmoremoney" value="I am sorry, but you do not have enough money."/>
 	</parameters>
 </npc>

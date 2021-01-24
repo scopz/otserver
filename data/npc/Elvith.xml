@@ -9,6 +9,6 @@
 <parameter key="message_idletimeout" value="Asha Thrazi."/>
 
 <parameter key="message_decline" value="Maybe you will buy it another time."/>
-<parameter key="message_needmoremoney" value="Sorry, you do not have enough copper."/>
+<parameter key="message_needmoremoney" value="Sorry, you do not have enough money."/>
 	</parameters>
 </npc>

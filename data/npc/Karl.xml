@@ -10,6 +10,6 @@
 <parameter key="message_idletimeout" value="Please come back, but don't tell others."/>
 
 <parameter key="message_decline" value="Maybe later."/>
-<parameter key="message_needmoremoney" value="Sorry, come back with more copper."/>
+<parameter key="message_needmoremoney" value="Sorry, come back with more money."/>
 	</parameters>
 </npc>

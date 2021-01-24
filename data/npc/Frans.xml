@@ -10,6 +10,6 @@
 <parameter key="message_idletimeout" value="Bye."/>
 
 <parameter key="message_decline" value="Better not annoy a FRANS if you don't want to deeeeal with him!"/>
-<parameter key="message_needmoremoney" value="Sorry, too many buttonssss and not enough copper in your pursssse."/>
+<parameter key="message_needmoremoney" value="Sorry, too many buttonssss and not enough money in your pursssse."/>
 	</parameters>
 </npc>

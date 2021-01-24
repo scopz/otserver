@@ -10,7 +10,7 @@
 <parameter key="message_idletimeout" value="Please come back from time to time."/>
 
 <parameter key="message_decline" value="Maybe later."/>
-<parameter key="message_needmoremoney" value="I am sorry, but you do not have enough copper."/>
+<parameter key="message_needmoremoney" value="I am sorry, but you do not have enough money."/>
 	</parameters>
 	
 <item type="selling" name="bread" id="Cfbread" price="4"/>

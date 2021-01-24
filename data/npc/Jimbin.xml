@@ -10,6 +10,6 @@
 <parameter key="message_idletimeout" value="Come back if you enjoyed my tavern, if not ... well, get eaten by a dragon, jawoll."/>
 
 <parameter key="message_decline" value="Maybe later."/>
-<parameter key="message_needmoremoney" value="I am sorry, but you do not have enough copper."/>
+<parameter key="message_needmoremoney" value="I am sorry, but you do not have enough money."/>
 	</parameters>
 </npc>

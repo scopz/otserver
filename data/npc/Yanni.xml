@@ -11,6 +11,6 @@
 
 <parameter key="message_decline" value="Maybe next time."/>
 <parameter key="message_nothaveitem" value="Sorry, you do not have so much."/>
-<parameter key="message_needmoremoney" value="Sorry, you do not have enough copper."/>
+<parameter key="message_needmoremoney" value="Sorry, you do not have enough money."/>
 	</parameters>
 </npc>

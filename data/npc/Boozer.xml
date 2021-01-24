@@ -11,6 +11,6 @@
 
 <parameter key="message_decline" value="Then not, fine with me."/>
 <parameter key="message_nothaveitem" value=""/>
-<parameter key="message_needmoremoney" value="You don't have the copper. If we were gambling I'd call you a cheater ... and you know what happens to cheaters, don't you?"/>
+<parameter key="message_needmoremoney" value="You don't have the money. If we were gambling I'd call you a cheater ... and you know what happens to cheaters, don't you?"/>
 	</parameters>
 </npc>
