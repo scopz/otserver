@@ -417,9 +417,9 @@ ReturnValue Container::__queryMaxCount(int32_t index, const Thing* thing, uint32
 			}
 
 			maxQueryCount = freeSlots * 100 + n;
-		}
-		else {
-			maxQueryCount = 0;
+
+		} else {
+			maxQueryCount = freeSlots * 100;
 			if (g_config.getBoolean(ConfigManager::CONTAINER_ITEMS_AUTO_STACK)) {
 				if(item->getParent() != this){
 					//try find a suitable item to stack with
@@ -428,10 +428,9 @@ ReturnValue Container::__queryMaxCount(int32_t index, const Thing* thing, uint32
 							maxQueryCount += 100 - (*cit)->getItemCount();
 						}
 					}
+				} else {
+					maxQueryCount = 0;
 				}
-			}
-			else {
-				maxQueryCount = freeSlots * 100;
 			}
 		}
 
