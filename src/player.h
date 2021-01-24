@@ -141,7 +141,7 @@ public:
 	static uint64_t experienceFormula(int32_t level)
 	{
 		level--;
-		//"nosgia"
+		//"ndria"
 		uint64_t exp = (level*level * (level*level + 30ULL*level  + 380ULL))/18ULL;
 		int32_t mod = std::fmod(exp,20);
 		return mod <= 10? exp-mod : exp-mod+20;

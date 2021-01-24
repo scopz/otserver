@@ -1,5 +1,5 @@
 -------- config.lua --------
--- Config file for OTServ --
+-- Config file for Ndria --
 ----------------------------
 
 -- data directory location
@@ -20,7 +20,7 @@ map_store_type = "binary"
 mapkind = "OTBM"
 
 -- server name
-servername = "OTServ"
+servername = "Ndria"
 
 -- server location
 location = "Solar System"
@@ -55,7 +55,7 @@ ownername = "peonso"
 owneremail = ""
 
 -- world name
-worldname = "Nosgia"
+worldname = "Ndria"
 
 -- world type
 -- options: openpvp/pvp, optionalpvp/no-pvp, hardcorepvp/pvp-enforced
@@ -285,11 +285,11 @@ maxmessagebuffer = 4
 lua_excepted_type_errors_enabled = false
 
 -- motd (the message box that you sometimes get before you choose characters)
-motd = "Welcome to Tibia Legacy Server."
+motd = "Welcome to Ndria."
 motdnum = "1"
 
 -- login message
-loginmsg = "Welcome to Nosgia."
+loginmsg = "Welcome to Ndria."
 
 -- how many logins attempts until ip is temporary disabled
 -- set to 0 to disable
