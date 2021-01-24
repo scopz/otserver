@@ -1733,6 +1733,15 @@ void ProtocolGame::sendSkills()
 	}
 }
 
+void ProtocolGame::sendPlayerInfo()
+{
+	NetworkMessage_ptr msg = (NetworkMessage_ptr) getOutputBuffer();
+	if(msg){
+		TRACK_MESSAGE(msg);
+		AddPlayerInfo(msg);
+	}
+}
+
 void ProtocolGame::sendPing()
 {
 	NetworkMessage_ptr msg = (NetworkMessage_ptr) getOutputBuffer();
@@ -1879,6 +1888,7 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 				AddInventoryItem(msg, SLOT_RING, player->getInventoryItem(SLOT_RING));
 				AddInventoryItem(msg, SLOT_AMMO, player->getInventoryItem(SLOT_AMMO));
 
+				AddPlayerInfo(msg);
 				AddPlayerStats(msg);
 				AddPlayerSkills(msg);
 
@@ -2309,6 +2319,23 @@ void ProtocolGame::AddCreature(NetworkMessage_ptr msg,const Creature* creature, 
 	msg->AddByte(SKULL_NONE);
 #endif
 	msg->AddByte(player->getPartyShield(creature->getPlayer()));
+}
+
+void ProtocolGame::AddPlayerInfo(NetworkMessage_ptr msg)
+{
+	msg->AddByte(0x9F);
+
+	msg->AddByte(player->isPremium());
+
+	Vocation* vocation = player->getVocation();
+	msg->AddByte(vocation->getBaseVocation()); // vocation
+	//msg->AddByte(vocation->getPromotion()==0); // isPromoted
+	//msg->AddByte(vocation->getRebirth()==0); // isReborn
+
+	// can't send spells because they have no numeric Id...
+	msg->AddU16(0); //spellCount
+	//for(int i=0;i < spellCount; ++i)
+		//msg->AddByte(spells[i]->id);
 }
 
 void ProtocolGame::AddPlayerStats(NetworkMessage_ptr msg)

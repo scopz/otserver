@@ -254,6 +254,10 @@ bool Player::setVocation(uint32_t vocId)
 		manaMax   += (level-8) * vocation->getManaGain();
 		capacity  += (level-8) * vocation->getCapGain();
 	}
+
+	// send vocation change
+	if (client) client->sendPlayerInfo();
+
 	return true;
 }
 

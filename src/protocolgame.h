@@ -164,6 +164,7 @@ private:
 	void sendAnimatedText(const Position& pos, unsigned char color, std::string text);
 	void sendCreatureHealth(const Creature* creature);
 	void sendSkills();
+	void sendPlayerInfo();
 	void sendPing();
 	void sendCreatureTurn(const Creature* creature, uint32_t stackpos);
 	void sendCreatureSay(const Creature* creature, SpeakClasses type, const std::string& text);
@@ -239,6 +240,7 @@ private:
 	void AddMagicEffect(NetworkMessage_ptr msg,const Position& pos, unsigned char type);
 	void AddDistanceShoot(NetworkMessage_ptr msg,const Position& from, const Position& to, uint8_t type);
 	void AddCreature(NetworkMessage_ptr msg,const Creature* creature, bool known, uint32_t remove);
+	void AddPlayerInfo(NetworkMessage_ptr msg);
 	void AddPlayerStats(NetworkMessage_ptr msg);
 	void AddCreatureSpeak(NetworkMessage_ptr msg, const Creature* creature, SpeakClasses type, std::string text, uint16_t channelId, uint32_t time = 0);
 	void AddCreatureHealth(NetworkMessage_ptr msg,const Creature* creature);
