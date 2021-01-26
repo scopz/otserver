@@ -174,6 +174,7 @@ public:
 		ENABLE_CAST,
 		MAX_CAST_VIEWERS,		
 		FLOOR_CHANGE_DELAY,
+		NO_EXHAUST_WHEN_USING_ITEM,
 		LAST_INTEGER_CONFIG /* this must be the last one */
 	};
 

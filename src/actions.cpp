@@ -395,7 +395,7 @@ ReturnValue Actions::internalUseItem(Player* player, const Position& pos,
 bool Actions::useItem(Player* player, const Position& pos, uint8_t index,
 	Item* item)
 {
-	if(!player->canDoAction()){
+	if(!player->canDoAction() && !g_config.getBoolean(ConfigManager::NO_EXHAUST_WHEN_USING_ITEM)){
 		return false;
 	}
 
@@ -502,7 +502,7 @@ ReturnValue Actions::internalUseItemEx(Player* player, const PositionEx& fromPos
 bool Actions::useItemEx(Player* player, const Position& fromPos, const Position& toPos,
 	uint8_t toStackPos, Item* item, uint32_t creatureId/* = 0*/)
 {
-	if(!player->canDoAction()){
+	if(!player->canDoAction() && !g_config.getBoolean(ConfigManager::NO_EXHAUST_WHEN_USING_ITEM)){
 		return false;
 	}
 

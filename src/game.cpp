@@ -2323,7 +2323,7 @@ bool Game::playerUseItemEx(uint32_t playerId, const Position& fromPos, uint8_t f
 
 	player->resetIdle();
 
-	if(!player->canDoAction()){
+	if(!player->canDoAction() && !g_config.getBoolean(ConfigManager::NO_EXHAUST_WHEN_USING_ITEM)){
 		uint32_t delay = player->getNextActionTime();
 		SchedulerTask* task = createSchedulerTask(delay, boost::bind(&Game::playerUseItemEx, this,
 			playerId, fromPos, fromStackPos, fromSpriteId, toPos, toStackPos, toSpriteId));
@@ -2389,7 +2389,7 @@ bool Game::playerUseItem(uint32_t playerId, const Position& pos, uint8_t stackPo
 
 	player->resetIdle();
 
-	if(!player->canDoAction()){
+	if(!player->canDoAction() && !g_config.getBoolean(ConfigManager::NO_EXHAUST_WHEN_USING_ITEM)){
 		uint32_t delay = player->getNextActionTime();
 		SchedulerTask* task = createSchedulerTask(delay, boost::bind(&Game::playerUseItem, this,
 			playerId, pos, stackPos, index, spriteId));

@@ -218,6 +218,7 @@ bool ConfigManager::loadFile(const std::string& _filename)
 
 	// Custom
 	m_confInteger[FLOOR_CHANGE_DELAY] = getGlobalNumber(L, "floor_change_delay", -1);
+	m_confInteger[NO_EXHAUST_WHEN_USING_ITEM] = getGlobalBoolean(L, "no_exhaust_when_using_item", false);
 	
 	// Cast System
 	m_confInteger[ENABLE_CAST] = getGlobalBoolean(L, "enableCast", false);

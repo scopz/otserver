@@ -380,3 +380,6 @@ guild_wars_end_only_on_startup = false
 -- Overrides walk delay after changing floor.
 -- Use -1 for default step value
 floor_change_delay = 150
+
+-- In Tibia, sometimes you can't use an item while walking. This configuration prevents it.
+no_exhaust_when_using_item = true
