@@ -215,6 +215,9 @@ bool ConfigManager::loadFile(const std::string& _filename)
 	// Guild War
 	m_confInteger[GUILD_WAR_FEE] = getGlobalNumber(L, "guild_war_fee", 1000);
 	m_confInteger[GUILD_WARS_END_ONLY_ON_STARTUP] = getGlobalBoolean(L, "guild_wars_end_only_on_startup", true);
+
+	// Custom
+	m_confInteger[FLOOR_CHANGE_DELAY] = getGlobalNumber(L, "floor_change_delay", -1);
 	
 	// Cast System
 	m_confInteger[ENABLE_CAST] = getGlobalBoolean(L, "enableCast", false);

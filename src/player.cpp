@@ -124,6 +124,7 @@ Player::Player(const std::string& _name, ProtocolGame* p) : Creature()
 
 	walkTask = NULL;
 	walkTaskEvent = 0;
+	floorChange = false;
 	actionTaskEvent = 0;
 
 	idleTime = 0;
@@ -1771,6 +1772,22 @@ void Player::onWalk(Direction& dir)
 	setNextAction(OTSYS_TIME() + getStepDuration(dir));
 }
 
+int32_t Player::getStepDuration(Direction dir) const
+{
+	if (floorChange && g_config.getNumber(ConfigManager::FLOOR_CHANGE_DELAY) >= 0) {
+		return g_config.getNumber(ConfigManager::FLOOR_CHANGE_DELAY);
+	}
+	return Creature::getStepDuration(dir);
+}
+
+int32_t Player::getStepDuration() const
+{
+	if (floorChange && g_config.getNumber(ConfigManager::FLOOR_CHANGE_DELAY) >= 0) {
+		return g_config.getNumber(ConfigManager::FLOOR_CHANGE_DELAY);
+	}
+	return Creature::getStepDuration();
+}
+
 void Player::onCreatureMove(const Creature* creature, const Tile* newTile, const Position& newPos,
 	const Tile* oldTile, const Position& oldPos, bool teleport)
 {
@@ -1796,15 +1813,19 @@ void Player::onCreatureMove(const Creature* creature, const Tile* newTile, const
 			getParty()->updateSharedExperience();
 		}
 
-		if(g_config.getNumber(ConfigManager::STAIRHOP_EXHAUSTED) > 0){
-			if(teleport || (oldPos.z != newPos.z)){
-				addCondition(Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_PACIFIED,
-					g_config.getNumber(ConfigManager::STAIRHOP_EXHAUSTED)));
-				addCondition(Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_EXHAUST_COMBAT,
-					g_config.getNumber(ConfigManager::STAIRHOP_EXHAUSTED)));
+
+		if(teleport || (oldPos.z != newPos.z)){
+			if(g_config.getNumber(ConfigManager::STAIRHOP_EXHAUSTED) > 0){
+				addCondition(Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_PACIFIED,       g_config.getNumber(ConfigManager::STAIRHOP_EXHAUSTED)));
+				addCondition(Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_EXHAUST_COMBAT, g_config.getNumber(ConfigManager::STAIRHOP_EXHAUSTED)));
+
 			}
+			floorChange = true;
+		} else {
+			floorChange = false;
 		}
 	}
+
 }
 
 bool Player::onStepOnItem(Item* item)

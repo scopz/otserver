@@ -755,6 +755,7 @@ protected:
 	uint32_t actionTaskEvent;
 	uint32_t walkTaskEvent;
 	SchedulerTask* walkTask;
+	bool floorChange;
 
 	int32_t idleTime;
 	bool idleWarned;
@@ -857,6 +858,8 @@ protected:
 	static std::map<int32_t, uint64_t> experienceMap;
 
 	void updateItemsLight(bool internal = false);
+	virtual int32_t getStepDuration(Direction dir) const;
+	virtual int32_t getStepDuration() const;
 	virtual int32_t getStepSpeed() const;
 	void updateBaseSpeed();
 

@@ -49,7 +49,7 @@ admin_port = "7171"
 url = "http://otland.net"
 
 -- server owner name
-ownername = "peonso"
+ownername = "scopp"
 
 -- server owner email
 owneremail = ""
@@ -233,7 +233,7 @@ max_containers_inside_player_inventory = 100
 max_deepness_of_chain_of_containers = 500
 
 --should OTServ bind only global IP address ?
-bind_only_global_address = true
+bind_only_global_address = false
 
 -- How many items can be stacked in a single tile (all type of tiles)(client side)? DO NOT CHANGE IT UNLESS THAT YOU KNOW WHAT YOU ARE DOING
 max_stack_size = 1000
@@ -375,3 +375,8 @@ guild_war_fee = 1000
 guild_wars_end_only_on_startup = false
 
 
+-- Custom configuration
+
+-- Overrides walk delay after changing floor.
+-- Use -1 for default step value
+floor_change_delay = 150

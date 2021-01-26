@@ -201,8 +201,8 @@ public:
 	int64_t getTimeSinceLastMove() const;
 
 	int64_t getEventStepTicks(bool onlyDelay = false) const;
-	int32_t getStepDuration(Direction dir) const;
-	int32_t getStepDuration() const;
+	virtual int32_t getStepDuration(Direction dir) const;
+	virtual int32_t getStepDuration() const;
 	virtual int32_t getStepSpeed() const {return getSpeed();}
 	int32_t getSpeed() const {return getBaseSpeed() + varSpeed;}
 	void setSpeed(int32_t varSpeedDelta)

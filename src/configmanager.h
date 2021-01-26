@@ -173,6 +173,7 @@ public:
 		GUILD_WARS_END_ONLY_ON_STARTUP,		
 		ENABLE_CAST,
 		MAX_CAST_VIEWERS,		
+		FLOOR_CHANGE_DELAY,
 		LAST_INTEGER_CONFIG /* this must be the last one */
 	};
 
