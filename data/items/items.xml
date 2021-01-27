@@ -11505,6 +11505,22 @@
 		<attribute key="breakChance" value="0"/>
 		<attribute key="ammoAction" value="move"/>
 	</item>
+	<item id="5093" name="stairs">
+		<attribute key="floorchange" value="west"/>
+	</item>
+	<item id="5094" name="stairs">
+		<attribute key="floorchange" value="west"/>
+	</item>
+	<item id="5095" name="stairs">
+		<attribute key="floorchange" value="down"/>
+	</item>
+	<item id="5096" name="stairs">
+		<attribute key="floorchange" value="down"/>
+	</item>
+	<item id="5097" name="stairs">
+		<attribute key="floorchange" value="down"/>
+	</item>
+
 	
 	<item id="20001" name="water" fluidClient="1"/>
 	<item id="20002" name="blood" fluidClient="2"/>
