@@ -66,7 +66,7 @@ bool ScriptingManager::loadScriptSystems()
 	std::string datadir = g_config.getString(ConfigManager::DATA_DIRECTORY);
 
 	//load weapons data
-	std::cout << ":: Loading Weapons ...";
+	std::cout << ":: Loading Weapons... ";
 	if(!g_weapons->loadFromXml(datadir)){
 		ErrorMessage("Unable to load Weapons!");
 		return false;
@@ -76,7 +76,7 @@ bool ScriptingManager::loadScriptSystems()
 	std::cout << "[done]" << std::endl;
 
 	//load spells data
-	std::cout << ":: Loading Spells ...";
+	std::cout << ":: Loading Spells... ";
 	if(!g_spells->loadFromXml(datadir)){
 		ErrorMessage("Unable to load Spells!");
 		return false;
@@ -84,7 +84,7 @@ bool ScriptingManager::loadScriptSystems()
 	std::cout << "[done]" << std::endl;
 
 	//load actions data
-	std::cout << ":: Loading Actions ...";
+	std::cout << ":: Loading Actions... ";
 	if(!g_actions->loadFromXml(datadir)){
 		ErrorMessage("Unable to load Actions!");
 		return false;
@@ -92,7 +92,7 @@ bool ScriptingManager::loadScriptSystems()
 	std::cout << "[done]" << std::endl;
 
 	//load talkactions data
-	std::cout << ":: Loading Talkactions ...";
+	std::cout << ":: Loading Talkactions... ";
 	if(!g_talkactions->loadFromXml(datadir)){
 		ErrorMessage("Unable to load Talkactions!");
 		return false;
@@ -100,7 +100,7 @@ bool ScriptingManager::loadScriptSystems()
 	std::cout << "[done]" << std::endl;
 
 	//load moveEvents
-	std::cout << ":: Loading MoveEvents ...";
+	std::cout << ":: Loading MoveEvents... ";
 	if(!g_moveEvents->loadFromXml(datadir)){
 		ErrorMessage("Unable to load MoveEvents!");
 		return false;
@@ -108,7 +108,7 @@ bool ScriptingManager::loadScriptSystems()
 	std::cout << "[done]" << std::endl;
 
 	//load creature events
-	std::cout << ":: Loading CreatureEvents ...";
+	std::cout << ":: Loading CreatureEvents... ";
 	if(!g_creatureEvents->loadFromXml(datadir)){
 		ErrorMessage("Unable to load CreatureEvents!");
 		return false;
@@ -117,7 +117,7 @@ bool ScriptingManager::loadScriptSystems()
 	
 	#ifdef __GLOBALEVENTS__
 	//load global events
-	std::cout << ":: Loading GlobalEvents ...";
+	std::cout << ":: Loading GlobalEvents... ";
 	if(!g_globalEvents->loadFromXml(datadir)){
 		ErrorMessage("Unable to load GlobalEvents!");
 		return false;

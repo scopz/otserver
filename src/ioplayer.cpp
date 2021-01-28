@@ -527,6 +527,10 @@ bool IOPlayer::savePlayer(Player* player, bool shallow)
 		<< ", `loss_containers` = " << (int32_t)player->getLossPercent(LOSS_CONTAINERS)
 		<< ", `balance` = " << player->balance;
 
+	if (player->removeFrozenSkills) {
+		query << ", `manafreeze` = 0";
+	}
+
 #ifdef __SKULLSYSTEM__
 	query << ", `skull_type` = " << (player->getSkull() == SKULL_RED ? player->getSkull() : 0);
 	query << ", `skull_time` = " << player->lastSkullTime;
@@ -547,6 +551,14 @@ bool IOPlayer::savePlayer(Player* player, bool shallow)
 	for(int32_t i = 0; i <= 6; ++i){
 		query << "UPDATE `player_skills` SET `count` = " << player->skills[i].tries << " WHERE `freeze` = 0 AND `player_id` = " << player->getGUID() << " AND `skillid` = " << i;
 
+		if(!db->executeQuery(query.str())){
+			return false;
+		}
+		query.str("");
+	}
+
+	if (player->removeFrozenSkills) {
+		query << "DELETE FROM `player_skills` WHERE `freeze` = 1 AND `player_id` = " << player->getGUID();
 		if(!db->executeQuery(query.str())){
 			return false;
 		}
@@ -696,7 +708,7 @@ bool IOPlayer::freezeCurrentSkills(const uint32_t &guid)
 	return true;
 }
 
-bool IOPlayer::addFrozenSkills(Player* player)
+bool IOPlayer::addFrozenSkills(Player* player, const bool &onlyCheck)
 {
 	Database* db = Database::instance();
 	DBQuery query;
@@ -704,42 +716,57 @@ bool IOPlayer::addFrozenSkills(Player* player)
 
 	Vocation *voc = player->vocation;
 
+	bool skillsChanged = false;
+
 	query << "SELECT `skillid`, `count` FROM `player_skills` WHERE `freeze` = 1 AND `player_id` = " << player->getGUID();
 	if((result = db->storeQuery(query.str()))){
 		do{
 			int skillid = result->getDataInt("skillid");
 
 			if(skillid >= SKILL_FIRST && skillid <= SKILL_LAST){
-				Skill &skills = player->skills[skillid];
 
-				uint64_t skillCount = skills.tries + result->getDataLong("count");
-				uint32_t skillLevel = voc->getSkillLevel(skillid, skillCount);
-				int32_t percent = voc->getSkillPercent(skillid, skillLevel, skillCount);
+				skillsChanged = true;
+				if (!onlyCheck) {
+					Skill &skills = player->skills[skillid];
 
-				skills.percent = percent<0? 0:percent;
-				skills.level = skillLevel;
-				skills.tries = skillCount;
+					uint64_t skillCount = skills.tries + result->getDataLong("count");
+					uint32_t skillLevel = voc->getSkillLevel(skillid, skillCount);
+					int32_t percent = voc->getSkillPercent(skillid, skillLevel, skillCount);
 
-				voc->adjustMaxSkillCount(skillid, skills.tries, skills.percent);
+					skills.percent = percent<0? 0:percent;
+					skills.level = skillLevel;
+					skills.tries = skillCount;
+
+					voc->adjustMaxSkillCount(skillid, skills.tries, skills.percent);
+				} else break;
 			}
 		}while(result->next());
 		db->freeResult(result);
 	}
 	query.str("");
 
+	if (skillsChanged && onlyCheck)
+		return true;
 
 	query << "SELECT `manafreeze` FROM `players` WHERE `id` = " << player->getGUID();
 	if((result = db->storeQuery(query.str()))){
-		player->manaSpent += (uint64_t)result->getDataLong("manafreeze");
-		player->magLevel = player->vocation->getMagicLevel(player->manaSpent);
-		int32_t magPercent = player->vocation->getMagicLevelPercent(player->magLevel, player->manaSpent);
-		player->magLevelPercent = magPercent < 0? 0 : magPercent;
-		player->vocation->adjustMaxManaSpent(player->manaSpent, player->magLevelPercent);
+		uint64_t manaFrozen = (uint64_t)result->getDataLong("manafreeze");
+		if (manaFrozen > 0) {
+
+			skillsChanged = true;
+			if (!onlyCheck) {
+				player->manaSpent += manaFrozen;
+				player->magLevel = player->vocation->getMagicLevel(player->manaSpent);
+				int32_t magPercent = player->vocation->getMagicLevelPercent(player->magLevel, player->manaSpent);
+				player->magLevelPercent = magPercent < 0? 0 : magPercent;
+				player->vocation->adjustMaxManaSpent(player->manaSpent, player->magLevelPercent);
+			}
+		}
 
 		db->freeResult(result);
 	}
 
-	return true;
+	return skillsChanged;
 }
 
 bool IOPlayer::storeNameByGuid(Database &db, uint32_t guid)

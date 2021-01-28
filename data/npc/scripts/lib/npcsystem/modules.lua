@@ -33,8 +33,6 @@ if(Modules == nil) then
 		
 		}
 	
-	
-	
 	-- These callback function must be called with parameters.npcHandler = npcHandler in the parameters table or they will not work correctly.
 	-- Notice: The members of StdModule have not yet been tested. If you find any bugs, please report them to me.
 	
@@ -116,7 +114,6 @@ if(Modules == nil) then
 	end
 
 	function StdModule.rebirthPlayer(cid, message, keywords, parameters, node)
-		
 		local npcHandler = parameters.npcHandler
 		if(npcHandler == nil) then
 			error('StdModule.promotePlayer called without any npcHandler instance.')
@@ -125,32 +122,107 @@ if(Modules == nil) then
 			return false
 		end
 
-		local oldVoc = getPlayerVocation(cid)
-		local reb = getRebirthVocation(oldVoc)
+		npcHandler:say('You need to be at least level 100, and you will lose all your levels and skills. You\'ll need to start all over again. ' .. 
+			'However, not everything is negative. Do you want to hear the positive part?')
 
+		local node1 = node:addChildKeyword({'yes'}, function()
+			if(cid ~= npcHandler.focus) then return false end
 
-		if oldVoc == 0 then
-			npcHandler:say('You can\'t rebirth!')
-		elseif(reb == 0) then
-			npcHandler:say('You are already reborn!')
-		elseif isPlayerPremiumCallback(cid) == false then
-			npcHandler:say('You need a premium account in order to rebirth.')
-		elseif(getPlayerLevel(cid) < 110) then
-			npcHandler:say('You need to be at least level 110 in order to be reborn.')
-		elseif(doPlayerRemoveMoney(cid, 100000) ~= true) then
-			npcHandler:say('You do not have 100000 gold!')
-		else
-			doSendMagicEffect(getCreaturePosition(cid), CONST_ME_MAGIC_RED)
-			if doPlayerRebirth(cid, reb) then
+			npcHandler:say('Once you reach to Tibia, you will develop as a stronger class. Also, and your lost skills can be recoved back once you reach a least level 110 again. '..
+				'You can see this process as a sacrifice. All your equipment will be sent automatically to your depot. Did you understand?')
+
+			return true;
+		end, {})
+
+		local node2 = node1:addChildKeyword({'yes'}, function()
+			if(cid ~= npcHandler.focus) then return false end
+
+			npcHandler:say('This process is not easy either, it has a cost of 100000 gold coins. DO YOU WANT TO PROCEED?')
+
+			return true;
+		end, {})
+
+		node2:addChildKeyword({'yes'}, function()
+			if(cid ~= npcHandler.focus) then return false end
+
+			local oldVoc = getPlayerVocation(cid)
+			local reb = getRebirthVocation(oldVoc)
+
+			if oldVoc == 0 then
+				npcHandler:say('You can\'t rebirth!')
+
+			elseif reb == 0 then
+				npcHandler:say('You are already reborn!')
+
+			elseif not isPlayerPremiumCallback(cid) then
+				npcHandler:say('You need a premium account in order to rebirth.')
+
+			elseif getPlayerLevel(cid) < 110 then
+				npcHandler:say('You need to be at least level 110 in order to be reborn.')
+
+			elseif not doPlayerRemoveMoney(cid, 100000) then
+				npcHandler:say('You do not have 100000 gold!')
+
+			else
 				doSendMagicEffect(getCreaturePosition(cid), CONST_ME_MAGIC_RED)
-				setFirstItems(cid);
+				if doPlayerRebirth(cid, reb) then
+					doSendMagicEffect(getCreaturePosition(cid), CONST_ME_MAGIC_RED)
+					setFirstItems(cid);
+				end
+				npcHandler:say(parameters.text)
+				npcHandler:releaseFocus()
 			end
-			npcHandler:say(parameters.text)
-			npcHandler:releaseFocus()
+
+			return true;
+		end, {})
+
+		node:addChildKeyword({'no'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = 'Ok, then not.', reset = true})
+		node1:addChildKeyword({'no'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = 'Ok, then not.', reset = true})
+		node2:addChildKeyword({'no'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = 'Ok, then not.', reset = true})
+		return true
+	end
+
+
+	function StdModule.recoverSkills(cid, message, keywords, parameters, node)
+		local npcHandler = parameters.npcHandler
+		if(cid ~= npcHandler.focus) then
+			return false
 		end
 
+		if not isReborn(cid) then
+			npcHandler:say('You haven\'t lost anything yet...')
+			return true
+		end
+
+		npcHandler:say('You will recover the skills you lost when you reborn, but this is not free... It will cost you exactly 50000 gold coins. Are you Sure?')
+
+		node:addChildKeyword({'yes'}, function()
+			if(cid ~= npcHandler.focus) then return false end
+
+			if not canRecoverSkills(cid) then
+				npcHandler:say('You don\'t have anything to recover.')
+
+			elseif not isPlayerPremiumCallback(cid) then
+				npcHandler:say('You need a premium account in order to recover what you lost.')
+
+			elseif getPlayerLevel(cid) < 110 then
+				npcHandler:say('You need to be at least level 110 to recover your skills.')
+
+			elseif not doPlayerRemoveMoney(cid, 50000) then
+				npcHandler:say('You do not have 50000 gold!')
+
+			else
+				doPlayerRecoverSkills(cid)
+				doSendMagicEffect(getCreaturePosition(cid), CONST_ME_MAGIC_RED)
+				npcHandler:say("Done. There you are.")
+			end
+
+			npcHandler:resetNpc()
+			return true;
+		end, {})
+
+		node:addChildKeyword({'no'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = 'Ok, then not.', reset = true})
 		return true
-		
 	end
 
 	
@@ -409,7 +481,6 @@ if(Modules == nil) then
 		table.insert(keywords2, 'bring me to ' .. name)
 		local node = self.npcHandler.keywordHandler:addKeyword(keywords, TravelModule.travel, parameters)
 		self.npcHandler.keywordHandler:addKeyword(keywords2, TravelModule.bringMeTo, parameters)
-		node:addChildKeywordNode(self.yesNode)
 		node:addChildKeywordNode(self.noNode)
 	end
 	
@@ -418,6 +489,7 @@ if(Modules == nil) then
 		if(cid ~= module.npcHandler.focus) then
 			return false
 		end
+		node:addChildKeywordNode(self.yesNode)
 		
 		local npcHandler = module.npcHandler
 		

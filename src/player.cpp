@@ -142,6 +142,7 @@ Player::Player(const std::string& _name, ProtocolGame* p) : Creature()
 		skills[i].tries = 0;
 		skills[i].percent = 0;
 	}
+	removeFrozenSkills = false;
 
 	for(int32_t i = SKILL_FIRST; i <= SKILL_LAST; ++i){
 		varSkills[i] = 0;
@@ -2504,6 +2505,33 @@ bool Player::rebirth(const uint32_t &voc)
 			sendSkills();
 			sendStats();
 
+			return true;
+		}
+	}
+	return false;
+}
+
+bool Player::recoverSkills(const bool &onlyCheck)
+{
+	if (g_config.getBoolean(ConfigManager::REBIRTH_SYSTEM_ENABLED)) {
+
+		// Skills already recovered
+		if (removeFrozenSkills)
+			return false;
+
+		// Player must be reborn
+		if (vocation->getRebirth() != 0)
+			return false;
+
+
+		if (IOPlayer::instance()->addFrozenSkills(this, onlyCheck)) {
+
+			if (!onlyCheck) {
+				removeFrozenSkills = true;
+				sendSkills();
+				sendStats();
+			}
+			
 			return true;
 		}
 	}

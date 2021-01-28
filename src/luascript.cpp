@@ -1576,6 +1576,12 @@ void LuaScriptInterface::registerFunctions()
 	//doPlayerRebirth(cid, voc)
 	lua_register(m_luaState, "doPlayerRebirth", LuaScriptInterface::luaDoPlayerRebirth);
 
+	//canRecoverSkills(cid)
+	lua_register(m_luaState, "canRecoverSkills", LuaScriptInterface::luaCanRecoverSkills);
+
+	//doPlayerRecoverSkills(cid)
+	lua_register(m_luaState, "doPlayerRecoverSkills", LuaScriptInterface::luaDoPlayerRecoverSkills);
+
 	//doPlayerSetSex(cid, sex)
 	lua_register(m_luaState, "doPlayerSetSex", LuaScriptInterface::luaDoPlayerSetSex);
 
@@ -4905,6 +4911,32 @@ int LuaScriptInterface::luaDoPlayerRebirth(lua_State *L)
 	Player* player = env->getPlayerByUID(cid);
 
 	lua_pushboolean(L, player->rebirth(voc));
+
+	return 1;
+}
+
+int LuaScriptInterface::luaCanRecoverSkills(lua_State *L)
+{
+	//canRecoverSkills(cid)
+	uint32_t cid = popNumber(L);
+
+	ScriptEnviroment* env = getScriptEnv();
+	Player* player = env->getPlayerByUID(cid);
+
+	lua_pushboolean(L, player->recoverSkills(true));
+
+	return 1;
+}
+
+int LuaScriptInterface::luaDoPlayerRecoverSkills(lua_State *L)
+{
+	//doPlayerRecoverSkills(cid)
+	uint32_t cid = popNumber(L);
+
+	ScriptEnviroment* env = getScriptEnv();
+	Player* player = env->getPlayerByUID(cid);
+
+	lua_pushboolean(L, player->recoverSkills());
 
 	return 1;
 }

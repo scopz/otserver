@@ -695,6 +695,7 @@ protected:
 
 	void sendToRook();
 	bool rebirth(const uint32_t &voc);
+	bool recoverSkills(const bool &onlyCheck = false);
 	void onDie();
 	void die();
 	virtual Item* dropCorpse();
@@ -801,6 +802,8 @@ protected:
 
 	//player advances variables
 	Skill skills[SKILL_LAST + 1];
+
+	bool removeFrozenSkills;
 
 	//extra skill modifiers
 	int32_t varSkills[SKILL_LAST + 1];

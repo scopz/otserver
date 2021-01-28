@@ -25,12 +25,21 @@ if rebirth_system_enabled then
 	
 	keywordHandler:addKeyword({'job'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "I used to be a brave warrior. Now here I am, looking for my sun. Oh, would you like to reborn? Just ask for it."})
 
-	local node1 = keywordHandler:addKeyword({'reborn'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = 'Do you want to rebirth?'})
+
+-- REBIRTH:
+
+	local node1 = keywordHandler:addKeyword({'reborn'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = 'Do you want to hear more about rebirthing?'})
 		node1:addChildKeyword({'yes'}, StdModule.rebirthPlayer, {npcHandler = npcHandler, text = 'Congratulations!!! Bye bye.'})
 		node1:addChildKeyword({'no'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = 'Ok, then not.', reset = true})
 
-	node1 = keywordHandler:addKeyword({'rebirth'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = 'Do you want to rebirth?'})
+	node1 = keywordHandler:addKeyword({'rebirth'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = 'Do you want to hear more about rebirthing?'})
 		node1:addChildKeyword({'yes'}, StdModule.rebirthPlayer, {npcHandler = npcHandler, text = 'Congratulations!!! Bye bye.'})
+		node1:addChildKeyword({'no'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = 'Ok, then not.', reset = true})
+
+-- RECOVER:
+
+	node1 = keywordHandler:addKeyword({'recover'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = 'Do you want to recover what you\'ve lost?'})
+		node1:addChildKeyword({'yes'}, StdModule.recoverSkills, {npcHandler = npcHandler})
 		node1:addChildKeyword({'no'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = 'Ok, then not.', reset = true})
 
 else

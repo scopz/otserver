@@ -61,7 +61,7 @@ public:
 	  */
 	bool savePlayer(Player* player, bool shallow = false);
 	bool freezeCurrentSkills(const uint32_t &guid);
-	bool addFrozenSkills(Player* player);
+	bool addFrozenSkills(Player* player, const bool &onlyCheck);
 
 	bool addPlayerDeath(Player* dying_player, const DeathList& dl);
 	int32_t getPlayerUnjustKillCount(const Player* player, UnjustKillPeriod_t period);
