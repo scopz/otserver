@@ -2410,6 +2410,7 @@ void ProtocolGame::AddCreatureSpeak(NetworkMessage_ptr msg, const Creature* crea
 		case SPEAK_SAY:
 		case SPEAK_WHISPER:
 		case SPEAK_YELL:
+		case SPEAK_CAST:
 		case SPEAK_MONSTER_SAY:
 		case SPEAK_MONSTER_YELL:
 			assert(creature);

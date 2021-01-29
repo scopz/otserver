@@ -3437,7 +3437,7 @@ bool Game::playerSayTargetPosition(const uint32_t &playerId, const Position &pos
 	AimSpell* spell = g_spells->getAimSpell(text);
 	if (spell && spell->isAimSpell()) {
 		if (spell->castSpell(player, pos)) {
-			return internalCreatureSay(player, SPEAK_SAY, text);
+			return internalCreatureSay(player, SPEAK_CAST, text);
 		}
 	}
 	return false;
@@ -3448,7 +3448,7 @@ bool Game::playerSaySpell(Player* player, SpeakClasses type, const std::string& 
 	std::string words = text;
 	TalkActionResult_t result = g_spells->playerSaySpell(player, type, words);
 	if(result == TALKACTION_BREAK){
-		return internalCreatureSay(player, SPEAK_SAY, words);
+		return internalCreatureSay(player, SPEAK_CAST, words);
 	}
 	else if(result == TALKACTION_FAILED){
 		return true;
