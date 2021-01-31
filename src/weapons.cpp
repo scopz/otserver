@@ -477,6 +477,7 @@ bool Weapon::internalUseWeapon(Player* player, Item* item, Creature* target, int
 	else{
 		int32_t damage = (getWeaponDamage(player, target, item) * damageModifier) / 100;
 		Combat::doCombatHealth(player, target, damage, damage, params);
+		player->useActiveSpellAttack(target);
 	}
 
 	if(g_config.getNumber(ConfigManager::REMOVE_AMMUNITION)){

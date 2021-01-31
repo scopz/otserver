@@ -98,6 +98,7 @@ typedef std::map<uint32_t, uint32_t> MuteCountMap;
 typedef std::map<uint32_t, std::string> ChannelStatementMap;
 typedef std::list<std::string> LearnedInstantSpellList;
 typedef std::list<Party*> PartyList;
+typedef std::function<bool(Creature*, Creature*)> AttackSpellCallback;
 
 #define PLAYER_MAX_SPEED 1500
 #define PLAYER_MIN_SPEED 10
@@ -359,6 +360,10 @@ public:
 	bool isImmune(ConditionType_t type, bool aggressive = true) const;
 	bool hasShield() const;
 	virtual bool isAttackable() const;
+
+	//attackSpells
+	void setAttackSpell(AttackSpellCallback attackSpellCallback, uint32_t usages);
+	bool useActiveSpellAttack(Creature* target);
 
 	virtual void changeHealth(int32_t healthChange);
 	virtual void changeMana(int32_t manaChange);
@@ -778,6 +783,9 @@ protected:
 	bool addAttackSkillPoint;
 	uint64_t lastAttack;
 	int32_t shootRange;
+
+	AttackSpellCallback activeAttackSpellCallback;
+	uint32_t attackSpellUsagesLeft;
 
 	chaseMode_t chaseMode;
 	fightMode_t fightMode;

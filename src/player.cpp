@@ -111,6 +111,9 @@ Player::Player(const std::string& _name, ProtocolGame* p) : Creature()
 	lastAttack = 0;
 	shootRange = 1;
 
+	//activeAttackSpell = NULL;
+	attackSpellUsagesLeft = 0;
+
 	chaseMode = CHASEMODE_STANDSTILL;
 	fightMode = FIGHTMODE_ATTACK;
 	pickUpMode = PICKUPMODE_OFF;
@@ -595,27 +598,10 @@ int32_t Player::getDefense() const
 float Player::getAttackFactor() const
 {
 	switch(fightMode){
-		case FIGHTMODE_ATTACK:
-		{
-			return 1.0f;
-			break;
-		}
-
-		case FIGHTMODE_BALANCED:
-		{
-			return 1.2f;
-			break;
-		}
-
-		case FIGHTMODE_DEFENSE:
-		{
-			return 2.0f;
-			break;
-		}
-
-		default:
-			return 1.0f;
-			break;
+		case FIGHTMODE_ATTACK:   return 1.0f;
+		case FIGHTMODE_BALANCED: return 1.2f;
+		case FIGHTMODE_DEFENSE:  return 2.0f;
+		default:                 return 1.0f;
 	}
 }
 
@@ -4346,6 +4332,27 @@ bool Player::isAttackable() const
 	}
 
 	return true;
+}
+
+void Player::setAttackSpell(AttackSpellCallback attackSpellCallback, uint32_t usages)
+{
+	activeAttackSpellCallback = attackSpellCallback;
+	attackSpellUsagesLeft = usages;
+}
+
+
+bool Player::useActiveSpellAttack(Creature* target)
+{
+	if (attackSpellUsagesLeft > 0) {
+		activeAttackSpellCallback(this, target);
+		attackSpellUsagesLeft--;
+
+		if (attackSpellUsagesLeft == 0) {
+			activeAttackSpellCallback = NULL;
+		}
+		return true;
+	}
+	return false;
 }
 
 void Player::changeHealth(int32_t healthChange)

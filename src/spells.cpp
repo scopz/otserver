@@ -59,16 +59,19 @@ TalkActionResult_t Spells::playerSaySpell(Player* player, SpeakClasses type, std
 	trim_right(str_words, " ");
 
 	InstantSpell* instantSpell = getInstantSpell(str_words);
+
+	if (!instantSpell){
+		instantSpell = getAttackSpell(str_words);
+	}
+
 	if (!instantSpell){
 		instantSpell = getAimSpell(str_words);
-		if (instantSpell && instantSpell->isAimSpell()) {
+		if (instantSpell) {
 			return TALKACTION_REQUIRES_TARGET;
 		}
 		return TALKACTION_CONTINUE;
-
-	} else if (instantSpell->isAimSpell()){
-		return TALKACTION_REQUIRES_TARGET;
 	}
+
 	std::string param = "";
 
 	if (instantSpell->getHasParam()){
@@ -141,6 +144,9 @@ Event* Spells::getEvent(const std::string& nodeName)
 	else if(asLowerCaseString(nodeName) == "aim"){
 		return new AimSpell(&m_scriptInterface);
 	}
+	else if(asLowerCaseString(nodeName) == "attack"){
+		return new AttackSpell(&m_scriptInterface);
+	}
 	else{
 		return NULL;
 	}
@@ -149,12 +155,21 @@ Event* Spells::getEvent(const std::string& nodeName)
 bool Spells::registerEvent(Event* event, xmlNodePtr p)
 {
 	AimSpell* aim = dynamic_cast<AimSpell*>(event);
+	AttackSpell* attack = dynamic_cast<AttackSpell*>(event);
 	InstantSpell* instant = dynamic_cast<InstantSpell*>(event);
 	RuneSpell* rune = dynamic_cast<RuneSpell*>(event);
 
-	if(aim){
-			if(aimables.find(aim->getWords()) != aimables.end())
-			{
+	if(attack){
+			if(attacks.find(attack->getWords()) != attacks.end()) {
+				std::cout << "[Warning - Spells::registerEvent] Duplicate registered attack spell with id: " << attack->getWords() << std::endl;
+				return false;
+			}
+
+			attacks[attack->getWords()] = attack;
+			return true;
+		}
+	else if(aim){
+			if(aimables.find(aim->getWords()) != aimables.end()) {
 				std::cout << "[Warning - Spells::registerEvent] Duplicate registered aim spell with id: " << aim->getWords() << std::endl;
 				return false;
 			}
@@ -163,8 +178,7 @@ bool Spells::registerEvent(Event* event, xmlNodePtr p)
 			return true;
 		}
 	else if(instant){
-		if(instants.find(instant->getWords()) != instants.end())
-		{
+		if(instants.find(instant->getWords()) != instants.end()) {
 			std::cout << "[Warning - Spells::registerEvent] Duplicate registered instant spell with words: " << instant->getWords() << std::endl;
 			return false;
 		}
@@ -173,8 +187,7 @@ bool Spells::registerEvent(Event* event, xmlNodePtr p)
 		return true;
 	}
 	else if(rune){
-		if(runes.find(rune->getRuneItemId()) != runes.end())
-		{
+		if(runes.find(rune->getRuneItemId()) != runes.end()) {
 			std::cout << "[Warning - Spells::registerEvent] Duplicate registered rune with id: " << rune->getRuneItemId() << std::endl;
 			return false;
 		}
@@ -299,6 +312,26 @@ AimSpell* Spells::getAimSpell(const std::string& words)
 
     if(result && words.length() > result->getWords().length())
     {
+        std::string param = words.substr(result->getWords().length(), words.length());
+        if(param[0] != ' ' || (param.length() > 1 && param[1] != '"'))
+            return NULL;
+    }
+
+    return result;
+}
+
+AttackSpell* Spells::getAttackSpell(const std::string& words)
+{
+	AttackSpell* result = NULL;
+    for(AttacksMap::iterator it = attacks.begin(); it != attacks.end(); ++it) {
+        AttackSpell* attackSpell = it->second;
+        if(!asLowerCaseString(words).compare(0, attackSpell->getWords().length(), asLowerCaseString(attackSpell->getWords()))) {
+            if(!result || attackSpell->getWords().length() > result->getWords().length())
+                result = attackSpell;
+        }
+    }
+
+    if(result && words.length() > result->getWords().length()) {
         std::string param = words.substr(result->getWords().length(), words.length());
         if(param[0] != ' ' || (param.length() > 1 && param[1] != '"'))
             return NULL;
@@ -1037,7 +1070,6 @@ TalkAction(_interface)
 	hasParam = false;
 	checkLineOfSight = true;
 	function = NULL;
-	aimSpell = false;
 }
 
 InstantSpell::~InstantSpell()
@@ -2408,7 +2440,6 @@ AimSpell::AimSpell(LuaScriptInterface* _interface) :
 		InstantSpell(_interface)
 {
 	useType = NONE;
-	aimSpell = true;
 }
 
 AimSpell::~AimSpell()
@@ -2492,9 +2523,58 @@ bool AimSpell::castSpell(Player* player, const Position &toPos)
 	return result;
 }
 
-bool AimSpell::internalCastSpell(Creature* creature, const LuaVariant& var)
+AttackSpell::AttackSpell(LuaScriptInterface* _interface) :
+		InstantSpell(_interface)
+{
+	usages = 0;
+}
+
+AttackSpell::~AttackSpell()
+{
+}
+
+bool AttackSpell::configureEvent(xmlNodePtr p)
+{
+	if(!Spell::configureSpell(p)){
+		return false;
+	}
+
+	if(!TalkAction::configureEvent(p)){
+		return false;
+	}
+
+	int intValue;
+	if(readXMLInteger(p, "usages", intValue)){
+		usages = intValue;
+	}
+
+	return true;
+}
+
+bool AttackSpell::playerCastInstant(Player* player, const std::string& param)
+{
+	if(!playerSpellCheck(player)){
+		return false;
+	}
+
+	g_game.addMagicEffect(player->getPosition(), NM_ME_MAGIC_BLOOD);
+
+	player->setAttackSpell([this](Creature* creature, Creature* target){
+		return internalCastSpell(creature, target);
+	}, usages);
+
+	postCastSpell(player);
+	return true;
+}
+
+
+
+bool AttackSpell::internalCastSpell(Creature* creature, Creature* target)
 {
 	bool result = false;
+	LuaVariant var;
+	var.type = VARIANT_NUMBER;
+	var.number = target->getID();
 
 	if(m_scripted){
 		result = executeCastSpell(creature, var);

@@ -463,87 +463,60 @@ bool Combat::setParam(CombatParam_t param, uint32_t value)
 {
 	switch(param){
 		case COMBATPARAM_COMBATTYPE:
-		{
 			params.combatType = (CombatType_t)value;
 			return true;
-		}
 
 		case COMBATPARAM_EFFECT:
-		{
 			params.impactEffect = (uint8_t)value;
 			return true;
-		}
 
 		case COMBATPARAM_DISTANCEEFFECT:
-		{
 			params.distanceEffect = (uint8_t)value;
 			return true;
-		}
 
 		case COMBATPARAM_BLOCKEDBYARMOR:
-		{
 			params.blockedByArmor = (value != 0);
 			return true;
-		}
 
 		case COMBATPARAM_BLOCKEDBYSHIELD:
-		{
 			params.blockedByShield = (value != 0);
 			return true;
-		}
 
 		case COMBATPARAM_TARGETCASTERORTOPMOST:
-		{
 			params.targetCasterOrTopMost = (value != 0);
 			return true;
-		}
 
 		case COMBATPARAM_CREATEITEM:
-		{
 			params.itemId = value;
 			return true;
-		}
 
 		case COMBATPARAM_AGGRESSIVE:
-		{
 			params.isAggressive = (value != 0);
 			return true;
-		}
 
 		case COMBATPARAM_DISPEL:
-		{
 			params.dispelType = (ConditionType_t)value;
 			return true;
-		}
 
 		case COMBATPARAM_USECHARGES:
-		{
 			params.useCharges = (value != 0);
 			return true;
-		}
 
 		case COMBATPARAM_HITEFFECT:
-		{
 			params.hitEffect = (MagicEffectClasses)value;
 			return true;
-		}
+
 
 		case COMBATPARAM_HITTEXTCOLOR:
-		{
 			params.hitTextColor = (TextColor_t)value;
 			return true;
-		}
 
 		case COMBATPARAM_PZBLOCK:
-		{
 			params.pzBlock = (value != 0);
 			return true;
-		}
 
 		default:
-		{
 			break;
-		}
 	}
 
 	return false;
@@ -1127,24 +1100,39 @@ void ValueCallback::getMinMaxValues(Player* player, int32_t& min, int32_t& max, 
 
 			case FORMULA_SKILL:
 			{
-				//"onGetPlayerMinMaxValues"(cid, attackSkill, attackValue, attackFactor)
-				Item* tool = player->getWeapon();
+				//"onGetPlayerMinMaxValues"(cid, level, attackSkill, attackValue, attackFactor)
+				Item* tool = player->getWeapon(true);
 				int32_t attackSkill = player->getWeaponSkill(tool);
-				int32_t attackValue = g_config.getNumber(ConfigManager::FIST_STRENGTH);
-				if(tool){
-					attackValue = tool->getAttack();
+				int32_t attackValue = 0;
 
-					if(useCharges && tool->hasCharges() && g_config.getNumber(ConfigManager::REMOVE_WEAPON_CHARGES)){
-						int32_t newCharge = std::max(0, tool->getCharges() - 1);
-						g_game.transformItem(tool, tool->getID(), newCharge);
+				if (tool) {
+					if (tool->getWeaponType() == WEAPON_DIST && tool->getAmuType() != AMMO_NONE) {
+						attackValue += tool->getAttack();
+						tool = player->getWeapon();
+					}
+
+					if(tool){
+						attackValue += tool->getAttack();
+
+						if(useCharges && tool->hasCharges() && g_config.getNumber(ConfigManager::REMOVE_WEAPON_CHARGES)){
+							int32_t newCharge = std::max(0, tool->getCharges() - 1);
+							g_game.transformItem(tool, tool->getID(), newCharge);
+						}
 					}
 				}
+
+				if (!tool) {
+					attackSkill = player->getSkillLevel(SKILL_FIST);
+					attackValue = g_config.getNumber(ConfigManager::FIST_STRENGTH);
+				}
+
 				float attackFactor = player->getAttackFactor();
 
+				lua_pushnumber(L, player->getLevel());
 				lua_pushnumber(L, attackSkill);
 				lua_pushnumber(L, attackValue);
 				lua_pushnumber(L, attackFactor);
-				parameters += 3;
+				parameters += 4;
 				break;
 			}
 
