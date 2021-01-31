@@ -2026,7 +2026,9 @@ Condition(_id, _type, _duration), relatedItem(_item)
 
 uint16_t ConditionFrozen::getIcons() const
 {
-	return ICON_FROZEN;
+	uint16_t icons = Condition::getIcons();
+	icons |= ICON_FROZEN;
+	return icons;
 }
 
 bool ConditionFrozen::startCondition(Creature* creature)
@@ -2040,4 +2042,26 @@ bool ConditionFrozen::startCondition(Creature* creature)
 	}));
 
 	return Condition::startCondition(creature);
+}
+
+
+ConditionBuff::ConditionBuff(ConditionId_t _id, ConditionType_t _type, int32_t _duration) :
+Condition(_id, _type, _duration)
+{
+}
+
+uint16_t ConditionBuff::getIcons() const
+{
+	uint16_t icons = Condition::getIcons();
+
+	switch(conditionType){
+		case CONDITION_BUFF_ATTACK:
+			icons |= ICON_ATTACK_BUFF;
+			break;
+
+		default:
+			break;
+	}
+
+	return icons;
 }

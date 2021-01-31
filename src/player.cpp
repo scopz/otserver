@@ -4338,6 +4338,7 @@ void Player::setAttackSpell(AttackSpellCallback attackSpellCallback, uint32_t us
 {
 	activeAttackSpellCallback = attackSpellCallback;
 	attackSpellUsagesLeft = usages;
+	addCondition(new ConditionBuff(CONDITIONID_COMBAT, CONDITION_BUFF_ATTACK, -1));
 }
 
 
@@ -4349,6 +4350,7 @@ bool Player::useActiveSpellAttack(Creature* target)
 
 		if (attackSpellUsagesLeft == 0) {
 			activeAttackSpellCallback = NULL;
+			removeCondition(CONDITION_BUFF_ATTACK);
 		}
 		return true;
 	}

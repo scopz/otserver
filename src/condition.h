@@ -52,6 +52,7 @@ enum ConditionType_t {
 	CONDITION_REGENERATION_MANA = 1 << 15,
 	CONDITION_MUTED             = 1 << 16,
 	CONDITION_ATTRIBUTES        = 1 << 17,
+	CONDITION_BUFF_ATTACK       = 1 << 18,
 	//CONDITION_FREEZING          = 1 << 18,
 	//CONDITION_DAZZLED           = 1 << 19,
 	//CONDITION_CURSED            = 1 << 20,
@@ -429,9 +430,7 @@ public:
 	virtual ~ConditionFrozen(){};
 
 	virtual bool startCondition(Creature* creature);
-	uint16_t getIcons() const;
-	virtual bool executeCondition(Creature* creature, int32_t interval)
-		{ return Condition::executeCondition(creature, interval); };
+	virtual uint16_t getIcons() const;
 	virtual void endCondition(Creature* creature, ConditionEnd_t reason) {};
 	virtual void addCondition(Creature* creature, const Condition* addCondition) {};
 	virtual bool setParam(ConditionParam_t param, int32_t value) { return true; };
@@ -439,8 +438,22 @@ public:
 	virtual ConditionFrozen* clone()  const { return new ConditionFrozen(*this); }
 
 
-protected:
+private:
 	Item* relatedItem;
+};
+
+
+class ConditionBuff: public Condition
+{
+public:
+	ConditionBuff(ConditionId_t _id, ConditionType_t _type, int32_t _duration);
+	virtual ~ConditionBuff(){};
+
+	virtual uint16_t getIcons() const;
+
+	virtual void endCondition(Creature* creature, ConditionEnd_t reason) {};
+	virtual void addCondition(Creature* creature, const Condition* addCondition) {};
+	virtual ConditionBuff* clone() const { return new ConditionBuff(*this); }
 };
 
 #endif
