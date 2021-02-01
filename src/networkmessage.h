@@ -191,6 +191,8 @@ public:
 	bool isOverrun(){ return m_overrun; };
 
 	char* getBuffer() { return (char*)&m_MsgBuf[0]; }
+	//uint8_t* getBuffer() { return m_MsgBuf; }
+	const uint8_t* getBuffer() const { return m_MsgBuf; }
 	char* getBodyBuffer() { m_ReadPos = 2; return (char*)&m_MsgBuf[header_length]; }
 
 #ifdef __TRACK_NETWORK__

@@ -87,18 +87,15 @@ void Protocol::onRecvMessage(NetworkMessage& msg)
 	parsePacket(msg);
 }
 
-OutputMessage_ptr Protocol::getOutputBuffer()
+OutputMessage_ptr Protocol::getOutputBuffer(int32_t size)
 {
-	if(m_outputBuffer && m_outputBuffer->getMessageLength() < NETWORKMESSAGE_MAXSIZE - 8192){
-		return m_outputBuffer;
-	}
-	else if(m_connection){
+	if (!m_outputBuffer) {
 		m_outputBuffer = OutputMessagePool::getInstance()->getOutputMessage(this);
-		return m_outputBuffer;
+	} else if ((m_outputBuffer->getMessageLength() + size) > NETWORKMESSAGE_MAXSIZE) {
+		OutputMessagePool::getInstance()->send(m_outputBuffer);
+		m_outputBuffer = OutputMessagePool::getInstance()->getOutputMessage(this);
 	}
-	else{
-		return OutputMessage_ptr();
-	}
+	return m_outputBuffer;
 }
 
 void Protocol::releaseProtocol()

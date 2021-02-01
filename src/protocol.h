@@ -71,8 +71,7 @@ public:
 	int32_t unRef() {return --m_refCount;}
 
 protected:
-	//Use this function for autosend messages only
-	OutputMessage_ptr getOutputBuffer();
+	OutputMessage_ptr getOutputBuffer(int32_t size);
 
 	void enableXTEAEncryption() { m_encryptionEnabled = true; }
 	void disableXTEAEncryption() { m_encryptionEnabled = false; }

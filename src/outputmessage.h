@@ -62,6 +62,22 @@ public:
 		m_outputBufferStart = 0;
 	}
 
+	void append(const NetworkMessage& msg)
+	{
+		int32_t msgLen = msg.getMessageLength();
+		memcpy(m_MsgBuf + m_ReadPos, msg.getBuffer() + 4, msgLen);
+		m_ReadPos += msgLen;
+		m_MsgSize += msgLen;
+	}
+
+	void append(const OutputMessage_ptr& msg)
+	{
+		int32_t msgLen = msg->getMessageLength();
+		memcpy(m_MsgBuf + m_ReadPos, msg->getBuffer() + 4, msgLen);
+		m_ReadPos += msgLen;
+		m_MsgSize += msgLen;
+	}
+
 	enum OutputMessageState{
 		STATE_FREE,
 		STATE_ALLOCATED,
