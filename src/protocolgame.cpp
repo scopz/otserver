@@ -296,6 +296,8 @@ bool ProtocolGame::logout(bool forced)
 void ProtocolGame::writeToOutputBuffer(const NetworkMessage& msg)
 {
 	OutputMessage_ptr out = getOutputBuffer(msg.getMessageLength());
+	if (msg.isPriorized()) out->priorize();
+	
 	TRACK_MESSAGE(out);
 	out->append(msg);
 }
@@ -1870,8 +1872,9 @@ void ProtocolGame::sendMoveCreature(const Creature* creature, const Tile* newTil
 		if(teleport || oldStackPos >= 10){
 			RemoveTileItem(msg, oldPos, oldStackPos);
 			AddMapDescription(msg, newPos);
-		}
-		else{
+
+		} else {
+			msg.priorize();
 			if(oldPos.z == 7 && newPos.z >= 8){
 				RemoveTileItem(msg, oldPos, oldStackPos);
 			}

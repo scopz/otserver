@@ -122,7 +122,7 @@ void OutputMessagePool::sendAll()
 		bool v = 1;
 		#else
 		//It will send only messages bigger then 1 kb or with a lifetime greater than 10 ms
-		bool v = omsg->getMessageLength() > 1024 || (m_frameTime - omsg->getFrame() > 10);
+		bool v = omsg->getMessageLength() > 1024 || omsg->m_priorize || (m_frameTime - omsg->getFrame() > 10);
 		#endif
 		if(v){
 			#ifdef __DEBUG_NET_DETAIL__

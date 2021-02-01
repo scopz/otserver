@@ -1446,7 +1446,8 @@ void Tile::postAddNotification(Thing* thing, const Cylinder* oldParent, int32_t 
 				fromTile = oldParent->getTile();
 			}
 
-			g_moveEvents->onCreatureMove(creature, fromTile, this, true);
+			if (!hasFlag(TILESTATE_TELEPORT) && !getTeleportItem())
+				g_moveEvents->onCreatureMove(creature, fromTile, this, true);
 		}
 		else{
 			item = thing->getItem();

@@ -49,10 +49,14 @@ public:
 protected:
 	void Reset(){
 		m_overrun = false;
+		m_priorize = false;
 		m_MsgSize = 0;
 		m_ReadPos = 4;
 	}
 public:
+	void priorize() {
+		m_priorize = true;
+	}
 
 	// simply read functions for incoming message
 	uint8_t  GetByte(){
@@ -189,9 +193,9 @@ public:
 	int32_t decodeHeader();
 	
 	bool isOverrun(){ return m_overrun; };
+	bool isPriorized() const { return m_priorize; };
 
-	char* getBuffer() { return (char*)&m_MsgBuf[0]; }
-	//uint8_t* getBuffer() { return m_MsgBuf; }
+	uint8_t* getBuffer() { return m_MsgBuf; }
 	const uint8_t* getBuffer() const { return m_MsgBuf; }
 	char* getBodyBuffer() { m_ReadPos = 2; return (char*)&m_MsgBuf[header_length]; }
 
@@ -219,6 +223,7 @@ protected:
 	int32_t m_ReadPos;
 	
 	bool m_overrun;
+	bool m_priorize;
 
 	uint8_t m_MsgBuf[NETWORKMESSAGE_MAXSIZE];
 };
