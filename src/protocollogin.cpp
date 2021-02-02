@@ -52,8 +52,8 @@ void ProtocolLogin::disconnectClient(uint8_t error, const char* message)
 	OutputMessage_ptr output = OutputMessagePool::getInstance()->getOutputMessage(this, false);
 	if(output){
 		TRACK_MESSAGE(output);
-		output->AddByte(error);
-		output->AddString(message);
+		output->addByte(error);
+		output->addString(message);
 		OutputMessagePool::getInstance()->send(output);
 	}
 	getConnection()->closeConnection();
@@ -68,9 +68,9 @@ bool ProtocolLogin::parseFirstPacket(NetworkMessage& msg)
 
 	uint32_t clientip = getConnection()->getIP();
 
-	/*uint16_t clientos =*/ msg.GetU16();
-	uint16_t version  = msg.GetU16();
-	msg.SkipBytes(12);
+	/*uint16_t clientos =*/ msg.getU16();
+	uint16_t version  = msg.getU16();
+	msg.skipBytes(12);
 
 	if(version <= 760){
 		disconnectClient(0x0A, STRING_CLIENT_VERSION);
@@ -82,15 +82,15 @@ bool ProtocolLogin::parseFirstPacket(NetworkMessage& msg)
 	}
 
 	uint32_t key[4];
-	key[0] = msg.GetU32();
-	key[1] = msg.GetU32();
-	key[2] = msg.GetU32();
-	key[3] = msg.GetU32();
+	key[0] = msg.getU32();
+	key[1] = msg.getU32();
+	key[2] = msg.getU32();
+	key[3] = msg.getU32();
 	enableXTEAEncryption();
 	setXTEAKey(key);
 
-	uint32_t accnumber = msg.GetU32();
-	std::string password = msg.GetString();
+	uint32_t accnumber = msg.getU32();
+	std::string password = msg.getString();
 
 	if(accnumber == 0){
 		disconnectClient(0x0A, "You must enter your account number.");
@@ -142,22 +142,22 @@ bool ProtocolLogin::parseFirstPacket(NetworkMessage& msg)
 		TRACK_MESSAGE(output);
 		//Add MOTD
 		std::stringstream motd;
-		output->AddByte(0x14);
+		output->addByte(0x14);
 		motd << g_config.getNumber(ConfigManager::MOTD_NUM) << "\n";
 		motd << g_config.getString(ConfigManager::MOTD);
-		output->AddString(motd.str());
+		output->addString(motd.str());
 		//Add char list
-		output->AddByte(0x64);
-		output->AddByte((uint8_t)account.charList.size());
+		output->addByte(0x64);
+		output->addByte((uint8_t)account.charList.size());
 		std::list<std::string>::iterator it;
 		for(it = account.charList.begin(); it != account.charList.end(); ++it){
-			output->AddString((*it));
-			output->AddString(g_config.getString(ConfigManager::WORLD_NAME));
-			output->AddU32(serverip);
-			output->AddU16(g_config.getNumber(ConfigManager::GAME_PORT));
+			output->addString((*it));
+			output->addString(g_config.getString(ConfigManager::WORLD_NAME));
+			output->addU32(serverip);
+			output->addU16(g_config.getNumber(ConfigManager::GAME_PORT));
 		}
 		//Add premium days
-		output->AddU16(Account::getPremiumDaysLeft(account.premEnd));
+		output->addU16(Account::getPremiumDaysLeft(account.premEnd));
 
 		OutputMessagePool::getInstance()->send(output);
 	}

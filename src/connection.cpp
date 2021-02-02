@@ -355,7 +355,7 @@ void Connection::parsePacket(const boost::system::error_code& error)
 		}
 		else{
 			// Skip protocol ID
-			m_msg.GetByte();
+			m_msg.getByte();
 		}
 		m_protocol->onRecvFirstMessage(m_msg);
 	}

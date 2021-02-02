@@ -67,17 +67,17 @@ void ProtocolStatus::onRecvFirstMessage(NetworkMessage& msg)
 
 	ipConnectMap[getIP()] = OTSYS_TIME();
 
-	switch(msg.GetByte()){
+	switch(msg.getByte()){
 	//XML info protocol
 	case 0xFF:
 	{
-		if(msg.GetRaw() == "info"){
+		if(msg.getRaw() == "info"){
 			OutputMessage_ptr output = OutputMessagePool::getInstance()->getOutputMessage(this, false);
 			if(output){
 				TRACK_MESSAGE(output);
 				Status* status = Status::instance();
 				std::string str = status->getStatusString();
-				output->AddBytes(str.c_str(), str.size());
+				output->addBytes(str.c_str(), str.size());
 				setRawMessages(true); // we dont want the size header, nor encryption
 				OutputMessagePool::getInstance()->send(output);
 			}
@@ -87,7 +87,7 @@ void ProtocolStatus::onRecvFirstMessage(NetworkMessage& msg)
 	//Another ServerInfo protocol
 	case 0x01:
 	{
-		uint32_t requestedInfo = msg.GetU16(); //Only a Byte is necessary, though we could add new infos here
+		uint32_t requestedInfo = msg.getU16(); //Only a Byte is necessary, though we could add new infos here
 
 		OutputMessage_ptr output = OutputMessagePool::getInstance()->getOutputMessage(this, false);
 		if(output){
@@ -245,83 +245,83 @@ void Status::getInfo(uint32_t requestedInfo, OutputMessage_ptr output, NetworkMe
 	// properties of the server, such serverinfo, playersinfo and so
 
 	if(requestedInfo & REQUEST_BASIC_SERVER_INFO){
-		output->AddByte(0x10); // server info
-		output->AddString(g_config.getString(ConfigManager::SERVER_NAME).c_str());
-		output->AddString(g_config.getString(ConfigManager::IP).c_str());
+		output->addByte(0x10); // server info
+		output->addString(g_config.getString(ConfigManager::SERVER_NAME).c_str());
+		output->addString(g_config.getString(ConfigManager::IP).c_str());
 		ss << g_config.getNumber(ConfigManager::LOGIN_PORT);
-		output->AddString(ss.str().c_str());
+		output->addString(ss.str().c_str());
 		ss.str("");
 	}
 
 	if(requestedInfo & REQUEST_OWNER_SERVER_INFO){
-		output->AddByte(0x11); // server info - owner info
-		output->AddString(g_config.getString(ConfigManager::OWNER_NAME).c_str());
-		output->AddString(g_config.getString(ConfigManager::OWNER_EMAIL).c_str());
+		output->addByte(0x11); // server info - owner info
+		output->addString(g_config.getString(ConfigManager::OWNER_NAME).c_str());
+		output->addString(g_config.getString(ConfigManager::OWNER_EMAIL).c_str());
 	}
 
 	if(requestedInfo & REQUEST_MISC_SERVER_INFO){
-		output->AddByte(0x12); // server info - misc
-		output->AddString(g_config.getString(ConfigManager::MOTD).c_str());
-		output->AddString(g_config.getString(ConfigManager::LOCATION).c_str());
-		output->AddString(g_config.getString(ConfigManager::URL).c_str());
-		output->AddU32((uint32_t)(running >> 32)); // this method prevents a big number parsing
-		output->AddU32((uint32_t)(running));       // since servers can be online for months ;)
+		output->addByte(0x12); // server info - misc
+		output->addString(g_config.getString(ConfigManager::MOTD).c_str());
+		output->addString(g_config.getString(ConfigManager::LOCATION).c_str());
+		output->addString(g_config.getString(ConfigManager::URL).c_str());
+		output->addU32((uint32_t)(running >> 32)); // this method prevents a big number parsing
+		output->addU32((uint32_t)(running));       // since servers can be online for months ;)
 	}
 
 	/*
 	// COMPLETELY breaks backwards-compatibility
 	if(requestedInfo & REQUEST_RATES_SERVER_INFO){
-		output->AddByte(0x13); // server info - rates
-		output->AddU16(g_config.getNumber(ConfigManager::RATE_EXPERIENCE));
-		output->AddU16(g_config.getNumber(ConfigManager::RATE_MAGIC));
-		output->AddU16(g_config.getNumber(ConfigManager::RATE_SKILL));
-		output->AddU16(g_config.getNumber(ConfigManager::RATE_LOOT));
-		output->AddU16(g_config.getNumber(ConfigManager::RATE_SPAWN));
+		output->addByte(0x13); // server info - rates
+		output->addU16(g_config.getNumber(ConfigManager::RATE_EXPERIENCE));
+		output->addU16(g_config.getNumber(ConfigManager::RATE_MAGIC));
+		output->addU16(g_config.getNumber(ConfigManager::RATE_SKILL));
+		output->addU16(g_config.getNumber(ConfigManager::RATE_LOOT));
+		output->addU16(g_config.getNumber(ConfigManager::RATE_SPAWN));
 	}
 	*/
 	if(requestedInfo & REQUEST_PLAYERS_INFO){
-		output->AddByte(0x20); // players info
-		output->AddU32(m_playersonline);
-		output->AddU32(g_config.getNumber(ConfigManager::MAX_PLAYERS));
-		output->AddU32(m_playerspeak);
+		output->addByte(0x20); // players info
+		output->addU32(m_playersonline);
+		output->addU32(g_config.getNumber(ConfigManager::MAX_PLAYERS));
+		output->addU32(m_playerspeak);
 	}
 
 	if(requestedInfo & REQUEST_MAP_INFO){
-		output->AddByte(0x30); // map info
-		output->AddString(m_mapname.c_str());
-		output->AddString(m_mapauthor.c_str());
+		output->addByte(0x30); // map info
+		output->addString(m_mapname.c_str());
+		output->addString(m_mapauthor.c_str());
 		uint32_t mapWidth, mapHeight;
 		g_game.getMapDimensions(mapWidth, mapHeight);
-		output->AddU16(mapWidth);
-		output->AddU16(mapHeight);
+		output->addU16(mapWidth);
+		output->addU16(mapHeight);
 	}
 
 	if(requestedInfo & REQUEST_EXT_PLAYERS_INFO){
-		output->AddByte(0x21); // players info - online players list
-		output->AddU32(m_playersonline);
+		output->addByte(0x21); // players info - online players list
+		output->addU32(m_playersonline);
 		for(AutoList<Player>::listiterator it = Player::listPlayer.list.begin(); it != Player::listPlayer.list.end(); ++it){
 			//Send the most common info
-			output->AddString(it->second->getName());
-			output->AddU32(it->second->getLevel());
+			output->addString(it->second->getName());
+			output->addU32(it->second->getLevel());
 		}
 	}
 
 	if(requestedInfo & REQUEST_PLAYER_STATUS_INFO){
-		output->AddByte(0x22); // players info - online status info of a player
-		const std::string name = msg.GetString();
+		output->addByte(0x22); // players info - online status info of a player
+		const std::string name = msg.getString();
 		if(g_game.getPlayerByName(name) != NULL){
-			output->AddByte(0x01);
+			output->addByte(0x01);
 		}
 		else{
-			output->AddByte(0x00);
+			output->addByte(0x00);
 		}
 	}
 
 	if(requestedInfo & REQUEST_SERVER_SOFTWARE_INFORMATION){
-		output->AddByte(0x23); // server software info
-		output->AddString(OTSERV_NAME);
-		output->AddString(OTSERV_VERSION);
-		output->AddString(OTSERV_CLIENT_VERSION);
+		output->addByte(0x23); // server software info
+		output->addString(OTSERV_NAME);
+		output->addString(OTSERV_VERSION);
+		output->addString(OTSERV_CLIENT_VERSION);
 	}
 
 	return;

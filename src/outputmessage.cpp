@@ -231,7 +231,7 @@ OutputMessage_ptr OutputMessagePool::getOutputMessage(Protocol* protocol, bool a
 void OutputMessagePool::configureOutputMessage(OutputMessage_ptr msg, Protocol* protocol, bool autosend)
 {
 	TRACK_MESSAGE(msg);
-	msg->Reset();
+	msg->reset();
 	if(autosend){
 		msg->setState(OutputMessage::STATE_ALLOCATED);
 		m_autoSendOutputMessages.push_back(msg);

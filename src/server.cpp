@@ -225,7 +225,7 @@ void ServicePort::onAccept(boost::asio::ip::tcp::socket* socket, const boost::sy
 
 Protocol* ServicePort::make_protocol(bool checksummed, NetworkMessage& msg) const
 {
-	uint8_t protocolId = msg.GetByte();
+	uint8_t protocolId = msg.getByte();
 	for(std::vector<Service_ptr>::const_iterator it = m_services.begin(); it != m_services.end(); ++it)
 	{
 		Service_ptr service = *it;

@@ -130,7 +130,7 @@ void Protocol::XTEA_encrypt(OutputMessage& msg)
 	uint32_t n;
 	if((messageLength % 8) != 0){
 		n = 8 - (messageLength % 8);
-		msg.AddPaddingBytes(n);
+		msg.addPaddingBytes(n);
 		messageLength = messageLength + n;
 	}
 
@@ -179,7 +179,7 @@ bool Protocol::XTEA_decrypt(NetworkMessage& msg)
 		read_pos = read_pos + 2;
 	}
 
-	int tmp = msg.GetU16();
+	int tmp = msg.getU16();
 	if (tmp > msg.getMessageLength() - 4){
 		std::cout << "Failure: [Protocol::XTEA_decrypt]. Not valid unencrypted message size"
 			<< std::endl;
@@ -208,7 +208,7 @@ bool Protocol::RSA_decrypt(RSA* rsa, NetworkMessage& msg)
 		return false;
 	}
 
-	if(msg.GetByte() != 0){
+	if(msg.getByte() != 0){
 #ifdef __DEBUG_NET_DETAIL__
 		std::cout << "Warning: [Protocol::RSA_decrypt]. First byte != 0" << std::endl;
 #endif
