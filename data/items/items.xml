@@ -5599,7 +5599,7 @@
 	<item id="2543" article="a" name="bolt" plural="bolts">
 		<attribute key="weight" value="80"/>
 		<attribute key="slotType" value="ammo"/>
-		<attribute key="attack" value="30"/>
+		<attribute key="attack" value="32"/>
 		<attribute key="weaponType" value="ammunition"/>
 		<attribute key="ammoType" value="bolt"/>
 		<attribute key="shootType" value="bolt"/>

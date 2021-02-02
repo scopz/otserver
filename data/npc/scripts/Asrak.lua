@@ -69,6 +69,7 @@ spellSellModule:addSpellStock({
 	'Conjure Explosive Arrow',
 	'Invisibility',
 	'Light',
+	'Conjure Bolt',
 	'Conjure Arrow',
 })
 

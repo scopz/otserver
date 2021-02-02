@@ -255,7 +255,7 @@
 		<vocation id="2"/>
 		<vocation id="3"/>
 	</conjure>
-	<conjure name="Conjure Bolt" words="exevo con mort" price="750" maglv="6" needlearn="1" lvl="17" mana="140" soul="2" conjureId="2543" conjureCount="10" function="conjureItem">
+	<conjure name="Conjure Bolt" words="exevo con mort" price="750" maglv="6" needlearn="1" lvl="17" mana="110" soul="2" conjureId="2543" conjureCount="15" function="conjureItem">
 		<vocation id="3"/>
 	</conjure>
 	<conjure name="Energy Field" words="adevo grav vis" price="700" maglv="5" needlearn="1" lvl="18" mana="320" soul="2" reagentId="2260" conjureId="2277" conjureCount="3" function="conjureRune">

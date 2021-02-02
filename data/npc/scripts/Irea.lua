@@ -43,6 +43,7 @@ spellSellModule.condition = function(cid) return isPaladin(cid) end
 spellSellModule.conditionFailText = "Sorry, I only sell spells to paladins."
 spellSellModule.listPreText = "I teach"
 spellSellModule:addSpellStock({
+	'Conjure Bolt',
 	"Conjure Arrow",
 	"Deploy Trap",
 	"Conjure Poisoned Arrow",

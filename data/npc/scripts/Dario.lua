@@ -67,6 +67,7 @@ spellSellModule:addSpellStock({
 	"Magic Shield",
 	"Heavy Magic Missile",
 	"Great Light",
+	'Conjure Bolt',
 	"Conjure Arrow",
 	"Intense Healing",
 	"Antidote",
