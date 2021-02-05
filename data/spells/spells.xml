@@ -68,7 +68,7 @@
 		<vocation id="3"/>
 		<vocation id="4"/>
 	</instant>
-	<instant name="Intense Healing" words="exura gran" price="350" maglv="2" needlearn="1" lvl="11" mana="40" selftarget="1" aggressive="0" script="healing/intense_healing.lua">
+	<instant name="Intense Healing" words="exura gran" price="350" maglv="2" needlearn="1" lvl="11" mana="66" selftarget="1" aggressive="0" script="healing/intense_healing.lua">
 		<vocation id="1"/>
 		<vocation id="2"/>
 		<vocation id="3"/>
@@ -127,7 +127,7 @@
 	<instant name="Heal Friend" words="exura sio" price="800" maglv="7" needlearn="1" lvl="18" mana="70" prem="1" needtarget="1" params="1" aggressive="0" blockwalls="0" script="healing/heal_friend.lua">
 		<vocation id="2"/>
 	</instant>
-	<instant name="Ultimate Healing" words="exura vita" price="1000" maglv="8" needlearn="1" lvl="20" mana="160" selftarget="1" aggressive="0" script="healing/ultimate_healing.lua">
+	<instant name="Ultimate Healing" words="exura vita" price="1000" maglv="8" needlearn="1" lvl="20" mana="198" selftarget="1" aggressive="0" script="healing/ultimate_healing.lua">
 		<vocation id="1"/>
 		<vocation id="2"/>
 		<vocation id="3"/>
