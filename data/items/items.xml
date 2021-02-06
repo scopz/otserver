@@ -1570,8 +1570,8 @@
 		<attribute key="attack" value="5"/>
 		<attribute key="weaponType" value="distance"/>
 		<attribute key="shootType" value="smallstone"/>
-		<attribute key="range" value="5"/>
-		<attribute key="breakChance" value="7"/>
+		<attribute key="range" value="6"/>
+		<attribute key="breakChance" value="3"/>
 		<attribute key="ammoAction" value="move"/>
 	</item>
 	<item id="1295" article="a" name="stone">
@@ -4694,8 +4694,8 @@
 		<attribute key="attack" value="25"/>
 		<attribute key="weaponType" value="distance"/>
 		<attribute key="shootType" value="spear"/>
-		<attribute key="range" value="7"/>
-		<attribute key="breakChance" value="0"/>
+		<attribute key="range" value="5"/>
+		<attribute key="breakChance" value="1"/>
 		<attribute key="ammoAction" value="move"/>
 	</item>
 	<item id="2390" article="a" name="magic longsword">
@@ -4766,7 +4766,7 @@
 		<attribute key="weaponType" value="distance"/>
 		<attribute key="shootType" value="throwingstar"/>
 		<attribute key="range" value="4"/>
-		<attribute key="breakChance" value="10"/>
+		<attribute key="breakChance" value="5"/>
 		<attribute key="ammoAction" value="moveback"/>
 	</item>
 	<item id="2400" article="a" name="magic sword">
@@ -4840,7 +4840,7 @@
 		<attribute key="weaponType" value="distance"/>
 		<attribute key="shootType" value="throwingknife"/>
 		<attribute key="range" value="4"/>
-		<attribute key="breakChance" value="7"/>
+		<attribute key="breakChance" value="5"/>
 		<attribute key="ammoAction" value="moveback"/>
 	</item>
 	<item id="2411" article="a" name="poison dagger">
@@ -5142,14 +5142,14 @@
 		<attribute key="weaponType" value="distance"/>
 		<attribute key="slotType" value="two-handed"/>
 		<attribute key="ammoType" value="bolt"/>
-		<attribute key="range" value="5"/>
+		<attribute key="range" value="7"/>
 	</item>
 	<item id="2456" article="a" name="bow">
 		<attribute key="weight" value="3100"/>
 		<attribute key="weaponType" value="distance"/>
 		<attribute key="slotType" value="two-handed"/>
 		<attribute key="ammoType" value="arrow"/>
-		<attribute key="range" value="6"/>
+		<attribute key="range" value="7"/>
 	</item>
 	<item id="2457" article="a" name="steel helmet">
 		<attribute key="weight" value="4600"/>
@@ -11501,8 +11501,8 @@
 		<attribute key="attack" value="32"/>
 		<attribute key="weaponType" value="distance"/>
 		<attribute key="shootType" value="royalspear"/>
-		<attribute key="range" value="7"/>
-		<attribute key="breakChance" value="0"/>
+		<attribute key="range" value="5"/>
+		<attribute key="breakChance" value="1"/>
 		<attribute key="ammoAction" value="move"/>
 	</item>
 	<item id="5093" name="stairs">

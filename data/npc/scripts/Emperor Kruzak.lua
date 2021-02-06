@@ -90,8 +90,8 @@ keywordHandler:addKeyword({'reward'}, StdModule.say, {npcHandler = npcHandler, o
 keywordHandler:addKeyword({'tbi'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "Well, I don't think our southern allies have agents in our town."})
 keywordHandler:addKeyword({'t.b.i'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "Well, I don't think our southern allies have agents in our town."})
 
-local node1 = keywordHandler:addKeyword({'promot'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = 'Do you want to be promoted in your vocation for 20000 gold?'})
-	node1:addChildKeyword({'yes'}, StdModule.promotePlayer, {npcHandler = npcHandler, cost = 20000, level = 20, text = 'Congratulations! You are now promoted.'})
+local node1 = keywordHandler:addKeyword({'promot'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = 'Do you want to be promoted in your vocation for 10000 gold?'})
+	node1:addChildKeyword({'yes'}, StdModule.promotePlayer, {npcHandler = npcHandler, cost = 10000, level = 20, text = 'Congratulations! You are now promoted.'})
 	node1:addChildKeyword({'no'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = 'Ok, then not.', reset = true})
 
 npcHandler:addModule(FocusModule:new())
