@@ -151,6 +151,7 @@ private:
 	bool extraMeleeAttack;
 	bool semiIdle;
 	bool hadRecentBattleVar;
+	Position attackingLastPosition;
 	int64_t timeOfLastHit;
 
 	Spawn* spawn;

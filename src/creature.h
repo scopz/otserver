@@ -68,6 +68,7 @@ struct FindPathParams{
 	int32_t maxSearchDist;
 	int32_t minTargetDist;
 	int32_t maxTargetDist;
+	Position preventSteppingPosition;
 
 	FindPathParams()
 	{

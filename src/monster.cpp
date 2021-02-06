@@ -138,6 +138,7 @@ void Monster::onAttackedCreature(Creature* target)
 {
 	Creature::onAttackedCreature(target);
 
+	attackingLastPosition = Position();
 	if(isSummon()){
 		getMaster()->onSummonAttackedCreature(this, target);
 	}
@@ -1200,6 +1201,11 @@ void Monster::onThinkYell(uint32_t interval)
 
 void Monster::onWalk()
 {
+	if(getWalkDelay() <= 0){
+		if (!isFleeing() && attackedCreature == followCreature) {
+			attackingLastPosition = getPosition();
+		}
+	}
 	Creature::onWalk();
 }
 
@@ -3339,6 +3345,10 @@ void Monster::getPathSearchParams(const Creature* creature, FindPathParams& fpp)
 
 	fpp.minTargetDist = 1;
 	fpp.maxTargetDist = mType->targetDistance;
+
+	if (!isFleeing() && creature == attackedCreature) {
+		fpp.preventSteppingPosition = attackingLastPosition;
+	}
 
 	if(isSummon()){
 		if(getMaster() == creature){

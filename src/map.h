@@ -57,7 +57,7 @@ struct AStarNode{
 #define GET_NODE_INDEX(a) (a - &nodes[0])
 
 #define MAP_NORMALWALKCOST 10
-#define MAP_DIAGONALWALKCOST 25
+#define MAP_DIAGONALWALKCOST 21
 
 class AStarNodes{
 public:

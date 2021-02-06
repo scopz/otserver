@@ -38,6 +38,7 @@
 #include <sstream>
 #include <map>
 #include <algorithm>
+#include <random>
 
 extern ConfigManager g_config;
 
@@ -667,6 +668,10 @@ bool Map::getPathTo(const Creature* creature, const Position& destPos,
 		{-1, 1},
 	};
 
+	// randomize path finding to prevent looping monsters in some ocasions
+	int32_t randomizer[8] = { 0, 1, 2, 3, 4, 5, 6, 7 };
+	std::random_shuffle(randomizer,   randomizer+4);
+
 	const Tile* tile = NULL;
 	AStarNode* found = NULL;
 
@@ -683,16 +688,14 @@ bool Map::getPathTo(const Creature* creature, const Position& destPos,
 		}
 		else{
 			for(int i = 0; i < 8; ++i){
-				pos.x = n->x + neighbourOrderList[i][0];
-				pos.y = n->y + neighbourOrderList[i][1];
+				pos.x = n->x + neighbourOrderList[randomizer[i]][0];
+				pos.y = n->y + neighbourOrderList[randomizer[i]][1];
 
-				bool outOfRange = false;
-				if(maxSearchDist != -1 && (std::abs(endPos.x - pos.x) > maxSearchDist ||
-					std::abs(endPos.y - pos.y) > maxSearchDist) ){
-					outOfRange = true;
+				if(maxSearchDist != -1 && (std::abs(endPos.x - pos.x) > maxSearchDist || std::abs(endPos.y - pos.y) > maxSearchDist) ){
+					continue;
 				}
 
-				if(!outOfRange && (tile = canWalkTo(creature, pos))){
+				if((tile = canWalkTo(creature, pos))){
 					const MagicField* field = tile->getFieldItem();
 					if (creature->getPlayer() && field)
 						continue;
@@ -817,6 +820,14 @@ bool Map::getPathMatching(const Creature* creature, std::list<Direction>& dirLis
 		{-1, 1},
 	};
 
+	// randomize path finding to prevent looping monsters in some ocasions
+	int32_t randomizer[8] = { 0, 1, 2, 3, 4, 5, 6, 7 };
+	std::random_shuffle(randomizer, randomizer+4);
+
+	// preventedPosition will store last position from monster. This systems prevents looping aswell.
+	static auto randomGenerator = std::bind(std::uniform_int_distribution<>(0,2),std::default_random_engine());
+	const bool enablePreventedPosition = randomGenerator() < 1; // 1 out of 3 times is enabled
+
 	const Tile* tile = NULL;
 	AStarNode* found = NULL;
 
@@ -842,26 +853,28 @@ bool Map::getPathMatching(const Creature* creature, std::list<Direction>& dirLis
 
 		int32_t dirCount = (fpp.allowDiagonal ? 8 : 4);
 		for(int32_t i = 0; i < dirCount; ++i){
-			pos.x = n->x + neighbourOrderList[i][0];
-			pos.y = n->y + neighbourOrderList[i][1];
+			pos.x = n->x + neighbourOrderList[randomizer[i]][0];
+			pos.y = n->y + neighbourOrderList[randomizer[i]][1];
 
-			bool inRange = true;
-			if(fpp.maxSearchDist != -1 && (std::abs(startPos.x - pos.x) > fpp.maxSearchDist ||
-				std::abs(startPos.y - pos.y) > fpp.maxSearchDist) ){
-				inRange = false;
+			if(fpp.maxSearchDist != -1 && (std::abs(startPos.x - pos.x) > fpp.maxSearchDist || std::abs(startPos.y - pos.y) > fpp.maxSearchDist) ){
+				continue;
 			}
 
 			if(fpp.keepDistance){
 				if(!pathCondition.isInRange(startPos, pos, fpp)){
-					inRange = false;
+					continue;
 				}
 			}
 
-			if(inRange && (tile = canWalkTo(creature, pos))){
+			if((tile = canWalkTo(creature, pos))){
+
 				if(creature->getPlayer() && tile->getFieldItem()) { continue; }	
 				//The cost (g) for this neighbour
-				int32_t cost = nodes.getMapWalkCost(creature, n, tile, pos);
 				int32_t extraCost = nodes.getTileWalkCost(creature, tile);
+				int32_t cost = (enablePreventedPosition && fpp.preventSteppingPosition == pos)?
+				                    MAP_DIAGONALWALKCOST : //going back will cost as a diagonal step
+				                    nodes.getMapWalkCost(creature, n, tile, pos);
+
 				int32_t newf = n->f + cost + extraCost;
 
 				//Check if the node is already in the closed/open list
@@ -921,28 +934,25 @@ bool Map::getPathMatching(const Creature* creature, std::list<Direction>& dirLis
 		prevx = pos.x;
 		prevy = pos.y;
 
-		if(dx == 1 && dy == 1){
-			dirList.push_front(NORTHWEST);
-		}
-		else if(dx == -1 && dy == 1){
-			dirList.push_front(NORTHEAST);
-		}
-		else if(dx == 1 && dy == -1){
-			dirList.push_front(SOUTHWEST);
-		}
-		else if(dx == -1 && dy == -1){
-			dirList.push_front(SOUTHEAST);
-		}
-		else if(dx == 1){
-			dirList.push_front(WEST);
-		}
-		else if(dx == -1){
-			dirList.push_front(EAST);
-		}
-		else if(dy == 1){
+		if(dx == 1) {
+			if (dy == 1){
+				dirList.push_front(NORTHWEST);
+			} else if (dy == -1){
+				dirList.push_front(SOUTHWEST);
+			} else {
+				dirList.push_front(WEST);
+			}
+		} else if(dx == -1) {
+			if (dy == 1){
+				dirList.push_front(NORTHEAST);
+			} else if (dy == -1){
+				dirList.push_front(SOUTHEAST);
+			} else {
+				dirList.push_front(EAST);
+			}
+		} else if(dy == 1) {
 			dirList.push_front(NORTH);
-		}
-		else if(dy == -1){
+		} else if(dy == -1) {
 			dirList.push_front(SOUTH);
 		}
 
