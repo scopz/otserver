@@ -788,7 +788,7 @@ end
 
 -- Functions made by Jiddo
 function doPlayerGiveItem(cid, itemid, count, charges)
-	local hasCharges = (isItemRune(itemid) == true or isItemFluidContainer(itemid) == true)
+	local hasCharges = (isItemFluidContainer(itemid) == true)
 	if(hasCharges and charges == nil) then
 		charges = 1
 	end
