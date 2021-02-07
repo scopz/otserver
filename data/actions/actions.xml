@@ -54,6 +54,11 @@
 	<action itemid="2577" script="liquids/containers.lua"/>
 	<action itemid="3941" script="liquids/containers.lua"/>
 	<action itemid="3942" script="liquids/containers.lua"/>
+
+	<!-- Orbs -->
+	<action itemid="5098" script="liquids/orb.lua"/>
+	<action itemid="5099" script="liquids/orb.lua"/>
+	<action itemid="5100" script="liquids/orb.lua"/>
 	
 	<!-- Make Bread -->
 	<action itemid="2692" script="make_bread.lua"/>

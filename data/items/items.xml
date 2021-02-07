@@ -11520,7 +11520,15 @@
 	<item id="5097" name="stairs">
 		<attribute key="floorchange" value="down"/>
 	</item>
-
+	<item id="5098" article="a" name="health orb" plural="health orbs">
+		<attribute key="weight" value="200"/>
+	</item>
+	<item id="5099" article="a" name="mana orb" plural="mana orbs">
+		<attribute key="weight" value="200"/>
+	</item>
+	<item id="5100" article="a" name="special orb" plural="special orbs">
+		<attribute key="weight" value="200"/>
+	</item>
 	
 	<item id="20001" name="water" fluidClient="1"/>
 	<item id="20002" name="blood" fluidClient="2"/>

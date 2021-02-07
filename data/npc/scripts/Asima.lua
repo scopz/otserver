@@ -5,16 +5,19 @@ local npcHandler = NpcHandler:new(keywordHandler)
 NpcSystem.parseParameters(npcHandler)
 
 -- OTServ event handling functions
-function onCreatureAppear(cid)			npcHandler:onCreatureAppear(cid)			end
-function onCreatureDisappear(cid)		npcHandler:onCreatureDisappear(cid)			end
-function onCreatureSay(cid, type, msg)		npcHandler:onCreatureSay(cid, type, msg)		end
-function onThink()				npcHandler:onThink()					end
+function onCreatureAppear(cid)         npcHandler:onCreatureAppear(cid)         end
+function onCreatureDisappear(cid)      npcHandler:onCreatureDisappear(cid)      end
+function onCreatureSay(cid, type, msg) npcHandler:onCreatureSay(cid, type, msg) end
+function onThink()                     npcHandler:onThink()                     end
 
 local shopModule = ShopModule:new()
 npcHandler:addModule(shopModule)
 
-shopModule:addBuyableItem({'life'}, 2006, 60, 10, 'life fluid')
-shopModule:addBuyableItem({'mana'}, 2006, 55, 7, 'mana fluid')
+shopModule:addBuyableItem({'mana'}, 5099, 100)
+shopModule:addBuyableItem({'life', 'health'}, 5098, 100)
+
+shopModule:addBuyableItem({'life fluid'}, 2006, 60, 10, 'life fluid')
+shopModule:addBuyableItem({'mana fluid'}, 2006, 55, 7, 'mana fluid')
 shopModule:addBuyableItem({'spellbook'}, 2175, 150)
 
 shopModule:addBuyableItem({'antidote rune'}, 2266, 65, 1, 'antidote rune')
