@@ -3461,6 +3461,30 @@ bool Game::playerSaySpell(Player* player, SpeakClasses type, const std::string& 
 	return false;
 }
 
+bool Game::playerSellItem(const uint32_t &playerId, const uint32_t &targetId, const Position& pos, const uint8_t &stackPos, const uint16_t &itemId)
+{
+	Player* player = getPlayerByID(playerId);
+	if(!player || player->isRemoved())
+		return false;
+
+	Creature* creature = getCreatureByID(targetId);
+	Npc* npc;
+	if(!creature || !(npc = creature->getNpc())){
+		player->sendCancelMessage(RET_NOTPOSSIBLE);
+		return false;
+	}
+
+	Thing* thing = internalGetThing(player, pos, stackPos, itemId);
+	Item* item;
+	if(!thing || !(item = thing->getItem())){
+		player->sendCancelMessage(RET_NOTPOSSIBLE);
+		return false;
+	}
+
+	npc->sellPlayerItem(player, pos, stackPos, item->getID());
+	return true;
+}
+
 bool Game::playerWhisper(Player* player, const std::string& text)
 {
 	SpectatorVec list;

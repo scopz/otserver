@@ -142,3 +142,7 @@ spellSellModule:addSpellStock({
 
 npcHandler:setCallback(CALLBACK_MESSAGE_DEFAULT, creatureSayCallback)
 npcHandler:addModule(FocusModule:new())
+
+function onCreatureSell(...)
+	shopModule:sellItemToPlayer(unpack(arg))
+end

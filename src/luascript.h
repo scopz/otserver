@@ -396,6 +396,7 @@ protected:
 	static int luaDoPlayerRecoverSkills(lua_State *L);
 	static int luaDoPlayerSetSex(lua_State *L);
 	static int luaDoPlayerRemoveItem(lua_State *L);
+	static int luaDoPlayerRemoveItemByPosition(lua_State *L);
 	static int luaDoPlayerAddSoul(lua_State *L);
 	static int luaDoPlayerAddExp(lua_State *L);
 	static int luaDoPlayerRemoveExp(lua_State *L);

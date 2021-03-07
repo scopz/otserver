@@ -232,6 +232,7 @@ if(NpcHandler == nil) then
 		local callback = self:getCallback(CALLBACK_FAREWELL)
 		if(callback == nil or callback()) then
 			if(self:processModuleCallback(CALLBACK_FAREWELL)) then
+				sendFocusLost(self.focus)
 				if(self.queue == nil or not self.queue:greetNext()) then
 					local msg = self:getMessage(MESSAGE_FAREWELL)
 					local parseInfo = { [TAG_PLAYERNAME] = getPlayerName(self.focus) }
@@ -365,6 +366,7 @@ if(NpcHandler == nil) then
 		if(cid == self.focus) then
 			local callback = self:getCallback(CALLBACK_CREATURE_DISAPPEAR)
 			if(callback == nil or callback()) then
+				sendFocusLost(self.focus)
 				if(self:processModuleCallback(CALLBACK_CREATURE_DISAPPEAR, cid)) then
 					if(self.queue == nil or not self.queue:greetNext()) then
 						local msg = self:getMessage(MESSAGE_WALKAWAY)
@@ -422,5 +424,13 @@ if(NpcHandler == nil) then
 		self.talkDelay.time = os.time()+self.talkDelayTime
 	end
 	
-	
+
+	function NpcHandler:startSelling(cid)
+		if not self:isInRange(cid) then
+			return false
+		end
+
+		selfSell(cid)
+		return true
+	end
 end

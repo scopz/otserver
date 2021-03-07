@@ -488,6 +488,10 @@ public:
 		{if(client) client->sendCreatureTurn(creature, creature->getTile()->getClientIndexOfThing(this, creature));}
 	void sendCreatureSay(const Creature* creature, SpeakClasses type, const std::string& text)
 		{if(client) client->sendCreatureSay(creature, type, text);}
+	void sendStartSellingTransaction(const Npc* npc)
+		{if(client) client->sendStartSellingTransaction(npc);}
+	void sendNpcFocusLost(const Npc* npc)
+		{if(client) client->sendNpcFocusLost(npc);}
 	void sendCreatureSquare(const Creature* creature, SquareColor_t color)
 		{if(client) client->sendCreatureSquare(creature, color);}
 	void sendCreatureChangeOutfit(const Creature* creature, const Outfit_t& outfit)

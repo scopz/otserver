@@ -54,6 +54,7 @@ protected:
 	virtual void registerFunctions();
 
 	static int luaActionSay(lua_State *L);
+	static int luaActionSell(lua_State *L);
 	static int luaActionMove(lua_State *L);
 	static int luaActionMoveTo(lua_State *L);
 	static int luaActionTurn(lua_State* L);
@@ -65,6 +66,7 @@ protected:
 	static int luaGetNpcPos(lua_State *L);
 	static int luaGetNpcName(lua_State *L);
 	static int luaGetNpcParameter(lua_State *L);
+	static int luaSendFocusLost(lua_State *L);
 
 private:
 	virtual bool initState();
@@ -83,6 +85,7 @@ public:
 	virtual void onCreatureDisappear(const Creature* creature){};
 	virtual void onCreatureMove(const Creature* creature, const Position& oldPos, const Position& newPos){};
 	virtual void onCreatureSay(const Creature* creature, SpeakClasses, const std::string& text){};
+	virtual void onCreatureSell(const Creature* creature, const Position& pos, const uint8_t &stackPos, const uint16_t &itemId){};
 	virtual void onThink(){};
 
 	bool isLoaded();
@@ -103,6 +106,7 @@ public:
 	virtual void onCreatureDisappear(const Creature* creature);
 	virtual void onCreatureMove(const Creature* creature, const Position& oldPos, const Position& newPos);
 	virtual void onCreatureSay(const Creature* creature, SpeakClasses, const std::string& text);
+	virtual void onCreatureSell(const Creature* creature, const Position& pos, const uint8_t &stackPos, const uint16_t &itemId);
 	virtual void onThink();
 
 private:
@@ -112,6 +116,7 @@ private:
 	int32_t m_onCreatureDisappear;
 	int32_t m_onCreatureMove;
 	int32_t m_onCreatureSay;
+	int32_t m_onCreatureSell;
 	int32_t m_onThink;
 };
 
@@ -159,6 +164,7 @@ public:
 
 	void turnToCreature(Creature* creature);
 	void setCreatureFocus(Creature* creature);
+	void sellPlayerItem(const Player* player, const Position& pos, const uint8_t &stackPos, const uint16_t &itemId);
 	void setInitialLookDirection(Direction dir) { initialLookDir = dir; };
 	void turnToInitialLookDirection();
 	bool getParameter(const std::string key, std::string& value);

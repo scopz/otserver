@@ -64,3 +64,7 @@ keywordHandler:addKeyword({'legs'}, StdModule.say, {npcHandler = npcHandler, onl
 keywordHandler:addKeyword({'time'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "It's |TIME| right now."})
 
 npcHandler:addModule(FocusModule:new())
+
+function onCreatureSell(...)
+	shopModule:sellItemToPlayer(unpack(arg))
+end

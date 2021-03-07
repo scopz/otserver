@@ -598,6 +598,14 @@ void Npc::setCreatureFocus(Creature* creature)
 	}
 }
 
+void Npc::sellPlayerItem(const Player* player, const Position& pos, const uint8_t &stackPos, const uint16_t &itemId)
+{
+	//only players for script events
+	if (m_npcEventHandler){
+		m_npcEventHandler->onCreatureSell(player, pos, stackPos, itemId);
+	}
+}
+
 bool Npc::getParameter(const std::string key, std::string& value)
 {
 	ParametersMap::const_iterator it = m_parameters.find(key);
@@ -658,6 +666,7 @@ void NpcScriptInterface::registerFunctions()
 
 	//npc exclusive functions
 	lua_register(m_luaState, "selfSay", NpcScriptInterface::luaActionSay);
+	lua_register(m_luaState, "selfSell", NpcScriptInterface::luaActionSell);
 	lua_register(m_luaState, "selfMove", NpcScriptInterface::luaActionMove);
 	lua_register(m_luaState, "selfMoveTo", NpcScriptInterface::luaActionMoveTo);
 	lua_register(m_luaState, "selfTurn", NpcScriptInterface::luaActionTurn);
@@ -669,6 +678,7 @@ void NpcScriptInterface::registerFunctions()
 	lua_register(m_luaState, "getNpcPos", NpcScriptInterface::luaGetNpcPos);
 	lua_register(m_luaState, "getNpcName", NpcScriptInterface::luaGetNpcName);
 	lua_register(m_luaState, "getNpcParameter", NpcScriptInterface::luaGetNpcParameter);
+	lua_register(m_luaState, "sendFocusLost", NpcScriptInterface::luaSendFocusLost);
 }
 
 int NpcScriptInterface::luaSelfGetPos(lua_State *L)
@@ -700,6 +710,31 @@ int NpcScriptInterface::luaActionSay(lua_State* L)
 		npc->doSay(text, SPEAK_SAY, NULL);
 	}
 
+	return 0;
+}
+
+int NpcScriptInterface::luaActionSell(lua_State* L)
+{
+	//selfSell(cid)
+	uint32_t cid = popNumber(L);
+
+	ScriptEnviroment* env = getScriptEnv();
+
+	Player* player = env->getPlayerByUID(cid);
+	if (cid != 0 && !player){
+		lua_pushboolean(L, false);
+		return 1;
+	}
+
+	Npc* npc = env->getNpc();
+	if (!npc){
+		lua_pushboolean(L, false);
+		return 1;
+	}
+
+	player->sendStartSellingTransaction(npc);
+
+	lua_pushboolean(L, true);
 	return 0;
 }
 
@@ -895,6 +930,30 @@ int NpcScriptInterface::luaGetNpcParameter(lua_State *L)
 	return 1;
 }
 
+int NpcScriptInterface::luaSendFocusLost(lua_State *L)
+{
+	//sendFocusLost(cid)
+	uint32_t cid = popNumber(L);
+
+	ScriptEnviroment* env = getScriptEnv();
+
+	Player* player = env->getPlayerByUID(cid);
+	if (cid != 0 && !player){
+		lua_pushboolean(L, false);
+		return 1;
+	}
+
+	Npc* npc = env->getNpc();
+	if (!npc){
+		lua_pushboolean(L, false);
+		return 1;
+	}
+
+	player->sendNpcFocusLost(npc);
+	lua_pushboolean(L, true);
+	return 0;
+}
+
 NpcEventsHandler::NpcEventsHandler(Npc* npc)
 {
 	m_npc = npc;
@@ -931,6 +990,7 @@ NpcEventsHandler(npc)
 	}
 
 	m_onCreatureSay = m_scriptInterface->getEvent("onCreatureSay");
+	m_onCreatureSell = m_scriptInterface->getEvent("onCreatureSell");
 	m_onCreatureDisappear = m_scriptInterface->getEvent("onCreatureDisappear");
 	m_onCreatureAppear = m_scriptInterface->getEvent("onCreatureAppear");
 	m_onCreatureMove = m_scriptInterface->getEvent("onCreatureMove");
@@ -1075,6 +1135,45 @@ void NpcScript::onCreatureSay(const Creature* creature, SpeakClasses type, const
 	}
 	else{
 		std::cout << "[Error] Call stack overflow. NpcScript::onCreatureSay" << std::endl;
+	}
+}
+
+void NpcScript::onCreatureSell(const Creature* creature, const Position& pos, const uint8_t &stackPos, const uint16_t &itemId)
+{
+	if (m_onCreatureSell == -1) {
+		return;
+	}
+	//onCreatureSell(cid, posX, posY, posZ, stackPos, itemId)
+	if (m_scriptInterface->reserveScriptEnv()){
+		ScriptEnviroment* env = m_scriptInterface->getScriptEnv();
+
+#ifdef __DEBUG_LUASCRIPTS__
+		std::stringstream desc;
+		desc << "npc " << m_npc->getName();
+		env->setEventDesc(desc.str());
+#endif
+
+		env->setScriptId(m_onCreatureSell, m_scriptInterface);
+		env->setRealPos(m_npc->getPosition());
+		env->setNpc(m_npc);
+
+		uint32_t cid = env->addThing(const_cast<Creature*>(creature));
+
+		lua_State* L = m_scriptInterface->getLuaState();
+		m_scriptInterface->pushFunction(m_onCreatureSell);
+
+		lua_pushnumber(L, cid);
+		lua_pushnumber(L, pos.x);
+		lua_pushnumber(L, pos.y);
+		lua_pushnumber(L, pos.z);
+		lua_pushnumber(L, stackPos);
+		lua_pushnumber(L, itemId);
+
+		m_scriptInterface->callFunction(6, false);
+		m_scriptInterface->releaseScriptEnv();
+	}
+	else{
+		std::cout << "[Error] Call stack overflow. NpcScript::onCreatureSell" << std::endl;
 	}
 }
 

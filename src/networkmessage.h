@@ -123,10 +123,6 @@ public:
 	}
 #endif
 
-	uint16_t getSpriteId(){
-		return getU16();
-	}
-
 	std::string getString();
 	std::string getRaw();
 	Position getPosition();

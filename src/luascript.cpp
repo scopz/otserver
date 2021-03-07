@@ -1588,6 +1588,9 @@ void LuaScriptInterface::registerFunctions()
 	//doPlayerRemoveItem(cid, itemid, count, <optional> subtype, <optional> ignoreEquipped)
 	lua_register(m_luaState, "doPlayerRemoveItem", LuaScriptInterface::luaDoPlayerRemoveItem);
 
+	//doPlayerRemoveItemByPosition(cid, posX, posY, posZ, stackPos, itemid)
+	lua_register(m_luaState, "doPlayerRemoveItemByPosition", LuaScriptInterface::luaDoPlayerRemoveItemByPosition);
+
 	//doPlayerAddExp(cid, exp, <optional: default: 0> useRate, <optional: default: 0> useMultiplier)
 	lua_register(m_luaState, "doPlayerAddExp", LuaScriptInterface::luaDoPlayerAddExp);
 
@@ -2854,6 +2857,41 @@ int LuaScriptInterface::luaDoPlayerRemoveItem(lua_State *L)
 	else{
 		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
 		lua_pushboolean(L, false);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaDoPlayerRemoveItemByPosition(lua_State *L)
+{
+	//doPlayerRemoveItemByPosition(cid, posX, posY, posZ, stackPos, itemid)
+	uint16_t itemId = (uint16_t)popNumber(L);
+	uint8_t stackPos = (uint8_t)popNumber(L);
+	int32_t posZ = popNumber(L);
+	int32_t posY = popNumber(L);
+	int32_t posX = popNumber(L);
+	uint32_t cid = popNumber(L);
+
+	ScriptEnviroment* env = getScriptEnv();
+	Player* player = env->getPlayerByUID(cid);
+	if(player){
+		const Position pos(posX, posY, posZ);
+
+		Thing* thing = g_game.internalGetThing(player, pos, stackPos);
+		Item* item;
+		if(thing && (item = thing->getItem()) && item->getID() == itemId){
+			int count = item->getItemCount();
+			if (g_game.internalRemoveItem(item) == RET_NOERROR) {
+				lua_pushnumber(L, count);
+			} else {
+				lua_pushnumber(L, 0);
+			}
+		} else {
+			lua_pushnumber(L, 0);
+		}
+	}
+	else{
+		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
+		lua_pushnumber(L, 0);
 	}
 	return 1;
 }

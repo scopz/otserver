@@ -888,6 +888,18 @@ function doPlayerSellItem(cid, itemid, count, cost)
 	return false
 end
 
+function doPlayerSellItemByPosition(cid, posX, posY, posZ, stackPos, itemId, cost)
+	local totalCount = doPlayerRemoveItemByPosition(cid, posX, posY, posZ, stackPos, itemId);
+	if totalCount > 0 then
+		cost = cost * totalCount;
+		if not doPlayerAddMoney(cid, cost) then
+			error('Could not add money to ' .. getPlayerName(cid) .. '(' .. cost .. 'gp)')
+		end
+		return LUA_NO_ERROR
+	end
+	return LUA_ERROR
+end
+
 function getContainerCapById(itemid)
 	local container = doCreateItemEx(itemid, 1)
 	local capacity = getContainerCap(container)

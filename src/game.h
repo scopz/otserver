@@ -398,13 +398,11 @@ public:
 	bool anonymousBroadcastMessage(MessageClasses type, const std::string& text);
 
 	//Implementation of player invoked events
-	bool playerMoveThing(uint32_t playerId, const Position& fromPos, uint16_t spriteId, uint8_t fromStackPos,
-		const Position& toPos, uint8_t count);
-	bool playerMoveCreature(uint32_t playerId, uint32_t movingCreatureId,
-		const Position& movingCreatureOrigPos, const Position& toPos);
-	bool playerMoveItem(uint32_t playerId, const Position& fromPos,
-		uint16_t spriteId, uint8_t fromStackPos, const Position& toPos, uint8_t count);
+	bool playerMoveThing(uint32_t playerId, const Position& fromPos, uint16_t spriteId, uint8_t fromStackPos, const Position& toPos, uint8_t count);
+	bool playerMoveCreature(uint32_t playerId, uint32_t movingCreatureId, const Position& movingCreatureOrigPos, const Position& toPos);
+	bool playerMoveItem(uint32_t playerId, const Position& fromPos, uint16_t spriteId, uint8_t fromStackPos, const Position& toPos, uint8_t count);
 	bool playerMove(uint32_t playerId, Direction dir);
+	bool playerSellItem(const uint32_t &playerId, const uint32_t &targetId, const Position& pos, const uint8_t &stackPos, const uint16_t &itemId);
 	bool playerCreatePrivateChannel(uint32_t playerId);
 	bool playerChannelInvite(uint32_t playerId, const std::string& name);
 	bool playerChannelExclude(uint32_t playerId, const std::string& name);

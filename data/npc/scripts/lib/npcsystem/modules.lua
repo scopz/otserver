@@ -612,7 +612,9 @@ if(Modules == nil) then
 		npcHandler = nil,
 		noText = '',
 		maxCount = 500,
-		amount = 0
+		amount = 0,
+		autosellConfirm = "Here you are.",
+		autosellCancel = "You can't sell that.",
 	}
 	-- Add it to the parseable module list.
 	Modules.parseableModules['module_shop'] = ShopModule
@@ -713,10 +715,13 @@ if(Modules == nil) then
 	
 	-- Initializes the module and associates handler to it.
 	function ShopModule:init(handler)
+		self.sellableItems = {}
 		self.npcHandler = handler
 		self.yesNode = KeywordNode:new(SHOP_YESWORD, ShopModule.onConfirm, {module = self})
 		self.noNode = KeywordNode:new(SHOP_NOWORD, ShopModule.onDecline, {module = self})
 		self.noText = handler:getMessage(MESSAGE_DECLINE)
+
+		handler.keywordHandler:addKeyword({"sell items"}, ShopModule.startSellingTransaction, {module = self})
 		
 		return true
 	end
@@ -740,6 +745,33 @@ if(Modules == nil) then
 		end
 		
 		return ret
+	end
+
+	-- Start selling transaction with player
+	function ShopModule.startSellingTransaction(cid, message, keywords, parameters, node)
+		local module = parameters.module
+		if(cid ~= module.npcHandler.focus) then
+			return false
+		end
+		module.npcHandler:startSelling(cid)
+		return true
+	end
+
+	function ShopModule:sellItemToPlayer(cid, posX, posY, posZ, stackPos, itemId)
+		if(cid ~= self.npcHandler.focus) then
+			return false
+		end
+
+		if self.sellableItems[itemId] ~= nil then 
+			local ret = doPlayerSellItemByPosition(cid, posX, posY, posZ, stackPos, itemId, self.sellableItems[itemId])
+			if(ret == LUA_NO_ERROR) then
+				self.npcHandler:say(ShopModule.autosellConfirm, false)
+			else
+				self.npcHandler:say(ShopModule.autosellCancel, false)
+			end
+		else
+			self.npcHandler:say(ShopModule.autosellCancel, false)
+		end
 	end
 	
 	-- Adds a new buyable item. 
@@ -776,6 +808,7 @@ if(Modules == nil) then
 	--	cost = the price of one single item with item id itemid ^^
 	--	realname - The real, full name for the item. Will be used as ITEMNAME in MESSAGE_ONBUY and MESSAGE_ONSELL if defined. Default value is nil (keywords[2]/names will be used)
 	function ShopModule:addSellableItem(names, itemid, cost, realname)
+		self.sellableItems[itemid] = cost
 		for i, name in pairs(names) do
 			local parameters = {
 					itemid = itemid,

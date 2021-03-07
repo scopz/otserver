@@ -110,3 +110,7 @@ keywordHandler:addKeyword({'legs'}, StdModule.say, {npcHandler = npcHandler, onl
 keywordHandler:addKeyword({'tusk'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "Sorry, I'm not interested in tusks, but you might want to offer them to Zaidal - as far as I know he uses them for making tables and chairs."})
 
 npcHandler:addModule(FocusModule:new())
+
+function onCreatureSell(...)
+	shopModule:sellItemToPlayer(unpack(arg))
+end

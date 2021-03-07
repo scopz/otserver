@@ -39,7 +39,7 @@ shopModule:addSellableItem({'doublet'}, 2485, 3)
 shopModule:addSellableItem({'leather armor'}, 2467, 5)
 shopModule:addSellableItem({'chain armor'}, 2464, 40)
 shopModule:addSellableItem({'brass armor'}, 2465, 150)
-shopModule:addSellableItem({'leather helmet'}, 					Cleatherhelmet, 3)
+shopModule:addSellableItem({'leather helmet'}, 2461, 3)
 shopModule:addSellableItem({'chain helmet'}, 2458, 12)
 shopModule:addSellableItem({'studded helmet'}, 2482, 20)
 shopModule:addSellableItem({'wooden shield'}, 2512, 3)
@@ -98,3 +98,7 @@ keywordHandler:addKeyword({'bolt'}, StdModule.say, {npcHandler = npcHandler, onl
 keywordHandler:addKeyword({'time'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "It is |TIME|."})
 
 npcHandler:addModule(FocusModule:new())
+
+function onCreatureSell(...)
+	shopModule:sellItemToPlayer(unpack(arg))
+end
