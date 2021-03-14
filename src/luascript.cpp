@@ -3027,9 +3027,9 @@ int LuaScriptInterface::luaDoTransformItem(lua_State *L)
 	}
 
 	const ItemType& it = Item::items[toId];
-	if(it.stackable && count > 100){
-		reportErrorFunc("Stack count cannot be higher than 100.");
-		count = 100;
+	if(it.stackable && count > (int32_t)it.maxStack){
+		reportErrorFunc("Stack count cannot be higher than max stack value.");
+		count = it.maxStack;
 	}
 
 	Item* newItem = g_game.transformItem(item, toId, count);
@@ -3309,22 +3309,22 @@ int LuaScriptInterface::luaDoPlayerAddItem(lua_State *L)
 		itemCount = count;
 	}
 
-	else if(it.hasSubType())
-		{
-			if(it.stackable)
-				itemCount = (int32_t)std::ceil((float)count / 100);
-
+	else if(it.hasSubType()) {
+			if(it.stackable) {
+				itemCount = (int32_t)std::ceil((float)count / it.maxStack);
+			}
 
 			subType = count;
-		}
-		else{
+
+		} else {
 			itemCount = std::max((int32_t)1, (int32_t)count);
 		}
 
 
 	while(itemCount > 0){
-		int32_t stackCount = std::min((int32_t)100, (int32_t)subType);
-		Item* newItem = Item::CreateItem(itemId, stackCount);
+		Item* newItem = Item::CreateItem(itemId);
+		int32_t stackCount = std::min((int32_t)newItem->getMaxStack(), subType);
+		newItem->setItemCount(stackCount);
 
 		if(!newItem){
 			reportErrorFunc(getErrorDesc(LUA_ERROR_ITEM_NOT_FOUND));
@@ -4320,18 +4320,19 @@ int LuaScriptInterface::luaDoCreateItem(lua_State *L)
 	if(it.hasSubType()){
 
 		if(it.stackable){
-			itemCount = (int32_t)std::ceil((float)count / 100);
+			itemCount = (int32_t)std::ceil((float)count / it.maxStack);
 		}
 
 		subType = count;
-	}
-	else{
+
+	} else {
 		itemCount = std::max((int32_t)1, (int32_t)count);
 	}
 
 	while(itemCount > 0){
-		int32_t stackCount = std::min((int32_t)100, (int32_t)subType);
-		Item* newItem = Item::CreateItem(itemId, stackCount);
+		Item* newItem = Item::CreateItem(itemId);
+		int32_t stackCount = std::min((int32_t)newItem->getMaxStack(), subType);
+		newItem->setItemCount(stackCount);
 
 		if(!newItem){
 			reportErrorFunc(getErrorDesc(LUA_ERROR_ITEM_NOT_FOUND));
@@ -4386,9 +4387,9 @@ int LuaScriptInterface::luaDoCreateItemEx(lua_State *L)
 	ScriptEnviroment* env = getScriptEnv();
 
 	const ItemType& it = Item::items[itemId];
-	if(it.stackable && count > 100){
-		reportErrorFunc("Stack count cannot be higher than 100.");
-		count = 100;
+	if(it.stackable && count > it.maxStack){
+		reportErrorFunc("Stack count cannot be higher than max stack value.");
+		count = it.maxStack;
 	}
 
 	Item* newItem = Item::CreateItem(itemId, count);
@@ -7705,7 +7706,7 @@ int LuaScriptInterface::luaDoAddContainerItem(lua_State *L)
 	if(it.hasSubType()){
 
 		if(it.stackable){
-			itemCount = (int32_t)std::ceil((float)count / 100);
+			itemCount = (int32_t)std::ceil((float)count / it.maxStack);
 		}
 
 		subType = count;
@@ -7715,8 +7716,9 @@ int LuaScriptInterface::luaDoAddContainerItem(lua_State *L)
 	}
 
 	while(itemCount > 0){
-		int32_t stackCount = std::min((int32_t)100, (int32_t)subType);
-		Item* newItem = Item::CreateItem(itemId, stackCount);
+		Item* newItem = Item::CreateItem(itemId);
+		int32_t stackCount = std::min((int32_t)newItem->getMaxStack(), subType);
+		newItem->setItemCount(stackCount);
 
 		if(!newItem){
 			reportErrorFunc(getErrorDesc(LUA_ERROR_ITEM_NOT_FOUND));

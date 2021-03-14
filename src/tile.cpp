@@ -1217,7 +1217,7 @@ void Tile::__removeThing(Thing* thing, uint32_t count)
 				for(ItemVector::iterator it = items->getBeginDownItem(); it != items->getEndDownItem(); ++it){
 					if((*it) == item){
 						if(item->isStackable() && count != item->getItemCount()){
-							uint8_t newCount = (uint8_t)std::max((int32_t)0, (int32_t)(item->getItemCount() - count));
+							const uint16_t newCount = (uint16_t)std::max((int32_t)0, (int32_t)(item->getItemCount() - count));
 							updateTileFlags(item, true);
 							item->setItemCount(newCount);
 							updateTileFlags(item, false);

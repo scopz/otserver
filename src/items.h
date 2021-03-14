@@ -43,6 +43,8 @@
 #define	SLOTP_DEPOT 1024
 #define	SLOTP_TWO_HAND 2048
 
+#define	DEFAULT_MAX_STACK 100
+
 enum ItemTypes_t {
 	ITEM_TYPE_NONE = 0,
 	ITEM_TYPE_DEPOT,
@@ -127,7 +129,7 @@ public:
 	itemgroup_t group;
 	ItemTypes_t type;
 
-	std::string getDescription(uint8_t count) const;
+	std::string getDescription(uint16_t count) const;
 
 	bool isGroundTile() const {return (group == ITEM_GROUP_GROUND);}
 	bool isContainer() const {return (group == ITEM_GROUP_CONTAINER);}
@@ -235,6 +237,7 @@ public:
 	int32_t hitChance;
 	int32_t maxHitChance;
 	uint32_t shootRange;
+	uint32_t maxStack;
 	AmmoAction_t ammoAction;
 	int32_t fluidSource;
 	ClientFluidTypes_t clientFluidType; //for the special ids who are related to fluids

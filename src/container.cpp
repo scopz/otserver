@@ -404,6 +404,7 @@ ReturnValue Container::__queryMaxCount(int32_t index, const Thing* thing, uint32
 	int32_t freeSlots = std::max((int32_t)(capacity() - size()), (int32_t)0);
 
 	if(item->isStackable()){
+		const uint16_t maxStack = item->getMaxStack();
 		uint32_t n = 0;
 		
 		if(index != INDEX_WHEREEVER){
@@ -413,19 +414,19 @@ ReturnValue Container::__queryMaxCount(int32_t index, const Thing* thing, uint32
 				destItem = destThing->getItem();
 
 			if(destItem && destItem->getID() == item->getID()){
-				n = 100 - destItem->getItemCount();
+				n = maxStack - destItem->getItemCount();
 			}
 
-			maxQueryCount = freeSlots * 100 + n;
+			maxQueryCount = freeSlots * maxStack + n;
 
 		} else {
-			maxQueryCount = freeSlots * 100;
+			maxQueryCount = freeSlots * maxStack;
 			if (g_config.getBoolean(ConfigManager::CONTAINER_ITEMS_AUTO_STACK)) {
 				if(item->getParent() != this){
 					//try find a suitable item to stack with
 					for(ItemList::const_iterator cit = itemlist.begin(); cit != itemlist.end(); ++cit){
 						if((*cit)->getID() == item->getID()){
-							maxQueryCount += 100 - (*cit)->getItemCount();
+							maxQueryCount += maxStack - (*cit)->getItemCount();
 						}
 					}
 				} else {
@@ -516,7 +517,7 @@ Cylinder* Container::__queryDestination(int32_t& index, const Thing* thing, Item
 				//try find a suitable item to stack with
 				uint32_t n = 0;
 				for(ItemList::iterator cit = itemlist.begin(); cit != itemlist.end(); ++cit){
-					if((*cit) != item && (*cit)->getID() == item->getID() && (*cit)->getItemCount() < 100){
+					if((*cit) != item && (*cit)->getID() == item->getID() && (*cit)->getItemCount() < item->getMaxStack()){
 						*destItem = (*cit);
 						index = n;
 						return this;
@@ -746,7 +747,7 @@ void Container::__removeThing(Thing* thing, uint32_t count)
 	}
 
 	if(item->isStackable() && count != item->getItemCount()){
-		uint8_t newCount = (uint8_t)std::max((int32_t)0, (int32_t)(item->getItemCount() - count));
+		const uint16_t newCount = (uint16_t)std::max((int32_t)0, (int32_t)(item->getItemCount() - count));
 		if(newCount == 0){
 			updateAmountOfItems(-(int32_t)item->getTotalAmountOfItemsInside());
 		}

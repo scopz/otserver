@@ -3289,8 +3289,8 @@ ReturnValue Player::__queryMaxCount(int32_t index, const Thing* thing, uint32_t 
 						}
 					}
 				}
-				else if(inventoryItem->isStackable() && item->getID() == inventoryItem->getID() && inventoryItem->getItemCount() < 100){
-					uint32_t remainder = (100 - inventoryItem->getItemCount());
+				else if(inventoryItem->isStackable() && item->getID() == inventoryItem->getID() && inventoryItem->getItemCount() < item->getMaxStack()){
+					uint32_t remainder = (item->getMaxStack() - inventoryItem->getItemCount());
 					if(__queryAdd(slotIndex, item, remainder, flags) == RET_NOERROR){
 						n += remainder;
 					}
@@ -3299,7 +3299,7 @@ ReturnValue Player::__queryMaxCount(int32_t index, const Thing* thing, uint32_t 
 			//empty slot
 			else if(__queryAdd(slotIndex, item, item->getItemCount(), flags) == RET_NOERROR){
 				if(item->isStackable())
-					n += 100;
+					n += item->getMaxStack();
 				else
 					n += 1;
 			}
@@ -3314,8 +3314,8 @@ ReturnValue Player::__queryMaxCount(int32_t index, const Thing* thing, uint32_t 
 			destItem = destThing->getItem();
 
 		if(destItem){
-			if(destItem->isStackable() && item->getID() == destItem->getID() && destItem->getItemCount() < 100){
-				maxQueryCount = 100 - destItem->getItemCount();
+			if(destItem->isStackable() && item->getID() == destItem->getID() && destItem->getItemCount() < item->getMaxStack()){
+				maxQueryCount = item->getMaxStack() - destItem->getItemCount();
 			}
 			else
 				maxQueryCount = 0;
@@ -3323,7 +3323,7 @@ ReturnValue Player::__queryMaxCount(int32_t index, const Thing* thing, uint32_t 
 		//empty slot
 		else if(__queryAdd(index, item, count, flags) == RET_NOERROR){
 			if(item->isStackable())
-				maxQueryCount = 100;
+				maxQueryCount = item->getMaxStack();
 			else
 				maxQueryCount = 1;
 
@@ -3383,7 +3383,7 @@ Cylinder* Player::__queryDestination(int32_t& index, const Thing* thing, Item** 
 						return this;
 					}
 				}
-				else if (autoStack && inventory[i]->getID() == item->getID() && inventory[i]->getItemCount() < 100) {
+				else if (autoStack && inventory[i]->getID() == item->getID() && inventory[i]->getItemCount() < item->getMaxStack()) {
 					*destItem = inventory[i];
 					index = i;
 					return this;
@@ -3606,7 +3606,7 @@ void Player::__removeThing(Thing* thing, uint32_t count)
 			inventory[index] = NULL;
 		}
 		else{
-			uint8_t newCount = (uint8_t)std::max((int32_t)0, (int32_t)(item->getItemCount() - count));
+			const uint16_t newCount = (uint16_t)std::max((int32_t)0, (int32_t)(item->getItemCount() - count));
 			item->setItemCount(newCount);
 
 			const ItemType& it = Item::items[item->getID()];

@@ -1068,7 +1068,7 @@ void ProtocolGame::parseThrow(NetworkMessage& msg)
 	uint16_t spriteId = msg.getU16();
 	uint8_t fromStackpos = msg.getByte();
 	Position toPos = msg.getPosition();
-	uint8_t count = msg.getByte();
+	const uint16_t count = msg.getU16();
 
 	/*
 	std::cout << "parseThrow: " << "from_x: " << (int)fromPos.x << ", from_y: " << (int)fromPos.y

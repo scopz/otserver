@@ -803,7 +803,7 @@ bool Game::removeCreature(Creature* creature, bool isLogout /*= true*/)
 }
 
 bool Game::playerMoveThing(uint32_t playerId, const Position& fromPos,
-	uint16_t spriteId, uint8_t fromStackPos, const Position& toPos, uint8_t count)
+	uint16_t spriteId, uint8_t fromStackPos, const Position& toPos, uint16_t count)
 {
 	Player* player = getPlayerByID(playerId);
 	if(!player || player->isRemoved())
@@ -1082,7 +1082,7 @@ ReturnValue Game::internalMoveCreature(Creature* creature, Cylinder* fromCylinde
 }
 
 bool Game::playerMoveItem(uint32_t playerId, const Position& fromPos,
-	uint16_t spriteId, uint8_t fromStackPos, const Position& toPos, uint8_t count)
+	uint16_t spriteId, uint8_t fromStackPos, const Position& toPos, uint16_t count)
 {
 	Player* player = getPlayerByID(playerId);
 	if(!player || player->isRemoved() || player->hasFlag(PlayerFlag_CannotMoveItems) || (!player->canMoveItem())){
@@ -1350,7 +1350,7 @@ ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder,
 	//update item(s)
 	if(item->isStackable()) {
 		if(toItem && toItem->getID() == item->getID()){
-			n = std::min((uint32_t)100 - toItem->getItemCount(), m);
+			n = std::min((uint32_t)toItem->getMaxStack() - toItem->getItemCount(), m);
 			toCylinder->__updateThing(toItem, toItem->getID(), toItem->getItemCount() + n);
 			updateItem = toItem;
 		}
@@ -1435,8 +1435,8 @@ ReturnValue Game::internalAddItem(Cylinder* toCylinder, Item* item, int32_t inde
 
 	if(!test){
 
-		if(item->isStackable() && toItem && toItem->getID() == item->getID() && toItem->getItemCount() < 100){
-			uint32_t countToMove = std::min(remainderCount, (uint32_t)(100 - toItem->getItemCount()));
+		if(item->isStackable() && toItem && toItem->getID() == item->getID() && toItem->getItemCount() < toItem->getMaxStack()){
+			uint32_t countToMove = std::min(remainderCount, (uint32_t)(toItem->getMaxStack() - toItem->getItemCount()));
 			if (countToMove > 0) {
 				toCylinder->__updateThing(toItem, toItem->getID(), toItem->getItemCount() + countToMove);
 				remainderCount -= countToMove;
@@ -1807,8 +1807,9 @@ bool Game::addMoney(Cylinder* cylinder, uint32_t money, uint32_t flags /*= 0*/)
 			money -= count * it->first;
 
 			while(count > 0){
-				uint32_t moneyCount = std::min(count, (uint32_t)100);
-				Item* moneyItem = Item::CreateItem(it->second->id, moneyCount);
+				Item* moneyItem = Item::CreateItem(it->second->id);
+				uint32_t moneyCount = std::min(count, (uint32_t)moneyItem->getMaxStack());
+				moneyItem->setItemCount(moneyCount);
 
 				ReturnValue ret = internalAddItem(cylinder, moneyItem, INDEX_WHEREEVER, flags);
 				if(ret != RET_NOERROR){

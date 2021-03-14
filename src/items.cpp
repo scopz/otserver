@@ -43,6 +43,7 @@ ItemType::ItemType()
 	group            = ITEM_GROUP_NONE;
 	type             = ITEM_TYPE_NONE;
 	stackable        = false;
+	maxStack         = DEFAULT_MAX_STACK;
 	useable	         = false;
 	moveable         = true;
 	alwaysOnTop      = false;
@@ -139,7 +140,7 @@ ItemType::~ItemType()
 
 
 //this function is used to show description of items who aren't really in game (like those shown at trade NPC window)
-std::string ItemType::getDescription(uint8_t count) const
+std::string ItemType::getDescription(uint16_t count) const
 {
 	int32_t subType = count;
 
@@ -549,6 +550,11 @@ bool Items::loadFromXml(const std::string& datadir)
 						else if(asLowerCaseString(strValue) == "showcount"){
 							if(readXMLInteger(itemAttributesNode, "value", intValue)){
 								it.showCount = (intValue != 0);
+							}
+						}
+						else if(asLowerCaseString(strValue) == "maxstack"){
+							if(readXMLInteger(itemAttributesNode, "value", intValue)){
+								it.maxStack = intValue;
 							}
 						}
 						else if(asLowerCaseString(strValue) == "armor"){
@@ -1356,6 +1362,10 @@ bool Items::loadFromXml(const std::string& datadir)
 				// plural adding "s" at the end
 				if(it.pluralName.size() == 0 && it.name.size() != 0){
 					it.pluralName = it.name + "s";
+				}
+
+				if (!it.stackable) {
+					it.maxStack = 1;
 				}
 			}
 			else{

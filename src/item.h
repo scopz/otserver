@@ -344,6 +344,7 @@ public:
 	bool hasCharges() const {return getCharges() > 0;}
 	bool isSolidForItems() const { return items[id].isSolidForItems(); }
 	bool isCorpse() const { return items[id].corpseType != 0; }
+	uint16_t getMaxStack() const {return items[id].maxStack;}
 
 	bool floorChangeDown() const {return items[id].floorChangeDown;}
 	bool floorChangeNorth() const {return items[id].floorChangeNorth;}
@@ -357,7 +358,7 @@ public:
 
 	// get the number of items
 	uint16_t getItemCount() const {return count;}
-	void setItemCount(uint8_t n) {if(n < 1) n = 1; count = n;}
+	void setItemCount(uint16_t n) {if(n < 1) n = 1; count = n;}
 
 	static uint32_t countByType(const Item* i, int32_t subType);
 
@@ -390,7 +391,7 @@ protected:
 	std::string getWeightDescription(double weight) const;
 
 	uint16_t id;  // the same id as in ItemType
-	uint8_t count; // number of stacked items
+	uint16_t count; // number of stacked items
 
 	//Don't add variables here, use the ItemAttribute class.
 };
