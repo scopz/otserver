@@ -5608,6 +5608,7 @@
 		<attribute key="shootType" value="bolt"/>
 		<attribute key="maxHitChance" value="90"/>
 		<attribute key="ammoAction" value="removecount"/>
+		<attribute key="maxstack" value="250"/>
 	</item>
 	<item id="2544" article="an" name="arrow" plural="arrows">
 		<attribute key="weight" value="70"/>
@@ -5618,6 +5619,7 @@
 		<attribute key="shootType" value="arrow"/>
 		<attribute key="maxHitChance" value="90"/>
 		<attribute key="ammoAction" value="removecount"/>
+		<attribute key="maxstack" value="250"/>
 	</item>
 	<item id="2545" article="a" name="poison arrow" plural="poison arrows">
 		<attribute key="weight" value="80"/>
@@ -5628,6 +5630,7 @@
 		<attribute key="shootType" value="poisonarrow"/>
 		<attribute key="maxHitChance" value="90"/>
 		<attribute key="ammoAction" value="removecount"/>
+		<attribute key="maxstack" value="250"/>
 	</item>
 	<item id="2546" article="a" name="burst arrow" plural="burst arrows">
 		<attribute key="weight" value="90"/>
@@ -5638,6 +5641,7 @@
 		<attribute key="shootType" value="burstarrow"/>
 		<attribute key="hitChance" value="100"/>
 		<attribute key="ammoAction" value="removecount"/>
+		<attribute key="maxstack" value="250"/>
 	</item>
 	<item id="2547" article="a" name="power bolt" plural="power bolts">
 		<attribute key="weight" value="80"/>
@@ -5648,6 +5652,7 @@
 		<attribute key="shootType" value="powerbolt"/>
 		<attribute key="maxHitChance" value="90"/>
 		<attribute key="ammoAction" value="removecount"/>
+		<attribute key="maxstack" value="250"/>
 	</item>
 	<item id="2548" article="a" name="pitch fork">
 		<attribute key="weight" value="2500"/>
