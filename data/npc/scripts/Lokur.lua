@@ -40,7 +40,7 @@ function creatureSayCallback(cid, type, msg)
     talkState = 0
 	elseif talkState == 8 then
 		n = getMoneyCount(msg)
-		b = n * 100
+		b = n * 1000
 		npcHandler:say('So I should change '..b..' of your gold coins to '..n..' platinum coins for you?')
 		talkState = 9
 
@@ -74,7 +74,7 @@ function creatureSayCallback(cid, type, msg)
     talkState = 0
 	elseif talkState == 11 then
 		n = getMoneyCount(msg)
-		b = n * 100
+		b = n * 1000
 		npcHandler:say('So I should change '..n..' of your platinum coins to '..b..' gold coins for you?')
 		talkState = 12
 
@@ -97,7 +97,7 @@ function creatureSayCallback(cid, type, msg)
     talkState = 0
 	elseif talkState == 13 then
 		n = getMoneyCount(msg)
-		b = n * 100
+		b = n * 1000
 		npcHandler:say('So I should change '..b..' of your platinum coins to '..n..' crystal coins for you?')
 		talkState = 14
 
@@ -122,7 +122,7 @@ function creatureSayCallback(cid, type, msg)
     talkState = 0
 	elseif talkState == 15 then
 		n = getMoneyCount(msg)
-		b = n * 100
+		b = n * 1000
 		npcHandler:say('So I should change '..n..' of your crystal coins to '..b..' platinum coins for you?')
 		talkState = 16
 
