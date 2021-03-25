@@ -3990,6 +3990,9 @@ bool Game::combatBlockHit(CombatType_t combatType, Creature* attacker, Creature*
 			case COMBAT_DEATHDAMAGE:
 			case COMBAT_HOLYDAMAGE:
 			case COMBAT_PHYSICALDAMAGE:
+			case COMBAT_BASHDAMAGE:
+			case COMBAT_SLASHDAMAGE:
+			case COMBAT_THRUSTDAMAGE:
 			case COMBAT_EARTHDAMAGE:
 			{
 				hitEffect = NM_ME_BLOCKHIT;
@@ -4065,6 +4068,9 @@ bool Game::combatChangeHealth(CombatType_t combatType, MagicEffectClasses custom
 
 				switch(combatType){
 					case COMBAT_PHYSICALDAMAGE:
+					case COMBAT_BASHDAMAGE:
+					case COMBAT_SLASHDAMAGE:
+					case COMBAT_THRUSTDAMAGE:
 					{
 						Item* splash = NULL;
 						switch(target->getRace()){

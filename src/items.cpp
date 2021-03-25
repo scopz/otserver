@@ -1043,6 +1043,9 @@ bool Items::loadFromXml(const std::string& datadir)
 								it.abilities.absorb.resistances[CombatTypeToIndex(COMBAT_DEATHDAMAGE)] = intValue;
 								it.abilities.absorb.resistances[CombatTypeToIndex(COMBAT_HOLYDAMAGE)] = intValue;
 								it.abilities.absorb.resistances[CombatTypeToIndex(COMBAT_PHYSICALDAMAGE)] = intValue;
+								it.abilities.absorb.resistances[CombatTypeToIndex(COMBAT_BASHDAMAGE)] = intValue;
+								it.abilities.absorb.resistances[CombatTypeToIndex(COMBAT_SLASHDAMAGE)] = intValue;
+								it.abilities.absorb.resistances[CombatTypeToIndex(COMBAT_THRUSTDAMAGE)] = intValue;
 								it.abilities.absorb.resistances[CombatTypeToIndex(COMBAT_LIFEDRAIN)] = intValue;
 								it.abilities.absorb.resistances[CombatTypeToIndex(COMBAT_MANADRAIN)] = intValue;
 							}
@@ -1057,6 +1060,9 @@ bool Items::loadFromXml(const std::string& datadir)
 								it.abilities.absorb.resistances[CombatTypeToIndex(COMBAT_DEATHDAMAGE)] = intValue;
 								it.abilities.absorb.resistances[CombatTypeToIndex(COMBAT_HOLYDAMAGE)] = intValue;
 								it.abilities.absorb.resistances[CombatTypeToIndex(COMBAT_PHYSICALDAMAGE)] = intValue;
+								it.abilities.absorb.resistances[CombatTypeToIndex(COMBAT_BASHDAMAGE)] = intValue;
+								it.abilities.absorb.resistances[CombatTypeToIndex(COMBAT_SLASHDAMAGE)] = intValue;
+								it.abilities.absorb.resistances[CombatTypeToIndex(COMBAT_THRUSTDAMAGE)] = intValue;
 							}
 						}
 						else if(asLowerCaseString(strValue) == "absorbpercentenergy"){
@@ -1104,6 +1110,9 @@ bool Items::loadFromXml(const std::string& datadir)
 						else if(asLowerCaseString(strValue) == "absorbpercentphysical"){
 							if(readXMLInteger(itemAttributesNode, "value", intValue)){
 								it.abilities.absorb.resistances[CombatTypeToIndex(COMBAT_PHYSICALDAMAGE)] = intValue;
+								it.abilities.absorb.resistances[CombatTypeToIndex(COMBAT_BASHDAMAGE)] = intValue;
+								it.abilities.absorb.resistances[CombatTypeToIndex(COMBAT_SLASHDAMAGE)] = intValue;
+								it.abilities.absorb.resistances[CombatTypeToIndex(COMBAT_THRUSTDAMAGE)] = intValue;
 							}
 						}
 						else if(asLowerCaseString(strValue) == "suppressdrunk"){

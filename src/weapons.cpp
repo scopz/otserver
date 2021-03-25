@@ -635,6 +635,14 @@ bool WeaponMelee::configureWeapon(const ItemType& it)
 {
 	elementType = it.abilities.elementType;
 	elementDamage = it.abilities.elementDamage;
+
+	switch(it.weaponType){
+		case WEAPON_THRUST: params.combatType = COMBAT_THRUSTDAMAGE;   break;
+		case WEAPON_BASH:   params.combatType = COMBAT_BASHDAMAGE;     break;
+		case WEAPON_SLASH:  params.combatType = COMBAT_SLASHDAMAGE;    break;
+		default:            params.combatType = COMBAT_PHYSICALDAMAGE; break;
+	}
+
 	return Weapon::configureWeapon(it);
 }
 

@@ -27,7 +27,7 @@
 	</defenses>
 	<elements>
 		<element holyPercent="20"/>
-		<element physicalPercent="-20"/>
+		<element physicalPercent="-20" bashPercent="-20" slashPercent="-20" thrustPercent="-20"/>
 	</elements>
 	<immunities>
 	</immunities>

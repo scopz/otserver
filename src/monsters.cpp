@@ -1389,6 +1389,15 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monster_n
 						if(readXMLInteger(tmpNode, "physicalPercent", intValue)){
 							mType->elementMap[COMBAT_PHYSICALDAMAGE] = intValue;
 						}
+						if(readXMLInteger(tmpNode, "bashPercent", intValue)){
+							mType->elementMap[COMBAT_BASHDAMAGE] = intValue;
+						}
+						if(readXMLInteger(tmpNode, "slashPercent", intValue)){
+							mType->elementMap[COMBAT_SLASHDAMAGE] = intValue;
+						}
+						if(readXMLInteger(tmpNode, "thrustPercent", intValue)){
+							mType->elementMap[COMBAT_THRUSTDAMAGE] = intValue;
+						}
 						if(readXMLInteger(tmpNode, "earthPercent", intValue)
 							|| readXMLInteger(tmpNode, "poisonPercent", intValue)){
 							mType->elementMap[COMBAT_EARTHDAMAGE] = intValue;

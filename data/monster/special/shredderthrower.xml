@@ -27,11 +27,11 @@
 	<defenses armor="1" defense="0">
 	</defenses>
 	<elements>
+		<element physicalPercent="100" bashPercent="100" slashPercent="100" thrustPercent="100"/>
 		<element deathPercent="100"/>
 		<element earthPercent="100"/>
 		<element energyPercent="100"/>
 		<element icePercent="100"/>
-		<element physicalPercent="100"/>
 		<element firePercent="100"/>
 		<element holyPercent="100"/>
 	</elements>
