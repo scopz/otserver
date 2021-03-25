@@ -56,12 +56,12 @@ public:
 
 	float getMeleeBaseDamage(WeaponType_t weaponType) const
 	{
-		if(weaponType == WEAPON_SWORD)
-			return swordBaseDamage;
-		else if(weaponType == WEAPON_AXE)
-			return axeBaseDamage;
-		else if(weaponType == WEAPON_CLUB)
-			return clubBaseDamage;
+		if(weaponType == WEAPON_THRUST)
+			return thrustBaseDamage;
+		else if(weaponType == WEAPON_SLASH)
+			return slashBaseDamage;
+		else if(weaponType == WEAPON_BASH)
+			return bashBaseDamage;
 		else if(weaponType == WEAPON_DIST)
 			return distBaseDamage;
 		else
@@ -102,9 +102,9 @@ protected:
 	float manaMultiplier;
 	uint32_t attackSpeed;
 
-	float swordBaseDamage;
-	float axeBaseDamage;
-	float clubBaseDamage;
+	float thrustBaseDamage;
+	float slashBaseDamage;
+	float bashBaseDamage;
 	float distBaseDamage;
 	float fistBaseDamage;
 	float magicBaseDamage;

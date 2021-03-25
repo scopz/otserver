@@ -3912,51 +3912,51 @@
 		<attribute key="showduration" value="1"/>
 		<attribute key="speed" value="30"/>
 	</item>
-	<item id="2207" article="a" name="sword ring">
+	<item id="2207" article="a" name="thrust ring">
 		<attribute key="weight" value="90"/>
 		<attribute key="slotType" value="ring"/>
 		<attribute key="transformEquipTo" value="2210"/>
 		<attribute key="stopduration" value="1"/>
 		<attribute key="showduration" value="1"/>
 	</item>
-	<item id="2208" article="an" name="axe ring">
+	<item id="2208" article="an" name="slash ring">
 		<attribute key="weight" value="90"/>
 		<attribute key="slotType" value="ring"/>
 		<attribute key="transformEquipTo" value="2211"/>
 		<attribute key="stopduration" value="1"/>
 		<attribute key="showduration" value="1"/>
 	</item>
-	<item id="2209" article="a" name="club ring">
+	<item id="2209" article="a" name="bash ring">
 		<attribute key="weight" value="90"/>
 		<attribute key="slotType" value="ring"/>
 		<attribute key="transformEquipTo" value="2212"/>
 		<attribute key="stopduration" value="1"/>
 		<attribute key="showduration" value="1"/>
 	</item>
-	<item id="2210" article="a" name="sword ring">
+	<item id="2210" article="a" name="thrust ring">
 		<attribute key="weight" value="90"/>
 		<attribute key="slotType" value="ring"/>
 		<attribute key="decayTo" value="0"/>
 		<attribute key="transformDeEquipTo" value="2207"/>
-		<attribute key="skillSword" value="4"/>
+		<attribute key="skillThrust" value="4"/>
 		<attribute key="duration" value="1800"/>
 		<attribute key="showduration" value="1"/>
 	</item>
-	<item id="2211" article="an" name="axe ring">
+	<item id="2211" article="an" name="slash ring">
 		<attribute key="weight" value="90"/>
 		<attribute key="slotType" value="ring"/>
 		<attribute key="decayTo" value="0"/>
 		<attribute key="transformDeEquipTo" value="2208"/>
-		<attribute key="skillAxe" value="4"/>
+		<attribute key="skillSlash" value="4"/>
 		<attribute key="duration" value="1800"/>
 		<attribute key="showduration" value="1"/>
 	</item>
-	<item id="2212" article="a" name="club ring">
+	<item id="2212" article="a" name="bash ring">
 		<attribute key="weight" value="90"/>
 		<attribute key="slotType" value="ring"/>
 		<attribute key="decayTo" value="0"/>
 		<attribute key="transformDeEquipTo" value="2209"/>
-		<attribute key="skillClub" value="4"/>
+		<attribute key="skillBash" value="4"/>
 		<attribute key="duration" value="1800"/>
 		<attribute key="showduration" value="1"/>
 	</item>
@@ -4396,7 +4396,7 @@
 		<attribute key="weight" value="6800"/>
 		<attribute key="defense" value="14"/>
 		<attribute key="attack" value="24"/>
-		<attribute key="weaponType" value="club"/>
+		<attribute key="weaponType" value="bash"/>
 	</item>
 	<item id="2322" article="a" name="voodoo doll">
 		<attribute key="description" value="It looks like a little king."/>
@@ -4614,83 +4614,83 @@
 		<attribute key="weight" value="3500"/>
 		<attribute key="defense" value="12"/>
 		<attribute key="attack" value="14"/>
-		<attribute key="weaponType" value="sword"/>
+		<attribute key="weaponType" value="thrust"/>
 	</item>
 	<item id="2377" article="a" name="two handed sword">
 		<attribute key="weight" value="7000"/>
 		<attribute key="defense" value="25"/>
 		<attribute key="attack" value="30"/>
-		<attribute key="weaponType" value="sword"/>
+		<attribute key="weaponType" value="thrust"/>
 		<attribute key="slotType" value="two-handed"/>
 	</item>
 	<item id="2378" article="a" name="battle axe">
 		<attribute key="weight" value="5000"/>
 		<attribute key="defense" value="10"/>
 		<attribute key="attack" value="25"/>
-		<attribute key="weaponType" value="axe"/>
+		<attribute key="weaponType" value="slash"/>
 		<attribute key="slotType" value="two-handed"/>
 	</item>
 	<item id="2379" article="a" name="dagger">
 		<attribute key="weight" value="950"/>
 		<attribute key="defense" value="6"/>
 		<attribute key="attack" value="8"/>
-		<attribute key="weaponType" value="sword"/>
+		<attribute key="weaponType" value="thrust"/>
 	</item>
 	<item id="2380" article="a" name="hand axe">
 		<attribute key="weight" value="1800"/>
 		<attribute key="defense" value="5"/>
 		<attribute key="attack" value="10"/>
-		<attribute key="weaponType" value="axe"/>
+		<attribute key="weaponType" value="slash"/>
 	</item>
 	<item id="2381" article="a" name="halberd">
 		<attribute key="weight" value="9000"/>
 		<attribute key="defense" value="14"/>
 		<attribute key="attack" value="35"/>
-		<attribute key="weaponType" value="axe"/>
+		<attribute key="weaponType" value="slash"/>
 		<attribute key="slotType" value="two-handed"/>
 	</item>
 	<item id="2382" article="a" name="club">
 		<attribute key="weight" value="2500"/>
 		<attribute key="defense" value="7"/>
 		<attribute key="attack" value="7"/>
-		<attribute key="weaponType" value="club"/>
+		<attribute key="weaponType" value="bash"/>
 	</item>
 	<item id="2383" article="a" name="spike sword">
 		<attribute key="weight" value="5000"/>
 		<attribute key="defense" value="21"/>
 		<attribute key="attack" value="24"/>
-		<attribute key="weaponType" value="sword"/>
+		<attribute key="weaponType" value="thrust"/>
 	</item>
 	<item id="2384" article="a" name="rapier">
 		<attribute key="weight" value="1500"/>
 		<attribute key="defense" value="8"/>
 		<attribute key="attack" value="10"/>
-		<attribute key="weaponType" value="sword"/>
+		<attribute key="weaponType" value="thrust"/>
 	</item>
 	<item id="2385" article="a" name="sabre">
 		<attribute key="weight" value="2500"/>
 		<attribute key="defense" value="10"/>
 		<attribute key="attack" value="12"/>
-		<attribute key="weaponType" value="sword"/>
+		<attribute key="weaponType" value="thrust"/>
 	</item>
 	<item id="2386" article="an" name="axe">
 		<attribute key="weight" value="4000"/>
 		<attribute key="defense" value="6"/>
 		<attribute key="attack" value="12"/>
-		<attribute key="weaponType" value="axe"/>
+		<attribute key="weaponType" value="slash"/>
 	</item>
 	<item id="2387" article="a" name="double axe">
 		<attribute key="weight" value="7000"/>
 		<attribute key="defense" value="12"/>
 		<attribute key="attack" value="35"/>
-		<attribute key="weaponType" value="axe"/>
+		<attribute key="weaponType" value="slash"/>
 		<attribute key="slotType" value="two-handed"/>
 	</item>
 	<item id="2388" article="a" name="hatchet">
 		<attribute key="weight" value="3500"/>
 		<attribute key="defense" value="8"/>
 		<attribute key="attack" value="15"/>
-		<attribute key="weaponType" value="axe"/>
+		<attribute key="weaponType" value="slash"/>
 	</item>
 	<item id="2389" article="a" name="spear" plural="spears">
 		<attribute key="weight" value="1000"/>
@@ -4706,14 +4706,14 @@
 		<attribute key="weight" value="4300"/>
 		<attribute key="defense" value="40"/>
 		<attribute key="attack" value="55"/>
-		<attribute key="weaponType" value="sword"/>
+		<attribute key="weaponType" value="thrust"/>
 		<attribute key="slotType" value="two-handed"/>
 	</item>
 	<item id="2391" article="a" name="war hammer">
 		<attribute key="weight" value="8500"/>
 		<attribute key="defense" value="10"/>
 		<attribute key="attack" value="45"/>
-		<attribute key="weaponType" value="club"/>
+		<attribute key="weaponType" value="bash"/>
 		<attribute key="slotType" value="two-handed"/>
 	</item>
 	<item id="2392" article="a" name="fire sword">
@@ -4721,47 +4721,47 @@
 		<attribute key="weight" value="2300"/>
 		<attribute key="defense" value="20"/>
 		<attribute key="attack" value="35"/>
-		<attribute key="weaponType" value="sword"/>
+		<attribute key="weaponType" value="thrust"/>
 	</item>
 	<item id="2393" article="a" name="giant sword">
 		<attribute key="description" value="This sword has been forged by ancient giants."/>
 		<attribute key="weight" value="18000"/>
 		<attribute key="defense" value="22"/>
 		<attribute key="attack" value="46"/>
-		<attribute key="weaponType" value="sword"/>
+		<attribute key="weaponType" value="thrust"/>
 		<attribute key="slotType" value="two-handed"/>
 	</item>
 	<item id="2394" article="a" name="morning star">
 		<attribute key="weight" value="5400"/>
 		<attribute key="defense" value="11"/>
 		<attribute key="attack" value="25"/>
-		<attribute key="weaponType" value="club"/>
+		<attribute key="weaponType" value="bash"/>
 	</item>
 	<item id="2395" article="a" name="carlin sword">
 		<attribute key="weight" value="4000"/>
 		<attribute key="defense" value="13"/>
 		<attribute key="attack" value="15"/>
-		<attribute key="weaponType" value="sword"/>
+		<attribute key="weaponType" value="thrust"/>
 	</item>
 	<item id="2396" article="an" name="ice rapier">
 		<attribute key="description" value="A deadly but fragile weapon."/>
 		<attribute key="weight" value="1500"/>
 		<attribute key="attack" value="100"/>
 		<attribute key="defense" value="1"/>
-		<attribute key="weaponType" value="sword"/>
+		<attribute key="weaponType" value="thrust"/>
 		<attribute key="charges" value="1"/>
 	</item>
 	<item id="2397" article="a" name="longsword">
 		<attribute key="weight" value="4200"/>
 		<attribute key="defense" value="14"/>
 		<attribute key="attack" value="17"/>
-		<attribute key="weaponType" value="sword"/>
+		<attribute key="weaponType" value="thrust"/>
 	</item>
 	<item id="2398" article="a" name="mace">
 		<attribute key="weight" value="3800"/>
 		<attribute key="defense" value="11"/>
 		<attribute key="attack" value="16"/>
-		<attribute key="weaponType" value="club"/>
+		<attribute key="weaponType" value="bash"/>
 	</item>
 	<item id="2399" article="a" name="throwing star" plural="throwing stars">
 		<attribute key="weight" value="200"/>
@@ -4777,65 +4777,65 @@
 		<attribute key="weight" value="4200"/>
 		<attribute key="defense" value="35"/>
 		<attribute key="attack" value="48"/>
-		<attribute key="weaponType" value="sword"/>
+		<attribute key="weaponType" value="thrust"/>
 	</item>
 	<item id="2401" article="a" name="staff">
 		<attribute key="weight" value="3800"/>
 		<attribute key="defense" value="25"/>
 		<attribute key="attack" value="10"/>
-		<attribute key="weaponType" value="club"/>
+		<attribute key="weaponType" value="bash"/>
 		<attribute key="slotType" value="two-handed"/>
 	</item>
 	<item id="2402" article="a" name="silver dagger">
 		<attribute key="weight" value="1020"/>
 		<attribute key="defense" value="7"/>
 		<attribute key="attack" value="9"/>
-		<attribute key="weaponType" value="sword"/>
+		<attribute key="weaponType" value="thrust"/>
 	</item>
 	<item id="2403" article="a" name="knife">
 		<attribute key="weight" value="420"/>
 		<attribute key="defense" value="5"/>
 		<attribute key="attack" value="5"/>
-		<attribute key="weaponType" value="sword"/>
+		<attribute key="weaponType" value="thrust"/>
 	</item>
 	<item id="2404" article="a" name="combat knife">
 		<attribute key="weight" value="870"/>
 		<attribute key="defense" value="6"/>
 		<attribute key="attack" value="8"/>
-		<attribute key="weaponType" value="sword"/>
+		<attribute key="weaponType" value="thrust"/>
 	</item>
 	<item id="2405" article="a" name="sickle">
 		<attribute key="weight" value="1050"/>
 		<attribute key="defense" value="4"/>
 		<attribute key="attack" value="5"/>
-		<attribute key="weaponType" value="axe"/>
+		<attribute key="weaponType" value="slash"/>
 	</item>
 	<item id="2406" article="a" name="short sword">
 		<attribute key="weight" value="3500"/>
 		<attribute key="defense" value="11"/>
 		<attribute key="attack" value="11"/>
-		<attribute key="weaponType" value="sword"/>
+		<attribute key="weaponType" value="thrust"/>
 	</item>
 	<item id="2407" article="a" name="bright sword">
 		<attribute key="description" value="The blade shimmers in light blue."/>
 		<attribute key="weight" value="2900"/>
 		<attribute key="defense" value="30"/>
 		<attribute key="attack" value="36"/>
-		<attribute key="weaponType" value="sword"/>
+		<attribute key="weaponType" value="thrust"/>
 	</item>
 	<item id="2408" article="a" name="warlord sword">
 		<attribute key="description" value="Strong powers flow in this magic sword."/>
 		<attribute key="weight" value="6400"/>
 		<attribute key="defense" value="38"/>
 		<attribute key="attack" value="53"/>
-		<attribute key="weaponType" value="sword"/>
+		<attribute key="weaponType" value="thrust"/>
 		<attribute key="slotType" value="two-handed"/>
 	</item>
 	<item id="2409" article="a" name="serpent sword">
 		<attribute key="weight" value="4100"/>
 		<attribute key="defense" value="15"/>
 		<attribute key="attack" value="26"/>
-		<attribute key="weaponType" value="sword"/>
+		<attribute key="weaponType" value="thrust"/>
 	</item>
 	<item id="2410" article="a" name="throwing knife" plural="throwing knives">
 		<attribute key="weight" value="500"/>
@@ -4850,19 +4850,19 @@
 		<attribute key="weight" value="880"/>
 		<attribute key="defense" value="8"/>
 		<attribute key="attack" value="18"/>
-		<attribute key="weaponType" value="sword"/>
+		<attribute key="weaponType" value="thrust"/>
 	</item>
 	<item id="2412" article="a" name="katana">
 		<attribute key="weight" value="3100"/>
 		<attribute key="defense" value="12"/>
 		<attribute key="attack" value="16"/>
-		<attribute key="weaponType" value="sword"/>
+		<attribute key="weaponType" value="thrust"/>
 	</item>
 	<item id="2413" article="a" name="broadsword">
 		<attribute key="weight" value="5250"/>
 		<attribute key="defense" value="23"/>
 		<attribute key="attack" value="26"/>
-		<attribute key="weaponType" value="sword"/>
+		<attribute key="weaponType" value="thrust"/>
 		<attribute key="slotType" value="two-handed"/>
 	</item>
 	<item id="2414" article="a" name="dragon lance">
@@ -4870,7 +4870,7 @@
 		<attribute key="weight" value="6700"/>
 		<attribute key="defense" value="16"/>
 		<attribute key="attack" value="47"/>
-		<attribute key="weaponType" value="axe"/>
+		<attribute key="weaponType" value="slash"/>
 		<attribute key="slotType" value="two-handed"/>
 	</item>
 	<item id="2415" article="a" name="great axe">
@@ -4878,7 +4878,7 @@
 		<attribute key="weight" value="9000"/>
 		<attribute key="defense" value="22"/>
 		<attribute key="attack" value="52"/>
-		<attribute key="weaponType" value="axe"/>
+		<attribute key="weaponType" value="slash"/>
 		<attribute key="slotType" value="two-handed"/>
 	</item>
 	<item id="2416" article="a" name="crowbar">
@@ -4886,117 +4886,117 @@
 		<attribute key="weight" value="2100"/>
 		<attribute key="defense" value="6"/>
 		<attribute key="attack" value="5"/>
-		<attribute key="weaponType" value="club"/>
+		<attribute key="weaponType" value="bash"/>
 	</item>
 	<item id="2417" article="a" name="battle hammer">
 		<attribute key="weight" value="6800"/>
 		<attribute key="defense" value="14"/>
 		<attribute key="attack" value="24"/>
-		<attribute key="weaponType" value="club"/>
+		<attribute key="weaponType" value="bash"/>
 	</item>
 	<item id="2418" article="a" name="golden sickle">
 		<attribute key="weight" value="1950"/>
 		<attribute key="defense" value="6"/>
 		<attribute key="attack" value="13"/>
-		<attribute key="weaponType" value="axe"/>
+		<attribute key="weaponType" value="slash"/>
 	</item>
 	<item id="2419" article="a" name="scimitar">
 		<attribute key="weight" value="2900"/>
 		<attribute key="defense" value="13"/>
 		<attribute key="attack" value="19"/>
-		<attribute key="weaponType" value="sword"/>
+		<attribute key="weaponType" value="thrust"/>
 	</item>
 	<item id="2420" article="a" name="machete">
 		<attribute key="weight" value="1650"/>
 		<attribute key="defense" value="9"/>
 		<attribute key="attack" value="12"/>
-		<attribute key="weaponType" value="sword"/>
+		<attribute key="weaponType" value="thrust"/>
 	</item>
 	<item id="2421" article="a" name="thunder hammer">
 		<attribute key="description" value="It is blessed by the gods of Tibia."/>
 		<attribute key="weight" value="12500"/>
 		<attribute key="defense" value="35"/>
 		<attribute key="attack" value="49"/>
-		<attribute key="weaponType" value="club"/>
+		<attribute key="weaponType" value="bash"/>
 	</item>
 	<item id="2422" article="an" name="iron hammer">
 		<attribute key="weight" value="6600"/>
 		<attribute key="defense" value="10"/>
 		<attribute key="attack" value="18"/>
-		<attribute key="weaponType" value="club"/>
+		<attribute key="weaponType" value="bash"/>
 	</item>
 	<item id="2423" article="a" name="clerical mace">
 		<attribute key="weight" value="5800"/>
 		<attribute key="defense" value="15"/>
 		<attribute key="attack" value="28"/>
-		<attribute key="weaponType" value="club"/>
+		<attribute key="weaponType" value="bash"/>
 	</item>
 	<item id="2424" article="a" name="silver mace">
 		<attribute key="description" value="You feel an aura of protection."/>
 		<attribute key="weight" value="6700"/>
 		<attribute key="defense" value="30"/>
 		<attribute key="attack" value="41"/>
-		<attribute key="weaponType" value="club"/>
+		<attribute key="weaponType" value="bash"/>
 	</item>
 	<item id="2425" article="an" name="obsidian lance">
 		<attribute key="weight" value="8000"/>
 		<attribute key="defense" value="10"/>
 		<attribute key="attack" value="34"/>
-		<attribute key="weaponType" value="axe"/>
+		<attribute key="weaponType" value="slash"/>
 		<attribute key="slotType" value="two-handed"/>
 	</item>
 	<item id="2426" article="a" name="naginata">
 		<attribute key="weight" value="8000"/>
 		<attribute key="defense" value="25"/>
 		<attribute key="attack" value="39"/>
-		<attribute key="weaponType" value="axe"/>
+		<attribute key="weaponType" value="slash"/>
 		<attribute key="slotType" value="two-handed"/>
 	</item>
 	<item id="2427" article="a" name="guardian halberd">
 		<attribute key="weight" value="11000"/>
 		<attribute key="defense" value="15"/>
 		<attribute key="attack" value="46"/>
-		<attribute key="weaponType" value="axe"/>
+		<attribute key="weaponType" value="slash"/>
 		<attribute key="slotType" value="two-handed"/>
 	</item>
 	<item id="2428" article="an" name="orcish axe">
 		<attribute key="weight" value="4500"/>
 		<attribute key="defense" value="12"/>
 		<attribute key="attack" value="23"/>
-		<attribute key="weaponType" value="axe"/>
+		<attribute key="weaponType" value="slash"/>
 	</item>
 	<item id="2429" article="a" name="barbarian axe">
 		<attribute key="weight" value="5100"/>
 		<attribute key="defense" value="18"/>
 		<attribute key="attack" value="28"/>
-		<attribute key="weaponType" value="axe"/>
+		<attribute key="weaponType" value="slash"/>
 	</item>
 	<item id="2430" article="a" name="knight axe">
 		<attribute key="weight" value="5900"/>
 		<attribute key="defense" value="21"/>
 		<attribute key="attack" value="33"/>
-		<attribute key="weaponType" value="axe"/>
+		<attribute key="weaponType" value="slash"/>
 	</item>
 	<item id="2431" article="a" name="stonecutter axe">
 		<attribute key="description" value="You feel the power of this mighty axe."/>
 		<attribute key="weight" value="9900"/>
 		<attribute key="defense" value="30"/>
 		<attribute key="attack" value="50"/>
-		<attribute key="weaponType" value="axe"/>
+		<attribute key="weaponType" value="slash"/>
 	</item>
 	<item id="2432" article="a" name="fire axe">
 		<attribute key="description" value="The blade is a magic flame."/>
 		<attribute key="weight" value="4000"/>
 		<attribute key="defense" value="16"/>
 		<attribute key="attack" value="38"/>
-		<attribute key="weaponType" value="axe"/>
+		<attribute key="weaponType" value="slash"/>
 	</item>
 	<item id="2433" article="an" name="enchanted staff">
 		<attribute key="description" value="Temporary magic powers enchant this staff."/>
 		<attribute key="weight" value="3800"/>
 		<attribute key="defense" value="45"/>
 		<attribute key="attack" value="39"/>
-		<attribute key="weaponType" value="club"/>
+		<attribute key="weaponType" value="bash"/>
 		<attribute key="slotType" value="two-handed"/>
 		<attribute key="decayTo" value="2401"/>
 		<attribute key="duration" value="60"/>
@@ -5005,63 +5005,63 @@
 		<attribute key="weight" value="9700"/>
 		<attribute key="defense" value="20"/>
 		<attribute key="attack" value="32"/>
-		<attribute key="weaponType" value="club"/>
+		<attribute key="weaponType" value="bash"/>
 	</item>
 	<item id="2435" article="a" name="dwarven axe">
 		<attribute key="weight" value="8200"/>
 		<attribute key="defense" value="19"/>
 		<attribute key="attack" value="31"/>
-		<attribute key="weaponType" value="axe"/>
+		<attribute key="weaponType" value="slash"/>
 	</item>
 	<item id="2436" article="a" name="skull staff">
 		<attribute key="description" value="The staff longs for death."/>
 		<attribute key="weight" value="1700"/>
 		<attribute key="defense" value="12"/>
 		<attribute key="attack" value="36"/>
-		<attribute key="weaponType" value="club"/>
+		<attribute key="weaponType" value="bash"/>
 	</item>
 	<item id="2437" article="a" name="light mace">
 		<attribute key="weight" value="4100"/>
 		<attribute key="defense" value="9"/>
 		<attribute key="attack" value="14"/>
-		<attribute key="weaponType" value="club"/>
+		<attribute key="weaponType" value="bash"/>
 	</item>
 	<item id="2438" article="an" name="epee">
 		<attribute key="weight" value="1450"/>
 		<attribute key="defense" value="23"/>
 		<attribute key="attack" value="37"/>
-		<attribute key="weaponType" value="sword"/>
+		<attribute key="weaponType" value="thrust"/>
 	</item>
 	<item id="2439" article="a" name="daramanian mace">
 		<attribute key="weight" value="6800"/>
 		<attribute key="defense" value="12"/>
 		<attribute key="attack" value="21"/>
-		<attribute key="weaponType" value="club"/>
+		<attribute key="weaponType" value="bash"/>
 	</item>
 	<item id="2440" article="a" name="daramanian waraxe">
 		<attribute key="weight" value="5250"/>
 		<attribute key="defense" value="15"/>
 		<attribute key="attack" value="39"/>
-		<attribute key="weaponType" value="axe"/>
+		<attribute key="weaponType" value="slash"/>
 		<attribute key="slotType" value="two-handed"/>
 	</item>
 	<item id="2441" article="a" name="daramian axe">
 		<attribute key="weight" value="4100" />
 		<attribute key="defense" value="8" />
 		<attribute key="attack" value="17" />
-		<attribute key="weaponType" value="axe" />
+		<attribute key="weaponType" value="slash"/>
 	</item>
 	<item id="2442" article="a" name="heavy machete">
 		<attribute key="weight" value="1840"/>
 		<attribute key="defense" value="10"/>
 		<attribute key="attack" value="16"/>
-		<attribute key="weaponType" value="sword"/>
+		<attribute key="weaponType" value="thrust"/>
 	</item>
 	<item id="2443" article="a" name="ravager's axe">
 		<attribute key="weight" value="5250"/>
 		<attribute key="defense" value="14"/>
 		<attribute key="attack" value="49"/>
-		<attribute key="weaponType" value="axe"/>
+		<attribute key="weaponType" value="slash"/>
 		<attribute key="slotType" value="two-handed"/>
 	</item>
 	<item id="2444" article="a" name="hammer of wrath">
@@ -5069,26 +5069,26 @@
 		<attribute key="weight" value="7000"/>
 		<attribute key="defense" value="12"/>
 		<attribute key="attack" value="48"/>
-		<attribute key="weaponType" value="club"/>
+		<attribute key="weaponType" value="bash"/>
 		<attribute key="slotType" value="two-handed"/>
 	</item>
 	<item id="2445" article="a" name="crystal mace">
 		<attribute key="weight" value="8000"/>
 		<attribute key="defense" value="16"/>
 		<attribute key="attack" value="38"/>
-		<attribute key="weaponType" value="club"/>
+		<attribute key="weaponType" value="bash"/>
 	</item>
 	<item id="2446" article="a" name="pharaoh sword">
 		<attribute key="weight" value="5200"/>
 		<attribute key="defense" value="23"/>
 		<attribute key="attack" value="41"/>
-		<attribute key="weaponType" value="sword"/>
+		<attribute key="weaponType" value="thrust"/>
 	</item>
 	<item id="2447" article="a" name="twin axe">
 		<attribute key="weight" value="6400"/>
 		<attribute key="defense" value="24"/>
 		<attribute key="attack" value="45"/>
-		<attribute key="weaponType" value="axe"/>
+		<attribute key="weaponType" value="slash"/>
 		<attribute key="slotType" value="two-handed"/>
 	</item>
 	<item id="2448" article="a" name="studded club">
@@ -5096,33 +5096,33 @@
 		<attribute key="weight" value="3500"/>
 		<attribute key="defense" value="8"/>
 		<attribute key="attack" value="9"/>
-		<attribute key="weaponType" value="club"/>
+		<attribute key="weaponType" value="bash"/>
 	</item>
 	<item id="2449" article="a" name="bone club">
 		<attribute key="description" value="It apparently originally belonged to some lesser undead."/>
 		<attribute key="weight" value="3900"/>
 		<attribute key="defense" value="8"/>
 		<attribute key="attack" value="12"/>
-		<attribute key="weaponType" value="club"/>
+		<attribute key="weaponType" value="bash"/>
 	</item>
 	<item id="2450" article="a" name="bone sword">
 		<attribute key="weight" value="1900"/>
 		<attribute key="defense" value="10"/>
 		<attribute key="attack" value="14"/>
-		<attribute key="weaponType" value="sword"/>
+		<attribute key="weaponType" value="thrust"/>
 	</item>
 	<item id="2451" article="a" name="djinn blade">
 		<attribute key="weight" value="2450"/>
 		<attribute key="defense" value="22"/>
 		<attribute key="attack" value="38"/>
-		<attribute key="weaponType" value="sword"/>
+		<attribute key="weaponType" value="thrust"/>
 	</item>
 	<item id="2452" article="a" name="heavy mace">
 		<attribute key="description" value="Its tip is made of extremely solid steel."/>
 		<attribute key="weight" value="11000"/>
 		<attribute key="defense" value="15"/>
 		<attribute key="attack" value="49"/>
-		<attribute key="weaponType" value="club"/>
+		<attribute key="weaponType" value="bash"/>
 		<attribute key="slotType" value="two-handed"/>
 	</item>
 	<item id="2453" article="an" name="arcane staff">
@@ -5130,14 +5130,14 @@
 		<attribute key="weight" value="4000"/>
 		<attribute key="defense" value="30"/>
 		<attribute key="attack" value="50"/>
-		<attribute key="weaponType" value="club"/>
+		<attribute key="weaponType" value="bash"/>
 		<attribute key="slotType" value="two-handed"/>
 	</item>
 	<item id="2454" article="a" name="war axe">
 		<attribute key="weight" value="6150"/>
 		<attribute key="defense" value="10"/>
 		<attribute key="attack" value="48"/>
-		<attribute key="weaponType" value="axe"/>
+		<attribute key="weaponType" value="slash"/>
 		<attribute key="slotType" value="two-handed"/>
 	</item>
 	<item id="2455" article="a" name="crossbow">
@@ -5664,7 +5664,7 @@
 		<attribute key="weight" value="3000"/>
 		<attribute key="defense" value="3"/>
 		<attribute key="attack" value="8"/>
-		<attribute key="weaponType" value="axe"/>
+		<attribute key="weaponType" value="slash"/>
 		<attribute key="slotType" value="two-handed"/>
 	</item>
 	<item id="2551" article="a" name="broom">
@@ -9372,25 +9372,25 @@
 		<attribute key="weight" value="8000"/>
 		<attribute key="defense" value="30"/>
 		<attribute key="attack" value="40"/>
-		<attribute key="weaponType" value="club"/>
+		<attribute key="weaponType" value="bash"/>
 	</item>
 	<item id="3962" article="a" name="beastslayer axe">
 		<attribute key="weight" value="6150"/>
 		<attribute key="defense" value="12"/>
 		<attribute key="attack" value="35"/>
-		<attribute key="weaponType" value="axe"/>
+		<attribute key="weaponType" value="slash"/>
 	</item>
 	<item id="3963" article="a" name="templar scytheblade">
 		<attribute key="weight" value="2900"/>
 		<attribute key="defense" value="15"/>
 		<attribute key="attack" value="23"/>
-		<attribute key="weaponType" value="sword"/>
+		<attribute key="weaponType" value="thrust"/>
 	</item>
 	<item id="3964" article="a" name="ripper lance">
 		<attribute key="weight" value="8000"/>
 		<attribute key="defense" value="7"/>
 		<attribute key="attack" value="28"/>
-		<attribute key="weaponType" value="axe"/>
+		<attribute key="weaponType" value="slash"/>
 		<attribute key="slotType" value="two-handed"/>
 	</item>
 	<item id="3965" article="a" name="hunting spear">
@@ -9406,7 +9406,7 @@
 		<attribute key="weight" value="5000"/>
 		<attribute key="defense" value="15"/>
 		<attribute key="attack" value="25"/>
-		<attribute key="weaponType" value="club"/>
+		<attribute key="weaponType" value="bash"/>
 	</item>
 	<item id="3967" article="a" name="tribal mask">
 		<attribute key="weight" value="2500"/>
@@ -11079,7 +11079,7 @@
 		<attribute key="weight" value="6600"/>
 		<attribute key="defense" value="10"/>
 		<attribute key="attack" value="18"/>
-		<attribute key="weaponType" value="club"/>
+		<attribute key="weaponType" value="bash"/>
 	</item>
 	<item id="4847" article="a" name="simple dress">
 		<attribute key="weight" value="2400"/>

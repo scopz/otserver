@@ -47,7 +47,7 @@
 				<item id="2378" chance="2500"/><!-- 2.5% battle axe -->
 				<item id="2525" chance="5000"/><!-- 5% dwarven shield -->
 				<item id="2455" chance="4000"/><!-- 4% crossbow -->
-				<item id="2208" chance="100"/><!-- 0.1% axe ring -->
+				<item id="2208" chance="100"/><!-- 0.1% slash ring -->
 			</inside>
 		</item>
 	</loot>

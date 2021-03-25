@@ -153,14 +153,14 @@ bool Vocations::loadFromXml(const std::string& datadir)
 							}
 						}
 						else if(xmlStrcmp(skillNode->name, (const xmlChar*)"meleeDamage") == 0){
-							if(readXMLFloat(skillNode, "sword", floatVal)){
-								voc->swordBaseDamage = floatVal;
+							if(readXMLFloat(skillNode, "thrust", floatVal)){
+								voc->thrustBaseDamage = floatVal;
 							}
-							if(readXMLFloat(skillNode, "axe", floatVal)){
-								voc->axeBaseDamage = floatVal;
+							if(readXMLFloat(skillNode, "slash", floatVal)){
+								voc->slashBaseDamage = floatVal;
 							}
-							if(readXMLFloat(skillNode, "club", floatVal)){
-								voc->clubBaseDamage = floatVal;
+							if(readXMLFloat(skillNode, "bash", floatVal)){
+								voc->bashBaseDamage = floatVal;
 							}
 							if(readXMLFloat(skillNode, "dist", floatVal)){
 								voc->distBaseDamage = floatVal;
@@ -282,9 +282,9 @@ Vocation::Vocation()
 	skillBases[5] = 100;
 	skillBases[6] = 20;
 
-	swordBaseDamage = 1.;
-	axeBaseDamage = 1.;
-	clubBaseDamage = 1.;
+	thrustBaseDamage = 1.;
+	slashBaseDamage = 1.;
+	bashBaseDamage = 1.;
 	distBaseDamage = 1.;
 	fistBaseDamage = 1.;
 

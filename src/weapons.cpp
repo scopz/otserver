@@ -89,9 +89,9 @@ bool Weapons::loadDefaults()
 
 		if(it->weaponType != WEAPON_NONE){
 			switch(it->weaponType){
-				case WEAPON_AXE:
-				case WEAPON_SWORD:
-				case WEAPON_CLUB:
+				case WEAPON_SLASH:
+				case WEAPON_THRUST:
+				case WEAPON_BASH:
 				{
 					WeaponMelee* weapon = new WeaponMelee(&m_scriptInterface);
 					weapon->configureWeapon(*it);
@@ -693,23 +693,23 @@ bool WeaponMelee::getSkillType(const Player* player, const Item* item,
 	WeaponType_t weaponType = item->getWeaponType();
 
 	switch(weaponType){
-		case WEAPON_SWORD:
+		case WEAPON_THRUST:
 		{
-			skill = SKILL_SWORD;
+			skill = SKILL_THRUST;
 			return true;
 			break;
 		}
 
-		case WEAPON_CLUB:
+		case WEAPON_BASH:
 		{
-			skill = SKILL_CLUB;
+			skill = SKILL_BASH;
 			return true;
 			break;
 		}
 
-		case WEAPON_AXE:
+		case WEAPON_SLASH:
 		{
-			skill = SKILL_AXE;
+			skill = SKILL_SLASH;
 			return true;
 			break;
 		}

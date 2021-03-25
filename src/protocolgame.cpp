@@ -2296,12 +2296,12 @@ void ProtocolGame::addPlayerSkills(NetworkMessage &msg)
 	msg.addByte(0xA1);
 	msg.addByte(player->getSkillLevel(SKILL_FIST));
 	msg.addByte(player->getSkill(SKILL_FIST).percent);
-	msg.addByte(player->getSkillLevel(SKILL_CLUB));
-	msg.addByte(player->getSkill(SKILL_CLUB).percent);
-	msg.addByte(player->getSkillLevel(SKILL_SWORD));
-	msg.addByte(player->getSkill(SKILL_SWORD).percent);
-	msg.addByte(player->getSkillLevel(SKILL_AXE));
-	msg.addByte(player->getSkill(SKILL_AXE).percent);
+	msg.addByte(player->getSkillLevel(SKILL_BASH));
+	msg.addByte(player->getSkill(SKILL_BASH).percent);
+	msg.addByte(player->getSkillLevel(SKILL_THRUST));
+	msg.addByte(player->getSkill(SKILL_THRUST).percent);
+	msg.addByte(player->getSkillLevel(SKILL_SLASH));
+	msg.addByte(player->getSkill(SKILL_SLASH).percent);
 	msg.addByte(player->getSkillLevel(SKILL_DIST));
 	msg.addByte(player->getSkill(SKILL_DIST).percent);
 	msg.addByte(player->getSkillLevel(SKILL_SHIELD));

@@ -1,6 +1,6 @@
 function isBreakingTool(item)
 	local t = getItemWeaponTypeByUID(item.uid)
-	return (t == WEAPON_SWORD) or (t == WEAPON_CLUB) or (t == WEAPON_AXE)
+	return (t == WEAPON_THRUST) or (t == WEAPON_BASH) or (t == WEAPON_SLASH)
 end
 
 function onUse(cid, item, fromPosition, itemEx, toPosition)

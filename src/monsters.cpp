@@ -651,14 +651,14 @@ bool Monsters::deserializeSpell(xmlNodePtr node, spellBlock_t& sb, MonsterType* 
 			else if(readXMLInteger(node, "fist", intValue)){
 				param = CONDITIONPARAM_SKILL_FIST;
 			}
-			else if(readXMLInteger(node, "club", intValue)){
-				param = CONDITIONPARAM_SKILL_CLUB;
+			else if(readXMLInteger(node, "bash", intValue)){
+				param = CONDITIONPARAM_SKILL_BASH;
 			}
-			else if(readXMLInteger(node, "axe", intValue)){
-				param = CONDITIONPARAM_SKILL_AXE;
+			else if(readXMLInteger(node, "slash", intValue)){
+				param = CONDITIONPARAM_SKILL_SLASH;
 			}
-			else if(readXMLInteger(node, "sword", intValue)){
-				param = CONDITIONPARAM_SKILL_SWORD;
+			else if(readXMLInteger(node, "thrust", intValue)){
+				param = CONDITIONPARAM_SKILL_THRUST;
 			}
 			else if(readXMLInteger(node, "distance", intValue) || readXMLInteger(node, "dist", intValue)){
 				param = CONDITIONPARAM_SKILL_DISTANCE;
@@ -675,14 +675,14 @@ bool Monsters::deserializeSpell(xmlNodePtr node, spellBlock_t& sb, MonsterType* 
 			else if(readXMLInteger(node, "fistPercent", intValue)){
 				param = CONDITIONPARAM_SKILL_FISTPERCENT;
 			}
-			else if(readXMLInteger(node, "clubPercent", intValue)){
-				param = CONDITIONPARAM_SKILL_CLUBPERCENT;
+			else if(readXMLInteger(node, "bashPercent", intValue)){
+				param = CONDITIONPARAM_SKILL_BASHPERCENT;
 			}
-			else if(readXMLInteger(node, "axePercent", intValue)){
-				param = CONDITIONPARAM_SKILL_AXEPERCENT;
+			else if(readXMLInteger(node, "slashPercent", intValue)){
+				param = CONDITIONPARAM_SKILL_SLASHPERCENT;
 			}
-			else if(readXMLInteger(node, "swordPercent", intValue)){
-				param = CONDITIONPARAM_SKILL_SWORDPERCENT;
+			else if(readXMLInteger(node, "thrustPercent", intValue)){
+				param = CONDITIONPARAM_SKILL_THRUSTPERCENT;
 			}
 			else if(readXMLInteger(node, "distancePercent", intValue) || readXMLInteger(node, "distPercent", intValue)){
 				param = CONDITIONPARAM_SKILL_DISTANCEPERCENT;

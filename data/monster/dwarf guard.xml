@@ -46,7 +46,7 @@
 				<item id="2417" chance="4000"/><!-- 4% battle hammer -->
 				<item id="2387" chance="600"/><!-- 0.6% double axe -->
 				<item id="2513" chance="7500"/><!-- 7.5% battle shield -->
-				<item id="2208" chance="200"/><!-- 0.2% axe ring -->
+				<item id="2208" chance="200"/><!-- 0.2% slash ring -->
 			</inside>
 		</item>
 	</loot>

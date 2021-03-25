@@ -725,14 +725,14 @@ bool Items::loadFromXml(const std::string& datadir)
 						}
 						else if(asLowerCaseString(strValue) == "weapontype"){
 							if(readXMLString(itemAttributesNode, "value", strValue)){
-								if(asLowerCaseString(strValue) == "sword"){
-									it.weaponType = WEAPON_SWORD;
+								if(asLowerCaseString(strValue) == "thrust"){
+									it.weaponType = WEAPON_THRUST;
 								}
-								else if(asLowerCaseString(strValue) == "club"){
-									it.weaponType = WEAPON_CLUB;
+								else if(asLowerCaseString(strValue) == "bash"){
+									it.weaponType = WEAPON_BASH;
 								}
-								else if(asLowerCaseString(strValue) == "axe"){
-									it.weaponType = WEAPON_AXE;
+								else if(asLowerCaseString(strValue) == "slash"){
+									it.weaponType = WEAPON_SLASH;
 								}
 								else if(asLowerCaseString(strValue) == "shield"){
 									it.weaponType = WEAPON_SHIELD;
@@ -958,19 +958,19 @@ bool Items::loadFromXml(const std::string& datadir)
 								it.abilities.manaShield = (intValue != 0);
 							}
 						}
-						else if(asLowerCaseString(strValue) == "skillsword"){
+						else if(asLowerCaseString(strValue) == "skillthrust"){
 							if(readXMLInteger(itemAttributesNode, "value", intValue)){
-								it.abilities.skill.upgrades[SKILL_SWORD] = intValue;
+								it.abilities.skill.upgrades[SKILL_THRUST] = intValue;
 							}
 						}
-						else if(asLowerCaseString(strValue) == "skillaxe"){
+						else if(asLowerCaseString(strValue) == "skillslash"){
 							if(readXMLInteger(itemAttributesNode, "value", intValue)){
-								it.abilities.skill.upgrades[SKILL_AXE] = intValue;
+								it.abilities.skill.upgrades[SKILL_SLASH] = intValue;
 							}
 						}
-						else if(asLowerCaseString(strValue) == "skillclub"){
+						else if(asLowerCaseString(strValue) == "skillbash"){
 							if(readXMLInteger(itemAttributesNode, "value", intValue)){
-								it.abilities.skill.upgrades[SKILL_CLUB] = intValue;
+								it.abilities.skill.upgrades[SKILL_BASH] = intValue;
 							}
 						}
 						else if(asLowerCaseString(strValue) == "skilldist"){

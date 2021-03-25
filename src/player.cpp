@@ -427,9 +427,9 @@ Item* Player::getWeapon(bool ignoreAmmu /*= false*/)
 		}
 
 		switch(item->getWeaponType()){
-			case WEAPON_SWORD:
-			case WEAPON_AXE:
-			case WEAPON_CLUB:
+			case WEAPON_THRUST:
+			case WEAPON_SLASH:
+			case WEAPON_BASH:
 			case WEAPON_WAND:
 			{
 				const Weapon* weapon = g_weapons->getWeapon(item);
@@ -491,19 +491,19 @@ int32_t Player::getWeaponSkill(const Item* item) const
 	int32_t attackSkill;
 
 	switch(weaponType){
-		case WEAPON_SWORD:
-			attackSkill = getSkillLevel(SKILL_SWORD);
+		case WEAPON_THRUST:
+			attackSkill = getSkillLevel(SKILL_THRUST);
 			break;
 
-		case WEAPON_CLUB:
+		case WEAPON_BASH:
 		{
-			attackSkill = getSkillLevel(SKILL_CLUB);
+			attackSkill = getSkillLevel(SKILL_BASH);
 			break;
 		}
 
-		case WEAPON_AXE:
+		case WEAPON_SLASH:
 		{
-			attackSkill = getSkillLevel(SKILL_AXE);
+			attackSkill = getSkillLevel(SKILL_SLASH);
 			break;
 		}
 
@@ -713,14 +713,14 @@ std::string Player::getSkillName(int skillid)
 	case SKILL_FIST:
 		skillname = "fist fighting";
 		break;
-	case SKILL_CLUB:
-		skillname = "club fighting";
+	case SKILL_BASH:
+		skillname = "bash fighting";
 		break;
-	case SKILL_SWORD:
-		skillname = "sword fighting";
+	case SKILL_THRUST:
+		skillname = "thrust fighting";
 		break;
-	case SKILL_AXE:
-		skillname = "axe fighting";
+	case SKILL_SLASH:
+		skillname = "slash fighting";
 		break;
 	case SKILL_DIST:
 		skillname = "distance fighting";
