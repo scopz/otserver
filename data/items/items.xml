@@ -4614,13 +4614,13 @@
 		<attribute key="weight" value="3500"/>
 		<attribute key="defense" value="12"/>
 		<attribute key="attack" value="14"/>
-		<attribute key="weaponType" value="thrust"/>
+		<attribute key="weaponType" value="slash"/>
 	</item>
 	<item id="2377" article="a" name="two handed sword">
 		<attribute key="weight" value="7000"/>
 		<attribute key="defense" value="25"/>
 		<attribute key="attack" value="30"/>
-		<attribute key="weaponType" value="thrust"/>
+		<attribute key="weaponType" value="slash"/>
 		<attribute key="slotType" value="two-handed"/>
 	</item>
 	<item id="2378" article="a" name="battle axe">
@@ -4659,7 +4659,7 @@
 		<attribute key="weight" value="5000"/>
 		<attribute key="defense" value="21"/>
 		<attribute key="attack" value="24"/>
-		<attribute key="weaponType" value="thrust"/>
+		<attribute key="weaponType" value="slash"/>
 	</item>
 	<item id="2384" article="a" name="rapier">
 		<attribute key="weight" value="1500"/>
@@ -4671,7 +4671,7 @@
 		<attribute key="weight" value="2500"/>
 		<attribute key="defense" value="10"/>
 		<attribute key="attack" value="12"/>
-		<attribute key="weaponType" value="thrust"/>
+		<attribute key="weaponType" value="slash"/>
 	</item>
 	<item id="2386" article="an" name="axe">
 		<attribute key="weight" value="4000"/>
@@ -4706,7 +4706,7 @@
 		<attribute key="weight" value="4300"/>
 		<attribute key="defense" value="40"/>
 		<attribute key="attack" value="55"/>
-		<attribute key="weaponType" value="thrust"/>
+		<attribute key="weaponType" value="slash"/>
 		<attribute key="slotType" value="two-handed"/>
 	</item>
 	<item id="2391" article="a" name="war hammer">
@@ -4721,14 +4721,14 @@
 		<attribute key="weight" value="2300"/>
 		<attribute key="defense" value="20"/>
 		<attribute key="attack" value="35"/>
-		<attribute key="weaponType" value="thrust"/>
+		<attribute key="weaponType" value="slash"/>
 	</item>
 	<item id="2393" article="a" name="giant sword">
 		<attribute key="description" value="This sword has been forged by ancient giants."/>
 		<attribute key="weight" value="18000"/>
 		<attribute key="defense" value="22"/>
 		<attribute key="attack" value="46"/>
-		<attribute key="weaponType" value="thrust"/>
+		<attribute key="weaponType" value="slash"/>
 		<attribute key="slotType" value="two-handed"/>
 	</item>
 	<item id="2394" article="a" name="morning star">
@@ -4741,7 +4741,7 @@
 		<attribute key="weight" value="4000"/>
 		<attribute key="defense" value="13"/>
 		<attribute key="attack" value="15"/>
-		<attribute key="weaponType" value="thrust"/>
+		<attribute key="weaponType" value="slash"/>
 	</item>
 	<item id="2396" article="an" name="ice rapier">
 		<attribute key="description" value="A deadly but fragile weapon."/>
@@ -4777,7 +4777,7 @@
 		<attribute key="weight" value="4200"/>
 		<attribute key="defense" value="35"/>
 		<attribute key="attack" value="48"/>
-		<attribute key="weaponType" value="thrust"/>
+		<attribute key="weaponType" value="slash"/>
 	</item>
 	<item id="2401" article="a" name="staff">
 		<attribute key="weight" value="3800"/>
@@ -4814,28 +4814,28 @@
 		<attribute key="weight" value="3500"/>
 		<attribute key="defense" value="11"/>
 		<attribute key="attack" value="11"/>
-		<attribute key="weaponType" value="thrust"/>
+		<attribute key="weaponType" value="slash"/>
 	</item>
 	<item id="2407" article="a" name="bright sword">
 		<attribute key="description" value="The blade shimmers in light blue."/>
 		<attribute key="weight" value="2900"/>
 		<attribute key="defense" value="30"/>
 		<attribute key="attack" value="36"/>
-		<attribute key="weaponType" value="thrust"/>
+		<attribute key="weaponType" value="slash"/>
 	</item>
 	<item id="2408" article="a" name="warlord sword">
 		<attribute key="description" value="Strong powers flow in this magic sword."/>
 		<attribute key="weight" value="6400"/>
 		<attribute key="defense" value="38"/>
 		<attribute key="attack" value="53"/>
-		<attribute key="weaponType" value="thrust"/>
+		<attribute key="weaponType" value="slash"/>
 		<attribute key="slotType" value="two-handed"/>
 	</item>
 	<item id="2409" article="a" name="serpent sword">
 		<attribute key="weight" value="4100"/>
 		<attribute key="defense" value="15"/>
 		<attribute key="attack" value="26"/>
-		<attribute key="weaponType" value="thrust"/>
+		<attribute key="weaponType" value="slash"/>
 	</item>
 	<item id="2410" article="a" name="throwing knife" plural="throwing knives">
 		<attribute key="weight" value="500"/>
@@ -4856,13 +4856,13 @@
 		<attribute key="weight" value="3100"/>
 		<attribute key="defense" value="12"/>
 		<attribute key="attack" value="16"/>
-		<attribute key="weaponType" value="thrust"/>
+		<attribute key="weaponType" value="slash"/>
 	</item>
 	<item id="2413" article="a" name="broadsword">
 		<attribute key="weight" value="5250"/>
 		<attribute key="defense" value="23"/>
 		<attribute key="attack" value="26"/>
-		<attribute key="weaponType" value="thrust"/>
+		<attribute key="weaponType" value="slash"/>
 		<attribute key="slotType" value="two-handed"/>
 	</item>
 	<item id="2414" article="a" name="dragon lance">
@@ -4904,13 +4904,13 @@
 		<attribute key="weight" value="2900"/>
 		<attribute key="defense" value="13"/>
 		<attribute key="attack" value="19"/>
-		<attribute key="weaponType" value="thrust"/>
+		<attribute key="weaponType" value="slash"/>
 	</item>
 	<item id="2420" article="a" name="machete">
 		<attribute key="weight" value="1650"/>
 		<attribute key="defense" value="9"/>
 		<attribute key="attack" value="12"/>
-		<attribute key="weaponType" value="thrust"/>
+		<attribute key="weaponType" value="slash"/>
 	</item>
 	<item id="2421" article="a" name="thunder hammer">
 		<attribute key="description" value="It is blessed by the gods of Tibia."/>
@@ -5055,7 +5055,7 @@
 		<attribute key="weight" value="1840"/>
 		<attribute key="defense" value="10"/>
 		<attribute key="attack" value="16"/>
-		<attribute key="weaponType" value="thrust"/>
+		<attribute key="weaponType" value="slash"/>
 	</item>
 	<item id="2443" article="a" name="ravager's axe">
 		<attribute key="weight" value="5250"/>
@@ -5082,7 +5082,7 @@
 		<attribute key="weight" value="5200"/>
 		<attribute key="defense" value="23"/>
 		<attribute key="attack" value="41"/>
-		<attribute key="weaponType" value="thrust"/>
+		<attribute key="weaponType" value="slash"/>
 	</item>
 	<item id="2447" article="a" name="twin axe">
 		<attribute key="weight" value="6400"/>
@@ -5109,13 +5109,13 @@
 		<attribute key="weight" value="1900"/>
 		<attribute key="defense" value="10"/>
 		<attribute key="attack" value="14"/>
-		<attribute key="weaponType" value="thrust"/>
+		<attribute key="weaponType" value="slash"/>
 	</item>
 	<item id="2451" article="a" name="djinn blade">
 		<attribute key="weight" value="2450"/>
 		<attribute key="defense" value="22"/>
 		<attribute key="attack" value="38"/>
-		<attribute key="weaponType" value="thrust"/>
+		<attribute key="weaponType" value="slash"/>
 	</item>
 	<item id="2452" article="a" name="heavy mace">
 		<attribute key="description" value="Its tip is made of extremely solid steel."/>
