@@ -791,8 +791,8 @@ bool WeaponDistance::configureEvent(xmlNodePtr p)
 		maxHitChance = 90;
 	}
 	else{
-		//one-handed is set to 75%
-		maxHitChance = 75;
+		//one-handed is set to 83%
+		maxHitChance = 83;
 	}
 
 	if(it.hitChance != -1){
@@ -830,8 +830,8 @@ bool WeaponDistance::configureWeapon(const ItemType& it)
 		maxHitChance = 90;
 	}
 	else{
-		//one-handed is set to 75%
-		maxHitChance = 75;
+		//one-handed is set to 83%
+		maxHitChance = 83;
 	}
 
 	params.distanceEffect = it.shootType;
@@ -895,52 +895,32 @@ bool WeaponDistance::useWeapon(Player* player, Item* item, Creature* target) con
 		const Position& targetPos = target->getPosition();
 		uint32_t distance = std::max(std::abs(playerPos.x - targetPos.x), std::abs(playerPos.y - targetPos.y));
 
-		if(maxHitChance == 75){
-			//chance for one-handed weapons
-			switch(distance){
-				case 0: chance = (uint32_t)((float)std::min(skill, (uint32_t)74)) + 1; break;
-				case 1: chance = (uint32_t)((float)std::min(skill, (uint32_t)74)) + 1; break;
-				case 2: chance = (uint32_t)((float)2.4 * std::min(skill, (uint32_t)28)) + 8; break;
-				case 3: chance = (uint32_t)((float)1.55 * std::min(skill, (uint32_t)45)) + 6; break;
-				case 4: chance = (uint32_t)((float)1.25 * std::min(skill, (uint32_t)58)) + 3; break;
-				case 5: chance = (uint32_t)((float)std::min(skill, (uint32_t)74)) + 1; break;
-				case 6: chance = (uint32_t)((float)0.8 * std::min(skill, (uint32_t)90)) + 3; break;
-				case 7: chance = (uint32_t)((float)0.7 * std::min(skill, (uint32_t)104)) + 2; break;
-				default: chance = hitChance; break;
-			}
+		float distanceFactor;
+		switch(distance){
+			case 0:  distanceFactor = 0.55f; break;
+			case 1:  distanceFactor = 0.55f; break;
+			case 2:  distanceFactor = 1.00f; break;
+			case 3:  distanceFactor = 0.93f; break;
+			case 4:  distanceFactor = 0.80f; break;
+			case 5:  distanceFactor = 0.60f; break;
+			case 6:  distanceFactor = 0.55f; break;
+			case 7:  distanceFactor = 0.35f; break;
+			case 8:  distanceFactor = 0.30f; break;
+			case 9:  distanceFactor = 0.30f; break;
+			default: distanceFactor = 0.00f; break;
 		}
-		else if(maxHitChance == 90){
-			//formula for two-handed weapons
-			switch(distance){
-				case 0: chance = (uint32_t)((float)1.2 * std::min(skill, (uint32_t)74)) + 1; break;
-				case 1: chance = (uint32_t)((float)1.2 * std::min(skill, (uint32_t)74)) + 1; break;
-				case 2: chance = (uint32_t)((float)3.2 * std::min(skill, (uint32_t)28)); break;
-				case 3: chance = (uint32_t)((float)2.0 * std::min(skill, (uint32_t)45)); break;
-				case 4: chance = (uint32_t)((float)1.55 * std::min(skill, (uint32_t)58)); break;
-				case 5: chance = (uint32_t)((float)1.2 * std::min(skill, (uint32_t)74)) + 1; break;
-				case 6: chance = (uint32_t)((float)1.0 * std::min(skill, (uint32_t)90)); break;
-				case 7: chance = (uint32_t)((float)1.0 * std::min(skill, (uint32_t)90)); break;
-				default: chance = hitChance; break;
-			}
+
+		if (distanceFactor > 0) {
+			float skillFactor = (skill-30)/60.f; // (90 - 30) = 60
+			if (skillFactor > 1)      skillFactor = 1.f;
+			else if (skillFactor < 0) skillFactor = 0.f;
+
+			chance = (distanceFactor + (1-distanceFactor)*skillFactor) * maxHitChance;
+
+		} else {
+			chance = -1;
 		}
-		else if(maxHitChance == 100){
-			switch(distance){
-				case 0: chance = (uint32_t)((float)1.35 * std::min(skill, (uint32_t)73)) + 1; break;
-				case 1: chance = (uint32_t)((float)1.35 * std::min(skill, (uint32_t)73)) + 1; break;
-				case 2: chance = (uint32_t)((float)3.2 * std::min(skill, (uint32_t)30)) + 4; break;
-				case 3: chance = (uint32_t)((float)2.05 * std::min(skill, (uint32_t)48)) + 2; break;
-				case 4: chance = (uint32_t)((float)1.5 * std::min(skill, (uint32_t)65)) + 2; break;
-				case 5: chance = (uint32_t)((float)1.35 * std::min(skill, (uint32_t)73)) + 1; break;
-				case 6: chance = (uint32_t)((float)1.2 * std::min(skill, (uint32_t)87)) - 4; break;
-				case 7: chance = (uint32_t)((float)1.1 * std::min(skill, (uint32_t)90)) + 1; break;
-				default: chance = hitChance; break;
-			}
-		}
-		else{
-			chance = maxHitChance;
-		}
-	}
-	else{
+	} else {
 		chance = hitChance;
 	}
 
