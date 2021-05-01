@@ -818,6 +818,9 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 						s << " ";
 
 					s << "Def:" << (int)it.defense;
+
+					if (it.extraDef != 0)
+						s << " " << std::showpos << it.extraDef << std::noshowpos;
 				}
 
 				if (it.abilities.stats[STAT_MAGICPOINTS] != 0){
@@ -827,6 +830,13 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 					s << "magic level " << std::showpos << (int)it.abilities.stats[STAT_MAGICPOINTS] << std::noshowpos;
 				}
 				s << ")";
+			}
+			if (it.weaponType == WEAPON_THRUST) {
+				s << "." << std::endl << "This is a thrust weapon";
+			} else if (it.weaponType == WEAPON_BASH) {
+				s << "." << std::endl << "This is a bash weapon";
+			} else if (it.weaponType == WEAPON_SLASH) {
+				s << "." << std::endl << "This is a slash weapon";
 			}
 		}
 		s << ".";
