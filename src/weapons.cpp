@@ -1023,7 +1023,10 @@ int32_t WeaponDistance::getWeaponDamage(const Player* player, const Creature* ta
 		minValue = int32_t(minValue * vocation->getMeleeBaseDamage(WEAPON_DIST));
 	}
 
-	return -random_range(minValue, maxValue);
+	if (player->getFightMode() == FIGHTMODE_ATTACK)
+		return -random_range(minValue, maxValue, DISTRO_CUSTOM_ATTACK, 0.45, 0.1);
+	else
+		return -random_range(minValue, maxValue);
 }
 
 bool WeaponDistance::getSkillType(const Player* player, const Item* item,
