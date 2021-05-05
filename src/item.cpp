@@ -355,7 +355,16 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 			setSubType(_count);
 			break;
 		}
+		case ATTR_RANK:
+		{
+			uint8_t _rank = 0;
+			if(!propStream.GET_UINT8(_rank)){
+				return ATTR_READ_ERROR;
+			}
 
+			setRank(_rank);
+			break;
+		}
 		case ATTR_ACTION_ID:
 		{
 			uint16_t _actionid = 0;
@@ -472,7 +481,7 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 				return ATTR_READ_ERROR;
 			}
 
-			return ATTR_READ_CONTINUE;
+			break;
 		}
 
 		//Door class
@@ -483,7 +492,7 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 				return ATTR_READ_ERROR;
 			}
 
-			return ATTR_READ_CONTINUE;
+			break;
 		}
 
 		//Bed class
@@ -494,7 +503,7 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 				return ATTR_READ_ERROR;
 			}
 
-			return ATTR_READ_CONTINUE;
+			break;
 		}
 
 		case ATTR_SLEEPSTART:
@@ -504,7 +513,7 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 				return ATTR_READ_ERROR;
 			}
 
-			return ATTR_READ_CONTINUE;
+			break;
 		}
 
 		//Teleport class
@@ -518,7 +527,7 @@ Attr_ReadValue Item::readAttr(AttrTypes_t attr, PropStream& propStream)
 				return ATTR_READ_ERROR;
 			}
 
-			return ATTR_READ_CONTINUE;
+			break;
 		}
 
 		//Container class
@@ -570,6 +579,12 @@ bool Item::serializeAttr(PropWriteStream& propWriteStream) const
 		uint8_t _count = getSubType();
 		propWriteStream.ADD_UINT8(ATTR_COUNT);
 		propWriteStream.ADD_UINT8(_count);
+	}
+
+	if(hasRank()){
+		uint8_t _rank = getRank();
+		propWriteStream.ADD_UINT8(ATTR_RANK);
+		propWriteStream.ADD_UINT8(_rank);
 	}
 
 	if(hasCharges()){
@@ -802,8 +817,13 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 	}
 	else if (it.weaponType != WEAPON_NONE){
 		if (it.weaponType == WEAPON_DIST && it.amuType != AMMO_NONE){
-			if (it.attack != 0){
-				s << ", Atk" << std::showpos << it.attack << std::noshowpos;
+
+			int attack = it.attack;
+			if (item && item->hasRank())
+				attack += item->getRank();
+
+			if (attack != 0){
+				s << ", Atk" << std::showpos << attack << std::noshowpos;
 			}
 		}
 		else if (it.weaponType != WEAPON_AMMO && it.weaponType != WEAPON_WAND){ // Arrows and Bolts doesn't show atk
@@ -811,6 +831,9 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 				s << " (";
 				if (it.attack != 0){
 					s << "Atk:" << (int)it.attack;
+
+					if (item && item->hasRank())
+						s << " " << std::showpos << (int)item->getRank() << std::noshowpos;
 				}
 
 				if (it.defense != 0 || it.extraDef != 0){
@@ -821,6 +844,9 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 
 					if (it.extraDef != 0)
 						s << " " << std::showpos << it.extraDef << std::noshowpos;
+
+					if (it.weaponType == WEAPON_SHIELD && item && item->hasRank())
+						s << " " << std::showpos << (int)item->getRank() << std::noshowpos;
 				}
 
 				if (it.abilities.stats[STAT_MAGICPOINTS] != 0){
@@ -845,14 +871,18 @@ std::string Item::getDescription(const ItemType& it, int32_t lookDistance,
 		if (it.showCharges){
 			if (subType > 1){
 				s << " that has " << (int32_t)subType << " charges left";
-			}
-			else{
+			} else {
 				s << " that has 1 charge left";
 			}
 		}
 		
 		if (it.armor != 0){
-			s << " (Arm:" << it.armor << ")";
+			s << " (Arm:" << it.armor;
+
+			if (item && item->hasRank())
+				s << " " << std::showpos << (int)item->getRank() << std::noshowpos;
+
+			s << ")";
 		}
 		
 		s << ".";
@@ -1053,6 +1083,24 @@ void Item::setUniqueId(uint16_t n)
 	ScriptEnviroment::addUniqueThing(this);
 }
 
+void Item::assignRank(uint8_t r /* = 0 */)
+{
+	const ItemType& it = items[id];
+	if (it.maxRank > 0) {
+		if (r == 0) {
+			while (r < it.maxRank) {
+				int rnd = random_range(0, 4);
+				if (rnd < 3) {
+					break;
+				} else {
+					r++;
+				}
+			}
+		}
+		setRank(r);
+	}
+}
+
 bool Item::canDecay()
 {
 	if(isRemoved()){
@@ -1217,6 +1265,7 @@ bool ItemAttributes::validateIntAttrType(itemAttrTypes type)
 	case ATTR_ITEM_CHARGES:
 	case ATTR_ITEM_FLUIDTYPE:
 	case ATTR_ITEM_DOORID:
+	case ATTR_ITEM_RANK:
 		return true;
 		break;
 

@@ -131,6 +131,7 @@ ItemType::ItemType()
 	//]
 
 	currency = 0;
+	maxRank = 0;
 }
 
 ItemType::~ItemType()
@@ -721,6 +722,11 @@ bool Items::loadFromXml(const std::string& datadir)
 						else if(asLowerCaseString(strValue) == "writeonceitemid"){
 							if(readXMLInteger(itemAttributesNode, "value", intValue)){
 								it.writeOnceItemId = intValue;
+							}
+						}
+						else if(asLowerCaseString(strValue) == "ranklevel"){
+							if(readXMLInteger(itemAttributesNode, "value", intValue)){
+								it.maxRank = intValue;
 							}
 						}
 						else if(asLowerCaseString(strValue) == "weapontype"){

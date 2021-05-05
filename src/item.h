@@ -104,7 +104,8 @@ enum AttrTypes_t{
 	ATTR_CHARGES = 22,
 	// This is NOT stored in serializeAttr, but rather used by IOMapSerialize
 	// look at that code for the ugly hack that makes this work. :)
-	ATTR_CONTAINER_ITEMS = 23
+	ATTR_CONTAINER_ITEMS = 23,
+	ATTR_RANK = 24,
 };
 
 enum Attr_ReadValue{
@@ -152,6 +153,9 @@ public:
 	void setCharges(uint16_t n) {setIntAttr(ATTR_ITEM_CHARGES, n);}
 	uint16_t getCharges() const {return (uint16_t)getIntAttr(ATTR_ITEM_CHARGES);}
 
+	void setRank(uint8_t n) {setIntAttr(ATTR_ITEM_RANK, n);}
+	uint8_t getRank() const {return (uint8_t)getIntAttr(ATTR_ITEM_RANK);}
+
 	void setFluidType(uint16_t n) {setIntAttr(ATTR_ITEM_FLUIDTYPE, n);}
 	uint16_t getFluidType() const {return (uint16_t)getIntAttr(ATTR_ITEM_FLUIDTYPE);}
 
@@ -177,7 +181,8 @@ protected:
 		ATTR_ITEM_DECAYING = 1 << 8,
 		ATTR_ITEM_CHARGES = 1 << 10,
 		ATTR_ITEM_FLUIDTYPE = 1 << 11,
-		ATTR_ITEM_DOORID = 1 << 12
+		ATTR_ITEM_DOORID = 1 << 12,
+		ATTR_ITEM_RANK = 1 << 13
 	};
 
 	bool hasAttribute(itemAttrTypes type) const;
@@ -341,6 +346,7 @@ public:
 	bool isDoor() const {return items[id].isDoor();}
 	bool isBed() const {return items[id].isBed();}
 	bool isLevelDoor() const {return items[id].isLevelDoor();}
+	bool hasRank() const {return getRank() > 0;}
 	bool hasCharges() const {return getCharges() > 0;}
 	bool isSolidForItems() const { return items[id].isSolidForItems(); }
 	bool isCorpse() const { return items[id].corpseType != 0; }
@@ -368,6 +374,8 @@ public:
 	void setSubType(uint16_t n);
 
 	void setUniqueId(uint16_t n);
+
+	void assignRank(uint8_t r = 0);
 
 	void setDefaultDuration(){
 		uint32_t duration = getDefaultDuration();

@@ -180,10 +180,11 @@ std::list<Item*> MonsterType::createLootItem(const LootBlock& lootBlock)
 {
 	Item* tmpItem = NULL;
 	int32_t itemCount = 0;
+	const ItemType& it = Item::items[lootBlock.id];
 
 	uint32_t randvalue = Monsters::getLootRandom();
 	if(randvalue < lootBlock.chance){
-		if(Item::items[lootBlock.id].stackable){
+		if(it.stackable){
 			itemCount = randvalue % lootBlock.countmax + 1;
 		}
 		else{
@@ -192,11 +193,9 @@ std::list<Item*> MonsterType::createLootItem(const LootBlock& lootBlock)
 	}
 
 	std::list<Item*> itemList;
-
-
 	
 	while(itemCount > 0){
-		uint16_t n = (uint16_t)std::min(itemCount, (int32_t)100);
+		uint16_t n = (uint16_t)std::min(itemCount, (int32_t)it.maxStack);
 		itemCount -= n;
 		
 		if((tmpItem = Item::CreateItem(lootBlock.id, n))){
@@ -211,6 +210,8 @@ std::list<Item*> MonsterType::createLootItem(const LootBlock& lootBlock)
 			if(lootBlock.text != ""){
 				tmpItem->setText(lootBlock.text);
 			}
+
+			tmpItem->assignRank();
 
 			itemList.push_back(tmpItem);
 		}

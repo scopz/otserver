@@ -525,18 +525,19 @@ int32_t Player::getArmor() const
 {
 	int32_t armor = 0;
 
-	if(getInventoryItem(SLOT_HEAD))
-		armor += getInventoryItem(SLOT_HEAD)->getArmor();
-	if(getInventoryItem(SLOT_NECKLACE))
-		armor += getInventoryItem(SLOT_NECKLACE)->getArmor();
-	if(getInventoryItem(SLOT_ARMOR))
-		armor += getInventoryItem(SLOT_ARMOR)->getArmor();
-	if(getInventoryItem(SLOT_LEGS))
-		armor += getInventoryItem(SLOT_LEGS)->getArmor();
-	if(getInventoryItem(SLOT_FEET))
-		armor += getInventoryItem(SLOT_FEET)->getArmor();
-	if(getInventoryItem(SLOT_RING))
-		armor += getInventoryItem(SLOT_RING)->getArmor();
+	Item* item;
+	if((item = getInventoryItem(SLOT_HEAD)))
+		armor += item->getArmor() + item->getRank();
+	if((item = getInventoryItem(SLOT_NECKLACE)))
+		armor += item->getArmor();
+	if((item = getInventoryItem(SLOT_ARMOR)))
+		armor += item->getArmor() + item->getRank();
+	if((item = getInventoryItem(SLOT_LEGS)))
+		armor += item->getArmor() + item->getRank();
+	if((item = getInventoryItem(SLOT_FEET)))
+		armor += item->getArmor() + item->getRank();
+	if((item = getInventoryItem(SLOT_RING)))
+		armor += item->getArmor();
 
 	return (vocation->getArmorDefense() != 1.0 ? int32_t(armor * vocation->getArmorDefense()) : armor);
 }
@@ -580,8 +581,8 @@ int32_t Player::getDefense() const
 		extraDef = weapon->getExtraDef();
 	}
 
-	if(shield && shield->getDefense() >= defenseValue){
-		defenseValue = shield->getDefense() + extraDef;
+	if(shield && (shield->getDefense() + shield->getRank()) >= defenseValue){
+		defenseValue = shield->getDefense() + extraDef + shield->getRank();
 		defenseSkill = getSkillLevel(SKILL_SHIELD);
 	}
 
