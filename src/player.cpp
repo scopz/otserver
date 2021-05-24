@@ -2315,7 +2315,7 @@ void Player::onBlockHit(BlockType_t blockType)
 	if(shieldBlockCount > 0){
 		--shieldBlockCount;
 
-		if(hasShield()){
+		if(hasShield() || hasTwoHandedWeapon()){
 			addSkillAdvance(SKILL_SHIELD, 1);
 		}
 	}
@@ -2362,20 +2362,32 @@ void Player::onAttackedCreatureBlockHit(Creature* target, BlockType_t blockType)
 
 bool Player::hasShield() const
 {
-	bool result = false;
-	Item* item;
-
-	item = getInventoryItem(SLOT_LEFT);
+	Item* item = getInventoryItem(SLOT_LEFT);
 	if(item && item->getWeaponType() == WEAPON_SHIELD){
-		result = true;
+		return true;
 	}
 
 	item = getInventoryItem(SLOT_RIGHT);
 	if(item && item->getWeaponType() == WEAPON_SHIELD){
-		result = true;
+		return true;
 	}
 
-	return result;
+	return false;
+}
+
+bool Player::hasTwoHandedWeapon() const
+{
+	Item* item = getInventoryItem(SLOT_LEFT);
+	if(item && item->getWeaponType() != WEAPON_NONE && item->getWeaponType() != WEAPON_AMMO && (item->getSlotPosition() & SLOTP_TWO_HAND)){
+		return true;
+	}
+
+	item = getInventoryItem(SLOT_RIGHT);
+	if(item && item->getWeaponType() != WEAPON_NONE && item->getWeaponType() != WEAPON_AMMO && (item->getSlotPosition() & SLOTP_TWO_HAND)){
+		return true;
+	}
+
+	return false;
 }
 
 BlockType_t Player::blockHit(Creature* attacker, CombatType_t combatType, int32_t& damage,

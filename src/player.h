@@ -359,6 +359,7 @@ public:
 	bool isImmune(CombatType_t type) const;
 	bool isImmune(ConditionType_t type, bool aggressive = true) const;
 	bool hasShield() const;
+	bool hasTwoHandedWeapon() const;
 	virtual bool isAttackable() const;
 
 	//attackSpells
