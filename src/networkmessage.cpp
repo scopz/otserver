@@ -105,32 +105,26 @@ void NetworkMessage::addPosition(const Position& pos)
 	addByte(pos.z);
 }
 
-void NetworkMessage::addItem(uint16_t id, uint16_t count)
+void NetworkMessage::addItem(uint16_t id, uint16_t count, uint8_t rank)
 {
 	const ItemType &it = Item::items[id];
-
 	addU16(it.clientId);
 
 	if(it.stackable){
 		addU16(count);
-	}
-	else if(it.isSplash() || it.isFluidContainer()){
-		addU16(Item::items.getClientFluidType(FluidTypes_t(count)));
+
+	} else {
+		addByte(rank);
+
+		if(it.isSplash() || it.isFluidContainer()){
+			addU16(Item::items.getClientFluidType(FluidTypes_t(count)));
+		}
 	}
 }
 
 void NetworkMessage::addItem(const Item* item)
 {
-	const ItemType &it = Item::items[item->getID()];
-
-	addU16(it.clientId);
-
-	if(it.stackable){
-		addU16(item->getSubType());
-	}
-	else if(it.isSplash() || it.isFluidContainer()){
-		addU16(Item::items.getClientFluidType(FluidTypes_t(item->getSubType())));
-	}
+	addItem(item->getID(), item->getSubType(), item->getRank());
 }
 
 void NetworkMessage::addItemId(const Item *item){

@@ -1547,6 +1547,7 @@ void ProtocolGame::sendContainer(uint32_t cid, const Container* container, bool 
 	msg.addByte(0x6E);
 	msg.addByte(cid);
 	msg.addItemId(container);
+	msg.addByte(0); // rank
 	msg.addString(container->getName());
 	msg.addByte(container->capacity());
 	msg.addByte(hasParent ? 0x01 : 0x00);

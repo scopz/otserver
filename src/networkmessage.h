@@ -175,7 +175,7 @@ public:
 
 	// write functions for complex types
 	void addPosition(const Position &pos);
-	void addItem(uint16_t id, uint16_t count);
+	void addItem(uint16_t id, uint16_t count, uint8_t rank = 0);
 	void addItem(const Item *item);
 	void addItemId(const Item *item);
 	void addItemId(uint16_t itemId);
