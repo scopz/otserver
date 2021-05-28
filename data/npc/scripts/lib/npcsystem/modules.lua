@@ -1077,8 +1077,9 @@ if(Modules == nil) then
 			else
 				local msg = module.npcHandler:parseMessage(module.cantLearnText, parseInfo)
 				module.npcHandler:say(msg)
-
 			end
+
+			return false
 		end
 
 		return true		
