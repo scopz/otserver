@@ -220,6 +220,11 @@
 		<vocation id="4"/>
 	</attack>
 
+	<attack name="Empowered Ice Attack" words="exori inv frigo" price="1500" maglv="10" needlearn="1" lvl="30" mana="60" exhaustion="1000" range="6" usages="10" script="attack/empowered_ice_attack.lua">
+		<vocation id="3"/>
+		<vocation id="4"/>
+	</attack>
+
 	<!-- Conjure Spells -->
 	<conjure name="Poison Field" words="adevo grav pox" price="300" maglv="2" needlearn="1" lvl="14" mana="200" soul="1" aggressive="0" reagentId="2260" conjureId="2285" conjureCount="3" function="conjureRune">
 		<vocation id="1"/>

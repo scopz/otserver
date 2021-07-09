@@ -1107,7 +1107,7 @@ void ValueCallback::getMinMaxValues(Player* player, int32_t& min, int32_t& max, 
 
 				if (tool) {
 					if (tool->getWeaponType() == WEAPON_DIST && tool->getAmuType() != AMMO_NONE) {
-						attackValue += tool->getAttack();
+						attackValue += tool->getAttack() + tool->getRank();
 						tool = player->getWeapon();
 					}
 
