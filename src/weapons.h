@@ -112,7 +112,6 @@ protected:
 	uint32_t magLevel;
 	int32_t mana;
 	int32_t manaPercent;
-	int32_t soul;
 	int32_t range;
 	AmmoAction_t ammoAction;
 	CombatParams params;

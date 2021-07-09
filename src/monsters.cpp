@@ -700,9 +700,6 @@ bool Monsters::deserializeSpell(xmlNodePtr node, spellBlock_t& sb, MonsterType* 
 			else if(readXMLInteger(node, "maxmana", intValue)){
 				param = CONDITIONPARAM_STAT_MAXMANAPOINTS;
 			}
-			else if(readXMLInteger(node, "soul", intValue)){
-				param = CONDITIONPARAM_STAT_SOULPOINTS;
-			}
 			else if(readXMLInteger(node, "magiclevel", intValue) || readXMLInteger(node, "maglevel", intValue)){
 				param = CONDITIONPARAM_STAT_MAGICPOINTS;
 			}
@@ -711,9 +708,6 @@ bool Monsters::deserializeSpell(xmlNodePtr node, spellBlock_t& sb, MonsterType* 
 			}
 			else if(readXMLInteger(node, "maxmanaPercent", intValue)){
 				param = CONDITIONPARAM_STAT_MAXMANAPOINTSPERCENT;
-			}
-			else if(readXMLInteger(node, "soulPercent", intValue)){
-				param = CONDITIONPARAM_STAT_SOULPOINTSPERCENT;
 			}
 			else if(readXMLInteger(node, "magiclevelPercent", intValue) || readXMLInteger(node, "maglevelPercent", intValue)){
 				param = CONDITIONPARAM_STAT_MAGICPOINTSPERCENT;

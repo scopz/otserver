@@ -48,7 +48,7 @@ enum ConditionType_t {
 	CONDITION_DRUNK             = 1 << 11,
 	CONDITION_EXHAUST_YELL      = 1 << 12,
 	CONDITION_REGENERATION      = 1 << 13,
-	CONDITION_SOUL              = 1 << 14,
+	//CONDITION_SOUL              = 1 << 14,
 	CONDITION_REGENERATION_MANA = 1 << 15,
 	CONDITION_MUTED             = 1 << 16,
 	CONDITION_ATTRIBUTES        = 1 << 17,
@@ -238,28 +238,6 @@ protected:
 	uint32_t manaTicks;
 	uint32_t healthGain;
 	uint32_t manaGain;
-};
-
-class ConditionSoul : public ConditionGeneric
-{
-public:
-	ConditionSoul(ConditionId_t _id, ConditionType_t _type, int32_t _ticks);
-	virtual ~ConditionSoul(){};
-	virtual void addCondition(Creature* creature, const Condition* addCondition);
-	virtual bool executeCondition(Creature* creature, int32_t interval);
-
-	virtual ConditionSoul* clone()  const { return new ConditionSoul(*this); }
-
-	virtual bool setParam(ConditionParam_t param, int32_t value);
-
-	//serialization
-	virtual bool serialize(PropWriteStream& propWriteStream);
-	virtual bool unserializeProp(ConditionAttr_t attr, PropStream& propStream);
-
-protected:
-	uint32_t internalSoulTicks;
-	uint32_t soulTicks;
-	uint32_t soulGain;
 };
 
 class ConditionInvisible: public ConditionGeneric

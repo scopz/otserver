@@ -129,10 +129,9 @@ public:
 	const std::string& getName() const {return name;}
 
 	void postCastSpell(Player* player, bool finishedSpell = true, uint8_t payCost = 1) const;
-	void postCastSpell(Player* player, uint32_t manaCost, uint32_t soulCost) const;
+	void postCastSpell(Player* player, uint32_t manaCost) const;
 
 	int32_t getManaCost(const Player* player) const;
-	int32_t getSoulCost(const Player* player) const;
 	uint32_t getLevel() const {return level;}
 	uint32_t getMagicLevel() const {return magLevel;}
 	uint32_t getPrice() const {return price;}
@@ -170,7 +169,6 @@ protected:
 	int32_t mana;
 	int32_t manaPercent;
 	int32_t levelPercent;
-	int32_t soul;
 	int32_t range;
 	int32_t exhaustion;
 	bool needTarget;

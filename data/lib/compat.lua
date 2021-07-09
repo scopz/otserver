@@ -100,7 +100,6 @@ function Player:getRequiredMana(magicLevel) return getPlayerRequiredMana(self.ci
 function Player:getRequiredSkillTries(skillId, skillLevel) return getPlayerRequiredSkillTries(self.cid, skillId, skillLevel) end
 function Player:getItemCount(itemid, subType) return getPlayerItemCount(self.cid, itemid, subType or -1) end
 function Player:getMoney() return getPlayerMoney(self.cid) end
-function Player:getSoul() return getPlayerSoul(self.cid) end
 function Player:getCap() return getPlayerFreeCap(self.cid) end
 function Player:getLight() return getPlayerLight(self.cid) end
 function Player:getSlotItem(slot) return getPlayerSlotItem(self.cid, slot) end
@@ -126,7 +125,6 @@ function Player:addSkillTries(skillid, n, useMultiplier) doPlayerAddSkillTry(sel
 -- Player misc. functions
 function Player:feed(food) doPlayerFeed(self.cid, food) end
 function Player:addSpentMana(amount, useMultiplier) doPlayerAddSpentMana(self.cid, amount, useMultiplier) end
-function Player:addSoul(soul) doPlayerAddSoul(self.cid, soul) end
 function Player:addItem(itemid, count, canDropOnMap, subtype) return doPlayerAddItem(self.cid, itemid, count, canDropOnMap, subtype) end
 function Player:addItemEx(uid, canDropOnMap) return doPlayerAddItemEx(self.cid, uid, canDropOnMap or false) end
 function Player:addExperience(amount) doPlayerAddExperience(self.cid, amount) end

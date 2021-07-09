@@ -48,7 +48,7 @@ bool IOPlayer::loadPlayer(Player* player, const std::string& name, bool preload 
 		`account_id`, `sex`, `vocation`, `rebirth_voc`, `experience`, `health`, \
 		`groups`.`name` AS `groupname`, `groups`.`flags` AS `groupflags`, `groups`.`access` AS `access`, \
 		`groups`.`maxviplist` AS `maxviplist`, `groups`.`maxdepotitems` AS `maxdepotitems`, `groups`.`violation` AS `violation`, \
-		`mana`, `manaspent`, `soul`, `direction`, `lookbody`, \
+		`mana`, `manaspent`, `direction`, `lookbody`, \
 		`lookfeet`, `lookhead`, `looklegs`, `looktype`, `posx`, `posy`, \
 		`posz`, `lastlogin`, `lastlogout`, `lastip`, `conditions`, `skull_time`, \
 		`skull_type`, `loss_experience`, `loss_mana`, `loss_skills`, ";
@@ -105,7 +105,6 @@ bool IOPlayer::loadPlayer(Player* player, const std::string& name, bool preload 
 	player->levelPercent = levelPercent < 0? 0 : levelPercent;
 	player->adjustMaxExperience(player->experience, player->levelPercent);
 
-	player->soul = result->getDataInt("soul");
 	player->lastLoginSaved = result->getDataInt("lastlogin");
 	player->lastLogout = result->getDataInt("lastlogout");
 
@@ -513,7 +512,6 @@ bool IOPlayer::savePlayer(Player* player, bool shallow)
 		<< ", `looktype` = " << (int32_t)player->defaultOutfit.lookType
 		<< ", `mana` = " << (player->health <= 0 ? player->manaMax : player->mana)
 		<< ", `manaspent` = " << (int64_t)player->manaSpent
-		<< ", `soul` = " << player->soul
 		<< ", `town_id` = " << player->town
 		<< ", `posx` = " << player->getLoginPosition().x
 		<< ", `posy` = " << player->getLoginPosition().y

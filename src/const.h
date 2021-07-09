@@ -343,7 +343,7 @@ enum PlayerFlags{
 	PlayerFlag_IgnoredByMonsters,           //2^8 = 256
 	PlayerFlag_NotGainInFight,              //2^9 = 512
 	PlayerFlag_HasInfiniteMana,             //2^10 = 1024
-	PlayerFlag_HasInfiniteSoul,             //2^11 = 2048
+	PlayerFlag_HasInfiniteSoul,             //2^11 = 2048 -- UNUSED, can be recycled
 	PlayerFlag_HasNoExhaustion,             //2^12 = 4096
 	PlayerFlag_CannotUseSpells,             //2^13 = 8192
 	PlayerFlag_CannotPickupItem,            //2^14 = 16384

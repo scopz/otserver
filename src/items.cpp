@@ -1019,16 +1019,6 @@ bool Items::loadFromXml(const std::string& datadir)
 								it.abilities.statsPercent[STAT_MAXMANAPOINTS] = intValue;
 							}
 						}
-						else if(asLowerCaseString(strValue) == "soulpoints"){
-							if(readXMLInteger(itemAttributesNode, "value", intValue)){
-								it.abilities.stats[STAT_SOULPOINTS] = intValue;
-							}
-						}
-						else if(asLowerCaseString(strValue) == "soulpointspercent"){
-							if(readXMLInteger(itemAttributesNode, "value", intValue)){
-								it.abilities.statsPercent[STAT_SOULPOINTS] = intValue;
-							}
-						}
 						else if(asLowerCaseString(strValue) == "magicpoints"){
 							if(readXMLInteger(itemAttributesNode, "value", intValue)){
 								it.abilities.stats[STAT_MAGICPOINTS] = intValue;

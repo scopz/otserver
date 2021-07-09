@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <vocations>
 	<vocation id="0" name="None" description="none" gaincap="5" gainhp="5" gainmana="5" gainhpticks="2" gainhpamount="2"
-			gainmanaticks="6" gainmanaamount="2" maxsoul="100" gainsoulticks="120" attackspeed="2000">
+			gainmanaticks="6" gainmanaamount="2" attackspeed="2000">
 		<damage magicDamage="1.0" wandDamage="1.0" healingDamage="1.0" />
 		<meleeDamage thrust="1.0" slash="1.0" bash="1.0" dist="1.0" fist="1.0" />
 		<defense baseDefense="1.0" armorDefense="1.0" />
@@ -15,7 +15,7 @@
 		<skill id="6" base="8" multiplier="1.1"/>
 	</vocation>
 	<vocation id="1" name="Sorcerer" description="a sorcerer" gaincap="10" gainhp="5" gainmana="30" gainhpticks="2" gainhpamount="3"
-			gainmanaticks="3" gainmanaamount="2" maxsoul="100" gainsoulticks="120" attackspeed="2000">
+			gainmanaticks="3" gainmanaamount="2" attackspeed="2000">
 		<damage magicDamage="1.0" wandDamage="1.0" healingDamage="1.0" />
 		<meleeDamage thrust="1.0" slash="1.0" bash="1.0" dist="1.0" fist="1.0" />
 		<defense baseDefense="1.0" armorDefense="1.0" />
@@ -30,7 +30,7 @@
 		<evolution promotes="5" rebirths="9"/>
 	</vocation>
 	<vocation id="2" name="Druid" description="a druid" gaincap="10" gainhp="5" gainmana="30" gainhpticks="2" gainhpamount="3"
-			gainmanaticks="3" gainmanaamount="2" maxsoul="100" gainsoulticks="120" attackspeed="2000">
+			gainmanaticks="3" gainmanaamount="2" attackspeed="2000">
 		<damage magicDamage="1.0" wandDamage="1.0" healingDamage="1.0" />
 		<meleeDamage thrust="1.0" slash="1.0" bash="1.0" dist="1.0" fist="1.0" />
 		<defense baseDefense="1.0" armorDefense="1.0" />
@@ -45,7 +45,7 @@
 		<evolution promotes="6" rebirths="10"/>
 	</vocation>
 	<vocation id="3" name="Paladin" description="a paladin" gaincap="20" gainhp="10" gainmana="15" gainhpticks="2" gainhpamount="4"
-			gainmanaticks="4" gainmanaamount="2" maxsoul="100" gainsoulticks="120" attackspeed="2000">
+			gainmanaticks="4" gainmanaamount="2" attackspeed="2000">
 		<damage magicDamage="1.0" wandDamage="1.0" healingDamage="1.0" />
 		<meleeDamage thrust="1.0" slash="1.0" bash="1.0" dist="1.0" fist="1.0" />
 		<defense baseDefense="1.0" armorDefense="1.0" />
@@ -60,7 +60,7 @@
 		<evolution promotes="7" rebirths="11"/>
 	</vocation>
 	<vocation id="4" name="Knight" description="a knight" gaincap="25" gainhp="15" gainmana="5" gainhpticks="2" gainhpamount="5"
-			gainmanaticks="5" gainmanaamount="2" maxsoul="100" gainsoulticks="120" attackspeed="2000">
+			gainmanaticks="5" gainmanaamount="2" attackspeed="2000">
 		<damage magicDamage="1.0" wandDamage="1.0" healingDamage="1.0" />
 		<meleeDamage thrust="1.0" slash="1.0" bash="1.0" dist="1.0" fist="1.0" />
 		<defense baseDefense="1.0" armorDefense="1.0" />
@@ -75,7 +75,7 @@
 		<evolution promotes="8" rebirths="12"/>
 	</vocation>
 	<vocation id="5" name="Master Sorcerer" description="a master sorcerer" gaincap="10" gainhp="5" gainmana="30" gainhpticks="2" gainhpamount="4"
-			gainmanaticks="2" gainmanaamount="2" maxsoul="200" gainsoulticks="15" attackspeed="2000">
+			gainmanaticks="2" gainmanaamount="2" attackspeed="2000">
 		<damage magicDamage="1.0" wandDamage="1.0" healingDamage="1.0" />
 		<meleeDamage thrust="1.0" slash="1.0" bash="1.0" dist="1.0" fist="1.0" />
 		<defense baseDefense="1.0" armorDefense="1.0" />
@@ -90,7 +90,7 @@
 		<evolution base="1" rebirths="9"/>
 	</vocation>
 	<vocation id="6" name="Elder Druid" description="an elder druid" gaincap="10" gainhp="5" gainmana="30" gainhpticks="2" gainhpamount="4"
-			gainmanaticks="2" gainmanaamount="2" maxsoul="200" gainsoulticks="15" attackspeed="2000">
+			gainmanaticks="2" gainmanaamount="2" attackspeed="2000">
 		<damage magicDamage="1.0" wandDamage="1.0" healingDamage="1.0" />
 		<meleeDamage thrust="1.0" slash="1.0" bash="1.0" dist="1.0" fist="1.0" />
 		<defense baseDefense="1.0" armorDefense="1.0" />
@@ -105,7 +105,7 @@
 		<evolution base="2" rebirths="10"/>
 	</vocation>
 	<vocation id="7" name="Royal Paladin" description="a royal paladin" gaincap="20" gainhp="10" gainmana="15" gainhpticks="2" gainhpamount="5"
-			gainmanaticks="3" gainmanaamount="2" maxsoul="200" gainsoulticks="15" attackspeed="2000">
+			gainmanaticks="3" gainmanaamount="2" attackspeed="2000">
 		<damage magicDamage="1.0" wandDamage="1.0" healingDamage="1.0" />
 		<meleeDamage thrust="1.0" slash="1.0" bash="1.0" dist="1.0" fist="1.0" />
 		<defense baseDefense="1.0" armorDefense="1.0" />
@@ -120,7 +120,7 @@
 		<evolution base="3" rebirths="11"/>
 	</vocation>
 	<vocation id="8" name="Elite Knight" description="an elite knight" gaincap="25" gainhp="15" gainmana="5" gainhpticks="2" gainhpamount="6"
-			gainmanaticks="4" gainmanaamount="2" maxsoul="200" gainsoulticks="15" attackspeed="2000">
+			gainmanaticks="4" gainmanaamount="2" attackspeed="2000">
 		<damage magicDamage="1.0" wandDamage="1.0" healingDamage="1.0" />
 		<meleeDamage thrust="1.0" slash="1.0" bash="1.0" dist="1.0" fist="1.0" />
 		<defense baseDefense="1.0" armorDefense="1.0" />
@@ -136,7 +136,7 @@
 	</vocation>
 
 	<vocation id="9" name="Doomcaster" description="a doomcaster" gaincap="10" gainhp="5" gainmana="30" gainhpticks="2" gainhpamount="3"
-			gainmanaticks="3" gainmanaamount="2" maxsoul="100" gainsoulticks="120" attackspeed="1000">
+			gainmanaticks="3" gainmanaamount="2" attackspeed="1000">
 		<damage magicDamage="1.0" wandDamage="1.0" healingDamage="1.0" />
 		<meleeDamage thrust="1.0" slash="1.0" bash="1.0" dist="1.0" fist="1.0" />
 		<defense baseDefense="1.0" armorDefense="1.0" />
@@ -151,7 +151,7 @@
 		<evolution base="1" promotes="13"/>
 	</vocation>
 	<vocation id="10" name="Sage" description="a sage" gaincap="10" gainhp="5" gainmana="30" gainhpticks="2" gainhpamount="3"
-			gainmanaticks="3" gainmanaamount="2" maxsoul="100" gainsoulticks="120" attackspeed="1000">
+			gainmanaticks="3" gainmanaamount="2" attackspeed="1000">
 		<damage magicDamage="1.0" wandDamage="1.0" healingDamage="1.0" />
 		<meleeDamage thrust="1.0" slash="1.0" bash="1.0" dist="1.0" fist="1.0" />
 		<defense baseDefense="1.0" armorDefense="1.0" />
@@ -166,7 +166,7 @@
 		<evolution base="2" promotes="14"/>
 	</vocation>
 	<vocation id="11" name="Templar" description="a templar" gaincap="20" gainhp="10" gainmana="15" gainhpticks="2" gainhpamount="4"
-			gainmanaticks="4" gainmanaamount="2" maxsoul="100" gainsoulticks="120" attackspeed="1000">
+			gainmanaticks="4" gainmanaamount="2" attackspeed="1000">
 		<damage magicDamage="1.0" wandDamage="1.0" healingDamage="1.0" />
 		<meleeDamage thrust="1.0" slash="1.0" bash="1.0" dist="1.0" fist="1.0" />
 		<defense baseDefense="1.0" armorDefense="1.0" />
@@ -181,7 +181,7 @@
 		<evolution base="3" promotes="15"/>
 	</vocation>
 	<vocation id="12" name="Guardian" description="a guardian" gaincap="25" gainhp="15" gainmana="5" gainhpticks="2" gainhpamount="5"
-			gainmanaticks="5" gainmanaamount="2" maxsoul="100" gainsoulticks="120" attackspeed="1000">
+			gainmanaticks="5" gainmanaamount="2" attackspeed="1000">
 		<damage magicDamage="1.0" wandDamage="1.0" healingDamage="1.0" />
 		<meleeDamage thrust="1.0" slash="1.0" bash="1.0" dist="1.0" fist="1.0" />
 		<defense baseDefense="1.0" armorDefense="1.0" />
@@ -196,7 +196,7 @@
 		<evolution base="4" promotes="16"/>
 	</vocation>
 	<vocation id="13" name="Master Doomcaster" description="a master doomcaster" gaincap="10" gainhp="5" gainmana="30" gainhpticks="2" gainhpamount="4"
-			gainmanaticks="2" gainmanaamount="2" maxsoul="200" gainsoulticks="15" attackspeed="1000">
+			gainmanaticks="2" gainmanaamount="2" attackspeed="1000">
 		<damage magicDamage="1.0" wandDamage="1.0" healingDamage="1.0" />
 		<meleeDamage thrust="1.0" slash="1.0" bash="1.0" dist="1.0" fist="1.0" />
 		<defense baseDefense="1.0" armorDefense="1.0" />
@@ -211,7 +211,7 @@
 		<evolution base="1"/>
 	</vocation>
 	<vocation id="14" name="Elder Sage" description="an elder sage" gaincap="10" gainhp="5" gainmana="30" gainhpticks="2" gainhpamount="4"
-			gainmanaticks="2" gainmanaamount="2" maxsoul="200" gainsoulticks="15" attackspeed="1000">
+			gainmanaticks="2" gainmanaamount="2" attackspeed="1000">
 		<damage magicDamage="1.0" wandDamage="1.0" healingDamage="1.0" />
 		<meleeDamage thrust="1.0" slash="1.0" bash="1.0" dist="1.0" fist="1.0" />
 		<defense baseDefense="1.0" armorDefense="1.0" />
@@ -226,7 +226,7 @@
 		<evolution base="2"/>
 	</vocation>
 	<vocation id="15" name="Royal Templar" description="a royal templar" gaincap="20" gainhp="10" gainmana="15" gainhpticks="2" gainhpamount="5"
-			gainmanaticks="3" gainmanaamount="2" maxsoul="200" gainsoulticks="15" attackspeed="1000">
+			gainmanaticks="3" gainmanaamount="2" attackspeed="1000">
 		<damage magicDamage="1.0" wandDamage="1.0" healingDamage="1.0" />
 		<meleeDamage thrust="1.0" slash="1.0" bash="1.0" dist="1.0" fist="1.0" />
 		<defense baseDefense="1.0" armorDefense="1.0" />
@@ -241,7 +241,7 @@
 		<evolution base="3"/>
 	</vocation>
 	<vocation id="16" name="Elite Guardian" description="an elite guardian" gaincap="25" gainhp="15" gainmana="5" gainhpticks="2" gainhpamount="6"
-			gainmanaticks="4" gainmanaamount="2" maxsoul="200" gainsoulticks="15" attackspeed="1000">
+			gainmanaticks="4" gainmanaamount="2" attackspeed="1000">
 		<damage magicDamage="1.0" wandDamage="1.0" healingDamage="1.0" />
 		<meleeDamage thrust="1.0" slash="1.0" bash="1.0" dist="1.0" fist="1.0" />
 		<defense baseDefense="1.0" armorDefense="1.0" />

@@ -1234,9 +1234,6 @@ void LuaScriptInterface::registerFunctions()
 	//getPlayerItemCount(cid, itemid, subtype)
 	lua_register(m_luaState, "getPlayerItemCount", LuaScriptInterface::luaGetPlayerItemCount);
 
-	//getPlayerSoul(cid)
-	lua_register(m_luaState, "getPlayerSoul", LuaScriptInterface::luaGetPlayerSoul);
-
 	//getPlayerFreeCap(cid)
 	lua_register(m_luaState, "getPlayerFreeCap", LuaScriptInterface::luaGetPlayerFreeCap);
 
@@ -1478,9 +1475,6 @@ void LuaScriptInterface::registerFunctions()
 
 	//doPlayerAddMana(cid, mana, <optional: default: 1> withoutAnimation)
 	lua_register(m_luaState, "doPlayerAddMana", LuaScriptInterface::luaDoPlayerAddMana);
-
-	//doPlayerAddSoul(cid, soul)
-	lua_register(m_luaState, "doPlayerAddSoul", LuaScriptInterface::luaDoPlayerAddSoul);
 
 	//doPlayerAddItem(uid, itemid, <optional: default: 1> count/subtype)
 	//doPlayerAddItem(cid, itemid, <optional: default: 1> count, <optional: default: 1> canDropOnMap, <optional: default: 1>subtype)
@@ -2193,11 +2187,6 @@ int LuaScriptInterface::internalGetPlayerInfo(lua_State *L, PlayerInfo_t info)
 			lua_pushnumber(L, player->getVocationId());
 			return 1;
 		}
-		case PlayerInfoSoul:
-		{
-			lua_pushnumber(L, player->getPlayerInfo(PLAYERINFO_SOUL));
-			return 1;
-		}
 		case PlayerInfoFreeCap:
 		{
 			lua_pushnumber(L, (int)player->getFreeCapacity());
@@ -2374,11 +2363,6 @@ int LuaScriptInterface::luaGetPlayerRebirthsTo(lua_State *L)
 int LuaScriptInterface::luaGetPlayerMasterPos(lua_State *L)
 {
 	return internalGetPlayerInfo(L, PlayerInfoMasterPos);
-}
-
-int LuaScriptInterface::luaGetPlayerSoul(lua_State *L)
-{
-	return internalGetPlayerInfo(L, PlayerInfoSoul);
 }
 
 int LuaScriptInterface::luaGetPlayerFreeCap(lua_State *L)
@@ -5006,26 +4990,6 @@ int LuaScriptInterface::luaDebugPrint(lua_State *L)
 	std::string text = popString(L);
 	reportErrorFunc(text);
 	return 0;
-}
-
-int LuaScriptInterface::luaDoPlayerAddSoul(lua_State *L)
-{
-	//doPlayerAddSoul(cid, soul)
-	int32_t addsoul = popNumber(L);
-	uint32_t cid = popNumber(L);
-
-	ScriptEnviroment* env = getScriptEnv();
-
-	Player* player = env->getPlayerByUID(cid);
-	if(player){
-		player->changeSoul(addsoul);
-		lua_pushboolean(L, true);
-	}
-	else{
-		reportErrorFunc(getErrorDesc(LUA_ERROR_PLAYER_NOT_FOUND));
-		lua_pushboolean(L, false);
-	}
-	return 1;
 }
 
 int LuaScriptInterface::luaGetPlayerItemCount(lua_State *L)

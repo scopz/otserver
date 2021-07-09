@@ -78,8 +78,6 @@ Player::Player(const std::string& _name, ProtocolGame* p) : Creature()
 	mana = 0;
 	manaMax	= 0;
 	manaSpent = 0;
-	soul = 0;
-	soulMax	= 100;
 
 	level = 1;
 	levelPercent = 0;
@@ -244,9 +242,6 @@ bool Player::setVocation(uint32_t vocId)
 		condition->setParam(CONDITIONPARAM_MANAGAIN, vocation->getManaGainAmount());
 		condition->setParam(CONDITIONPARAM_MANATICKS, vocation->getManaGainTicks() * 1000);
 	}
-
-	//Set the player's max soul according to their vocation
-	soulMax = vocation->getSoulMax();
 
 	Vocation *noneVoc;
 	g_vocations.getVocation(0, noneVoc);
@@ -679,7 +674,6 @@ int32_t Player::getPlayerInfo(playerinfo_t playerinfo) const
 		case PLAYERINFO_MAXHEALTH: return std::max((int32_t)1, ((int32_t)healthMax + varStats[STAT_MAXHITPOINTS])); break;
 		case PLAYERINFO_MANA: return std::max(0, mana); break;
 		case PLAYERINFO_MAXMANA: return std::max((int32_t)0, ((int32_t)manaMax + varStats[STAT_MAXMANAPOINTS])); break;
-		case PLAYERINFO_SOUL: return std::max((int32_t)0, ((int32_t)soul + varStats[STAT_SOULPOINTS])); break;
 		default:
 			return 0; break;
 	}
@@ -821,17 +815,11 @@ int32_t Player::getDefaultStats(stats_t stat)
 {
 	switch(stat){
 		case STAT_MAXHITPOINTS:
-		{
 			return getMaxHealth() - getVarStats(STAT_MAXHITPOINTS);
 			break;
-		}
 
 		case STAT_MAXMANAPOINTS:
 			return getMaxMana() - getVarStats(STAT_MAXMANAPOINTS);
-			break;
-
-		case STAT_SOULPOINTS:
-			return getPlayerInfo(PLAYERINFO_SOUL) - getVarStats(STAT_SOULPOINTS);
 			break;
 
 		case STAT_MAGICPOINTS:
@@ -1327,10 +1315,6 @@ void Player::sendCancelMessage(ReturnValue message) const
 
 	case RET_NOTENOUGHMANA:
 		sendCancel("You do not have enough mana.");
-		break;
-
-	case RET_NOTENOUGHSOUL:
-		sendCancel("You do not have enough soul.");
 		break;
 
 	case RET_YOUAREEXHAUSTED:
@@ -2444,8 +2428,6 @@ void Player::sendToRook()
 	manaMax = 0;
 	manaSpent = 0;
 	magLevel= 0;
-	soul = 100;
-	soulMax = 100;
 	capacity = 400;
 	experience = 0;
 
@@ -4271,16 +4253,6 @@ void Player::gainExperience(uint64_t& gainExp, bool fromMonster)
 {
 	if(!hasFlag(PlayerFlag_NotGainExperience)){
 		if(gainExp > 0){
-			//soul regeneration
-			if((uint32_t)gainExp >= getLevel()){
-				Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_SOUL, 4 * 60 * 1000, 0);
-				//Soul regeneration rate is defined by the vocation
-				uint32_t vocSoulTicks = vocation->getSoulGainTicks();
-				condition->setParam(CONDITIONPARAM_SOULGAIN, 1);
-				condition->setParam(CONDITIONPARAM_SOULTICKS, vocSoulTicks * 1000);
-				addCondition(condition);
-			}
-
 			//check stamina, player rate and other values
 			getGainExperience(gainExp, fromMonster);
 
@@ -4379,18 +4351,6 @@ void Player::changeHealth(int32_t healthChange)
 void Player::changeMana(int32_t manaChange)
 {
 	Creature::changeMana(manaChange);
-	sendStats();
-}
-
-void Player::changeSoul(int32_t soulChange)
-{
-	if(soulChange > 0){
-		soul += std::min(soulChange, soulMax - soul);
-	}
-	else{
-		soul = std::max((int32_t)0, soul + soulChange);
-	}
-
 	sendStats();
 }
 

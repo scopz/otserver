@@ -2288,8 +2288,6 @@ void ProtocolGame::addPlayerStats(NetworkMessage &msg)
 
 	msg.addByte(player->getMagicLevel());
 	msg.addByte(player->getPlayerInfo(PLAYERINFO_MAGICLEVELPERCENT));
-
-	msg.addByte(player->getPlayerInfo(PLAYERINFO_SOUL));
 }
 
 void ProtocolGame::addPlayerSkills(NetworkMessage &msg)

@@ -50,8 +50,7 @@ enum playerinfo_t {
 	PLAYERINFO_MANA,
 	PLAYERINFO_MAXMANA,
 	PLAYERINFO_MAGICLEVEL,
-	PLAYERINFO_MAGICLEVELPERCENT,
-	PLAYERINFO_SOUL
+	PLAYERINFO_MAGICLEVELPERCENT
 };
 
 enum freeslot_t {
@@ -368,7 +367,6 @@ public:
 
 	virtual void changeHealth(int32_t healthChange);
 	virtual void changeMana(int32_t manaChange);
-	void changeSoul(int32_t soulChange);
 
 	bool isPzLocked() const { return pzLocked; }
 	virtual BlockType_t blockHit(Creature* attacker, CombatType_t combatType, int32_t& damage,
@@ -758,7 +756,6 @@ protected:
 	Vocation_t vocation_id;
 	Vocation* vocation;
 	PlayerSex_t sex;
-	int32_t soul, soulMax;
 	uint64_t groupFlags;
 	uint16_t premiumDays;
 	uint32_t MessageBufferTicks;
