@@ -40,8 +40,6 @@ function creatureSayCallback(cid, type, msg) msg = string.lower(msg)
 		npcHandler:say("Say the words: exiva 'name'", 1)		
 	elseif talk_state == 1 and msgcontains(msg, 'light healing') then
 		npcHandler:say("Say the word: exura", 1)		
-	elseif talk_state == 1 and msgcontains(msg, 'light magic missile') then
-		npcHandler:say("Say the word: adori", 1)		
 	elseif talk_state == 1 and msgcontains(msg, 'antidote') then
 		npcHandler:say("Say the words: exana pox", 1)		
 	elseif talk_state == 1 and msgcontains(msg, 'intense healing') then
@@ -90,8 +88,6 @@ function creatureSayCallback(cid, type, msg) msg = string.lower(msg)
 		npcHandler:say("Say the words: adori vita vis", 1)			
 	elseif talk_state == 1 and msgcontains(msg, 'energy beam') then
 		npcHandler:say("Say the words: exevo vis lux", 1)		
-	elseif talk_state == 1 and msgcontains(msg, 'fireball') then
-		npcHandler:say("Say the words: adori flam", 1)		
 	elseif talk_state == 1 and msgcontains(msg, 'light') then
 		npcHandler:say("Say the words: utevo lux", 1)		
 		
@@ -115,8 +111,6 @@ function creatureSayCallback(cid, type, msg) msg = string.lower(msg)
 		npcHandler:say("If you search someone, this spell will give you an idea of the direction you must head. You will be able to see, whether he is below or above you.", 1)	
 	elseif msgcontains(msg, 'light healing') or msgcontains(msg, 'Light healing') then
 		npcHandler:say("The paths to the next temple are long. Even in Tibia. So learn this spell, and be able to heal yourself during your travels. This spell will only cure small wounds, but it is pretty helpful.", 1)	
-	elseif msgcontains(msg, 'light magic missile') or msgcontains(msg, 'Light magic missile') then
-		npcHandler:say("You can activate this spell by pointing your index finger in the direction of your enemy, conjure the power of your rune and shoot the magic missiles in your enemy's body.", 1)	
 	elseif msgcontains(msg, 'antidote') or msgcontains(msg, 'Antidote') then
 		npcHandler:say("This spell sucks the venom out of your veins, that some enemy might have injected.", 1)	
 	elseif msgcontains(msg, 'intense healing') or msgcontains(msg, 'Intense healing') then
@@ -167,8 +161,6 @@ function creatureSayCallback(cid, type, msg) msg = string.lower(msg)
 		npcHandler:say("The best spell for deciding a battle within seconds. The spell tries to interrupt the opponents heart beat, leading to his instant death in most cases.", 1)	
 	elseif msgcontains(msg, 'light') or msgcontains(msg, 'Light') then
 		npcHandler:say("A ray of light will emerge from your flat hand to illuminate your environment.", 1)	
-	elseif msgcontains(msg, 'fireball') or msgcontains(msg, 'Fireball') then
-		npcHandler:say("A perfect symbiosis of fire and wind. More is not to be said about this spell. Use this fireball as a warning or as your defence, but don't burn your fingers.", 1)	
 	elseif msgcontains(msg, 'formula') or msgcontains(msg, 'Formula') then
 		npcHandler:say("Which is the spell, you need the formula to?", 1)
 		talk_state = 1	

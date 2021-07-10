@@ -2174,9 +2174,6 @@ bool RuneSpell::loadFunction(const std::string& functionName)
 	else if(functionName == "convince"){
 		function = Convince;
 	}
-    else if(functionName == "soulfire"){
-        function = Soulfire;
-    }
 	else{
 		return false;
 	}
@@ -2269,37 +2266,6 @@ bool RuneSpell::Convince(const RuneSpell* spell, Creature* creature, Item* item,
 
 	spell->postCastSpell(player, (uint32_t)manaCost);
 	g_game.addMagicEffect(player->getPosition(), NM_ME_MAGIC_BLOOD);
-	return true;
-}
-
-bool RuneSpell::Soulfire(const RuneSpell* spell, Creature* creature, Item* item, const Position& posFrom, const Position& posTo)
-{
-	Player* player = creature->getPlayer();
-	if(!player){
-		return false;
-	}
-
-	Thing* thing = g_game.internalGetThing(player, posTo, 0, 0, STACKPOS_LOOK);
-	if(!thing){
-		player->sendCancelMessage(RET_NOTPOSSIBLE);
-		g_game.addMagicEffect(player->getPosition(), NM_ME_PUFF);
-		return false;
-	}
-
-	Creature* hitCreature = thing->getCreature();
-	if(!hitCreature){
-		player->sendCancelMessage(RET_NOTPOSSIBLE);
-		g_game.addMagicEffect(player->getPosition(), NM_ME_PUFF);
-		return false;
-	}
-
-	ConditionDamage* soulfireCondition = new ConditionDamage(CONDITIONID_COMBAT, CONDITION_FIRE);
-	soulfireCondition->setParam(CONDITIONPARAM_SUBID, 1);
-	soulfireCondition->setParam(CONDITIONPARAM_OWNER, player->getID());
-	soulfireCondition->addDamage(std::ceil((player->getLevel()+player->getMagicLevel()) / 3.), 9000, -10);
-	g_game.addDistanceEffect(player->getPosition(), hitCreature->getPosition(), NM_SHOOT_FIRE);
-	hitCreature->addCondition(soulfireCondition);
-	spell->postCastSpell(player, true, 0);
 	return true;
 }
 

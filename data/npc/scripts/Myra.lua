@@ -64,7 +64,6 @@ spellSellModule:addSpellStock({
 	"Fire Wave",
 	"Destroy Field",
 	"Energy Field",
-	"Fireball",
 	"Magic Shield",
 	"Heavy Magic Missile",
 	"Fire Field",
@@ -72,7 +71,6 @@ spellSellModule:addSpellStock({
 	"Poison Field",
 	"Intense Healing",
 	"Antidote",
-	"Light Magic Missile",
 	"Light Healing",
 	"Light",
 })

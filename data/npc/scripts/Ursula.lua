@@ -43,8 +43,6 @@ spellSellModule:addSpellStock({
 	"Poison Bomb",
 	"Desintegrate",
 	"Heal Friend",
-	"Envenom",
-	"Animate Dead",
 })
 
 npcHandler:addModule(FocusModule:new())

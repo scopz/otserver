@@ -53,11 +53,9 @@ npcHandler:addModule(spellSellModule)
 spellSellModule.condition = function(cid) return isDruid(cid) or isPaladin(cid) end
 spellSellModule.conditionFailText = "Sorry, I only teach paladins and druids!"
 spellSellModule:addSpellStock({
-	"Light Magic Missile",
 	"Explosion",
 	"Fire Bomb",
 	"Great Fireball",
-	"Fireball",
 	"Heavy Magic Missile",
 })
 

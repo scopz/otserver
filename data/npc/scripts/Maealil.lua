@@ -67,9 +67,7 @@ spellSellModule:addSpellStock({
 	"Light Healing",
 	"Ultimate Healing Rune",
 	"Ultimate Healing",
-	"Intense Healing Rune",
 	"Intense Healing",
-	"Antidote Rune",
 	"Antidote",
 })
 

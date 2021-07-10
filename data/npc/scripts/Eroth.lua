@@ -54,9 +54,7 @@ spellSellModule:addSpellStock({
 	"Magic Shield",
 	"Invisibility",
 	"Summon Creature",
-	"Convince Creature",
 	"Creature Illusion",
-	"Chameleon",
 	"Destroy Field",
 })
 

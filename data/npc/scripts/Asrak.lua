@@ -56,7 +56,6 @@ spellSellModule.condition = function(cid) return isPaladin(cid) or isKnight(cid)
 spellSellModule.conditionFailText = "Sorry, I only teach paladins and knights!"
 spellSellModule:addSpellStock({
 	'Find Person',
-	'Light Magic Missile',
 	'Food',
 	'Light Healing',
 	'Antidote',
@@ -64,7 +63,6 @@ spellSellModule:addSpellStock({
 	'Great Light',
 	'Magic Shield',
 	'Conjure Poisoned Arrow',
-	'Fireball',
 	'Ultimate Healing',
 	'Conjure Explosive Arrow',
 	'Invisibility',

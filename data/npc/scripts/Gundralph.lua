@@ -41,7 +41,6 @@ spellSellModule:addSpellStock({
 	"Undead Legion",
 	"Cancel Invisibility",
 	"Magic Wall",
-	"Soulfire",
 })
 
 npcHandler:addModule(FocusModule:new())
