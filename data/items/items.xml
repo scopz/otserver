@@ -1765,28 +1765,28 @@
 	<item id="1423" article="a" name="campfire">
 		<attribute key="replaceable" value="0"/>
 		<attribute key="field" value="fire">
-			<attribute key="damage" value="20"/>
-			<attribute key="ticks" value="4000"/>
-			<attribute key="count" value="2"/>
 			<attribute key="damage" value="10"/>
+			<attribute key="ticks" value="4000"/>
+			<attribute key="count" value="5"/>
+			<attribute key="damage" value="5"/>
 		</attribute>
 	</item>
 	<item id="1424" article="a" name="campfire">
 		<attribute key="replaceable" value="0"/>
 		<attribute key="field" value="fire">
-			<attribute key="damage" value="20"/>
-			<attribute key="ticks" value="4000"/>
-			<attribute key="count" value="2"/>
 			<attribute key="damage" value="10"/>
+			<attribute key="ticks" value="4000"/>
+			<attribute key="count" value="5"/>
+			<attribute key="damage" value="5"/>
 		</attribute>
 	</item>
 	<item id="1425" article="a" name="campfire">
 		<attribute key="replaceable" value="0"/>
 		<attribute key="field" value="fire">
-			<attribute key="damage" value="20"/>
-			<attribute key="ticks" value="4000"/>
-			<attribute key="count" value="2"/>
 			<attribute key="damage" value="10"/>
+			<attribute key="ticks" value="4000"/>
+			<attribute key="count" value="5"/>
+			<attribute key="damage" value="5"/>
 		</attribute>
 	</item>
 	<item id="1426" article="an" name="unlit campfire"/>
@@ -1877,18 +1877,18 @@
 	<item id="1487" article="a" name="fire field" editorsuffix=" (Not decaying)">
 		<attribute key="type" value="magicfield"/>
 		<attribute key="field" value="fire">
-			<attribute key="damage" value="20"/>
-			<attribute key="ticks" value="10000"/>
-			<attribute key="count" value="7"/>
 			<attribute key="damage" value="10"/>
+			<attribute key="ticks" value="4000"/>
+			<attribute key="count" value="20"/>
+			<attribute key="damage" value="5"/>
 		</attribute>
 	</item>
 	<item id="1488" article="a" name="fire field" editorsuffix=" (Not decaying)">
 		<attribute key="type" value="magicfield"/>
 		<attribute key="field" value="fire">
-			<attribute key="ticks" value="10000"/>
-			<attribute key="count" value="7"/>
-			<attribute key="damage" value="10"/>
+			<attribute key="ticks" value="4000"/>
+			<attribute key="count" value="13"/>
+			<attribute key="damage" value="5"/>
 		</attribute>
 	</item>
 	<item id="1489" article="a" name="fire field" editorsuffix=" (Not decaying)">
@@ -1916,10 +1916,10 @@
 		<attribute key="decayTo" value="1493"/>
 		<attribute key="duration" value="120"/>
 		<attribute key="field" value="fire">
-			<attribute key="damage" value="20"/>
-			<attribute key="ticks" value="10000"/>
-			<attribute key="count" value="7"/>
 			<attribute key="damage" value="10"/>
+			<attribute key="ticks" value="4000"/>
+			<attribute key="count" value="20"/>
+			<attribute key="damage" value="5"/>
 		</attribute>
 	</item>
 	<item id="1493" article="a" name="fire field">
@@ -1927,9 +1927,9 @@
 		<attribute key="decayTo" value="1494"/>
 		<attribute key="duration" value="120"/>
 		<attribute key="field" value="fire">
-			<attribute key="ticks" value="10000"/>
-			<attribute key="count" value="7"/>
-			<attribute key="damage" value="10"/>
+			<attribute key="ticks" value="4000"/>
+			<attribute key="count" value="13"/>
+			<attribute key="damage" value="5"/>
 		</attribute>
 	</item>
 	<item id="1494" article="a" name="fire field">
@@ -1976,10 +1976,10 @@
 		<attribute key="decayTo" value="1501"/>
 		<attribute key="duration" value="120"/>
 		<attribute key="field" value="fire">
-			<attribute key="damage" value="20"/>
-			<attribute key="ticks" value="10000"/>
-			<attribute key="count" value="7"/>
 			<attribute key="damage" value="10"/>
+			<attribute key="ticks" value="4000"/>
+			<attribute key="count" value="20"/>
+			<attribute key="damage" value="5"/>
 		</attribute>
 	</item>
 	<item id="1501" article="a" name="fire field" editorsuffix=" (Non PvP)">
@@ -1987,9 +1987,9 @@
 		<attribute key="decayTo" value="1502"/>
 		<attribute key="duration" value="120"/>
 		<attribute key="field" value="fire">
-			<attribute key="ticks" value="10000"/>
-			<attribute key="count" value="7"/>
-			<attribute key="damage" value="10"/>
+			<attribute key="ticks" value="4000"/>
+			<attribute key="count" value="13"/>
+			<attribute key="damage" value="5"/>
 		</attribute>
 	</item>
 	<item id="1502" article="a" name="fire field" editorsuffix=" (Non PvP)">

@@ -904,7 +904,7 @@ bool ConditionRegeneration::executeCondition(Creature* creature, int32_t interva
 	internalManaTicks += interval;
 
 	if(creature->getZone() != ZONE_PROTECTION){
-		if(internalHealthTicks >= healthTicks){
+		if(internalHealthTicks >= healthTicks && !creature->hasCondition(CONDITION_FIRE)){
 			internalHealthTicks = 0;
 			creature->changeHealth(healthGain);
 		}
