@@ -8,16 +8,16 @@
 	
 	<!-- Rune Spells -->
 	<rune name="adevo grav pox" id="2285" maglv="0" blocktype="solid" conjureCount="3" script="attack/poison_field.lua"/>
-	<rune name="adevo mas pox" id="2286" maglv="4" blocktype="solid" conjureCount="2" script="attack/poison_bomb.lua" />
-	<rune name="adevo mas grav pox" id="2289" maglv="5" blocktype="solid" conjureCount="4" script="attack/poison_wall.lua" />
+	<rune name="adevo mas pox" id="5101" maglv="4" blocktype="solid" conjureCount="2" script="attack/poison_bomb.lua" />
+	<rune name="adevo mas grav pox" id="5104" maglv="5" blocktype="solid" conjureCount="4" script="attack/poison_wall.lua" />
 
 	<rune name="adevo grav flam" id="2301" maglv="1" blocktype="solid" conjureCount="3" script="attack/fire_field.lua" />
 	<rune name="adevo mas flam" id="2305" maglv="5" blocktype="solid" conjureCount="2" script="attack/firebomb.lua" />
-	<rune name="adevo mas grav flam" id="2303" maglv="6" blocktype="solid" conjureCount="4" script="attack/fire_wall.lua" />
+	<rune name="adevo mas grav flam" id="5103" maglv="6" blocktype="solid" conjureCount="4" script="attack/fire_wall.lua" />
 
 	<rune name="adevo grav vis" id="2277" maglv="3" blocktype="solid" conjureCount="3" script="attack/energy_field.lua" />
-	<rune name="adevo mas vis" id="2262" maglv="10" blocktype="solid" conjureCount="2" script="attack/energybomb.lua" />
-	<rune name="adevo mas grav vis" id="2279" maglv="9" blocktype="solid" conjureCount="4" script="attack/energy_wall.lua" />
+	<rune name="adevo mas vis" id="5102" maglv="10" blocktype="solid" conjureCount="2" script="attack/energybomb.lua" />
+	<rune name="adevo mas grav vis" id="5105" maglv="9" blocktype="solid" conjureCount="4" script="attack/energy_wall.lua" />
 
 	<rune name="adito grav" id="2261" maglv="3" range="4" blocktype="solid" aggressive="0" conjureCount="3" script="support/destroy_field_rune.lua" />
 	<rune name="adito tera" id="2310" maglv="4" conjureCount="3" range="1" script="support/desintegrate_rune.lua" />

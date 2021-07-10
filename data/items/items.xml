@@ -4130,10 +4130,9 @@
 		<attribute key="weight" value="40"/>
 		<attribute key="runeSpellName" value="adito grav"/>
 	</item>
-	<item id="2262" article="an" name="energy bomb rune">
+	<item id="2262" article="a" name="spell rune">
 		<attribute key="type" value="rune"/>
-		<attribute key="weight" value="60"/>
-		<attribute key="runeSpellName" value="adevo mas vis"/>
+		<attribute key="weight" value="120"/>
 	</item>
 	<item id="2263" article="a" name="spell rune">
 		<attribute key="type" value="rune"/>
@@ -4208,10 +4207,9 @@
 		<attribute key="weight" value="120"/>
 		<attribute key="runeSpellName" value="adana ani"/>
 	</item>
-	<item id="2279" article="an" name="energy wall rune">
+	<item id="2279" article="a" name="spell rune">
 		<attribute key="type" value="rune"/>
-		<attribute key="weight" value="30"/>
-		<attribute key="runeSpellName" value="adevo mas grav vis"/>
+		<attribute key="weight" value="120"/>
 	</item>
 	<item id="2280" article="a" name="spell rune">
 		<attribute key="type" value="rune"/>
@@ -4238,10 +4236,9 @@
 		<attribute key="weight" value="40"/>
 		<attribute key="runeSpellName" value="adevo grav pox"/>
 	</item>
-	<item id="2286" article="a" name="poison bomb rune">
+	<item id="2286" article="a" name="spell rune">
 		<attribute key="type" value="rune"/>
-		<attribute key="weight" value="60"/>
-		<attribute key="runeSpellName" value="adevo mas pox"/>
+		<attribute key="weight" value="120"/>
 	</item>
 	<item id="2287" article="a" name="light magic missile rune">
 		<attribute key="type" value="rune"/>
@@ -4253,10 +4250,9 @@
 		<attribute key="weight" value="30"/>
 		<attribute key="runeSpellName" value="adori mas tera"/>
 	</item>
-	<item id="2289" article="a" name="poison wall rune">
+	<item id="2289" article="a" name="spell rune">
 		<attribute key="type" value="rune"/>
-		<attribute key="weight" value="30"/>
-		<attribute key="runeSpellName" value="adevo mas grav pox"/>
+		<attribute key="weight" value="120"/>
 	</item>
 	<item id="2290" article="a" name="convince creature rune">
 		<attribute key="type" value="rune"/>
@@ -4317,10 +4313,9 @@
 		<attribute key="weight" value="40"/>
 		<attribute key="runeSpellName" value="adori flam"/>
 	</item>
-	<item id="2303" article="a" name="fire wall rune">
+	<item id="2303" article="a" name="spell rune">
 		<attribute key="type" value="rune"/>
-		<attribute key="weight" value="30"/>
-		<attribute key="runeSpellName" value="adevo mas grav flam"/>
+		<attribute key="weight" value="120"/>
 	</item>
 	<item id="2304" article="a" name="great fireball rune">
 		<attribute key="type" value="rune"/>
@@ -11744,6 +11739,31 @@
 	</item>
 	<item id="5100" article="a" name="special orb" plural="special orbs">
 		<attribute key="weight" value="200"/>
+	</item>
+	<item id="5101" article="a" name="poison bomb rune">
+		<attribute key="type" value="rune"/>
+		<attribute key="weight" value="60"/>
+		<attribute key="runeSpellName" value="adevo mas pox"/>
+	</item>
+	<item id="5102" article="an" name="energy bomb rune">
+		<attribute key="type" value="rune"/>
+		<attribute key="weight" value="60"/>
+		<attribute key="runeSpellName" value="adevo mas vis"/>
+	</item>
+	<item id="5103" article="a" name="fire wall rune">
+		<attribute key="type" value="rune"/>
+		<attribute key="weight" value="30"/>
+		<attribute key="runeSpellName" value="adevo mas grav flam"/>
+	</item>
+	<item id="5104" article="a" name="poison wall rune">
+		<attribute key="type" value="rune"/>
+		<attribute key="weight" value="30"/>
+		<attribute key="runeSpellName" value="adevo mas grav pox"/>
+	</item>
+	<item id="5105" article="an" name="energy wall rune">
+		<attribute key="type" value="rune"/>
+		<attribute key="weight" value="30"/>
+		<attribute key="runeSpellName" value="adevo mas grav vis"/>
 	</item>
 	
 	<item id="20001" name="water" fluidClient="1"/>
