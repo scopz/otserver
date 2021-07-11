@@ -619,12 +619,18 @@ bool WeaponMelee::configureWeapon(const ItemType& it)
 	elementType = it.abilities.elementType;
 	elementDamage = it.abilities.elementDamage;
 
-	switch(it.weaponType){
-		case WEAPON_THRUST: params.combatType = COMBAT_THRUSTDAMAGE;   break;
-		case WEAPON_BASH:   params.combatType = COMBAT_BASHDAMAGE;     break;
-		case WEAPON_SLASH:  params.combatType = COMBAT_SLASHDAMAGE;    break;
-		default:            params.combatType = COMBAT_PHYSICALDAMAGE; break;
+	if (it.damageType == COMBAT_NONE) {
+		switch(it.weaponType){
+			case WEAPON_THRUST: params.combatType = COMBAT_THRUSTDAMAGE;   break;
+			case WEAPON_BASH:   params.combatType = COMBAT_BASHDAMAGE;     break;
+			case WEAPON_SLASH:  params.combatType = COMBAT_SLASHDAMAGE;    break;
+			default:            params.combatType = COMBAT_PHYSICALDAMAGE; break;
+		}
+
+	} else {
+		params.combatType = it.damageType;
 	}
+
 
 	return Weapon::configureWeapon(it);
 }
@@ -835,6 +841,10 @@ bool WeaponDistance::configureWeapon(const ItemType& it)
 
 	if(it.ammoAction != AMMOACTION_NONE){
 		ammoAction = it.ammoAction;
+	}
+
+	if (it.damageType != COMBAT_NONE) {
+		params.combatType = it.damageType;
 	}
 
 	return Weapon::configureWeapon(it);

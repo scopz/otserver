@@ -1569,6 +1569,7 @@
 		<attribute key="weight" value="360"/>
 		<attribute key="attack" value="5"/>
 		<attribute key="weaponType" value="distance"/>
+		<attribute key="damageType" value="bash"/>
 		<attribute key="shootType" value="smallstone"/>
 		<attribute key="range" value="6"/>
 		<attribute key="breakChance" value="3"/>
@@ -3464,6 +3465,7 @@
 		<attribute key="weight" value="80"/>
 		<attribute key="attack" value="0"/>
 		<attribute key="weaponType" value="distance"/>
+		<attribute key="damageType" value="bash"/>
 		<attribute key="shootType" value="snowball"/>
 		<attribute key="range" value="5"/>
 		<attribute key="ammoAction" value="removecount"/>
@@ -4710,6 +4712,7 @@
 		<attribute key="weight" value="1000"/>
 		<attribute key="attack" value="25"/>
 		<attribute key="weaponType" value="distance"/>
+		<attribute key="damageType" value="thrust"/>
 		<attribute key="shootType" value="spear"/>
 		<attribute key="range" value="5"/>
 		<attribute key="breakChance" value="1"/>
@@ -4790,9 +4793,10 @@
 		<attribute key="weight" value="200"/>
 		<attribute key="attack" value="30"/>
 		<attribute key="weaponType" value="distance"/>
+		<attribute key="damageType" value="slash"/>
 		<attribute key="shootType" value="throwingstar"/>
 		<attribute key="range" value="4"/>
-		<attribute key="breakChance" value="5"/>
+		<attribute key="breakChance" value="3"/>
 		<attribute key="ammoAction" value="moveback"/>
 	</item>
 	<item id="2400" article="a" name="magic sword">
@@ -4874,9 +4878,10 @@
 		<attribute key="weight" value="500"/>
 		<attribute key="attack" value="25"/>
 		<attribute key="weaponType" value="distance"/>
+		<attribute key="damageType" value="thrust"/>
 		<attribute key="shootType" value="throwingknife"/>
 		<attribute key="range" value="4"/>
-		<attribute key="breakChance" value="5"/>
+		<attribute key="breakChance" value="3"/>
 		<attribute key="ammoAction" value="moveback"/>
 	</item>
 	<item id="2411" article="a" name="poison dagger">
@@ -5767,6 +5772,7 @@
 		<attribute key="slotType" value="ammo"/>
 		<attribute key="attack" value="32"/>
 		<attribute key="weaponType" value="ammunition"/>
+		<attribute key="damageType" value="thrust"/>
 		<attribute key="ammoType" value="bolt"/>
 		<attribute key="shootType" value="bolt"/>
 		<attribute key="maxHitChance" value="90"/>
@@ -5778,6 +5784,7 @@
 		<attribute key="slotType" value="ammo"/>
 		<attribute key="attack" value="25"/>
 		<attribute key="weaponType" value="ammunition"/>
+		<attribute key="damageType" value="thrust"/>
 		<attribute key="ammoType" value="arrow"/>
 		<attribute key="shootType" value="arrow"/>
 		<attribute key="maxHitChance" value="90"/>
@@ -5789,6 +5796,7 @@
 		<attribute key="slotType" value="ammo"/>
 		<attribute key="attack" value="22"/>
 		<attribute key="weaponType" value="ammunition"/>
+		<attribute key="damageType" value="poison"/>
 		<attribute key="ammoType" value="arrow"/>
 		<attribute key="shootType" value="poisonarrow"/>
 		<attribute key="maxHitChance" value="90"/>
@@ -5811,6 +5819,7 @@
 		<attribute key="slotType" value="ammo"/>
 		<attribute key="attack" value="45"/>
 		<attribute key="weaponType" value="ammunition"/>
+		<attribute key="damageType" value="thrust"/>
 		<attribute key="ammoType" value="bolt"/>
 		<attribute key="shootType" value="powerbolt"/>
 		<attribute key="maxHitChance" value="90"/>
@@ -9586,6 +9595,7 @@
 		<attribute key="weight" value="2200"/>
 		<attribute key="attack" value="32"/>
 		<attribute key="weaponType" value="distance"/>
+		<attribute key="damageType" value="thrust"/>
 		<attribute key="shootType" value="spear"/>
 		<attribute key="range" value="3"/>
 		<attribute key="breakChance" value="5"/>
@@ -11711,6 +11721,7 @@
 		<attribute key="weight" value="1250"/>
 		<attribute key="attack" value="32"/>
 		<attribute key="weaponType" value="distance"/>
+		<attribute key="damageType" value="thrust"/>
 		<attribute key="shootType" value="royalspear"/>
 		<attribute key="range" value="5"/>
 		<attribute key="breakChance" value="1"/>

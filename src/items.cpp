@@ -80,6 +80,7 @@ ItemType::ItemType()
 	weight        = 0;  // weight of the item, e.g. throwing distance depends on it
 	showCount     = true;
 	weaponType    = WEAPON_NONE;
+	damageType    = COMBAT_NONE;
 	slot_position = SLOTP_RIGHT | SLOTP_LEFT | SLOTP_AMMO;
 	wield_position= SLOT_HAND;
 	amuType       = AMMO_NONE;
@@ -754,6 +755,24 @@ bool Items::loadFromXml(const std::string& datadir)
 								}
 								else{
 									std::cout << "Warning: [Items::loadFromXml] " << "Unknown weaponType " << strValue  << std::endl;
+								}
+							}
+						}
+						else if(asLowerCaseString(strValue) == "damagetype"){
+							if(readXMLString(itemAttributesNode, "value", strValue)){
+								if(asLowerCaseString(strValue) == "physical")    it.damageType = COMBAT_PHYSICALDAMAGE;
+								else if(asLowerCaseString(strValue) == "poison") it.damageType = COMBAT_POISONDAMAGE;
+								else if(asLowerCaseString(strValue) == "energy") it.damageType = COMBAT_ENERGYDAMAGE;
+								else if(asLowerCaseString(strValue) == "earth")  it.damageType = COMBAT_EARTHDAMAGE;
+								else if(asLowerCaseString(strValue) == "fire")   it.damageType = COMBAT_FIREDAMAGE;
+								else if(asLowerCaseString(strValue) == "ice")    it.damageType = COMBAT_ICEDAMAGE;
+								else if(asLowerCaseString(strValue) == "death")  it.damageType = COMBAT_DEATHDAMAGE;
+								else if(asLowerCaseString(strValue) == "holy")   it.damageType = COMBAT_HOLYDAMAGE;
+								else if(asLowerCaseString(strValue) == "slash")  it.damageType = COMBAT_SLASHDAMAGE;
+								else if(asLowerCaseString(strValue) == "bash")   it.damageType = COMBAT_BASHDAMAGE;
+								else if(asLowerCaseString(strValue) == "thrust") it.damageType = COMBAT_THRUSTDAMAGE;
+								else{
+									std::cout << "Warning: [Items::loadFromXml] " << "Unknown damageType " << strValue  << std::endl;
 								}
 							}
 						}

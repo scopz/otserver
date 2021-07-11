@@ -169,6 +169,7 @@ public:
 	float          weight;
 	bool           showCount;
 	WeaponType_t   weaponType;
+	CombatType_t   damageType;
 	Ammo_t         amuType;
 	ShootType_t    shootType;
 	MagicEffectClasses magicEffect;
