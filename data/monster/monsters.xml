@@ -130,6 +130,7 @@
 	<monster name="Yeti" file="yeti.xml"/>
 	
 <!-- special -->	
+	<monster name="Trainer" file="trainer.xml"/>
 	<monster name="Deathslicer" file="special/deathslicer.xml"/>
 	<monster name="demongoblin" file="special/demongoblin.xml"/>
 	<monster name="Flamethrower" file="special/flamethrower.xml"/>

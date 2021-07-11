@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<monster name="trainer" nameDescription="a trainer" race="blood" experience="0" speed="0" manacost="0">
+	<health now="20000" max="20000"/>
+	<look type="131" head="78" body="97" legs="116" feet="95" corpse="3128"/>
+	<targetchange interval="10000" chance="0"/>
+	<targetstrategies nearest="100" health="0" damage="0" random="0"/>
+	<flags>
+		<flag attackable="1"/>
+		<flag hostile="1"/>
+		<flag summonable="0"/>
+		<flag convinceable="0"/>
+		<flag illusionable="1"/>
+		<flag pushable="0"/>
+		<flag canpushitems="0"/>
+		<flag canpushcreatures="0"/>
+		<flag targetdistance="1"/>
+		<flag staticattack="80"/>
+		<flag runonhealth="0"/>
+	</flags>
+	<attacks>
+		<attack name="melee" skill="24" attack="20"/>
+	</attacks>
+	<defenses armor="5" defense="40">
+		<defense name="healing" chance="50" min="500" max="600"/>
+	</defenses>
+	<elements>
+		<element physicalPercent="0"/>
+		<element firePercent="100"/>
+		<element earthPercent="100"/>
+		<element energyPercent="100"/>
+		<element deathPercent="100"/>
+		<element icePercent="100"/>
+		<element holyPercent="100"/>
+	</elements>
+	<immunities>
+		<immunity lifedrain="1"/>
+		<immunity paralyze="1"/>
+		<immunity outfit="1"/>
+		<immunity drunk="1"/>
+		<immunity invisible="1"/>
+	</immunities>
+	<voices interval="3000" chance="1">
+		<voice sentence="Do you even lift?"/>
+		<voice sentence="Education is important, but big biceps are importanter."/>
+	</voices>
+	<loot>
+	</loot>
+</monster>
