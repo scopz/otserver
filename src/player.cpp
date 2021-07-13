@@ -1432,13 +1432,6 @@ void Player::sendCancelMessage(ReturnValue message) const
 	}
 }
 
-void Player::sendStats()
-{
-	if(client){
-		client->sendStats();
-	}
-}
-
 Item* Player::getWriteItem(uint32_t& _windowTextId, uint16_t& _maxWriteLen)
 {
 	_windowTextId = windowTextId;
@@ -4640,6 +4633,19 @@ bool Player::hasLearnedInstantSpell(const std::string& name) const
 	return false;
 }
 
+// TODO: remove money from equipment first
+bool Player::removeMoney(uint32_t amount, bool notifyBalanceChanged /*= true*/)
+{
+	if(balance < amount){
+		return false;
+	}
+
+	balance -= amount;
+	if (notifyBalanceChanged) sendBalance();
+
+	return true;
+}
+
 bool Player::withdrawMoney(uint32_t amount)
 {
 	if(balance < amount){
@@ -4649,6 +4655,7 @@ bool Player::withdrawMoney(uint32_t amount)
 	bool ret = g_game.addMoney(this, amount);
 	if(ret){
 		balance -= amount;
+		sendBalance();
 	}
 	return ret;
 }
@@ -4666,6 +4673,7 @@ bool Player::depositMoney(uint32_t amount)
 	else
 		return false;
 
+	sendBalance();
 	return true;
 }
 
@@ -4680,11 +4688,14 @@ bool Player::transferMoneyTo(const std::string& name, uint32_t amount)
 	if (balance >= amount && safeIncrUInt32_t(target->balance, amount)){
 		balance -= amount;
 		result = true;
+		sendBalance();
 	}
 
 	if(target->isOffline()){
 		IOPlayer::instance()->savePlayer(target);
 		delete target;
+	} else {
+		target->sendBalance();
 	}
 
 	return result;

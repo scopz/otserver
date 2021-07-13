@@ -206,6 +206,7 @@ public:
 	static bool setStorageValueByName(const std::string name, const uint32_t key, const int32_t value);
 	static bool eraseStorageValueByName(const std::string name, const uint32_t key);
 
+	bool removeMoney(uint32_t amount, bool notifyBalanceChanged = true);
 	bool withdrawMoney(uint32_t amount);
 	bool depositMoney(uint32_t amount);
 	bool transferMoneyTo(const std::string& name, uint32_t amount);
@@ -612,9 +613,14 @@ public:
 	void sendIcons() const;
 	void sendMagicEffect(const Position& pos, unsigned char type) const
 		{if(client) client->sendMagicEffect(pos,type);}
-	void sendStats();
+	void sendStats() const
+		{if(client) client->sendStats();}
 	void sendSkills() const
 		{if(client) client->sendSkills();}
+	void sendBalance() const
+		{if(client) client->sendPlayerBalance();}
+	void sendSpellTree() const
+		{if(client) client->sendSpellTree();}
 	void sendTextMessage(MessageClasses mclass, const std::string& message) const
 		{if(client) client->sendTextMessage(mclass, message);}
 	void sendTextWindow(Item* item, uint16_t maxlen, bool canWrite) const

@@ -125,6 +125,9 @@ private:
 	//sell methods
 	void parseSellItem(NetworkMessage& msg);
 
+	//spells methods
+	void parseBuySpells(NetworkMessage& msg);
+
 	//VIP methods
 	void parseAddVip(NetworkMessage& msg);
 	void parseRemoveVip(NetworkMessage& msg);
@@ -164,6 +167,7 @@ private:
 	void sendRuleViolationCancel(const std::string& name);
 	void sendIcons(uint16_t icons);
 	void sendTargetRequirement(const uint8_t &reason, const std::string &text);
+	void sendSpellTree();
 
 	void sendDistanceShoot(const Position& from, const Position& to, unsigned char type);
 	void sendMagicEffect(const Position& pos, unsigned char type);
@@ -171,6 +175,7 @@ private:
 	void sendCreatureHealth(const Creature* creature);
 	void sendSkills();
 	void sendPlayerInfo();
+	void sendPlayerBalance();
 	void sendPing();
 	void sendCreatureTurn(const Creature* creature, uint32_t stackpos);
 	void sendCreatureSay(const Creature* creature, SpeakClasses type, const std::string& text);
@@ -246,6 +251,7 @@ private:
 	void addDistanceShoot(NetworkMessage &msg,const Position& from, const Position& to, uint8_t type);
 	void addCreature(NetworkMessage &msg,const Creature* creature, bool known, uint32_t remove);
 	void addPlayerInfo(NetworkMessage &msg);
+	void addPlayerBalance(NetworkMessage &msg);
 	void addPlayerStats(NetworkMessage &msg);
 	void addCreatureSpeak(NetworkMessage &msg, const Creature* creature, SpeakClasses type, std::string text, uint16_t channelId, uint32_t time = 0);
 	void addCreatureHealth(NetworkMessage &msg,const Creature* creature);
@@ -254,6 +260,7 @@ private:
 	void addPlayerSkills(NetworkMessage &msg);
 	void addWorldLight(NetworkMessage &msg, const LightInfo& lightInfo);
 	void addCreatureLight(NetworkMessage &msg, const Creature* creature);
+	void addSpellTree(NetworkMessage &msg);
 
 	//tiles
 	void addTileItem(NetworkMessage &msg, const Position& pos, uint32_t stackpos, const Item* item);

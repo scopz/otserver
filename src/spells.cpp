@@ -38,6 +38,7 @@ extern Spells* g_spells;
 extern Monsters g_monsters;
 extern Vocations g_vocations;
 extern ConfigManager g_config;
+SpellSets g_spellsets;
 
 Spells::Spells():
 m_scriptInterface("Spell Interface")
@@ -212,6 +213,82 @@ bool BaseSpell::internalExecuteCastSpell(Event *event, Creature* creature, const
 	return(false);
 }
 
+
+SpellSet::SpellSet()
+{
+	id = 0;
+	firstSpell = NULL;
+	elements = 0;
+}
+
+
+void SpellSet::setSpell(InstantSpell* spell)
+{
+	if (firstSpell == NULL) {
+		firstSpell = spell;
+
+	} else {
+		InstantSpell* search = firstSpell;
+		while (search->getNextSpell()) {
+			search = search->getNextSpell();
+		}
+		search->setNextSpell(spell);
+		spell->setPrevSpell(search);
+	}
+	elements++;
+}
+
+SpellSets::SpellSets()
+{
+	//
+}
+
+SpellSets::~SpellSets()
+{
+	for(SpellSetsMap::iterator it = sets.begin(); it != sets.end(); ++it){
+		delete it->second;
+	}
+	sets.clear();
+}
+
+SpellSet* SpellSets::getSpellSet(const uint16_t& id)
+{
+	SpellSetsMap::iterator set = sets.find(id);
+	if(set == sets.end()) {
+		SpellSet* spellSet = new SpellSet();
+		spellSet->id = id;
+		sets[id] = spellSet;
+		return spellSet;
+	}
+	return set->second;
+}
+
+std::list<SpellSet*> SpellSets::getSpellSets(const Player* player)
+{
+	std::list<SpellSet*> spellSetList;
+
+	if(player->hasFlag(PlayerFlag_CannotUseSpells) || player->hasFlag(PlayerFlag_IgnoreSpellCheck)){
+		return spellSetList;
+	}
+
+	Vocation* vocation = player->getVocation();
+	for(SpellSetsMap::iterator it = sets.begin(); it != sets.end(); ++it){
+		InstantSpell* spell = it->second->firstSpell;
+
+		if(spell->getWords().find("###") == std::string::npos && spell->getWords().find("al") != 0){
+			if (spell->requiresPromotion()? vocation->getPromotion() == 0 : true) {
+				if(spell->availableForVocation(vocation)){
+					spellSetList.push_back(it->second);
+				}
+			}
+		}
+	}
+
+	return spellSetList;
+}
+
+
+
 Spell* Spells::getSpellByName(const std::string& name)
 {
 	Spell* spell;
@@ -270,6 +347,28 @@ InstantSpell* Spells::getInstantSpell(const std::string& words)
     }
 
     return result;
+}
+
+std::list<InstantSpell*> Spells::getInstantSpells(const Player* player)
+{
+	std::list<InstantSpell*> spellList;
+
+	if(player->hasFlag(PlayerFlag_CannotUseSpells) || player->hasFlag(PlayerFlag_IgnoreSpellCheck)){
+		return spellList;
+	}
+
+	Vocation* vocation = player->getVocation();
+	for(InstantsMap::iterator it = instants.begin(); it != instants.end(); ++it){
+		InstantSpell* instantSpell = it->second;
+
+		if(instantSpell->getSpellSet() == 0 && instantSpell->getWords().find("###") == std::string::npos && instantSpell->getWords().find("al") != 0){
+			if(instantSpell->availableForVocation(vocation, true)){
+				spellList.push_back(instantSpell);
+			}
+		}
+	}
+
+	return spellList;
 }
 
 uint32_t Spells::getInstantSpellCount(const Player* player)
@@ -479,6 +578,8 @@ Spell::Spell()
 	isAggressive = true;
 	learnable = false;
 	areaSpell = false;
+
+	type = SPELL_DEFAULT;
 }
 
 bool Spell::configureSpell(xmlNodePtr p)
@@ -576,6 +677,22 @@ bool Spell::configureSpell(xmlNodePtr p)
 
 	if(readXMLInteger(p, "range", intValue)){
 		range = intValue;
+	}
+
+	if(readXMLString(p, "type", strValue)){
+		if(asLowerCaseString(strValue) == "healing")       type = SPELL_HEALING;
+		else if(asLowerCaseString(strValue) == "conjure")  type = SPELL_CONJURE;
+		else if(asLowerCaseString(strValue) == "movement") type = SPELL_MOVEMENT;
+		else if(asLowerCaseString(strValue) == "attack")   type = SPELL_ATTACK;
+		else if(asLowerCaseString(strValue) == "earth")    type = SPELL_EARTH;
+		else if(asLowerCaseString(strValue) == "fire")     type = SPELL_FIRE;
+		else if(asLowerCaseString(strValue) == "energy")   type = SPELL_ENERGY;
+		else if(asLowerCaseString(strValue) == "ice")      type = SPELL_ICE;
+		else if(asLowerCaseString(strValue) == "holy")     type = SPELL_HOLY;
+		else if(asLowerCaseString(strValue) == "death")    type = SPELL_DEATH;
+		else if(asLowerCaseString(strValue) == "rune")     type = SPELL_RUNE;
+		else if(asLowerCaseString(strValue) == "buff")     type = SPELL_BUFF;
+		else                                               type = SPELL_DEFAULT;
 	}
 
 	if(readXMLInteger(p, "promotion", intValue)){
@@ -682,7 +799,7 @@ bool Spell::playerSpellCheck(Player* player) const
 			g_game.addMagicEffect(player->getPosition(), NM_ME_PUFF);
 			return false;
 
-		} else if(!vocSpellMap.empty() && vocSpellMap.find(vocation->getBaseVocation()) == vocSpellMap.end()){
+		} else if(!availableForVocation(vocation)){
 			player->sendCancelMessage(RET_YOURVOCATIONCANNOTUSETHISSPELL);
 			g_game.addMagicEffect(player->getPosition(), NM_ME_PUFF);
 			return false;
@@ -928,6 +1045,15 @@ int32_t Spell::getManaCost(const Player* player) const
 	return 0;
 }
 
+bool Spell::availableForVocation(Vocation* vocation, bool checkPromotion /*= false*/) const
+{
+	bool available = vocSpellMap.empty() || vocSpellMap.find(vocation->getBaseVocation()) != vocSpellMap.end();
+	if (checkPromotion && available && requiresPromotion()) {
+		available = vocation->getPromotion() == 0;
+	}
+	return available;
+}
+
 ReturnValue Spell::CreateIllusion(Creature* creature, const Outfit_t outfit, int32_t time)
 {
 	ConditionOutfit* outfitCondition = new ConditionOutfit(CONDITIONID_COMBAT, CONDITION_OUTFIT, time);
@@ -987,6 +1113,10 @@ TalkAction(_interface)
 	hasParam = false;
 	checkLineOfSight = true;
 	function = NULL;
+
+	spellSet = 0;
+	nextSpell = NULL;
+	prevSpell = NULL;
 }
 
 InstantSpell::~InstantSpell()
@@ -1023,6 +1153,16 @@ bool InstantSpell::configureEvent(xmlNodePtr p)
 
 	int intValue;
 	std::string strValue;
+
+	if(readXMLInteger(p, "set", intValue)){
+		SpellSet* set = g_spellsets.getSpellSet(intValue);
+		if(set == NULL) {
+			std::cout << "[Warning - Spells::registerEvent] No set found with id: " << intValue << std::endl;
+			return false;
+		}
+		set->setSpell(this);
+		spellSet = intValue;
+	}
 
 	if(readXMLInteger(p, "params", intValue)){
 		if(intValue == 1)
@@ -1721,7 +1861,6 @@ bool InstantSpell::Illusion(const InstantSpell* spell, Creature* creature, const
 	return (ret == RET_NOERROR);
 }
 
-// USED TO FILL SPELLBOOK
 bool InstantSpell::canCast(const Player* player) const
 {
 	if(player->hasFlag(PlayerFlag_CannotUseSpells)){
@@ -1737,7 +1876,7 @@ bool InstantSpell::canCast(const Player* player) const
 			return true;
 		}
 
-	} else if(vocSpellMap.empty() || vocSpellMap.find(player->getVocation()->getBaseVocation()) != vocSpellMap.end()){
+	} else if(availableForVocation(player->getVocation())){
 		return true;
 	}
 
@@ -1763,11 +1902,15 @@ bool InstantSpell::canLearn(const Player* player) const
 	}
 
 	Vocation* vocation = player->getVocation();
-	if (requiresPromotion() && vocation->getPromotion()>0) {
+	InstantSpell* prev = prevSpell;
+	while(prev && !prev->availableForVocation(vocation, true)){
+		prev = prev->getPrevSpell();
+	}
+	if(prev && !player->hasLearnedInstantSpell(prev->getName())){
 		return false;
 	}
 
-	if(!vocSpellMap.empty() && vocSpellMap.find(vocation->getBaseVocation()) == vocSpellMap.end()){
+	if(!availableForVocation(vocation, true)){
 		return false;
 	}
 
@@ -2429,6 +2572,16 @@ bool AttackSpell::configureEvent(xmlNodePtr p)
 	int intValue;
 	if(readXMLInteger(p, "usages", intValue)){
 		usages = intValue;
+	}
+
+	if(readXMLInteger(p, "set", intValue)){
+		SpellSet* set = g_spellsets.getSpellSet(intValue);
+		if(set == NULL) {
+			std::cout << "[Warning - Spells::registerEvent] No set found with id: " << intValue << std::endl;
+			return false;
+		}
+		set->setSpell(this);
+		spellSet = intValue;
 	}
 
 	return true;

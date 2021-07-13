@@ -3487,6 +3487,32 @@ bool Game::playerSellItem(const uint32_t &playerId, const uint32_t &targetId, co
 	return true;
 }
 
+bool Game::playerBuySpells(const uint32_t &playerId, const std::vector<std::string>& spells)
+{
+	Player* player = getPlayerByID(playerId);
+	if(!player || player->isRemoved())
+		return false;
+
+	bool spellsChanged = false;
+	for (const std::string &spellName : spells) {
+		InstantSpell *spell = g_spells->getInstantSpellByName(spellName);
+		
+		if (spell && spell->canLearn(player)) {
+			uint32_t price = spell->getPrice();
+			if (player->removeMoney(price, false)) {
+				player->learnInstantSpell(spellName);
+				spellsChanged = true;
+			}
+		}
+	}
+
+	if (spellsChanged) {
+		player->sendSpellTree();
+	}
+
+	return spellsChanged;
+}
+
 bool Game::playerWhisper(Player* player, const std::string& text)
 {
 	SpectatorVec list;

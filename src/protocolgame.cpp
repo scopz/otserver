@@ -30,6 +30,7 @@
 #include "actions.h"
 #include "game.h"
 #include "map.h"
+#include "spells.h"
 #include "ioplayer.h"
 #include "house.h"
 #include "waitlist.h"
@@ -47,6 +48,8 @@
 
 extern Game g_game;
 extern ConfigManager g_config;
+extern Spells* g_spells;
+extern SpellSets g_spellsets;
 extern BanManager g_bans;
 extern CreatureEvents* g_creatureEvents;
 Chat g_chat;
@@ -659,6 +662,10 @@ void ProtocolGame::parsePacket(NetworkMessage &msg)
 		parseSellItem(msg);
 		break;	
 
+	case 0x36:
+		parseBuySpells(msg);
+		break;	
+
 	default:
 		std::cout << "Unknown packet header: " << std::hex << (int)recvbyte << std::dec << ", player " << player->getName() << std::endl;
 		disconnectClient(0x14, "Unknown packet sent.");
@@ -1262,6 +1269,18 @@ void ProtocolGame::parseSellItem(NetworkMessage& msg)
 	addGameTaskTimed(DISPATCHER_TASK_EXPIRATION, &Game::playerSellItem, player->getID(), creatureId, pos, stackPos, spriteId);
 }
 
+void ProtocolGame::parseBuySpells(NetworkMessage& msg)
+{
+	uint16_t spellCount = msg.getU16();
+	std::vector<std::string> spells;
+
+	for(int i = spellCount; i-->0;) {
+		spells.push_back(msg.getString());
+	}
+
+	addGameTaskTimed(DISPATCHER_TASK_EXPIRATION, &Game::playerBuySpells, player->getID(), spells);
+}
+
 void ProtocolGame::parseAddVip(NetworkMessage& msg)
 {
 	const std::string name = msg.getString();
@@ -1541,6 +1560,14 @@ void ProtocolGame::sendTargetRequirement(const uint8_t &reason, const std::strin
 	writeToOutputBuffer(msg);
 }
 
+void ProtocolGame::sendSpellTree()
+{
+	NetworkMessage msg;
+	addSpellTree(msg);
+	addPlayerBalance(msg);
+	writeToOutputBuffer(msg);
+}
+
 void ProtocolGame::sendContainer(uint32_t cid, const Container* container, bool hasParent)
 {
 	NetworkMessage msg;
@@ -1723,6 +1750,13 @@ void ProtocolGame::sendPlayerInfo()
 	writeToOutputBuffer(msg);
 }
 
+void ProtocolGame::sendPlayerBalance()
+{
+	NetworkMessage msg;
+	addPlayerBalance(msg);
+	writeToOutputBuffer(msg);
+}
+
 void ProtocolGame::sendDistanceShoot(const Position& from, const Position& to, uint8_t type)
 {
 	if(canSee(from) || canSee(to)){
@@ -1848,6 +1882,8 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 			addPlayerInfo(msg);
 			addPlayerStats(msg);
 			addPlayerSkills(msg);
+			addPlayerBalance(msg);
+			addSpellTree(msg);
 
 			//gameworld light-settings
 			LightInfo lightInfo;
@@ -2267,6 +2303,12 @@ void ProtocolGame::addPlayerInfo(NetworkMessage &msg)
 		//msg.addByte(spells[i]->id);
 }
 
+void ProtocolGame::addPlayerBalance(NetworkMessage &msg)
+{
+	msg.addByte(0x36);
+	msg.addU32(player->balance);
+}
+
 void ProtocolGame::addPlayerStats(NetworkMessage &msg)
 {
 	msg.addByte(0xA0);
@@ -2399,6 +2441,70 @@ void ProtocolGame::addCreatureLight(NetworkMessage &msg, const Creature* creatur
 	msg.addU32(creature->getID());
 	msg.addByte(lightInfo.level);
 	msg.addByte(lightInfo.color);
+}
+
+void ProtocolGame::addSpellTree(NetworkMessage &msg)
+{
+	msg.addByte(0x35);
+
+	std::list<InstantSpell*> spells = g_spells->getInstantSpells(player);
+	std::list<SpellSet*> spellsets = g_spellsets.getSpellSets(player);
+
+	msg.addU16(spells.size() + spellsets.size());
+
+	std::list<InstantSpell*>::iterator it;
+	for (it = spells.begin(); it != spells.end(); ++it){
+		InstantSpell* instantSpell = (*it);
+		msg.addByte(instantSpell->getType());
+		msg.addByte(instantSpell->canCast(player)? 1 : 0);
+
+		msg.addString(instantSpell->getName());
+		msg.addString(instantSpell->getWords());
+		msg.addByte(instantSpell->getLevel());
+		msg.addByte(instantSpell->getMagicLevel());
+		msg.addU16(instantSpell->getPrice());
+		msg.addU16(instantSpell->getMana());
+
+		msg.addByte(0); // hasn't more
+	}
+
+	Vocation* vocation = player->getVocation();
+
+	std::list<SpellSet*>::iterator it2;
+	for (it2 = spellsets.begin(); it2 != spellsets.end(); ++it2){
+		SpellSet* spellSet = (*it2);
+		InstantSpell* instantSpell = spellSet->getFirstElement();
+
+		msg.addByte(instantSpell->getType());
+		uint8_t level = 0;
+		while (instantSpell) {
+			if (instantSpell->availableForVocation(vocation, true)) {
+				if (instantSpell->canCast(player))
+					level++;
+				else
+					break;
+			}
+			instantSpell = instantSpell->getNextSpell();
+		}
+		msg.addByte(level);
+
+		instantSpell = spellSet->getFirstElement();
+		while (instantSpell) {
+			msg.addString(instantSpell->getName());
+			msg.addString(instantSpell->getWords());
+			msg.addByte(instantSpell->getLevel());
+			msg.addByte(instantSpell->getMagicLevel());
+			msg.addU16(instantSpell->getPrice());
+			msg.addU16(instantSpell->getMana());
+
+			do {
+				instantSpell = instantSpell->getNextSpell();
+			} while(instantSpell && !instantSpell->availableForVocation(vocation, true));
+
+			if (instantSpell) msg.addByte(1); // has more
+		}
+		msg.addByte(0); // hasn't more
+	}
 }
 
 //tile

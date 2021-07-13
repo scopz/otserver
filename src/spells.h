@@ -39,6 +39,39 @@ class Spell;
 typedef std::map<uint32_t, RuneSpell*> RunesMap;
 typedef std::map<std::string, InstantSpell*> InstantsMap;
 
+class SpellSet {
+public:
+	SpellSet();
+	virtual ~SpellSet() {};
+
+	uint16_t getId() const {return id;}
+	uint32_t getElements() const {return elements;}
+	InstantSpell* getFirstElement() const {return firstSpell;}
+
+	void setSpell(InstantSpell* spell);
+
+protected:
+	friend class SpellSets;
+	uint16_t id;
+	InstantSpell* firstSpell;
+	uint32_t elements;
+};
+
+class SpellSets
+{
+public:
+	SpellSets();
+	~SpellSets();
+
+	SpellSet* getSpellSet(const uint16_t& id);
+	std::list<SpellSet*> getSpellSets(const Player* player);
+
+private:
+	typedef std::map<uint16_t, SpellSet*> SpellSetsMap;
+	SpellSetsMap sets;
+};
+
+
 class Spells : public BaseEvents
 {
 public:
@@ -51,6 +84,7 @@ public:
 
 	InstantSpell* getInstantSpell(const std::string& words);
 	InstantSpell* getInstantSpellByName(std::string name);
+	std::list<InstantSpell*> getInstantSpells(const Player* player);
 
 	uint32_t getInstantSpellCount(const Player* player);
 	InstantSpell* getInstantSpellByIndex(const Player* player, uint32_t index);
@@ -92,6 +126,7 @@ public:
 	//used by some child classes, like CombatSpell and InstantSpell
 	bool internalExecuteCastSpell(Event *event, Creature* creature, const LuaVariant& var, bool &result);
 };
+
 
 class CombatSpell : public Event, public BaseSpell{
 public:
@@ -143,6 +178,8 @@ public:
 	virtual bool isInstant() const = 0;
 	bool isLearnable() const {return learnable;}
 	bool requiresPromotion() const {return promotion;}
+	SpellType_t getType() const {return type;}
+	bool availableForVocation(Vocation* vocation, bool checkPromotion = false) const;
 
 	static ReturnValue CreateIllusion(Creature* creature, const Outfit_t outfit, int32_t time);
 	static ReturnValue CreateIllusion(Creature* creature, const std::string& name, int32_t time);
@@ -160,7 +197,6 @@ protected:
 	uint32_t level;
 	uint32_t magLevel;
 	uint32_t price;
-
 	int32_t mana;
 	int32_t manaPercent;
 	int32_t levelPercent;
@@ -173,6 +209,7 @@ protected:
 	bool blockingCreature;
 	bool isAggressive;
 	bool areaSpell;
+	SpellType_t type;
 
 	typedef std::map<int32_t, bool> VocSpellMap;
 	VocSpellMap vocSpellMap;
@@ -207,6 +244,12 @@ public:
 	bool canCast(const Player* player) const;
 	bool canThrowSpell(const Creature* creature, const Creature* target) const;
 
+	uint16_t getSpellSet() const {return spellSet;}
+	InstantSpell* getNextSpell() const {return nextSpell;}
+	InstantSpell* getPrevSpell() const {return prevSpell;}
+	void setNextSpell(InstantSpell* spell) {nextSpell = spell;}
+	void setPrevSpell(InstantSpell* spell) {prevSpell = spell;}
+
 protected:
 	virtual std::string getScriptEventName();
 
@@ -228,6 +271,10 @@ protected:
 	bool checkLineOfSight;
 	bool casterTargetOrDirection;
 	InstantSpellFunction* function;
+
+	uint16_t spellSet;
+	InstantSpell* nextSpell;
+	InstantSpell* prevSpell;
 };
 
 class ConjureSpell : public InstantSpell
