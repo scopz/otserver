@@ -1741,23 +1741,15 @@ void Player::onWalk(Direction& dir)
 {
 	Creature::onWalk(dir);
 	setNextActionTask(NULL);
-	setNextAction(OTSYS_TIME() + getStepDuration(dir));
+	setNextAction(OTSYS_TIME() + getLastStepDuration());
 }
 
-int32_t Player::getStepDuration(Direction dir) const
+int32_t Player::getLastStepDuration() const
 {
 	if (floorChange && g_config.getNumber(ConfigManager::FLOOR_CHANGE_DELAY) >= 0) {
 		return g_config.getNumber(ConfigManager::FLOOR_CHANGE_DELAY);
 	}
-	return Creature::getStepDuration(dir);
-}
-
-int32_t Player::getStepDuration() const
-{
-	if (floorChange && g_config.getNumber(ConfigManager::FLOOR_CHANGE_DELAY) >= 0) {
-		return g_config.getNumber(ConfigManager::FLOOR_CHANGE_DELAY);
-	}
-	return Creature::getStepDuration();
+	return Creature::getLastStepDuration();
 }
 
 void Player::onCreatureMove(const Creature* creature, const Tile* newTile, const Position& newPos,
@@ -3850,7 +3842,7 @@ bool Player::setAttackedCreature(Creature* creature)
 		}
 	}
 	else{
-		setFollowCreature(NULL);
+		Creature::setFollowCreature(NULL);
 	}
 
 	if(creature){
@@ -3958,9 +3950,7 @@ uint64_t Player::getGainedExperience(Creature* attacker) const
 
 void Player::onFollowCreature(const Creature* creature)
 {
-	if(!creature){
-		stopWalk();
-	}
+	//
 }
 
 void Player::setChaseMode(chaseMode_t mode)

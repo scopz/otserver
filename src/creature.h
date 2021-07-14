@@ -202,6 +202,7 @@ public:
 	int64_t getTimeSinceLastMove() const;
 
 	int64_t getEventStepTicks(bool onlyDelay = false) const;
+	virtual int32_t getLastStepDuration() const { return lastStepDuration; };
 	virtual int32_t getStepDuration(Direction dir) const;
 	virtual int32_t getStepDuration() const;
 	virtual int32_t getStepSpeed() const {return getSpeed();}
@@ -450,6 +451,7 @@ protected:
 	int32_t masterRadius;
 	uint64_t lastStep;
 	float lastStepCost;
+	int32_t lastStepDuration;
 	uint32_t baseSpeed;
 	int32_t varSpeed;
 	bool skillLoss;

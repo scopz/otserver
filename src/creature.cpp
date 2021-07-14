@@ -65,6 +65,7 @@ Creature::Creature() :
 
 	lastStep = 0;
 	lastStepCost = 100;
+	lastStepDuration = 1;
 	baseSpeed = 220;
 	varSpeed = 0;
 
@@ -206,7 +207,7 @@ int32_t Creature::getWalkDelay(Direction dir) const
 {
 	if(lastStep != 0){
 		int64_t ct = OTSYS_TIME();
-		int64_t stepDuration = getStepDuration(dir);
+		int64_t stepDuration = getLastStepDuration();
 		return stepDuration - (ct - lastStep);
 	}
 
@@ -218,7 +219,7 @@ int32_t Creature::getWalkDelay() const
 	//Used for auto-walking
 	if(lastStep != 0){
 		int64_t ct = OTSYS_TIME();
-		int64_t stepDuration = getStepDuration();
+		int64_t stepDuration = getLastStepDuration();
 		return stepDuration - (ct - lastStep);
 	}
 
@@ -283,6 +284,7 @@ void Creature::onWalk()
 		Direction dir;
 		uint32_t flags = FLAG_IGNOREFIELDDAMAGE;
 		if(getNextStep(dir, flags)){
+			lastStepDuration = getStepDuration(dir);
 			ReturnValue ret = g_game.internalMoveCreature(this, dir, flags);
 			if(ret != RET_NOERROR){
 				if(Player* player = getPlayer()){
@@ -1674,9 +1676,7 @@ int32_t Creature::getStepDuration() const
 		}
 	}
 	
-	
-
-	return duration * lastStepCost / 100.;
+	return duration;
 }
 
 int64_t Creature::getEventStepTicks(bool onlyDelay) const
@@ -1687,7 +1687,7 @@ int64_t Creature::getEventStepTicks(bool onlyDelay) const
 		if (onlyDelay)
 			ret = 1;
 		else
-			ret = getStepDuration();
+			ret = getLastStepDuration();
 	}
 
 	return ret;

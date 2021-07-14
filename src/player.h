@@ -871,8 +871,7 @@ protected:
 	static std::map<int32_t, uint64_t> experienceMap;
 
 	void updateItemsLight(bool internal = false);
-	virtual int32_t getStepDuration(Direction dir) const;
-	virtual int32_t getStepDuration() const;
+	virtual int32_t getLastStepDuration() const;
 	virtual int32_t getStepSpeed() const;
 	void updateBaseSpeed();
 
