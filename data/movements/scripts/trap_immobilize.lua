@@ -3,7 +3,8 @@ function onStepIn(cid, item, position, fromPosition)
 		doTransformItem(item.uid, 5090)
 	
 		if not getTilePzInfo(position) then
-			doTargetCombatFreeze(0, cid, 2000, 1000, item.uid)
+			-- double values if creature step on it instead of trap being created under it
+			doTargetCombatFreeze(0, cid, 4000, 2000, item.uid)
 		end
 	end
 	return true

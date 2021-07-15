@@ -178,7 +178,7 @@
 	</instant>
 
 	<!-- Target Requirement Spells -->
-	<aim name="Deploy Trap" words="osevo ani" price="500" maglv="7" needlearn="1" lvl="20" mana="40" exhaustion="1000" range="6" uses="position" script="support/deploy_trap.lua">
+	<aim name="Deploy Trap" words="osevo ani" price="500" maglv="7" needlearn="1" lvl="20" mana="18" exhaustion="1000" range="6" uses="position" script="support/deploy_trap.lua">
 		<vocation id="3"/>
 	</aim>
 	<aim name="Target Force Strike" words="osori corp" price="600" maglv="1" needlearn="1" lvl="20" mana="20" exhaustion="2000" range="6" uses="creature" script="attack/target_force_strike.lua">
