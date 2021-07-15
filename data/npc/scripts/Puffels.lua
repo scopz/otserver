@@ -36,6 +36,7 @@ npcHandler:addModule(spellSellModule)
 spellSellModule.listPreText = "I have"
 spellSellModule:addSpellStock({
 	"Magic Rope",
+	"Magic Shovel",
 	"Force Strike",
 	"Energy Strike",
 	"Flame Strike",

@@ -50,6 +50,12 @@
 		<vocation id="3"/>
 		<vocation id="4"/>
 	</instant>
+	<instant name="Magic Shovel" type="support" words="exani grav" price="300" maglv="1" needlearn="1" lvl="11" mana="10" aggressive="0" script="support/magic_shovel.lua">
+		<vocation id="1"/>
+		<vocation id="2"/>
+		<vocation id="3"/>
+		<vocation id="4"/>
+	</instant>
 	<instant name="Light Healing" words="exura" price="170" maglv="1" needlearn="1" lvl="9" mana="22" selftarget="1" aggressive="0" script="healing/light_healing.lua">
 		<vocation id="1"/>
 		<vocation id="2"/>
