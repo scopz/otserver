@@ -68,13 +68,13 @@ public:
 	virtual const std::string& getName() const {return mType->name;}
 	virtual const std::string& getNameDescription() const {return mType->nameDescription;}
 	virtual std::string getDescription(int32_t lookDistance) const {return strDescription + '.';}
-
 	virtual RaceType_t getRace() const { return mType->race; }
 	virtual int32_t getArmor() const { return mType->armor; }
 	virtual int32_t getDefense() const { return mType->defense; }
 	virtual bool isPushable() const { return mType->pushable && (baseSpeed > 0); }
 	virtual bool isAttackable() const { return mType->isAttackable;}
 	virtual bool isImmune(CombatType_t type) const;
+	virtual bool canSee(const Position& pos) const;
 
 	bool canPushItems() const {return mType->canPushItems;}
 	bool canPushCreatures() const {return mType->canPushCreatures;}

@@ -111,6 +111,7 @@ void MonsterType::reset()
 
 	changeTargetSpeed = 0;
 	changeTargetChance = 0;
+	seeTargetRange = -1;
 	
 	targetStrategiesNearestPercent = 100;
 	targetStrategiesLowerHPPercent = 0;
@@ -1085,6 +1086,10 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monster_n
 				}
 				else{
 					SHOW_XML_WARNING("Missing targetStrategiesRandom");
+				}
+
+				if(readXMLInteger(p, "range", intValue)){
+					mType->seeTargetRange = intValue;
 				}
 			}
 			else if(xmlStrcmp(p->name, (const xmlChar*)"strategy") == 0){

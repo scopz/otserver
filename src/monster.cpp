@@ -3189,6 +3189,15 @@ void Monster::dropLoot(Container* corpse)
 	}
 }
 
+bool Monster::canSee(const Position& pos) const
+{
+	if (mType->seeTargetRange < 0)
+		return Creature::canSee(pos);
+	else
+		return Creature::canSee(getPosition(), pos, mType->seeTargetRange, mType->seeTargetRange);
+}
+
+
 bool Monster::isImmune(CombatType_t type) const
 {
 	ElementMap::iterator it = mType->elementMap.find(type);

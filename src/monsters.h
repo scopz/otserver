@@ -140,6 +140,7 @@ public:
 	uint32_t yellSpeedTicks;
 	VoiceVector voiceVector;
 
+	int32_t seeTargetRange;
 	int32_t changeTargetSpeed;
 	int32_t changeTargetChance;
 	
