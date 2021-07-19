@@ -61,6 +61,7 @@ public:
 
 	TalkActionResult_t playerSaySpell(Player* player, SpeakClasses type, std::string& words);
 
+	static Direction getAttackerDirection(Creature* creature);
 	static Position getCasterPosition(Creature* creature, Direction dir) { return getFrontPosition(creature->getPosition(), dir); }
 	static Position getFrontPosition(Position pos, Direction dir);
 

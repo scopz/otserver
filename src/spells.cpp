@@ -389,6 +389,24 @@ InstantSpell* Spells::getInstantSpellByName(std::string name)
 	return NULL;
 }
 
+Direction Spells::getAttackerDirection(Creature* creature)
+{
+	Creature* attackingCreature = creature->getAttackedCreature();
+	if (attackingCreature) {
+		Position p1 = creature->getPosition();
+		Position p2 = attackingCreature->getPosition();
+
+		if (std::abs(p1.x-p2.x) < std::abs(p1.y-p2.y)) {
+			if (p1.y < p2.y)      return SOUTH;
+			else if (p2.y < p1.y) return NORTH;
+		} else {
+			if (p1.x < p2.x)      return EAST;
+			else if (p2.x < p1.x) return WEST;
+		}
+	}
+	return creature->getDirection();
+}
+
 Position Spells::getFrontPosition(Position pos, Direction dir)
 {
 	switch(dir){
@@ -442,7 +460,7 @@ bool CombatSpell::castSpell(Creature* creature)
 		var.type = VARIANT_POSITION;
 
 		if(needDirection){
-			var.pos = Spells::getCasterPosition(creature, creature->getDirection());
+			var.pos = Spells::getCasterPosition(creature, Spells::getAttackerDirection(creature));
 		}
 		else{
 			var.pos = creature->getPosition();
@@ -454,7 +472,7 @@ bool CombatSpell::castSpell(Creature* creature)
 	Position pos;
 
 	if(needDirection){
-		pos = Spells::getCasterPosition(creature, creature->getDirection());
+		pos = Spells::getCasterPosition(creature, Spells::getAttackerDirection(creature));
 	}
 	else{
 		pos = creature->getPosition();
@@ -476,7 +494,7 @@ bool CombatSpell::castSpell(Creature* creature, Creature* target)
 				var.pos = target->getPosition();
 			}
 			else if(needDirection){
-				var.pos = Spells::getCasterPosition(creature, creature->getDirection());
+				var.pos = Spells::getCasterPosition(creature, Spells::getAttackerDirection(creature));
 			}
 			else{
 				var.pos = creature->getPosition();
