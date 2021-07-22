@@ -1342,14 +1342,14 @@ void ProtocolGame::parseDebugAssert(NetworkMessage& msg)
 void ProtocolGame::sendPingBack()
 {
 	NetworkMessage msg;
-	msg.addByte(0x1D);
+	msg.addByte(0x1E);
 	writeToOutputBuffer(msg);
 }
 
 void ProtocolGame::sendPing()
 {
 	NetworkMessage msg;
-	msg.addByte(0x1E);
+	msg.addByte(0x1D);
 	writeToOutputBuffer(msg);
 }
 
