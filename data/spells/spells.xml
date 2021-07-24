@@ -32,12 +32,7 @@
 	<rune name="adevo grav tera" id="2293" maglv="9" blocktype="all" conjureCount="3" script="support/magic_wall_rune.lua" />
 
 	<!-- Instant Spells -->
-	<instant name="Light" words="utevo lux" price="100" maglv="0" needlearn="0" lvl="8" mana="20" selftarget="1" aggressive="0" script="support/light.lua">
-		<vocation id="1"/>
-		<vocation id="2"/>
-		<vocation id="3"/>
-		<vocation id="4"/>
-	</instant>
+	<instant name="Light" words="utevo lux" price="100" maglv="0" needlearn="0" lvl="8" mana="20" selftarget="1" aggressive="0" script="support/light.lua"/>
 	<instant name="Find Person" words="exiva" price="80" maglv="0" needlearn="1" lvl="8" mana="20" params="1" function="searchPlayer">
 		<vocation id="1"/>
 		<vocation id="2"/>
@@ -94,7 +89,12 @@
 		<vocation id="2"/>
 		<vocation id="3"/>
 	</instant>
-	<instant name="Haste" words="utani hur" price="600" maglv="4" needlearn="1" lvl="14" prem="1" mana="60" selftarget="1" aggressive="0" script="support/haste.lua" />
+	<instant name="Haste" words="utani hur" price="600" maglv="4" needlearn="1" lvl="14" prem="1" mana="60" selftarget="1" aggressive="0" script="support/haste.lua">
+		<vocation id="1"/>
+		<vocation id="2"/>
+		<vocation id="3"/>
+		<vocation id="4"/>
+	</instant>
 	<instant name="Force Strike" words="exori corp" price="600" maglv="2" needlearn="1" lvl="11" prem="1" mana="20" direction="1" exhaustion="1000" script="attack/force_strike.lua">
 		<vocation id="4"/>
 	</instant>
