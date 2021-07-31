@@ -238,6 +238,7 @@ Condition* Condition::createCondition(ConditionId_t _id, ConditionType_t _type, 
 
 		case CONDITION_REGENERATION:
 		case CONDITION_REGENERATION_MANA:
+		case CONDITION_REGENERATION_ICON:
 		{
 			return new ConditionRegeneration(_id, _type, _ticks);
 			break;
@@ -366,6 +367,7 @@ bool Condition::canBeAggressive(ConditionType_t type) //static
 		case CONDITION_LIGHT:
 		case CONDITION_REGENERATION:
 		case CONDITION_REGENERATION_MANA:
+		case CONDITION_REGENERATION_ICON:
 			return false;
 			break;
 		default:
@@ -819,6 +821,8 @@ ConditionRegeneration::ConditionRegeneration(ConditionId_t _id, ConditionType_t 
 
 	healthGain = 0;
 	manaGain = 0;
+
+	affectedByFire = false;
 }
 
 void ConditionRegeneration::addCondition(Creature* creature, const Condition* addCondition)
@@ -874,6 +878,15 @@ bool ConditionRegeneration::unserializeProp(ConditionAttr_t attr, PropStream& pr
 		manaGain = value;
 		return true;
 	}
+	else if(attr == CONDITIONATTR_AFFECTEDBYFIRE){
+		uint8_t value = 0;
+		if(!propStream.GET_UINT8(value)){
+			return false;
+		}
+
+		affectedByFire = value > 0;
+		return true;
+	}
 
 	return Condition::unserializeProp(attr, propStream);
 }
@@ -895,6 +908,9 @@ bool ConditionRegeneration::serialize(PropWriteStream& propWriteStream)
 
 	propWriteStream.ADD_UINT8(CONDITIONATTR_MANAGAIN);
 	propWriteStream.ADD_UINT32(manaGain);
+
+	propWriteStream.ADD_UINT8(CONDITIONATTR_AFFECTEDBYFIRE);
+	propWriteStream.ADD_UINT8(affectedByFire? 1 : 0);
 	return true;
 }
 
@@ -904,7 +920,7 @@ bool ConditionRegeneration::executeCondition(Creature* creature, int32_t interva
 	internalManaTicks += interval;
 
 	if(creature->getZone() != ZONE_PROTECTION){
-		if(internalHealthTicks >= healthTicks && !creature->hasCondition(CONDITION_FIRE)){
+		if(internalHealthTicks >= healthTicks && (!affectedByFire || !creature->hasCondition(CONDITION_FIRE))){
 			internalHealthTicks = 0;
 			creature->changeHealth(healthGain);
 		}
@@ -916,6 +932,16 @@ bool ConditionRegeneration::executeCondition(Creature* creature, int32_t interva
 	}
 
 	return ConditionGeneric::executeCondition(creature, interval);
+}
+
+uint16_t ConditionRegeneration::getIcons() const
+{
+	uint16_t icons = Condition::getIcons();
+
+	if (conditionType == CONDITION_REGENERATION_ICON)
+		icons |= ICON_HEALING;
+
+	return icons;
 }
 
 bool ConditionRegeneration::setParam(ConditionParam_t param, int32_t value)
@@ -947,6 +973,13 @@ bool ConditionRegeneration::setParam(ConditionParam_t param, int32_t value)
 		case CONDITIONPARAM_MANATICKS:
 		{
 			manaTicks = value;
+			return true;
+			break;
+		}
+
+		case CONDITIONPARAM_HEALTH_AFFECTEDBYFIRE:
+		{
+			affectedByFire = value > 0;
 			return true;
 			break;
 		}

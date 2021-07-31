@@ -2754,6 +2754,7 @@ void Player::addFoodRegeneration(uint32_t addTicks)
 		condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_REGENERATION, addTicks, 0);
 		condition->setParam(CONDITIONPARAM_HEALTHGAIN, vocation->getHealthGainAmount());
 		condition->setParam(CONDITIONPARAM_HEALTHTICKS, vocation->getHealthGainTicks() * 1000);
+		condition->setParam(CONDITIONPARAM_HEALTH_AFFECTEDBYFIRE, 1);
 		addCondition(condition);
 	}
 }

@@ -48,7 +48,7 @@ enum ConditionType_t {
 	CONDITION_DRUNK             = 1 << 11,
 	CONDITION_EXHAUST_YELL      = 1 << 12,
 	CONDITION_REGENERATION      = 1 << 13,
-	//CONDITION_SOUL              = 1 << 14,
+	CONDITION_REGENERATION_ICON = 1 << 14,
 	CONDITION_REGENERATION_MANA = 1 << 15,
 	CONDITION_MUTED             = 1 << 16,
 	CONDITION_ATTRIBUTES        = 1 << 17,
@@ -102,6 +102,8 @@ enum ConditionAttr_t{
 	CONDITIONATTR_ISBUFF = 27,
 	CONDITIONATTR_SUBID = 28,
 	CONDITIONATTR_RELATEDITEM = 29,
+
+	CONDITIONATTR_AFFECTEDBYFIRE = 30,
 
 	//reserved for serialization
 	CONDITIONATTR_END      = 254
@@ -221,6 +223,7 @@ public:
 	virtual ~ConditionRegeneration(){};
 	virtual void addCondition(Creature* creature, const Condition* addCondition);
 	virtual bool executeCondition(Creature* creature, int32_t interval);
+	virtual uint16_t getIcons() const;
 
 	virtual ConditionRegeneration* clone()  const { return new ConditionRegeneration(*this); }
 
@@ -238,6 +241,8 @@ protected:
 	uint32_t manaTicks;
 	uint32_t healthGain;
 	uint32_t manaGain;
+
+	bool affectedByFire;
 };
 
 class ConditionInvisible: public ConditionGeneric

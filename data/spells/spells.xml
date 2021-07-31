@@ -57,6 +57,12 @@
 		<vocation id="3"/>
 		<vocation id="4"/>
 	</instant>
+	<instant name="Recovery" type="healing" words="utura" price="4000" maglv="0" needlearn="1" lvl="50" mana="76" selftarget="1" aggressive="0" script="healing/recovery.lua">
+		<vocation id="1"/>
+		<vocation id="2"/>
+		<vocation id="3"/>
+		<vocation id="4"/>
+	</instant>
 	<instant name="Antidote" words="exana pox" price="150" maglv="2" needlearn="1" lvl="10" mana="30" selftarget="1" aggressive="0" script="healing/antidote.lua">
 		<vocation id="1"/>
 		<vocation id="2"/>

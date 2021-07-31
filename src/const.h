@@ -215,6 +215,7 @@ enum Icons_t{
 	ICON_SWORDS      = 128,
 	ICON_FROZEN      = 256,
 	ICON_ATTACK_BUFF = 512,
+	ICON_HEALING     = 1024,
 };
 
 enum WeaponType_t {
