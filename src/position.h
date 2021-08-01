@@ -140,6 +140,8 @@ public:
 		return !(*this == p);
 	}
 
+	PositionEx& operator=(const PositionEx&) = default;
+
 };
 
 
