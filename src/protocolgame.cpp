@@ -976,14 +976,14 @@ void ProtocolGame::parseSetOutfit(NetworkMessage& msg)
 	Outfit_t newOutfit;
 
 	// only first 4 outfits
-	uint8_t lastFemaleOutfit = 0x8B;
-	uint8_t lastMaleOutfit = 0x83;
+	uint8_t lastFemaleOutfit = 139;
+	uint8_t lastMaleOutfit = 131;
 
 	// if premium then all 7 outfits
 	if (player->getSex() == PLAYERSEX_FEMALE && player->isPremium())
-		lastFemaleOutfit = 0x8E;
+		lastFemaleOutfit = 143;
 	else if (player->getSex() == PLAYERSEX_MALE && player->isPremium())
-		lastMaleOutfit = 0x86;
+		lastMaleOutfit = 135;
 
 	if ((player->getSex() == PLAYERSEX_FEMALE &&
 		lookType >= 136 &&
@@ -2105,7 +2105,7 @@ void ProtocolGame::sendOutfitWindow()
 	case PLAYERSEX_FEMALE:
 		msg.addU16(136);
 		if (player->isPremium())
-			msg.addU16(142);
+			msg.addU16(143);
 		else
 			msg.addU16(139);
 
@@ -2113,7 +2113,7 @@ void ProtocolGame::sendOutfitWindow()
 	case PLAYERSEX_MALE:
 		msg.addU16(128);
 		if (player->isPremium())
-			msg.addU16(134);
+			msg.addU16(135);
 		else
 			msg.addU16(131);
 
@@ -2125,7 +2125,7 @@ void ProtocolGame::sendOutfitWindow()
 		break;
 	default:
 		msg.addU16(128);
-		msg.addU16(134);
+		msg.addU16(135);
 	}
 
 	writeToOutputBuffer(msg);
