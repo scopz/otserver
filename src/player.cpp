@@ -1321,8 +1321,8 @@ void Player::sendCancelMessage(ReturnValue message) const
 		sendCancel("You are exhausted.");
 		break;
 
-	case RET_CANONLYUSETHISRUNEONCREATURES:
-		sendCancel("You can only use this rune on creatures.");
+	case RET_CANONLYUSERUNEONCREATURES:
+		sendCancel("You can only use this on creatures.");
 		break;
 
 	case RET_PLAYERISNOTREACHABLE:

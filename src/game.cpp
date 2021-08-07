@@ -3419,11 +3419,11 @@ bool Game::playerSayTarget(const uint32_t &playerId, const uint32_t &targetId, c
 	if(!player || player->isRemoved())
 		return false;
 
-	AimSpell* spell = g_spells->getAimSpell(text);
-	if (spell && dynamic_cast<const AimSpell *>(spell) != NULL) {
+	InstantSpell* spell = g_spells->getInstantSpell(text);
+	if (spell && spell->requiresTarget()) {
 		Creature* creature = getCreatureByID(targetId);
 		if (spell->castSpell(player, creature)) {
-			return internalCreatureSay(player, SPEAK_SAY, text);
+			return internalCreatureSay(player, SPEAK_CAST, text);
 		}
 	}
 	return true;
@@ -3435,9 +3435,10 @@ bool Game::playerSayTargetPosition(const uint32_t &playerId, const Position &pos
 	if(!player || player->isRemoved())
 		return false;
 
-	AimSpell* spell = g_spells->getAimSpell(text);
-	if (spell && dynamic_cast<const AimSpell *>(spell) != NULL) {
-		if (spell->castSpell(player, pos)) {
+	InstantSpell* spell = g_spells->getInstantSpell(text);
+	if (spell && spell->requiresTarget()) {
+		AimSpell* aimSpell = dynamic_cast<AimSpell*>(spell);
+		if (aimSpell->castSpell(player, pos)) {
 			return internalCreatureSay(player, SPEAK_CAST, text);
 		}
 	}

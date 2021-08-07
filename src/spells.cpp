@@ -61,15 +61,11 @@ TalkActionResult_t Spells::playerSaySpell(Player* player, SpeakClasses type, std
 	InstantSpell* instantSpell = getInstantSpell(str_words);
 
 	if (!instantSpell){
-		instantSpell = getAttackSpell(str_words);
+		return TALKACTION_CONTINUE;
 	}
 
-	if (!instantSpell){
-		instantSpell = getAimSpell(str_words);
-		if (instantSpell) {
-			return TALKACTION_REQUIRES_TARGET;
-		}
-		return TALKACTION_CONTINUE;
+	if (instantSpell->requiresTarget()){
+		return TALKACTION_REQUIRES_TARGET;
 	}
 
 	std::string param = "";
@@ -154,30 +150,10 @@ Event* Spells::getEvent(const std::string& nodeName)
 
 bool Spells::registerEvent(Event* event, xmlNodePtr p)
 {
-	AimSpell* aim = dynamic_cast<AimSpell*>(event);
-	AttackSpell* attack = dynamic_cast<AttackSpell*>(event);
 	InstantSpell* instant = dynamic_cast<InstantSpell*>(event);
 	RuneSpell* rune = dynamic_cast<RuneSpell*>(event);
 
-	if(attack){
-			if(attacks.find(attack->getWords()) != attacks.end()) {
-				std::cout << "[Warning - Spells::registerEvent] Duplicate registered attack spell with id: " << attack->getWords() << std::endl;
-				return false;
-			}
-
-			attacks[attack->getWords()] = attack;
-			return true;
-		}
-	else if(aim){
-			if(aimables.find(aim->getWords()) != aimables.end()) {
-				std::cout << "[Warning - Spells::registerEvent] Duplicate registered aim spell with id: " << aim->getWords() << std::endl;
-				return false;
-			}
-
-			aimables[aim->getWords()] = aim;
-			return true;
-		}
-	else if(instant){
+	if(instant){
 		if(instants.find(instant->getWords()) != instants.end()) {
 			std::cout << "[Warning - Spells::registerEvent] Duplicate registered instant spell with words: " << instant->getWords() << std::endl;
 			return false;
@@ -296,50 +272,6 @@ InstantSpell* Spells::getInstantSpell(const std::string& words)
     return result;
 }
 
-AimSpell* Spells::getAimSpell(const std::string& words)
-{
-	AimSpell* result = NULL;
-    for(AimablesMap::iterator it = aimables.begin(); it != aimables.end(); ++it)
-    {
-        AimSpell* aimSpell = it->second;
-        if(!asLowerCaseString(words).compare(0, aimSpell->getWords().length(),
-            asLowerCaseString(aimSpell->getWords())))
-        {
-            if(!result || aimSpell->getWords().length() > result->getWords().length())
-                result = aimSpell;
-        }
-    }
-
-    if(result && words.length() > result->getWords().length())
-    {
-        std::string param = words.substr(result->getWords().length(), words.length());
-        if(param[0] != ' ' || (param.length() > 1 && param[1] != '"'))
-            return NULL;
-    }
-
-    return result;
-}
-
-AttackSpell* Spells::getAttackSpell(const std::string& words)
-{
-	AttackSpell* result = NULL;
-    for(AttacksMap::iterator it = attacks.begin(); it != attacks.end(); ++it) {
-        AttackSpell* attackSpell = it->second;
-        if(!asLowerCaseString(words).compare(0, attackSpell->getWords().length(), asLowerCaseString(attackSpell->getWords()))) {
-            if(!result || attackSpell->getWords().length() > result->getWords().length())
-                result = attackSpell;
-        }
-    }
-
-    if(result && words.length() > result->getWords().length()) {
-        std::string param = words.substr(result->getWords().length(), words.length());
-        if(param[0] != ' ' || (param.length() > 1 && param[1] != '"'))
-            return NULL;
-    }
-
-    return result;
-}
-
 uint32_t Spells::getInstantSpellCount(const Player* player)
 {
 	uint32_t count = 0;
@@ -376,11 +308,6 @@ InstantSpell* Spells::getInstantSpellByName(std::string name)
 {
 	toLowerCaseString(name);
 	for(InstantsMap::iterator it = instants.begin(); it != instants.end(); ++it){
-		if(asLowerCaseString(it->second->getName()) == name){
-			return it->second;
-		}
-	}
-	for(AimablesMap::iterator it = aimables.begin(); it != aimables.end(); ++it){
 		if(asLowerCaseString(it->second->getName()) == name){
 			return it->second;
 		}
@@ -920,7 +847,7 @@ bool Spell::playerRuneSpellCheck(Player* player, const Position& toPos)
 
 			bool canAttackInvisible = g_config.getBoolean(ConfigManager::CAN_ATTACK_INVISIBLE);
 			if(needTarget && tile->getTopVisibleCreature(player, !canAttackInvisible) == NULL){
-				player->sendCancelMessage(RET_CANONLYUSETHISRUNEONCREATURES);
+				player->sendCancelMessage(RET_CANONLYUSERUNEONCREATURES);
 				g_game.addMagicEffect(player->getPosition(), NM_ME_PUFF);
 				return false;
 			}
@@ -2300,7 +2227,7 @@ ReturnValue RuneSpell::canExecuteAction(const Player* player, const Position& to
 
 	if(toPos.x == 0xFFFF){
 		if(needTarget){
-			return RET_CANONLYUSETHISRUNEONCREATURES;
+			return RET_CANONLYUSERUNEONCREATURES;
 		}
 		else if(!selfTarget){
 			return RET_NOTENOUGHROOM;
@@ -2456,7 +2383,7 @@ bool AimSpell::castSpell(Player* player, const Position &toPos)
 
 	if (useType == CREATURE) {
 		if (tile->getCreatureCount() < 1) {
-			player->sendCancelMessage(RET_CANONLYUSETHISRUNEONCREATURES);
+			player->sendCancelMessage(RET_CANONLYUSERUNEONCREATURES);
 			g_game.addMagicEffect(player->getPosition(), NM_ME_PUFF);
 			return false;
 		} else {
