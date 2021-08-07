@@ -400,7 +400,6 @@ bool Actions::useItem(Player* player, const Position& pos, uint8_t index,
 	}
 
 	player->setNextActionTask(NULL);
-	player->stopWalk();
 
 	player->setNextAction(OTSYS_TIME() + g_config.getNumber(ConfigManager::MIN_ACTIONTIME) + SCHEDULER_MINTICKS);
 	ReturnValue ret = internalUseItem(player, pos, index, item, 0);
