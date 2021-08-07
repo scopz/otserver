@@ -10,7 +10,7 @@ function onThink()                        npcHandler:onThink()                  
 
 function greetCallback(cid)
 	if getPlayerStorageValue(cid,3058) == -1 then
-		selfSay('Arrrrgh! A dirty paleskin! Kill them my guards!')
+		npcHandler:playerSay(cid, 'Arrrrgh! A dirty paleskin! Kill them my guards!')
 		pos = getCreaturePosition(getNpcCid())
 
 		local northEast = {x=pos.x+1,y=pos.y-1,z=pos.z}

@@ -7,10 +7,10 @@ NpcSystem.parseParameters(npcHandler)
 
 
 -- OTServ event handling functions
-function onCreatureAppear(cid)			npcHandler:onCreatureAppear(cid)			end
-function onCreatureDisappear(cid)		npcHandler:onCreatureDisappear(cid)			end
-function onCreatureSay(cid, type, msg)		npcHandler:onCreatureSay(cid, type, msg)		end
-function onThink()				npcHandler:onThink()					end
+function onCreatureAppear(cid)         npcHandler:onCreatureAppear(cid)         end
+function onCreatureDisappear(cid)      npcHandler:onCreatureDisappear(cid)      end
+function onCreatureSay(cid, type, msg) npcHandler:onCreatureSay(cid, type, msg) end
+function onThink()                     npcHandler:onThink()                     end
 
 function greetCallback(cid)
 	if getPlayerVocation(cid) == 2 or getPlayerVocation(cid) == 6 then
@@ -69,7 +69,8 @@ keywordHandler:addKeyword({'bles'}, StdModule.say, {npcHandler = npcHandler, onl
 keywordHandler:addKeyword({'donat'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = 'Well, I can offer "premium light" and "remove vial".. but only for premium players!'})
 
 
-function creatureSayCallback(cid, type, msg) msg = string.lower(msg)
+function creatureSayCallback(cid, type, msg)
+	msg = string.lower(msg)
 	if msg == "heal" then
 		if getCreatureHealth(cid) <= 39 then
 			NPCSay("You are looking really bad. Let me heal your wounds.", 1)

@@ -5,10 +5,10 @@ local npcHandler = NpcHandler:new(keywordHandler)
 NpcSystem.parseParameters(npcHandler)
 
 -- OTServ event handling functions
-function onCreatureAppear(cid)			npcHandler:onCreatureAppear(cid)			end
-function onCreatureDisappear(cid)		npcHandler:onCreatureDisappear(cid)			end
-function onCreatureSay(cid, type, msg)		npcHandler:onCreatureSay(cid, type, msg)		end
-function onThink()				npcHandler:onThink()					end
+function onCreatureAppear(cid)         npcHandler:onCreatureAppear(cid)         end
+function onCreatureDisappear(cid)      npcHandler:onCreatureDisappear(cid)      end
+function onCreatureSay(cid, type, msg) npcHandler:onCreatureSay(cid, type, msg) end
+function onThink()                     npcHandler:onThink()                     end
 
 function greetCallback(cid)
 	if getPlayerSex(cid) == 1 then
@@ -17,7 +17,7 @@ function greetCallback(cid)
 	else
 	npcHandler:setMessage(MESSAGE_GREET, "Bienvenue, ".. getPlayerName(cid) .."! My fruits will complete the icing on your cake.")
 	return true
-	end	
+	end
 end
 
 npcHandler:setCallback(CALLBACK_GREET, greetCallback)
@@ -46,19 +46,18 @@ keywordHandler:addKeyword({'fruits'}, StdModule.say, {npcHandler = npcHandler, o
 keywordHandler:addKeyword({'time'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "Time is |TIME| now."})
 
 function creatureSayCallback(cid, type, msg)
-	if(npcHandler.focus ~= cid) then
+	if not npcHandler:hasFocus(cid) then
 		return false
 	end
+	msg = string.lower(msg)
 
-if msgcontains(msg, 'name') or msgcontains(msg, 'Name') then
-	if getPlayerSex(cid) == 1 then
-	npcHandler:say("Moi? Livielle for you, chéri.", 1)
-	else
-	npcHandler:say("I'm Livielle Delacroix, madame.", 1)
+	if msgcontains(msg, 'name') then
+		if getPlayerSex(cid) == 1 then
+			npcHandler:playerSay(cid, "Moi? Livielle for you, chéri.", 1)
+		else
+			npcHandler:playerSay(cid, "I'm Livielle Delacroix, madame.", 1)
+		end
 	end
-	talk_state = 0
-
-end		
     return true
 end
 

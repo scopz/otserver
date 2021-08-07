@@ -5,10 +5,10 @@ local npcHandler = NpcHandler:new(keywordHandler)
 NpcSystem.parseParameters(npcHandler)
 
 -- OTServ event handling functions
-function onCreatureAppear(cid)			npcHandler:onCreatureAppear(cid)			end
-function onCreatureDisappear(cid)		npcHandler:onCreatureDisappear(cid)			end
-function onCreatureSay(cid, type, msg)		npcHandler:onCreatureSay(cid, type, msg)		end
-function onThink()				npcHandler:onThink()					end
+function onCreatureAppear(cid)         npcHandler:onCreatureAppear(cid)         end
+function onCreatureDisappear(cid)      npcHandler:onCreatureDisappear(cid)      end
+function onCreatureSay(cid, type, msg) npcHandler:onCreatureSay(cid, type, msg) end
+function onThink()                     npcHandler:onThink()                     end
 
 local shopModule = ShopModule:new()
 npcHandler:addModule(shopModule)
@@ -23,7 +23,7 @@ shopModule:addBuyableItem({'bread'}, 2689, 3)
 shopModule:addBuyableItem({'cheese'}, 2696, 5)
 shopModule:addBuyableItem({'meat'}, 2666, 5)
 shopModule:addBuyableItem({'ham'}, 2671, 8)
- 
+
 keywordHandler:addKeyword({'how are you'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "I think, I'm fine."})
 keywordHandler:addKeyword({'job'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "I am a farmer and a cook."})
 keywordHandler:addKeyword({'cook'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "I am the best cook around. You can sell me most types of food."})
@@ -52,30 +52,32 @@ keywordHandler:addKeyword({'sell'}, StdModule.say, {npcHandler = npcHandler, onl
 keywordHandler:addKeyword({'buy'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "I buy food of most kind. Since I am a great cook I need much of it."})
 
 function creatureSayCallback(cid, type, msg)
-	if(npcHandler.focus ~= cid) then
+	if not npcHandler:hasFocus(cid) then
 		return false
 	end
-	
+	msg = string.lower(msg)
+	local cidData = npcHandler:getFocusPlayerData(cid)
+
 	if msgcontains(msg, 'pan') then
-	npcHandler:say('Have you found a pan for me?')
-	talk_state = 1
-	
-	elseif msgcontains(msg, 'yes') and talk_state == 1 and getPlayerItemCount(cid, 2563) >= 1 then
-	npcHandler:say('A pan! At last! Take this in case you eat something my cousin has cooked.')
-	doPlayerRemoveItem(cid, 2563, 1)
-	doPlayerAddItem(cid, 2266, 1)
-	talk_state = 0
-	
-	elseif msgcontains(msg, 'yes') and talk_state == 1 and getPlayerItemCount(cid, 2563) == 0 then
-	npcHandler:say('Hey! You don\'t have it!')
-	talk_state = 0
-	
-	elseif msgcontains(msg, 'no') and talk_state == 1 then
-	npcHandler:say('$&*@!')
-	talk_state = 0
-	
-end
-return true
+		npcHandler:playerSay(cid, 'Have you found a pan for me?')
+		cidData.state = 1
+
+	elseif msgcontains(msg, 'yes') and cidData.state == 1 and getPlayerItemCount(cid, 2563) >= 1 then
+		npcHandler:playerSay(cid, 'A pan! At last! Take this in case you eat something my cousin has cooked.')
+		doPlayerRemoveItem(cid, 2563, 1)
+		doPlayerAddItem(cid, 2266, 1)
+		cidData.state = 0
+
+	elseif msgcontains(msg, 'yes') and cidData.state == 1 and getPlayerItemCount(cid, 2563) == 0 then
+		npcHandler:playerSay(cid, 'Hey! You don\'t have it!')
+		cidData.state = 0
+
+	elseif msgcontains(msg, 'no') and cidData.state == 1 then
+		npcHandler:playerSay(cid, '$&*@!')
+		cidData.state = 0
+
+	end
+	return true
 end
 
 npcHandler:setCallback(CALLBACK_MESSAGE_DEFAULT, creatureSayCallback)

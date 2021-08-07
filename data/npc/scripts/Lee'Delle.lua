@@ -5,10 +5,10 @@ local npcHandler = NpcHandler:new(keywordHandler)
 NpcSystem.parseParameters(npcHandler)
 
 -- OTServ event handling functions
-function onCreatureAppear(cid)			npcHandler:onCreatureAppear(cid)			end
-function onCreatureDisappear(cid)		npcHandler:onCreatureDisappear(cid)			end
-function onCreatureSay(cid, type, msg)		npcHandler:onCreatureSay(cid, type, msg)		end
-function onThink()				npcHandler:onThink()					end
+function onCreatureAppear(cid)         npcHandler:onCreatureAppear(cid)         end
+function onCreatureDisappear(cid)      npcHandler:onCreatureDisappear(cid)      end
+function onCreatureSay(cid, type, msg) npcHandler:onCreatureSay(cid, type, msg) end
+function onThink()                     npcHandler:onThink()                     end
 
 local shopModule = ShopModule:new()
 npcHandler:addModule(shopModule)
@@ -65,7 +65,7 @@ shopModule:addBuyableItem({'scythe'}, 2550, 50)
 shopModule:addBuyableItem({'rope'}, 2120, 50)
 shopModule:addBuyableItem({'fishing rod'}, 2580, 150)
 shopModule:addBuyableItem({'worm'}, 3976, 1)
- 
+
 keywordHandler:addKeyword({'how are you'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "I am fine. I'm delighted to welcome you as customer."})
 keywordHandler:addKeyword({'sell'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "I sell much. Have a look at the blackboards for my wares or just ask."})
 keywordHandler:addKeyword({'job'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "I am a merchant, so what can I do for you?"})
@@ -97,25 +97,21 @@ keywordHandler:addKeyword({'sell club'}, StdModule.say, {npcHandler = npcHandler
 keywordHandler:addKeyword({'time'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "It is about |TIME|. I am so sorry, I have no watches to sell. Do you want to buy something else?"})
 
 function creatureSayCallback(cid, type, msg)
-	if(npcHandler.focus ~= cid) then
+	if not npcHandler:hasFocus(cid) then
 		return false
 	end
-	
-	if msgcontains(msg, 'mission') or msgcontains(msg, 'quest') or msgcontains(msg, 'reward') then
-	npcHandler:say('I really love flowers. Sadly my favourites, honey flowers are very rare on this isle. If you can find me one, I\'ll give you a little reward.')
-	
-	elseif msgcontains (msg, 'honey flower') and getPlayerItemCount(cid,2103) >= 1 then
-	npcHandler:say('Oh, thank you so much! Please take this piece of armor as reward.')
-	doPlayerAddItem(cid, 2468, 1)
-	doPlayerRemoveItem(cid, 2103, 1)
-	talk_state = 0
-	
-	elseif msgcontains (msg, 'honey flower') and getPlayerItemCount(cid,2103) == 0 then
-	npcHandler:say('Honey flowers are my favourites <sigh>.')
-	talk_state = 0
-	
-	end
 
+	if msgcontains(msg, 'mission') or msgcontains(msg, 'quest') or msgcontains(msg, 'reward') then
+		npcHandler:playerSay(cid, 'I really love flowers. Sadly my favourites, honey flowers are very rare on this isle. If you can find me one, I\'ll give you a little reward.')
+
+	elseif msgcontains (msg, 'honey flower') and getPlayerItemCount(cid,2103) >= 1 then
+		npcHandler:playerSay(cid, 'Oh, thank you so much! Please take this piece of armor as reward.')
+		doPlayerAddItem(cid, 2468, 1)
+		doPlayerRemoveItem(cid, 2103, 1)
+
+	elseif msgcontains (msg, 'honey flower') and getPlayerItemCount(cid,2103) == 0 then
+		npcHandler:playerSay(cid, 'Honey flowers are my favourites <sigh>.')
+	end
 	return true
 end
 

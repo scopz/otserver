@@ -7,23 +7,22 @@ NpcSystem.parseParameters(npcHandler)
 
 
 -- OTServ event handling functions
-function onCreatureAppear(cid)			npcHandler:onCreatureAppear(cid)			end
-function onCreatureDisappear(cid)		npcHandler:onCreatureDisappear(cid)			end
-function onCreatureSay(cid, type, msg)		npcHandler:onCreatureSay(cid, type, msg)		end
-function onThink()				npcHandler:onThink()					end
+function onCreatureAppear(cid)         npcHandler:onCreatureAppear(cid)         end
+function onCreatureDisappear(cid)      npcHandler:onCreatureDisappear(cid)      end
+function onCreatureSay(cid, type, msg) npcHandler:onCreatureSay(cid, type, msg) end
+function onThink()                     npcHandler:onThink()                     end
 
 function greetCallback(cid)
-if getCreatureHealth(cid) <= 39 then
-	npcHandler:setMessage(MESSAGE_GREET, "You are looking really bad, ".. getPlayerName(cid) ..". Let me heal your wounds.")
-	doCreatureAddHealth(cid, -getCreatureHealth(cid)+40)
-	doSendMagicEffect(getPlayerPosition(cid), 12)
-	talk_state = 0
-	return true
+	if getCreatureHealth(cid) <= 39 then
+		npcHandler:setMessage(MESSAGE_GREET, "You are looking really bad, ".. getPlayerName(cid) ..". Let me heal your wounds.")
+		doCreatureAddHealth(cid, -getCreatureHealth(cid)+40)
+		doSendMagicEffect(getPlayerPosition(cid), 12)
+		return true
 	else
-	npcHandler:setMessage(MESSAGE_GREET, "Welcome ".. getPlayerName(cid) .."! May earth protect you!")
-	return true
+		npcHandler:setMessage(MESSAGE_GREET, "Welcome ".. getPlayerName(cid) .."! May earth protect you!")
+		return true
 	end
-end	
+end
 npcHandler:setCallback(CALLBACK_GREET, greetCallback)
 
 
@@ -78,69 +77,72 @@ keywordHandler:addKeyword({'fight'}, StdModule.say, {npcHandler = npcHandler, on
 keywordHandler:addKeyword({'time'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "Time is not of importance."})
 
 
-function creatureSayCallback(cid, type, msg) msg = string.lower(msg)
+function creatureSayCallback(cid, type, msg)
+	msg = string.lower(msg)
 
-if msgcontains(msg, 'heal') then
-if getCreatureHealth(cid) <= 64 then
-	npcHandler:say("You are looking really bad. Let me heal your wounds.", 1)
-	doCreatureAddHealth(cid, -getCreatureHealth(cid)+65)
-	doSendMagicEffect(getPlayerPosition(cid), 12)
-	talk_state = 0
-	return true
-	else
-	npcHandler:say("You aren't looking really bad. Sorry, I can't help you.", 1)
-	return true
+	if msgcontains(msg, 'heal') then
+		if getCreatureHealth(cid) <= 64 then
+			npcHandler:playerSay(cid, "You are looking really bad. Let me heal your wounds.", 1)
+			doCreatureAddHealth(cid, -getCreatureHealth(cid)+65)
+			doSendMagicEffect(getPlayerPosition(cid), 12)
+			cidData.state = 0
+			return true
+		else
+			npcHandler:playerSay(cid, "You aren't looking really bad. Sorry, I can't help you.", 1)
+			return true
+		end
+		cidData.state = 0
 	end
-	talk_state = 0
-end		
-	if(npcHandler.focus ~= cid) then
+	if not npcHandler:hasFocus(cid) then
 		return false
-	end	
-	
-if msgcontains(msg, 'bless') then
-	npcHandler:say("There are five different blessings available in five sacred places. These blessings are: the spiritual shielding, the spark of the phoenix, the embrace of tibia, the fire of the suns and the wisdom of solitude.", 1)
-	talk_state = 0
-
-elseif msgcontains(msg, 'spark') or msgcontains(msg, 'phoenix') then
-	npcHandler:say("The spark of the phoenix is given by me and by the great pyromancer in the nearby firetemple. Do you wish to receive my part of the blessing of the phoenix?", 1)
-	talk_state = 1394
-
-
-elseif talk_state == 1394 and msgcontains(msg, 'yes') then
-	if getPlayerStorageValue(cid, 1339) <= 0 then
-	setPlayerStorageValue(cid, 1339, 1)
-	npcHandler:say("So receive the blessing of the live-giving earth, pilgrim.", 1)
-	doSendMagicEffect(getPlayerPosition(cid), 13)
-	talk_state = 0		
-	else
-	npcHandler:say("You already possess my blessing.", 1)
-	talk_state = 0			
 	end
-	
-elseif talk_state == 1394 and msgcontains(msg, '') then
-	npcHandler:say("Ok. If you don't want it ... .", 1)
-	talk_state = 0	
-	
-elseif msgcontains(msg, 'phoenix') then
-	npcHandler:say("The spark of the phoenix is given by the dwarven priests of earth and fire in Kazordoon.", 1)
-	talk_state = 0
-	
-elseif msgcontains(msg, 'embrace') then
-	npcHandler:say("The druids north of Carlin will provide you with the embrace of tibia.", 1)
-	talk_state = 0
-	
-elseif msgcontains(msg, 'suns') then
-	npcHandler:say("You can ask for the blessing of the two suns in the suntower near Ab'Dendriel.", 1)
-	talk_state = 0
-	
-elseif msgcontains(msg, 'wisdom') then
-	npcHandler:say("Talk to the hermit Eremo on the isle of Cormaya about this blessing.", 1)
-	talk_state = 0
-	
-elseif msgcontains(msg, 'spiritual') then
-	npcHandler:say("You can ask for the blessing of spiritual shielding the whiteflower temple south of Thais.", 1)
-	talk_state = 0
-end	
+
+	local cidData = npcHandler:getFocusPlayerData(cid)
+
+	if msgcontains(msg, 'bless') then
+		npcHandler:playerSay(cid, "There are five different blessings available in five sacred places. These blessings are: the spiritual shielding, the spark of the phoenix, the embrace of tibia, the fire of the suns and the wisdom of solitude.", 1)
+		cidData.state = 0
+
+	elseif msgcontains(msg, 'spark') or msgcontains(msg, 'phoenix') then
+		npcHandler:playerSay(cid, "The spark of the phoenix is given by me and by the great pyromancer in the nearby firetemple. Do you wish to receive my part of the blessing of the phoenix?", 1)
+		cidData.state = 1394
+
+
+	elseif cidData.state == 1394 and msgcontains(msg, 'yes') then
+		if getPlayerStorageValue(cid, 1339) <= 0 then
+			setPlayerStorageValue(cid, 1339, 1)
+			npcHandler:playerSay(cid, "So receive the blessing of the live-giving earth, pilgrim.", 1)
+			doSendMagicEffect(getPlayerPosition(cid), 13)
+			cidData.state = 0
+		else
+			npcHandler:playerSay(cid, "You already possess my blessing.", 1)
+			cidData.state = 0
+		end
+
+	elseif cidData.state == 1394 and msgcontains(msg, '') then
+		npcHandler:playerSay(cid, "Ok. If you don't want it ... .", 1)
+		cidData.state = 0
+
+	elseif msgcontains(msg, 'phoenix') then
+		npcHandler:playerSay(cid, "The spark of the phoenix is given by the dwarven priests of earth and fire in Kazordoon.", 1)
+		cidData.state = 0
+
+	elseif msgcontains(msg, 'embrace') then
+		npcHandler:playerSay(cid, "The druids north of Carlin will provide you with the embrace of tibia.", 1)
+		cidData.state = 0
+
+	elseif msgcontains(msg, 'suns') then
+		npcHandler:playerSay(cid, "You can ask for the blessing of the two suns in the suntower near Ab'Dendriel.", 1)
+		cidData.state = 0
+
+	elseif msgcontains(msg, 'wisdom') then
+		npcHandler:playerSay(cid, "Talk to the hermit Eremo on the isle of Cormaya about this blessing.", 1)
+		cidData.state = 0
+
+	elseif msgcontains(msg, 'spiritual') then
+		npcHandler:playerSay(cid, "You can ask for the blessing of spiritual shielding the whiteflower temple south of Thais.", 1)
+		cidData.state = 0
+	end
 end
 
 

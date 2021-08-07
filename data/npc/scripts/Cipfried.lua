@@ -5,10 +5,10 @@ local npcHandler = NpcHandler:new(keywordHandler)
 NpcSystem.parseParameters(npcHandler)
 
 -- OTServ event handling functions
-function onCreatureAppear(cid)			npcHandler:onCreatureAppear(cid)			end
-function onCreatureDisappear(cid)		npcHandler:onCreatureDisappear(cid)			end
-function onCreatureSay(cid, type, msg)		npcHandler:onCreatureSay(cid, type, msg)		end
-function onThink()				npcHandler:onThink()					end
+function onCreatureAppear(cid)         npcHandler:onCreatureAppear(cid)         end
+function onCreatureDisappear(cid)      npcHandler:onCreatureDisappear(cid)      end
+function onCreatureSay(cid, type, msg) npcHandler:onCreatureSay(cid, type, msg) end
+function onThink()                     npcHandler:onThink()                     end
 
 npcHandler:setMessage(MESSAGE_GREET, "Hello, |PLAYERNAME|! Feel free to ask me for help.")
 
@@ -48,25 +48,25 @@ keywordHandler:addKeyword({'food'}, StdModule.say, {npcHandler = npcHandler, onl
 keywordHandler:addKeyword({'time'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "Now, it is |TIME|, my child."})
 
 function creatureSayCallback(cid, type, msg)
-	if(cid ~= npcHandler.focus) then
+	if not npcHandler:hasFocus(cid) then
 		return false
 	end
 
 	if msgcontains(msg, 'heal') then
 		if hasCondition(cid, CONDITION_FIRE) == true then
-			npcHandler:say('You are burning. I will help you.')
+			npcHandler:playerSay(cid, 'You are burning. I will help you.')
 			doRemoveCondition(cid, CONDITION_FIRE)
 			doSendMagicEffect(getCreaturePosition(cid), 14)
 		elseif hasCondition(cid, CONDITION_POISON) == true then
-			npcHandler:say('You are poisoned. I will help you.')
+			npcHandler:playerSay(cid, 'You are poisoned. I will help you.')
 			doRemoveCondition(cid, CONDITION_POISON)
 			doSendMagicEffect(getCreaturePosition(cid), 13)
 		elseif getCreatureHealth(cid) < 65 then
-			npcHandler:say('You are looking really bad. Let me heal your wounds.')
+			npcHandler:playerSay(cid, 'You are looking really bad. Let me heal your wounds.')
 			doCreatureAddHealth(cid, 65 - getCreatureHealth(cid))
 			doSendMagicEffect(getCreaturePosition(cid), 12)
 		else
-			npcHandler:say('You aren\'t looking really bad, ' .. getCreatureName(cid) .. '. I can only help in cases of real emergencies. Raise your health simply by eating food.')
+			npcHandler:playerSay(cid, 'You aren\'t looking really bad, ' .. getCreatureName(cid) .. '. I can only help in cases of real emergencies. Raise your health simply by eating food.')
 		end
 		return true
 	end

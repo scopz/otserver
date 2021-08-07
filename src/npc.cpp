@@ -666,6 +666,7 @@ void NpcScriptInterface::registerFunctions()
 
 	//npc exclusive functions
 	lua_register(m_luaState, "selfSay", NpcScriptInterface::luaActionSay);
+	lua_register(m_luaState, "playerSay", NpcScriptInterface::luaActionPlayerSay);
 	lua_register(m_luaState, "selfSell", NpcScriptInterface::luaActionSell);
 	lua_register(m_luaState, "selfMove", NpcScriptInterface::luaActionMove);
 	lua_register(m_luaState, "selfMoveTo", NpcScriptInterface::luaActionMoveTo);
@@ -679,6 +680,7 @@ void NpcScriptInterface::registerFunctions()
 	lua_register(m_luaState, "getNpcName", NpcScriptInterface::luaGetNpcName);
 	lua_register(m_luaState, "getNpcParameter", NpcScriptInterface::luaGetNpcParameter);
 	lua_register(m_luaState, "sendFocusLost", NpcScriptInterface::luaSendFocusLost);
+	lua_register(m_luaState, "sendFocus", NpcScriptInterface::luaSendFocus);
 }
 
 int NpcScriptInterface::luaSelfGetPos(lua_State *L)
@@ -708,6 +710,28 @@ int NpcScriptInterface::luaActionSay(lua_State* L)
 
 	if (npc){
 		npc->doSay(text, SPEAK_SAY, NULL);
+	}
+
+	return 0;
+}
+
+int NpcScriptInterface::luaActionPlayerSay(lua_State* L)
+{
+	//playerSay(cid, words)
+	std::string text = popString(L);
+	uint32_t cid = popNumber(L);
+
+	ScriptEnviroment* env = getScriptEnv();
+
+	Player* player = env->getPlayerByUID(cid);
+	if (cid != 0 && !player){
+		lua_pushboolean(L, false);
+		return 1;
+	}
+
+	Npc* npc = env->getNpc();
+	if (npc){
+		npc->doSay(text, SPEAK_CHANNEL_NPC, player);
 	}
 
 	return 0;
@@ -950,6 +974,30 @@ int NpcScriptInterface::luaSendFocusLost(lua_State *L)
 	}
 
 	player->sendNpcFocusLost(npc);
+	lua_pushboolean(L, true);
+	return 0;
+}
+
+int NpcScriptInterface::luaSendFocus(lua_State *L)
+{
+	//sendFocus(cid)
+	uint32_t cid = popNumber(L);
+
+	ScriptEnviroment* env = getScriptEnv();
+
+	Player* player = env->getPlayerByUID(cid);
+	if (cid != 0 && !player){
+		lua_pushboolean(L, false);
+		return 1;
+	}
+
+	Npc* npc = env->getNpc();
+	if (!npc){
+		lua_pushboolean(L, false);
+		return 1;
+	}
+
+	player->sendNpcFocus(npc);
 	lua_pushboolean(L, true);
 	return 0;
 }

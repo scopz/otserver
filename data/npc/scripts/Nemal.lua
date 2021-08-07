@@ -7,10 +7,10 @@ NpcSystem.parseParameters(npcHandler)
 
 
 -- OTServ event handling functions
-function onCreatureAppear(cid)			npcHandler:onCreatureAppear(cid)			end
-function onCreatureDisappear(cid)		npcHandler:onCreatureDisappear(cid)			end
-function onCreatureSay(cid, type, msg)		npcHandler:onCreatureSay(cid, type, msg)		end
-function onThink()				npcHandler:onThink()					end
+function onCreatureAppear(cid)         npcHandler:onCreatureAppear(cid)         end
+function onCreatureDisappear(cid)      npcHandler:onCreatureDisappear(cid)      end
+function onCreatureSay(cid, type, msg) npcHandler:onCreatureSay(cid, type, msg) end
+function onThink()                     npcHandler:onThink()                     end
 
 keywordHandler:addKeyword({'name'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "My name is Nemal."})
 keywordHandler:addKeyword({'job'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "I have no job. I'm a wanderer."})
@@ -37,52 +37,54 @@ keywordHandler:addKeyword({'offer'}, StdModule.say, {npcHandler = npcHandler, on
 keywordHandler:addKeyword({'blind'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "Yes, I seem to be blind. But I am not sure - maybe the dungeons are too dark!"})
 
 
-function creatureSayCallback(cid, type, msg) msg = string.lower(msg)
-	if(npcHandler.focus ~= cid) then
+function creatureSayCallback(cid, type, msg)
+	if not npcHandler:hasFocus(cid) then
 		return false
 	end
-if msgcontains(msg, 'potion') and msgcontains(msg, 'regain') and msgcontains(msg, 'vision') or msgcontains(msg, 'Potion') and msgcontains(msg, 'Regain') and msgcontains(msg, 'Vision') then
-	npcHandler:say("I heard of a potion of regained vision ... but I can't remember how to make it! Maybe you can help me. Do you know something about it?", 1)
-	talk_state = 2
-			
-elseif talk_state == 2 and msgcontains(msg, 'yes') or talk_state == 2 and msgcontains(msg, 'Yes') then
-	npcHandler:say("So, did you bring the ingredients with you, stranger?", 1)
-	talk_state = 3
-elseif talk_state == 2 and msgcontains(msg, '') then
-	npcHandler:say("Oh. Maybe someone else could do it, then.", 1)
-	talk_state = 0
-	
-elseif talk_state == 3 and msgcontains(msg, 'yes') or talk_state == 3 and msgcontains(msg, 'Yes') then
-	if doPlayerRemoveItem(cid, 2690, 1) == true and doPlayerRemoveItem(cid, 2692, 1) == true and doPlayerRemoveItem(cid, 2744, 1) == true and doPlayerRemoveItem(cid, 2693, 1) == true and doPlayerRemoveItem(cid, 2679, 1) == true then
-	npcHandler:say("You seem to have them with you. Can you tell me, how many minutes I have to cook them?", 1)
-	else
-	npcHandler:say("It doesn't seem to me as if you have the correct ingredients with you, stranger!", 1)
-	end
-	talk_state = 4	
+	msg = string.lower(msg)
+	local cidData = npcHandler:getFocusPlayerData(cid)
 
-elseif talk_state == 3 and msgcontains(msg, '') then
-	npcHandler:say("Maybe you can find them!", 1)
-	talk_state = 0	
+	if msgcontains(msg, 'potion') and msgcontains(msg, 'regain') and msgcontains(msg, 'vision') then
+		npcHandler:playerSay(cid, "I heard of a potion of regained vision ... but I can't remember how to make it! Maybe you can help me. Do you know something about it?", 1)
+		cidData.state = 2
 
-elseif talk_state == 4 and msgcontains(msg, '31') then
-	npcHandler:say("Ah. It seems to work. But what are the words I have to speak?", 1)
-	talk_state = 5	
-elseif talk_state == 4 and msgcontains(msg, '') then
-	npcHandler:say("Oh no, I don't think this is right.", 1)
-	talk_state = 0
-	
-elseif talk_state == 5 and msgcontains(msg, 'nalus murtu') or talk_state == 5 and msgcontains(msg, 'Nalus Murtu') then
-	npcHandler:say("Thank you! NALUS MURTUUU! ... I can see again! To show you, how grateful I am, I'll give you a key. Be wise when using it. I can't tell you, where it matches, but ... take good care, it is useless without mental powers!", 1)
+	elseif cidData.state == 2 and msgcontains(msg, 'yes') then
+		npcHandler:playerSay(cid, "So, did you bring the ingredients with you, stranger?", 1)
+		cidData.state = 3
+	elseif cidData.state == 2 and msgcontains(msg, '') then
+		npcHandler:playerSay(cid, "Oh. Maybe someone else could do it, then.", 1)
+		cidData.state = 0
+
+	elseif cidData.state == 3 and msgcontains(msg, 'yes') then
+		if doPlayerRemoveItem(cid, 2690, 1) == true and doPlayerRemoveItem(cid, 2692, 1) == true and doPlayerRemoveItem(cid, 2744, 1) == true and doPlayerRemoveItem(cid, 2693, 1) == true and doPlayerRemoveItem(cid, 2679, 1) == true then
+			npcHandler:playerSay(cid, "You seem to have them with you. Can you tell me, how many minutes I have to cook them?", 1)
+		else
+			npcHandler:playerSay(cid, "It doesn't seem to me as if you have the correct ingredients with you, stranger!", 1)
+		end
+		cidData.state = 4
+
+	elseif cidData.state == 3 and msgcontains(msg, '') then
+		npcHandler:playerSay(cid, "Maybe you can find them!", 1)
+		cidData.state = 0
+
+	elseif cidData.state == 4 and msgcontains(msg, '31') then
+		npcHandler:playerSay(cid, "Ah. It seems to work. But what are the words I have to speak?", 1)
+		cidData.state = 5
+	elseif cidData.state == 4 and msgcontains(msg, '') then
+		npcHandler:playerSay(cid, "Oh no, I don't think this is right.", 1)
+		cidData.state = 0
+
+	elseif cidData.state == 5 and msgcontains(msg, 'nalus murtu') then
+		npcHandler:playerSay(cid, "Thank you! NALUS MURTUUU! ... I can see again! To show you, how grateful I am, I'll give you a key. Be wise when using it. I can't tell you, where it matches, but ... take good care, it is useless without mental powers!", 1)
 		DESERTDEEPKEY = doPlayerAddItem(cid, 2088, 1)
 		doSetItemActionId(DESERTDEEPKEY, 2012)
 		doSetItemSpecialDescription(DESERTDEEPKEY, "(Key: 4037)")
-	talk_state = 0	
-elseif talk_state == 5 and msgcontains(msg, '') then
-	npcHandler:say("Oh no, I don't think these are the right words.", 1)
-	talk_state = 0	
-	
-end		
-    return true
+		cidData.state = 0
+	elseif cidData.state == 5 and msgcontains(msg, '') then
+		npcHandler:playerSay(cid, "Oh no, I don't think these are the right words.", 1)
+		cidData.state = 0
+	end
+	return true
 end
 
 

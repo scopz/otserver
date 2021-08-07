@@ -9,10 +9,10 @@ setConditionParam(fire, CONDITION_PARAM_DELAYED, 10)
 addDamageCondition(fire, 450, 3000, -10)
 
 -- OTServ event handling functions
-function onCreatureAppear(cid)			npcHandler:onCreatureAppear(cid)			end
-function onCreatureDisappear(cid)		npcHandler:onCreatureDisappear(cid)			end
-function onCreatureSay(cid, type, msg)		npcHandler:onCreatureSay(cid, type, msg)		end
-function onThink()				npcHandler:onThink()					end
+function onCreatureAppear(cid)         npcHandler:onCreatureAppear(cid)         end
+function onCreatureDisappear(cid)      npcHandler:onCreatureDisappear(cid)      end
+function onCreatureSay(cid, type, msg) npcHandler:onCreatureSay(cid, type, msg) end
+function onThink()                     npcHandler:onThink()                     end
 
 keywordHandler:addKeyword({'name'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "My name is Adrenius."})
 keywordHandler:addKeyword({'job'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "I'm a priest of Fafnar."})
@@ -39,82 +39,91 @@ keywordHandler:addKeyword({'library'}, StdModule.say, {npcHandler = npcHandler, 
 
 
 function creatureSayCallback(cid, type, msg)
-	if(npcHandler.focus ~= cid) then
+	if not npcHandler:hasFocus(cid) then
 		return false
 	end
-	
-if msgcontains(msg, 'netlios') or msgcontains(msg, 'Netlios') then
-	npcHandler:say("This fool! His book is nothing but a hoax! At least I believe that. Or did you find an answer for my questions?", 1)
-	talk_state = 1
-	
-elseif talk_state == 1 and msgcontains(msg, 'yes') or talk_state == 1 and msgcontains(msg, 'Yes') then
-	npcHandler:say("By the way, I would like a donation for my temple. Are 500 gold ok?", 1)
-	talk_state = 2
-elseif talk_state == 1 and msgcontains(msg, 'no') or talk_state == 1 and msgcontains(msg, 'No') then
-	npcHandler:say("Oh. So once again I am proved right.", 1)
-	talk_state = 0
-elseif talk_state == 1 and msgcontains(msg, '') then
-	npcHandler:say("You can't even say 'yes' or 'no'. You are not worth talking to me!", 1)
-	talk_state = 0
-	npcHandler:releaseFocus()
-	npcHandler:resetNpc()	
-	
-elseif talk_state == 2 and msgcontains(msg, 'yes') or talk_state == 2 and msgcontains(msg, 'Yes') then
-	if doPlayerRemoveMoney(cid, 500) == true then
-	npcHandler:say("Thank you very much. Now, name me the first person in alphabetical order, his age, his fate, and how long he was on his journeys!", 1)
-	talk_state = 4	
-	else
-	npcHandler:say("You want to fool me? May Fafnar burn your soul!", 1)
-	doSendMagicEffect(getCreaturePosition(getNpcCid(  )), 13)
-	doSendMagicEffect(getPlayerPosition(cid), 15)
-	doAddCondition(cid, fire)
-	talk_state = 0	
+	msg = string.lower(msg)
+
+	local cidData = npcHandler:getFocusPlayerData(cid)
+
+	if msgcontains(msg, 'netlios') then
+		npcHandler:playerSay(cid, "This fool! His book is nothing but a hoax! At least I believe that. Or did you find an answer for my questions?", 1)
+		cidData.state = 1
+
+	elseif cidData.state == 1 and msgcontains(msg, 'yes') then
+		npcHandler:playerSay(cid, "By the way, I would like a donation for my temple. Are 500 gold ok?", 1)
+		cidData.state = 2
+
+	elseif cidData.state == 1 and msgcontains(msg, 'no') then
+		npcHandler:playerSay(cid, "Oh. So once again I am proved right.", 1)
+		cidData.state = 0
+
+	elseif cidData.state == 1 and msgcontains(msg, '') then
+		npcHandler:playerSay(cid, "You can't even say 'yes' or 'no'. You are not worth talking to me!", 1)
+		cidData.state = 0
+		npcHandler:releaseFocus(cid)
+		npcHandler:resetNpc(cid)
+
+	elseif cidData.state == 2 and msgcontains(msg, 'yes') then
+		if doPlayerRemoveMoney(cid, 500) == true then
+			npcHandler:playerSay(cid, "Thank you very much. Now, name me the first person in alphabetical order, his age, his fate, and how long he was on his journeys!", 1)
+			cidData.state = 4
+		else
+			npcHandler:playerSay(cid, "You want to fool me? May Fafnar burn your soul!", 1)
+			doSendMagicEffect(getCreaturePosition(getNpcCid()), 13)
+			doSendMagicEffect(getPlayerPosition(cid), 15)
+			doAddCondition(cid, fire)
+			cidData.state = 0
+		end
+	elseif cidData.state == 2 and msgcontains(msg, '') then
+		npcHandler:playerSay(cid, "Then I don't want to talk to you.", 1)
+		cidData.state = 0
+		npcHandler:releaseFocus(cid)
+		npcHandler:resetNpc(cid)
+
+	elseif cidData.state == 4 and msgcontains(msg, 'anaso') and msgcontains(msg, '41') and msgcontains(msg, 'mother') and msgcontains(msg, '117') then
+		npcHandler:playerSay(cid, "Hmmm, maybe. What can you tell me about the second 'adventurer'?", 1)
+		cidData.state = 5
+
+	elseif cidData.state == 4 and msgcontains(msg, '') then
+		npcHandler:playerSay(cid, "No, sorry, that doesn't sound correct to me. Maybe you should reconsider your words one more time...", 1)
+		cidData.state = 4
+
+	elseif cidData.state == 5 and msgcontains(msg, 'elaeus') and msgcontains(msg, '39') and msgcontains(msg, 'dragon') and msgcontains(msg, '100') then
+		npcHandler:playerSay(cid, "Yes, that might be true. What did you find out about the third man?", 1)
+		cidData.state = 6
+
+	elseif cidData.state == 5 and msgcontains(msg, '') then
+		npcHandler:playerSay(cid, "No, no, no! Think about it, that simply can't be true!", 1)
+		cidData.state = 5
+
+	elseif cidData.state == 6 and msgcontains(msg, 'gadinius') and msgcontains(msg, '42') and msgcontains(msg, 'fire') and msgcontains(msg, '83') then
+		npcHandler:playerSay(cid, "Correct again! Hmmmm... I doubt you know anything about the fourth person!", 1)
+		cidData.state = 7
+
+	elseif cidData.state == 6 and msgcontains(msg, '') then
+		npcHandler:playerSay(cid, "Hmmmm... well, no. That is not true, it does not fit to the data provided by the books.", 1)
+		cidData.state = 6
+
+	elseif cidData.state == 7 and msgcontains(msg, 'heso') and msgcontains(msg, '40') and msgcontains(msg, 'troll') and msgcontains(msg, '66') then
+		npcHandler:playerSay(cid, "Yes! Really, how did you figure that out? I bet, you don't know anything about the last adventurer!", 1)
+		cidData.state = 8
+
+	elseif cidData.state == 7 and msgcontains(msg, '') then
+		npcHandler:playerSay(cid, "No, sorry. Incorrect...", 1)
+		cidData.state = 7
+
+	elseif cidData.state == 8 and msgcontains(msg, 'hestus') and msgcontains(msg, '38') and msgcontains(msg, 'poison') and msgcontains(msg, '134') then
+		npcHandler:playerSay(cid, "That's right! Why didn't I see it? It's obvious, Netlios was right, and his stories are great! Wait, I'll give you something!", 1)
+		DESERTTPROOM = doPlayerAddItem(cid, 2088, 1)
+		doSetItemActionId(DESERTTPROOM, 2016)
+		doSetItemSpecialDescription(DESERTTPROOM, "(Key: 4023)")
+		cidData.state = 0
+
+	elseif cidData.state == 8 and msgcontains(msg, '') then
+		npcHandler:playerSay(cid, "Well, and again it was shown: I am right and Netlios is wrong!", 1)
+		cidData.state = 8
 	end
-elseif talk_state == 2 and msgcontains(msg, '') then
-	npcHandler:say("Then I don't want to talk to you.", 1)
-	talk_state = 0
-	npcHandler:releaseFocus()
-	npcHandler:resetNpc()
-
-elseif talk_state == 4 and msgcontains(msg, 'anaso') and msgcontains(msg, '41') and msgcontains(msg, 'mother') and msgcontains(msg, '117') or talk_state == 4 and msgcontains(msg, 'Anaso') and msgcontains(msg, '41') and msgcontains(msg, 'Mother') and msgcontains(msg, '117') then
-	npcHandler:say("Hmmm, maybe. What can you tell me about the second 'adventurer'?", 1)
-	talk_state = 5
-elseif talk_state == 4 and msgcontains(msg, '') then
-	npcHandler:say("No, sorry, that doesn't sound correct to me. Maybe you should reconsider your words one more time...", 1)
-	talk_state = 4
-
-elseif talk_state == 5 and msgcontains(msg, 'elaeus') and msgcontains(msg, '39') and msgcontains(msg, 'dragon') and msgcontains(msg, '100') or talk_state == 5 and msgcontains(msg, 'Elaeus') and msgcontains(msg, '39') and msgcontains(msg, 'Dragon') and msgcontains(msg, '100') then
-	npcHandler:say("Yes, that might be true. What did you find out about the third man?", 1)
-	talk_state = 6
-elseif talk_state == 5 and msgcontains(msg, '') then
-	npcHandler:say("No, no, no! Think about it, that simply can't be true!", 1)
-	talk_state = 5
-
-elseif talk_state == 6 and msgcontains(msg, 'gadinius') and msgcontains(msg, '42') and msgcontains(msg, 'fire') and msgcontains(msg, '83') or talk_state == 6 and msgcontains(msg, 'Gadinius') and msgcontains(msg, '42') and msgcontains(msg, 'Fire') and msgcontains(msg, '83') then
-	npcHandler:say("Correct again! Hmmmm... I doubt you know anything about the fourth person!", 1)
-	talk_state = 7
-elseif talk_state == 6 and msgcontains(msg, '') then
-	npcHandler:say("Hmmmm... well, no. That is not true, it does not fit to the data provided by the books.", 1)
-	talk_state = 6
-
-elseif talk_state == 7 and msgcontains(msg, 'heso') and msgcontains(msg, '40') and msgcontains(msg, 'troll') and msgcontains(msg, '66') or talk_state == 7 and msgcontains(msg, 'Heso') and msgcontains(msg, '40') and msgcontains(msg, 'Troll') and msgcontains(msg, '66') then
-	npcHandler:say("Yes! Really, how did you figure that out? I bet, you don't know anything about the last adventurer!", 1)
-	talk_state = 8
-elseif talk_state == 7 and msgcontains(msg, '') then
-	npcHandler:say("No, sorry. Incorrect...", 1)
-	talk_state = 7
-	
-elseif talk_state == 8 and msgcontains(msg, 'hestus') and msgcontains(msg, '38') and msgcontains(msg, 'poison') and msgcontains(msg, '134') or talk_state == 8 and msgcontains(msg, 'Hestus') and msgcontains(msg, '38') and msgcontains(msg, 'Poison') and msgcontains(msg, '134') then
-	npcHandler:say("That's right! Why didn't I see it? It's obvious, Netlios was right, and his stories are great! Wait, I'll give you something!", 1)
-	DESERTTPROOM = doPlayerAddItem(cid, 2088, 1)
-	doSetItemActionId(DESERTTPROOM, 2016)
-	doSetItemSpecialDescription(DESERTTPROOM, "(Key: 4023)")
-	talk_state = 0
-elseif talk_state == 8 and msgcontains(msg, '') then
-	npcHandler:say("Well, and again it was shown: I am right and Netlios is wrong!", 1)
-	talk_state = 8
-	
-end		
     return true
 end
 

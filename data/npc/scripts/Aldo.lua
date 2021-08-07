@@ -5,10 +5,10 @@ local npcHandler = NpcHandler:new(keywordHandler)
 NpcSystem.parseParameters(npcHandler)
 
 -- OTServ event handling functions
-function onCreatureAppear(cid)			npcHandler:onCreatureAppear(cid)			end
-function onCreatureDisappear(cid)		npcHandler:onCreatureDisappear(cid)			end
-function onCreatureSay(cid, type, msg)		npcHandler:onCreatureSay(cid, type, msg)		end
-function onThink()				npcHandler:onThink()					end
+function onCreatureAppear(cid)         npcHandler:onCreatureAppear(cid)         end
+function onCreatureDisappear(cid)      npcHandler:onCreatureDisappear(cid)      end
+function onCreatureSay(cid, type, msg) npcHandler:onCreatureSay(cid, type, msg) end
+function onThink()                     npcHandler:onThink()                     end
 
 local shopModule = ShopModule:new()
 npcHandler:addModule(shopModule)
@@ -47,36 +47,38 @@ keywordHandler:addKeyword({'shoes'}, StdModule.say, {npcHandler = npcHandler, on
 keywordHandler:addKeyword({'trouser'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "We offer leather legs and studded legs."})
 
 function creatureSayCallback(cid, type, msg)
-	if(npcHandler.focus ~= cid) then
+	if not npcHandler:hasFocus(cid) then
 		return false
 	end
-	
-if msgcontains(msg, 'soft boots') or msgcontains(msg, 'worn soft boots') or msgcontains(msg, 'soft boot') or msgcontains(msg, 'worn soft boot') then
-npcHandler:say('Do you want to repair your soft boots for 10000 gold coins?')
-talk_state = 1
 
-elseif msgcontains(msg, 'yes') and talk_state == 1 then
-	if getPlayerMoney(cid) >= 10000 then
-		if getPlayerItemCount(cid,2641) >= 1 then
-				doPlayerAddItem(cid,2358,1) 
-				doPlayerRemoveMoney(cid,10000)
-				doPlayerRemoveItem(cid,2641,1)
-				talk_state = 0
-		else	
-			npcHandler:say('You do not have that item.')
-			talk_state = 0
+	local cidData = npcHandler:getFocusPlayerData(cid)
+
+	if msgcontains(msg, 'soft boots') or msgcontains(msg, 'worn soft boots') or msgcontains(msg, 'soft boot') or msgcontains(msg, 'worn soft boot') then
+		npcHandler:playerSay(cid, 'Do you want to repair your soft boots for 10000 gold coins?')
+		cidData.state = 1
+
+	elseif msgcontains(msg, 'yes') and cidData.state == 1 then
+		if getPlayerMoney(cid) >= 10000 then
+			if getPlayerItemCount(cid,2641) >= 1 then
+					doPlayerAddItem(cid,2358,1)
+					doPlayerRemoveMoney(cid,10000)
+					doPlayerRemoveItem(cid,2641,1)
+					cidData.state = 0
+			else
+				npcHandler:playerSay(cid, 'You do not have that item.')
+				cidData.state = 0
+			end
+		else
+			npcHandler:playerSay(cid, 'You do not have enough money.')
+			cidData.state = 0
 		end
-	else	
-		npcHandler:say('You do not have enough money.')
-		talk_state = 0
-	end	
-else
-	npcHandler:say('Ok then.')
-	talk_state = 0
+	else
+		npcHandler:playerSay(cid, 'Ok then.')
+		cidData.state = 0
+	end
+
+	return true
 end
 
-return true
-end
-	
 npcHandler:setCallback(CALLBACK_MESSAGE_DEFAULT, creatureSayCallback)
 npcHandler:addModule(FocusModule:new())

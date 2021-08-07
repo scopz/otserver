@@ -7,10 +7,10 @@ NpcSystem.parseParameters(npcHandler)
 
 
 -- OTServ event handling functions
-function onCreatureAppear(cid)			npcHandler:onCreatureAppear(cid)			end
-function onCreatureDisappear(cid)		npcHandler:onCreatureDisappear(cid)			end
-function onCreatureSay(cid, type, msg)		npcHandler:onCreatureSay(cid, type, msg)		end
-function onThink()				npcHandler:onThink()					end
+function onCreatureAppear(cid)         npcHandler:onCreatureAppear(cid)         end
+function onCreatureDisappear(cid)      npcHandler:onCreatureDisappear(cid)      end
+function onCreatureSay(cid, type, msg) npcHandler:onCreatureSay(cid, type, msg) end
+function onThink()                     npcHandler:onThink()                     end
 
 local shopModule = ShopModule:new()
 npcHandler:addModule(shopModule)
@@ -109,20 +109,20 @@ keywordHandler:addKeyword({'trousers'}, StdModule.say, {npcHandler = npcHandler,
 keywordHandler:addKeyword({'legs'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "I am selling chain legs. Do you want to buy any?"})
 keywordHandler:addKeyword({'spellbook'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "I have none here."})
 
-function creatureSayCallback(cid, type, msg) msg = string.lower(msg)
+function creatureSayCallback(cid, type, msg)
+	msg = string.lower(msg)
 
 	if msgcontains(msg, 'heal') then
 		if getCreatureHealth(cid) <= 39 then
-			npcHandler:say("You are looking really bad. Let me heal your wounds.", 1)
+			npcHandler:playerSay(cid, "You are looking really bad. Let me heal your wounds.", 1)
 			doCreatureAddHealth(cid, -getCreatureHealth(cid)+40)
 			doSendMagicEffect(getPlayerPosition(cid), 12)
 		else
-			npcHandler:say("You aren't looking really bad. Sorry, I can't help you.", 1)
+			npcHandler:playerSay(cid, "You aren't looking really bad. Sorry, I can't help you.", 1)
 		end
-	end		
+	end
     return true
 end
-
 
 
 local spellSellModule = SpellSellModule:new()

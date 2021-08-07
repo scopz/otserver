@@ -3380,6 +3380,9 @@ bool Game::playerSay(uint32_t playerId, uint16_t channelId, SpeakClasses type,
 		case SPEAK_YELL:
 			return playerYell(player, text);
 			break;
+		case SPEAK_CHANNEL_NPC:
+			return playerSpeakToNpc(player, text);
+			break;
 		case SPEAK_PRIVATE:
 		case SPEAK_PRIVATE_RED:
 		case SPEAK_RVR_ANSWER:
@@ -3562,6 +3565,27 @@ bool Game::playerYell(Player* player, const std::string& text)
 	}
 
 	return !isExhausted;
+}
+
+bool Game::playerSpeakToNpc(Player* player, const std::string& text)
+{
+	// This somewhat complex construct ensures that the cached SpectatorVec
+	// is used if available and if it can be used, else a local vector is
+	// used. (Hopefully the compiler will optimize away the construction of
+	// the temporary when it's not used.
+	SpectatorVec list;
+	SpectatorVec::const_iterator it;
+
+	getSpectators(list, player->getPosition(), false, false,
+		Map::clientViewportX, Map::clientViewportX,
+		Map::clientViewportY, Map::clientViewportY);
+
+	//event method
+	for(it = list.begin(); it != list.end(); ++it){
+		if ((*it)->getNpc()) (*it)->onCreatureSay(player, SPEAK_CHANNEL_NPC, text);
+	}
+
+	return true;
 }
 
 bool Game::playerSpeakTo(Player* player, SpeakClasses type, const std::string& receiver,

@@ -8,31 +8,31 @@ NpcSystem.parseParameters(npcHandler)
 
 
 -- OTServ event handling functions
-function onCreatureAppear(cid)			npcHandler:onCreatureAppear(cid)			end
-function onCreatureDisappear(cid)		npcHandler:onCreatureDisappear(cid)			end
-function onCreatureSay(cid, type, msg)		npcHandler:onCreatureSay(cid, type, msg)		end
-function onThink()				npcHandler:onThink()					end
+function onCreatureAppear(cid)         npcHandler:onCreatureAppear(cid)         end
+function onCreatureDisappear(cid)      npcHandler:onCreatureDisappear(cid)      end
+function onCreatureSay(cid, type, msg) npcHandler:onCreatureSay(cid, type, msg) end
+function onThink()                     npcHandler:onThink()                     end
 
-	function FocusModule:init(handler)
+function FocusModule:init(handler)
 	FOCUS_GREETSWORDS = {'hi maryza', 'hello maryza', 'hiho maryza'}
 	FOCUS_FAREWELLSWORDS = {'bye', 'farewell', 'hi jimbin', 'hello jimbin', 'hiho jimbin'}
-		self.npcHandler = handler
-		for i, word in pairs(FOCUS_GREETSWORDS) do
-			local obj = {}
-			table.insert(obj, word)
-			obj.callback = FOCUS_GREETSWORDS.callback or FocusModule.messageMatcher
-			handler.keywordHandler:addKeyword(obj, FocusModule.onGreet, {module = self})
-		end
-		
-		for i, word in pairs(FOCUS_FAREWELLSWORDS) do
-			local obj = {}
-			table.insert(obj, word)
-			obj.callback = FOCUS_FAREWELLSWORDS.callback or FocusModule.messageMatcher
-			handler.keywordHandler:addKeyword(obj, FocusModule.onFarewell, {module = self})
-		end
-		
-		return true
+	self.npcHandler = handler
+	for i, word in pairs(FOCUS_GREETSWORDS) do
+		local obj = {}
+		table.insert(obj, word)
+		obj.callback = FOCUS_GREETSWORDS.callback or FocusModule.messageMatcher
+		handler.keywordHandler:addKeyword(obj, FocusModule.onGreet, {module = self})
 	end
+
+	for i, word in pairs(FOCUS_FAREWELLSWORDS) do
+		local obj = {}
+		table.insert(obj, word)
+		obj.callback = FOCUS_FAREWELLSWORDS.callback or FocusModule.messageMatcher
+		handler.keywordHandler:addKeyword(obj, FocusModule.onFarewell, {module = self})
+	end
+
+	return true
+end
 
 local shopModule = ShopModule:new()
 npcHandler:addModule(shopModule)
@@ -69,13 +69,13 @@ keywordHandler:addKeyword({'have'}, StdModule.say, {npcHandler = npcHandler, onl
 keywordHandler:addKeyword({'food'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "I sell normal and brown bread, meat, ham, cookies, rolls, and cheese made of mushrooms."})
 
 
-function creatureSayCallback(cid, type, msg) msg = string.lower(msg)
-if  msgcontains(msg, 'jimbin') or msgcontains(msg, 'jimbin') then
+function creatureSayCallback(cid, type, msg)
+	msg = string.lower(msg)
+	if  msgcontains(msg, 'jimbin') then
 
-elseif msgcontains(msg, 'hi') or msgcontains(msg, 'Hi') or msgcontains(msg, 'hello') or msgcontains(msg, 'Hello') or msgcontains(msg, 'Hiho') or msgcontains(msg, 'hiho') then
-	npcHandler:say("Talking to me?", 1)
-	talk_state = 0			
-        end	
+	elseif msgcontains(msg, 'hi') or msgcontains(msg, 'hello') or msgcontains(msg, 'hiho') then
+		npcHandler:playerSay(cid, "Talking to me?", 1)
+	end
     return true
 end
 

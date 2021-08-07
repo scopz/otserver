@@ -7,10 +7,10 @@ NpcSystem.parseParameters(npcHandler)
 
 
 -- OTServ event handling functions
-function onCreatureAppear(cid)			npcHandler:onCreatureAppear(cid)			end
-function onCreatureDisappear(cid)		npcHandler:onCreatureDisappear(cid)			end
-function onCreatureSay(cid, type, msg)		npcHandler:onCreatureSay(cid, type, msg)		end
-function onThink()				npcHandler:onThink()					end
+function onCreatureAppear(cid)         npcHandler:onCreatureAppear(cid)         end
+function onCreatureDisappear(cid)      npcHandler:onCreatureDisappear(cid)      end
+function onCreatureSay(cid, type, msg) npcHandler:onCreatureSay(cid, type, msg) end
+function onThink()                     npcHandler:onThink()                     end
 
 
 keywordHandler:addKeyword({'job'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "I am the master of the hall of the ancients."})
@@ -63,25 +63,21 @@ keywordHandler:addKeyword({'equipment'}, StdModule.say, {npcHandler = npcHandler
 keywordHandler:addKeyword({'fight'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "The life ot a dwarf is an eternal struggle. It hardens us and makes us the fine race we are, jawoll."})
 keywordHandler:addKeyword({'time'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "I think it's the fourth age of the yellow flame, isn't it?"})
 
-function creatureSayCallback(cid, type, msg) msg = string.lower(msg)
-if msgcontains(msg, 'heal') then
-	if getCreatureHealth(cid) <= 39 then
-	npcHandler:say("You are looking really bad. Let me heal your wounds.", 1)
-	doCreatureAddHealth(cid, -getCreatureHealth(cid)+40)
-	doSendMagicEffect(getPlayerPosition(cid), 12)
-	talk_state = 0
-	return true
-	else
-	npcHandler:say("You aren't looking really bad. Sorry, I can't help you.", 1)
-	return true
+function creatureSayCallback(cid, type, msg)
+	msg = string.lower(msg)
+	if msgcontains(msg, 'heal') then
+		if getCreatureHealth(cid) <= 39 then
+			npcHandler:playerSay(cid, "You are looking really bad. Let me heal your wounds.", 1)
+			doCreatureAddHealth(cid, -getCreatureHealth(cid)+40)
+			doSendMagicEffect(getPlayerPosition(cid), 12)
+			return true
+		else
+			npcHandler:playerSay(cid, "You aren't looking really bad. Sorry, I can't help you.", 1)
+			return true
+		end
+		return true
 	end
-	talk_state = 0	
-    return true
-end
-
-if(npcHandler.focus ~= cid) then
 	return false
-end		
 end
 
 

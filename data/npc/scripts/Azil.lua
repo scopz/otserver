@@ -5,10 +5,10 @@ local npcHandler = NpcHandler:new(keywordHandler)
 NpcSystem.parseParameters(npcHandler)
 
 -- OTServ event handling functions
-function onCreatureAppear(cid)			npcHandler:onCreatureAppear(cid)			end
-function onCreatureDisappear(cid)		npcHandler:onCreatureDisappear(cid)			end
-function onCreatureSay(cid, type, msg)		npcHandler:onCreatureSay(cid, type, msg)		end
-function onThink()				npcHandler:onThink()					end
+function onCreatureAppear(cid)         npcHandler:onCreatureAppear(cid)         end
+function onCreatureDisappear(cid)      npcHandler:onCreatureDisappear(cid)      end
+function onCreatureSay(cid, type, msg) npcHandler:onCreatureSay(cid, type, msg) end
+function onThink()                     npcHandler:onThink()                     end
 
 local shopModule = ShopModule:new()
 npcHandler:addModule(shopModule)
@@ -28,6 +28,7 @@ shopModule:addSellableItem({'wooden shield'}, 2512, 3)
 shopModule:addSellableItem({'battle shield'}, 2513, 60)
 shopModule:addSellableItem({'brass legs'}, 2478, 49)
 shopModule:addSellableItem({'chain legs'}, 2648, 20)
+shopModule:addSellableItem({'plate legs'}, 2647, 115)
 
 shopModule:addBuyableItem({'leather armor'}, 2467, 35)
 shopModule:addBuyableItem({'chain armor'}, 2464, 200)

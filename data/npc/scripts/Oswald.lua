@@ -7,10 +7,10 @@ NpcSystem.parseParameters(npcHandler)
 
 
 -- OTServ event handling functions
-function onCreatureAppear(cid)			npcHandler:onCreatureAppear(cid)			end
-function onCreatureDisappear(cid)		npcHandler:onCreatureDisappear(cid)			end
-function onCreatureSay(cid, type, msg)		npcHandler:onCreatureSay(cid, type, msg)		end
-function onThink()				npcHandler:onThink()					end
+function onCreatureAppear(cid)         npcHandler:onCreatureAppear(cid)         end
+function onCreatureDisappear(cid)      npcHandler:onCreatureDisappear(cid)      end
+function onCreatureSay(cid, type, msg) npcHandler:onCreatureSay(cid, type, msg) end
+function onThink()                     npcHandler:onThink()                     end
 
 
 keywordHandler:addKeyword({'how are you'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "If there weren't so many people harassing me, life could be great."})
@@ -56,24 +56,27 @@ keywordHandler:addKeyword({'necromant nectar'}, StdModule.say, {npcHandler = npc
 
 
 
-function creatureSayCallback(cid, type, msg) msg = string.lower(msg)
-	if(npcHandler.focus ~= cid) then
+function creatureSayCallback(cid, type, msg)
+	if not npcHandler:hasFocus(cid) then
 		return false
 	end
-if msgcontains(msg, 'monster') or msgcontains(msg, 'Monster') then
-npcHandler:say("AHHHH!!! WHERE??? WHERE???", 1)
-npcHandler:releaseFocus()
-npcHandler:resetNpc()
+	msg = string.lower(msg)
+	local cidData = npcHandler:getFocusPlayerData(cid)
 
-elseif msgcontains(msg, 'rumo') or msgcontains(msg, 'Rumo') or msgcontains(msg, 'gossip') or msgcontains(msg, 'new') then
-npcHandler:say("You know a rumour? TELL ME! TELL ME! TELL ME!", 1)
-talk_state = 3
+	if msgcontains(msg, 'monster') then
+		npcHandler:playerSay(cid, "AHHHH!!! WHERE??? WHERE???", 1)
+		npcHandler:releaseFocus(cid)
+		npcHandler:resetNpc(cid)
 
-elseif talk_state == 3 and msgcontains(msg, '') then
-npcHandler:say("Fascinating! Absolutely fascinating!", 1)	
-talk_state = 0
-end
-    return true
+	elseif msgcontains(msg, 'rumo') or msgcontains(msg, 'gossip') or msgcontains(msg, 'new') then
+		npcHandler:playerSay(cid, "You know a rumour? TELL ME! TELL ME! TELL ME!", 1)
+		cidData.state = 3
+
+	elseif cidData.state == 3 and msgcontains(msg, '') then
+		npcHandler:playerSay(cid, "Fascinating! Absolutely fascinating!", 1)	
+		cidData.state = 0
+	end
+	return true
 end
 
 

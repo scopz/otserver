@@ -7,11 +7,10 @@ NpcSystem.parseParameters(npcHandler)
 
 
 -- OTServ event handling functions
-function onCreatureAppear(cid)			npcHandler:onCreatureAppear(cid)			end
-function onCreatureDisappear(cid)		npcHandler:onCreatureDisappear(cid)			end
-function onCreatureSay(cid, type, msg)		npcHandler:onCreatureSay(cid, type, msg)		end
-function onThink()				npcHandler:onThink()					end
-
+function onCreatureAppear(cid)         npcHandler:onCreatureAppear(cid)         end
+function onCreatureDisappear(cid)      npcHandler:onCreatureDisappear(cid)      end
+function onCreatureSay(cid, type, msg) npcHandler:onCreatureSay(cid, type, msg) end
+function onThink()                     npcHandler:onThink()                     end
 
 keywordHandler:addKeyword({'how are you'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "Oh, this headache, one of the beers frodo served me must have been foul."})
 keywordHandler:addKeyword({'job'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "I am... a traveller."})
@@ -24,30 +23,28 @@ keywordHandler:addKeyword({'william'}, StdModule.say, {npcHandler = npcHandler, 
 keywordHandler:addKeyword({'money'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "I don't know anything about money, missing or not."})
 keywordHandler:addKeyword({'todd'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "Uh .. I... I met a Todd on the road. He told me he was traveling to Venore, look there for your Todd."})
 
-function creatureSayCallback(cid, type, msg) msg = string.lower(msg)
-	if(npcHandler.focus ~= cid) then
+function creatureSayCallback(cid, type, msg)
+	if not npcHandler:hasFocus(cid) then
 		return false
 	end
-if msgcontains(msg, 'karl') or msgcontains(msg, 'Karl') then
-	npcHandler:say("Uhm, never heared about him... and you can't proof otherwise.", 1)
-	talk_state = 0
-	npcHandler:releaseFocus()
-	npcHandler:resetNpc()
+	msg = string.lower(msg)
 
-elseif msgcontains(msg, 'smuggler') or msgcontains(msg, 'Smuggler') then
-	npcHandler:say("I am a honest person and don't like to be insulted!", 1)
-	talk_state = 0
-	npcHandler:releaseFocus()
-	npcHandler:resetNpc()
+	if msgcontains(msg, 'karl') then
+		npcHandler:playerSay(cid, "Uhm, never heared about him... and you can't proof otherwise.", 1)
+		npcHandler:releaseFocus(cid)
+		npcHandler:resetNpc(cid)
 
-elseif msgcontains(msg, 'carlin') or msgcontains(msg, 'Carlin') then
-	npcHandler:say("I never was there. Now leave me alone.", 1)
-	talk_state = 0
-	npcHandler:releaseFocus()
-	npcHandler:resetNpc()	
-	
-end		
-    return true
+	elseif msgcontains(msg, 'smuggler') then
+		npcHandler:playerSay(cid, "I am a honest person and don't like to be insulted!", 1)
+		npcHandler:releaseFocus(cid)
+		npcHandler:resetNpc(cid)
+
+	elseif msgcontains(msg, 'carlin') then
+		npcHandler:playerSay(cid, "I never was there. Now leave me alone.", 1)
+		npcHandler:releaseFocus(cid)
+		npcHandler:resetNpc(cid)
+	end
+	return true
 end
 
 npcHandler:setCallback(CALLBACK_MESSAGE_DEFAULT, creatureSayCallback)

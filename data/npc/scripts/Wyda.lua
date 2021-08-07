@@ -5,29 +5,28 @@ local npcHandler = NpcHandler:new(keywordHandler)
 NpcSystem.parseParameters(npcHandler)
 
 -- OTServ event handling functions
-function onCreatureAppear(cid)			npcHandler:onCreatureAppear(cid)			end
-function onCreatureDisappear(cid)		npcHandler:onCreatureDisappear(cid)			end
-function onCreatureSay(cid, type, msg)		npcHandler:onCreatureSay(cid, type, msg)		end
-function onThink()				npcHandler:onThink()					end
+function onCreatureAppear(cid)         npcHandler:onCreatureAppear(cid)         end
+function onCreatureDisappear(cid)      npcHandler:onCreatureDisappear(cid)      end
+function onCreatureSay(cid, type, msg) npcHandler:onCreatureSay(cid, type, msg) end
+function onThink()                     npcHandler:onThink()                     end
 
 function greetCallback(cid)
 	if getPlayerVocation(cid) == 2 or getPlayerVocation(cid) == 6 then
-		if getPlayerItemCount(cid, 2182) or getPlayerItemCount(cid, 2186) or getPlayerItemCount(cid, 2185) or getPlayerItemCount(cid, 2181) or getPlayerItemCount(cid, 2183) then 
-		npcHandler:setMessage(MESSAGE_GREET, "Welcome back, ".. getPlayerName(cid) ..". Hey, nice wand you have there!")
+		if getPlayerItemCount(cid, 2182) or getPlayerItemCount(cid, 2186) or getPlayerItemCount(cid, 2185) or getPlayerItemCount(cid, 2181) or getPlayerItemCount(cid, 2183) then
+			npcHandler:setMessage(MESSAGE_GREET, "Welcome back, ".. getPlayerName(cid) ..". Hey, nice wand you have there!")
 		else
-		npcHandler:setMessage(MESSAGE_GREET, "Welcome to my hut, ".. getPlayerName(cid) .."! It's always nice to see a druid here.")
+			npcHandler:setMessage(MESSAGE_GREET, "Welcome to my hut, ".. getPlayerName(cid) .."! It's always nice to see a druid here.")
 		end
 		return true
-		
+
 	elseif getPlayerVocation(cid) == 1 or getPlayerVocation(cid) == 5 then
-	npcHandler:setMessage(MESSAGE_GREET, "What do you want, ".. getPlayerName(cid) .."?")
-	return true
-	
+		npcHandler:setMessage(MESSAGE_GREET, "What do you want, ".. getPlayerName(cid) .."?")
+		return true
 	else
-	npcHandler:setMessage(MESSAGE_GREET, "Good day, ".. getPlayerName(cid) ..".")
-	return true
-	end	
-end	
+		npcHandler:setMessage(MESSAGE_GREET, "Good day, ".. getPlayerName(cid) ..".")
+		return true
+	end
+end
 npcHandler:setCallback(CALLBACK_GREET, greetCallback)
 
 keywordHandler:addKeyword({'job'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "I am a witch. Didn't you notice?"})
@@ -102,58 +101,60 @@ keywordHandler:addKeyword({'men'}, StdModule.say, {npcHandler = npcHandler, only
 keywordHandler:addKeyword({'man'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "There are only female witches."})
 
 function creatureSayCallback(cid, type, msg)
-	if(npcHandler.focus ~= cid) then
+	if not npcHandler:hasFocus(cid) then
 		return false
 	end
+	msg = string.lower(msg)
+	local cidData = npcHandler:getFocusPlayerData(cid)
 
-if msgcontains(msg, 'become') and msgcontains(msg, 'witch') or msgcontains(msg, 'Become') and msgcontains(msg, 'witch') then
-	if getPlayerSex(cid) == 1 then
-	npcHandler:say("You're a MAN!", 1)
-	else
-	npcHandler:say("You can't just become a witch. Either you are or you aren't - and YOU obviously aren't!", 1)
-	end
-	talk_state = 0
-
-elseif msgcontains(msg, 'quest') or msgcontains(msg, 'Quest') then	
-	npcHandler:say("A quest? Well, if you're so keen on doing me a favour... Why don't you try to find a blood herb?", 1)
-	talk_state = 0
-
-elseif msgcontains(msg, 'blood herb') or msgcontains(msg, 'Blood herb') then
-	if getPlayerItemCount(cid, 2798) >= 1 then
-	npcHandler:say("Do you have a blood herb for me?", 1)
-	talk_state = 1	
-	else
-	npcHandler:say("The blood herb is very rare. This plant would be very useful for me, but I don't know any accessible places to find it.", 1)
-	talk_state = 0		
-	end
-	
-elseif talk_state == 1 and msgcontains(msg, 'yes') or talk_state == 1 and msgcontains(msg, 'yes') then
-	if doPlayerRemoveItem(cid, 2798, 1) == true then
-		if getPlayerVocation(cid) == 1 or getPlayerVocation(cid) == 5 then
-		doPlayerAddMoney(cid, 400)
-		npcHandler:say("Hmm, thanks. Take this.", 1)
-		elseif getPlayerVocation(cid) == 2 or getPlayerVocation(cid) == 6 then
-		doPlayerAddItem(cid, 2324, 1)
-		npcHandler:say("Thank you so much! Here, let me give you a reward...", 1)
+	if msgcontains(msg, 'become') and msgcontains(msg, 'witch') then
+		if getPlayerSex(cid) == 1 then
+			npcHandler:playerSay(cid, "You're a MAN!", 1)
 		else
-		doPlayerAddMoney(cid, 300)
-		npcHandler:say("Thank you! Here are some coins for your help.", 1)
+			npcHandler:playerSay(cid, "You can't just become a witch. Either you are or you aren't - and YOU obviously aren't!", 1)
 		end
-		talk_state = 0	
-	else
-	npcHandler:say("Well, do you own one or not?", 1)
-	talk_state = 0		
-	end
-	
-elseif msgcontains(msg, 'herbs') or msgcontains(msg, 'Herbs') then	
-	npcHandler:say("The swamp is home to a wide variety of herbs, but the most famous is the blood herb.", 1)
-	talk_state = 0
+		cidData.state = 0
 
-elseif msgcontains(msg, 'witch') or msgcontains(msg, 'witch') then	
-	npcHandler:say("Aye, I am a witch.", 1)
-	talk_state = 0	
-end		
-    return true
+	elseif msgcontains(msg, 'quest') then
+		npcHandler:playerSay(cid, "A quest? Well, if you're so keen on doing me a favour... Why don't you try to find a blood herb?", 1)
+		cidData.state = 0
+
+	elseif msgcontains(msg, 'blood herb') then
+		if getPlayerItemCount(cid, 2798) >= 1 then
+			npcHandler:playerSay(cid, "Do you have a blood herb for me?", 1)
+			cidData.state = 1
+		else
+			npcHandler:playerSay(cid, "The blood herb is very rare. This plant would be very useful for me, but I don't know any accessible places to find it.", 1)
+			cidData.state = 0
+		end
+
+	elseif cidData.state == 1 and msgcontains(msg, 'yes') or cidData.state == 1 and msgcontains(msg, 'yes') then
+		if doPlayerRemoveItem(cid, 2798, 1) == true then
+			if getPlayerVocation(cid) == 1 or getPlayerVocation(cid) == 5 then
+				doPlayerAddMoney(cid, 400)
+				npcHandler:playerSay(cid, "Hmm, thanks. Take this.", 1)
+			elseif getPlayerVocation(cid) == 2 or getPlayerVocation(cid) == 6 then
+				doPlayerAddItem(cid, 2324, 1)
+				npcHandler:playerSay(cid, "Thank you so much! Here, let me give you a reward...", 1)
+			else
+				doPlayerAddMoney(cid, 300)
+				npcHandler:playerSay(cid, "Thank you! Here are some coins for your help.", 1)
+			end
+			cidData.state = 0
+		else
+			npcHandler:playerSay(cid, "Well, do you own one or not?", 1)
+			cidData.state = 0
+		end
+
+	elseif msgcontains(msg, 'herbs') then
+		npcHandler:playerSay(cid, "The swamp is home to a wide variety of herbs, but the most famous is the blood herb.", 1)
+		cidData.state = 0
+
+	elseif msgcontains(msg, 'witch') then
+		npcHandler:playerSay(cid, "Aye, I am a witch.", 1)
+		cidData.state = 0
+	end
+	return true
 end
 
 npcHandler:setCallback(CALLBACK_MESSAGE_DEFAULT, creatureSayCallback)

@@ -7,10 +7,10 @@ NpcSystem.parseParameters(npcHandler)
 
 
 -- OTServ event handling functions
-function onCreatureAppear(cid)			npcHandler:onCreatureAppear(cid)			end
-function onCreatureDisappear(cid)		npcHandler:onCreatureDisappear(cid)			end
-function onCreatureSay(cid, type, msg)		npcHandler:onCreatureSay(cid, type, msg)		end
-function onThink()				npcHandler:onThink()					end
+function onCreatureAppear(cid)         npcHandler:onCreatureAppear(cid)         end
+function onCreatureDisappear(cid)      npcHandler:onCreatureDisappear(cid)      end
+function onCreatureSay(cid, type, msg) npcHandler:onCreatureSay(cid, type, msg) end
+function onThink()                     npcHandler:onThink()                     end
 
 keywordHandler:addKeyword({'news'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "I hardly hear any news down here."})
 keywordHandler:addKeyword({'name'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "My name is Partos, but you can call me Party."})
@@ -38,58 +38,60 @@ keywordHandler:addKeyword({'time'}, StdModule.say, {npcHandler = npcHandler, onl
 keywordHandler:addKeyword({'waterpipe'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "My waterpipe? I lost it. But it doesn't matter. I quit smoking anyway."})
 keywordHandler:addKeyword({'excalibug'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "Excalibug? No way that I tell you something about it!"})
 
-function creatureSayCallback(cid, type, msg) msg = string.lower(msg)
-	if(npcHandler.focus ~= cid) then
+function creatureSayCallback(cid, type, msg)
+	if not npcHandler:hasFocus(cid) then
 		return false
 	end
-if msgcontains(msg, 'job') or msgcontains(msg, 'Job') then
-	npcHandler:say("Guess it! I give you a hint: I am not in this cell to clean it up! ...", 1)
-	npcHandler:say("I wished, I would have never left Ankrahmun.", 1)
-	talk_state = 0
-	
-elseif msgcontains(msg, 'ankrahmun') or msgcontains(msg, 'Ankrahmun') then
-	npcHandler:say("Yes, I've lived in Ankrahmun for quite some time. Ahh, good old times! ...", 1)
-	npcHandler:say("Unfortunately I had to relocate. <sigh> ...", 5)
-	npcHandler:say("Business reasons - you know.", 9)
-	talk_state = 0
+	msg = string.lower(msg)
+	local cidData = npcHandler:getFocusPlayerData(cid)
 
-elseif msgcontains(msg, 'djinn') and getPlayerStorageValue(cid,8130) == 1 or msgcontains(msg, "baa'leal") and getPlayerStorageValue(cid,8130) == 1 or msgcontains(msg, 'supplies') and getPlayerStorageValue(cid,8130) == 1 or msgcontains(msg, "mal'ouquah") and getPlayerStorageValue(cid,8130) == 1 then
-	npcHandler:say("What!? I bet, Baa'leal sent you! ...", 1)
-	npcHandler:say("I won't tell you anything! Shove off!", 5)
-	talk_state = 0
-	setPlayerStorageValue(cid,8130,2)
-	addEvent(message31, 5000, pos)	
+	if msgcontains(msg, 'job') then
+		npcHandler:playerSay(cid, "Guess it! I give you a hint: I am not in this cell to clean it up! ...", 1)
+		npcHandler:playerSay(cid, "I wished, I would have never left Ankrahmun.", 1)
+		cidData.state = 0
 
-elseif msgcontains(msg, 'djinn') or msgcontains(msg, "baa'leal") or msgcontains(msg, 'supplies') or msgcontains(msg, "mal'ouquah") then
-	npcHandler:say("I won't talk about that.", 1)
-	talk_state = 0
+	elseif msgcontains(msg, 'ankrahmun') then
+		npcHandler:playerSay(cid, "Yes, I've lived in Ankrahmun for quite some time. Ahh, good old times! ...", 1)
+		npcHandler:playerSay(cid, "Unfortunately I had to relocate. <sigh> ...", 5)
+		npcHandler:playerSay(cid, "Business reasons - you know.", 9)
+		cidData.state = 0
 
-elseif msgcontains(msg, 'grape') then
-	npcHandler:say("Do you have any grapes with you?", 1)
-	talk_state = 1	
-elseif talk_state == 1 and msgcontains(msg, 'yes') then
-	if doPlayerRemoveItem(cid, 2681, 1) == true then
-	npcHandler:say("What do you want for that ...ohhh... tasty ...uhm... sweet ...drool... delicous ...hmm... grapes?", 1)
-	talk_state = 2
-	else
-	npcHandler:say("Go away, if you don't have any grapes.", 1)
-	talk_state = 0
+	elseif msgcontains(msg, 'djinn') and getPlayerStorageValue(cid,8130) == 1 or msgcontains(msg, "baa'leal") and getPlayerStorageValue(cid,8130) == 1 or msgcontains(msg, 'supplies') and getPlayerStorageValue(cid,8130) == 1 or msgcontains(msg, "mal'ouquah") and getPlayerStorageValue(cid,8130) == 1 then
+		npcHandler:playerSay(cid, "What!? I bet, Baa'leal sent you! ...", 1)
+		npcHandler:playerSay(cid, "I won't tell you anything! Shove off!", 5)
+		cidData.state = 0
+		setPlayerStorageValue(cid,8130,2)
+		addEvent(message31, 5000, pos)
+
+	elseif msgcontains(msg, 'djinn') or msgcontains(msg, "baa'leal") or msgcontains(msg, 'supplies') or msgcontains(msg, "mal'ouquah") then
+		npcHandler:playerSay(cid, "I won't talk about that.", 1)
+		cidData.state = 0
+
+	elseif msgcontains(msg, 'grape') then
+		npcHandler:playerSay(cid, "Do you have any grapes with you?", 1)
+		cidData.state = 1
+	elseif cidData.state == 1 and msgcontains(msg, 'yes') then
+		if doPlayerRemoveItem(cid, 2681, 1) == true then
+		npcHandler:playerSay(cid, "What do you want for that ...ohhh... tasty ...uhm... sweet ...drool... delicous ...hmm... grapes?", 1)
+		cidData.state = 2
+		else
+		npcHandler:playerSay(cid, "Go away, if you don't have any grapes.", 1)
+		cidData.state = 0
+		end
+
+	elseif cidData.state == 2 and msgcontains(msg, 'excalibug') then
+		npcHandler:playerSay(cid, "My late mentor once told me he found a wallcarving about this sword in a cave beneath the castle.", 1)
+		cidData.state = 2
+	elseif cidData.state == 2 and msgcontains(msg, 'wallcarving') then
+		npcHandler:playerSay(cid, "That part of the dungeon was recently blocked by a cave-in. It was unsecure before, and only a fool would have entered there. I stayed out and alive.", 1)
+		cidData.state = 0
 	end
-	
-elseif talk_state == 2 and msgcontains(msg, 'excalibug') then
-	npcHandler:say("My late mentor once told me he found a wallcarving about this sword in a cave beneath the castle.", 1)
-	talk_state = 2	
-elseif talk_state == 2 and msgcontains(msg, 'wallcarving') then
-	npcHandler:say("That part of the dungeon was recently blocked by a cave-in. It was unsecure before, and only a fool would have entered there. I stayed out and alive.", 1)
-	talk_state = 0	
-	
-end		
     return true
 end
 
 function message31(cid, type, msg)
-npcHandler:releaseFocus()
-npcHandler:resetNpc()
+npcHandler:releaseFocus(cid)
+npcHandler:resetNpc(cid)
 end
 npcHandler:setCallback(CALLBACK_MESSAGE_DEFAULT, creatureSayCallback)
 npcHandler:addModule(FocusModule:new())

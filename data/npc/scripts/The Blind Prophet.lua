@@ -7,10 +7,10 @@ NpcSystem.parseParameters(npcHandler)
 
 
 -- OTServ event handling functions
-function onCreatureAppear(cid)			npcHandler:onCreatureAppear(cid)			end
-function onCreatureDisappear(cid)		npcHandler:onCreatureDisappear(cid)			end
-function onCreatureSay(cid, type, msg)		npcHandler:onCreatureSay(cid, type, msg)		end
-function onThink()				npcHandler:onThink()					end
+function onCreatureAppear(cid)         npcHandler:onCreatureAppear(cid)         end
+function onCreatureDisappear(cid)      npcHandler:onCreatureDisappear(cid)      end
+function onCreatureSay(cid, type, msg) npcHandler:onCreatureSay(cid, type, msg) end
+function onThink()                     npcHandler:onThink()                     end
 
 keywordHandler:addKeyword({'name'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "Me put name away name long ago. Now only blind prophet of ape people are."})
 keywordHandler:addKeyword({'job'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "Me prophet and guardian is."})
@@ -26,26 +26,26 @@ keywordHandler:addKeyword({'hair'}, StdModule.say, {npcHandler = npcHandler, onl
 
 
 function creatureSayCallback(cid, type, msg)
-	if(npcHandler.focus ~= cid) then
+	if not npcHandler:hasFocus(cid) then
 		return false
 	end
+	msg = string.lower(msg)
+	local cidData = npcHandler:getFocusPlayerData(cid)
 	
 	if msgcontains(msg, 'transport') then
-	npcHandler:say('You want me to transport you to forbidden land?')
-	topic = 1
-	
-	elseif msgcontains(msg, 'yes') and topic == 1 then
-	npcHandler:say('Take care!')
-	doTeleportThing(cid, {x=33026, y=32580,z=6})
-	doSendMagicEffect(getCreaturePosition(cid), 10)
-	topic = 0
-	elseif msgcontains(msg, 'no') and topic == 1 then
-	npcHandler:say('Wise decision maybe.')
-	topic = 0	
-	elseif hasCondition(cid, CONDITION_INFIGHT) ~= 1 and topic == 1 then
-	npcHandler:say('Anger of battle is burning in you! First calm down.')
-	topic = 0
-	
+		npcHandler:playerSay(cid, 'You want me to transport you to forbidden land?')
+		cidData.state = 1
+	elseif msgcontains(msg, 'yes') and cidData.state == 1 then
+		npcHandler:playerSay(cid, 'Take care!')
+		doTeleportThing(cid, {x=33026, y=32580,z=6})
+		doSendMagicEffect(getCreaturePosition(cid), 10)
+		cidData.state = 0
+	elseif msgcontains(msg, 'no') and cidData.state == 1 then
+		npcHandler:playerSay(cid, 'Wise decision maybe.')
+		cidData.state = 0	
+	elseif hasCondition(cid, CONDITION_INFIGHT) ~= 1 and cidData.state == 1 then
+		npcHandler:playerSay(cid, 'Anger of battle is burning in you! First calm down.')
+		cidData.state = 0
 	end
 	return true
 end

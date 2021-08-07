@@ -6,10 +6,10 @@ NpcSystem.parseParameters(npcHandler)
 
 
 -- OTServ event handling functions
-function onCreatureAppear(cid)			npcHandler:onCreatureAppear(cid)			end
-function onCreatureDisappear(cid)		npcHandler:onCreatureDisappear(cid)			end
-function onCreatureSay(cid, type, msg)		npcHandler:onCreatureSay(cid, type, msg)		end
-function onThink()				npcHandler:onThink()					end
+function onCreatureAppear(cid)         npcHandler:onCreatureAppear(cid)         end
+function onCreatureDisappear(cid)      npcHandler:onCreatureDisappear(cid)      end
+function onCreatureSay(cid, type, msg) npcHandler:onCreatureSay(cid, type, msg) end
+function onThink()                     npcHandler:onThink()                     end
 
 function FocusModule:init(handler)
 	FOCUS_GREETSWORDS = {'hi queen', 'hello queen', 'hail queen', 'hail the queen'}
@@ -21,14 +21,14 @@ function FocusModule:init(handler)
 		obj.callback = FOCUS_GREETSWORDS.callback or FocusModule.messageMatcher
 		handler.keywordHandler:addKeyword(obj, FocusModule.onGreet, {module = self})
 	end
-		
+
 	for i, word in pairs(FOCUS_FAREWELLSWORDS) do
 		local obj = {}
 		table.insert(obj, word)
 		obj.callback = FOCUS_FAREWELLSWORDS.callback or FocusModule.messageMatcher
 		handler.keywordHandler:addKeyword(obj, FocusModule.onFarewell, {module = self})
 	end
-		
+
 	return true
 end
 
@@ -93,21 +93,20 @@ keywordHandler:addKeyword({'tbi'}, StdModule.say, {npcHandler = npcHandler, only
 keywordHandler:addKeyword({'eremo'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "It is said that he lives on a small island near Edron. Maybe the people there know more about him."})
 
 function creatureSayCallback(cid, type, msg)
-	if(npcHandler.focus ~= cid) then
+	if not npcHandler:hasFocus(cid) then
 		return false
 	end
+	msg = string.lower(msg)
 
 	-- The Postman Missions Quest
 	if msgcontains(msg, 'uniform') and getPlayerStorageValue(cid,233) == 5 then
-	npcHandler:say('I remember about those uniforms, they had a camouflage inlay so they could be worn the inside out too. I will send some colorsamples via mail to Mr. Postner.')
-	setPlayerStorageValue(cid,233,6)
-	talk_state = 0
-	
+		npcHandler:playerSay(cid, 'I remember about those uniforms, they had a camouflage inlay so they could be worn the inside out too. I will send some colorsamples via mail to Mr. Postner.')
+		setPlayerStorageValue(cid,233,6)
+
 	elseif msgcontains(msg, 'uniform') and getPlayerStorageValue(cid,233) == 0 then
-	npcHandler:say('The uniforms of our guards and soldiers are of unparraleled quality of course.')
-	talk_state = 0
+		npcHandler:playerSay(cid, 'The uniforms of our guards and soldiers are of unparraleled quality of course.')
 	end
-	
+
 	return true
 end
 

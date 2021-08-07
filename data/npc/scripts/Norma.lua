@@ -5,17 +5,17 @@ local npcHandler = NpcHandler:new(keywordHandler)
 NpcSystem.parseParameters(npcHandler)
 
 -- OTServ event handling functions
-function onCreatureAppear(cid)			npcHandler:onCreatureAppear(cid)			end
-function onCreatureDisappear(cid)		npcHandler:onCreatureDisappear(cid)			end
-function onCreatureSay(cid, type, msg)		npcHandler:onCreatureSay(cid, type, msg)		end
-function onThink()				npcHandler:onThink()					end
+function onCreatureAppear(cid)         npcHandler:onCreatureAppear(cid)         end
+function onCreatureDisappear(cid)      npcHandler:onCreatureDisappear(cid)      end
+function onCreatureSay(cid, type, msg) npcHandler:onCreatureSay(cid, type, msg) end
+function onThink()                     npcHandler:onThink()                     end
 
 function greetCallback(cid)
-	if isPremium(cid) == true then
+	if isPremium(cid) then
 		npcHandler:setMessage(MESSAGE_GREET,'Hello, hello, '.. getPlayerName(cid) ..'! Please come in, look, and buy!')
 		return true
 	else
-		npcHandler:say('I\'m sorry '.. getPlayerName(cid) ..', but I only serve premium account customers.')
+		npcHandler:playerSay(cid, 'I\'m sorry '.. getPlayerName(cid) ..', but I only serve premium account customers.')
 		return false
 	end
 end

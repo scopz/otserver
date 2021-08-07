@@ -7,51 +7,52 @@ NpcSystem.parseParameters(npcHandler)
 
 
 -- OTServ event handling functions
-function onCreatureAppear(cid)			npcHandler:onCreatureAppear(cid)			end
-function onCreatureDisappear(cid)		npcHandler:onCreatureDisappear(cid)			end
-function onCreatureSay(cid, type, msg)		npcHandler:onCreatureSay(cid, type, msg)		end
+function onCreatureAppear(cid)         npcHandler:onCreatureAppear(cid)         end
+function onCreatureDisappear(cid)      npcHandler:onCreatureDisappear(cid)      end
+function onCreatureSay(cid, type, msg) npcHandler:onCreatureSay(cid, type, msg) end
 
- function getMonstersfromArea(pos, radiusx, radiusy, stack)
- local monsters = { } 
- local starting = {x = (pos.x - 5), y = (pos.y - 5), z = pos.z, stackpos = stack} 
- local ending = {x = (pos.x + 5), y = (pos.y + 5), z = pos.z, stackpos = stack} 
- local checking = {x = starting.x, y = starting.y, z = starting.z, stackpos = starting.stackpos} 
-  repeat 
-      creature = getThingfromPos(checking) 
-       if creature.itemid > 0 then 
-     if isCreature(creature.uid) == true then
-      if isPlayer(creature.uid) == false then
-        table.insert (monsters, creature.uid) 
-      end 
-     end 
-       end 
-       if checking.x == pos.x-1 and checking.y == pos.y then 
-        checking.x = checking.x+2 
-       else  
-     checking.x = checking.x+1 
-       end 
-       if checking.x > ending.x then 
-     checking.x = starting.x 
-     checking.y = checking.y+1 
-       end 
-  until checking.y > ending.y 
- return monsters 
- end 
- 
- function onThink()	npcHandler:onThink()
-if math.random(1,2) == 1 then
-   monster_table = getMonstersfromArea(getCreaturePosition(getNpcCid(  )), radiusx, radiusy, 253) 
-    if #monster_table >= 1 then
-        for i = 1, #monster_table do  
-		if getCreatureMaxHealth(monster_table[i]) >= 401 and isPlayer(monster_table[i]) == false then
-		doRemoveCreature(monster_table[i])
-		npcHandler:say('Get lost your beast!', 0.5) 
-		end
-        end 
-    elseif table.getn(monster_table) < 1 then  
-    end 
+function getMonstersfromArea(pos, radiusx, radiusy, stack)
+	local monsters = { } 
+	local starting = {x = (pos.x - 5), y = (pos.y - 5), z = pos.z, stackpos = stack} 
+	local ending = {x = (pos.x + 5), y = (pos.y + 5), z = pos.z, stackpos = stack} 
+	local checking = {x = starting.x, y = starting.y, z = starting.z, stackpos = starting.stackpos} 
+	repeat 
+		creature = getThingfromPos(checking) 
+		if creature.itemid > 0 then 
+			if isCreature(creature.uid) == true then
+				if isPlayer(creature.uid) == false then
+					table.insert (monsters, creature.uid) 
+				end 
+			end 
+		end 
+		if checking.x == pos.x-1 and checking.y == pos.y then 
+			checking.x = checking.x+2 
+		else  
+			checking.x = checking.x+1 
+		end 
+		if checking.x > ending.x then 
+			checking.x = starting.x 
+			checking.y = checking.y+1 
+		end 
+	until checking.y > ending.y 
+	return monsters 
+end 
+
+function onThink()
+	npcHandler:onThink()
+	if math.random(1,2) == 1 then
+		local monster_table = getMonstersfromArea(getCreaturePosition(getNpcCid()), radiusx, radiusy, 253) 
+		if #monster_table >= 1 then
+			for i = 1, #monster_table do  
+				if getCreatureMaxHealth(monster_table[i]) >= 401 and isPlayer(monster_table[i]) == false then
+					doRemoveCreature(monster_table[i])
+					npcHandler:say('Get lost your beast!', 0.5) 
+				end
+			end 
+		elseif table.getn(monster_table) < 1 then  
+		end 
+	end
 end
- end
  
 
 keywordHandler:addKeyword({'job'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "I am just a humble monk and responsible to maintain this little outpost that is leftover from our grand order."})
@@ -80,34 +81,34 @@ keywordHandler:addKeyword({'ankrahmun'}, StdModule.say, {npcHandler = npcHandler
 keywordHandler:addKeyword({'ferumbras'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "He will discover where his path will lead him to. But no matter how ruthless he is, even he stays away from the ruins of the cathedral."})
 keywordHandler:addKeyword({'excalibug'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "It is rumoured to be hidden somewhere beneath Edron."})
 
-function creatureSayCallback(cid, type, msg) msg = string.lower(msg)
-	if(npcHandler.focus ~= cid) then
+function creatureSayCallback(cid, type, msg)
+	if not npcHandler:hasFocus(cid) then
 		return false
 	end
-if msgcontains(msg, 'vanity') or msgcontains(msg, 'Vanity') then
-	npcHandler:say("In our vanity we thought that we could impress the gods with our money and show piety by building them a monument. ...", 1)
-	npcHandler:say("We were wrong and the gods punished us by sending the worst earthquake that mankind has seen. ...", 5)
-	npcHandler:say("Its ground motions could still be felt in Thais and as the dust settled, little had remained of that what we had built. ...", 9)
-	npcHandler:say("Most members of our order were dead, others turned mad or lost faith. We are all that is left from our glorious order.", 13)
-	talk_state = 0
-	
-elseif msgcontains(msg, 'cathedral') or msgcontains(msg, 'Cathedral') then
-	npcHandler:say("What was once planned as the most impressive cathedral of all times, lies now in ruins. ...", 1)
-	npcHandler:say("All what the earthquake has left over is a heap of rubble. The ruins are cursed and everybody who dares to go there will draw the ire of heaven on himself. ...", 5)
-	npcHandler:say("All those that travel there are infested with bad luck. But only few have returned from this treacherous ground. Noxious fumes are killing intruders almost unnoticed. ...", 9)
-	npcHandler:say("Crumbling structures might kill you instantly. ...", 13)
-	npcHandler:say("Those who survive the dangers of nature will face the soul-eating ghosts of those who have died in the catastrophe. ...", 17)
-	npcHandler:say("It's not worth to go there, there are no richnesses or treasures left in the ruins, the gold of our order melted away in funding the cathedral's construction. ...", 21)
-	npcHandler:say("I urge you to stay away from the cursed ground and the ruins. For the safety of your body and your soul keep away from there.", 25)
-	talk_state = 0
+	msg = string.lower(msg)
 
-elseif msgcontains(msg, 'assassin') or msgcontains(msg, 'dark monk') then
-	npcHandler:say("I know nothing about that topic. If you would excuse me, I have things to attend.", 1)
-	npcHandler:releaseFocus()
-	npcHandler:resetNpc()
-	
-end		
-    return true
+	if msgcontains(msg, 'vanity') then
+		npcHandler:playerSay(cid, "In our vanity we thought that we could impress the gods with our money and show piety by building them a monument. ...", 1)
+		npcHandler:playerSay(cid, "We were wrong and the gods punished us by sending the worst earthquake that mankind has seen. ...", 5)
+		npcHandler:playerSay(cid, "Its ground motions could still be felt in Thais and as the dust settled, little had remained of that what we had built. ...", 9)
+		npcHandler:playerSay(cid, "Most members of our order were dead, others turned mad or lost faith. We are all that is left from our glorious order.", 13)
+		
+	elseif msgcontains(msg, 'cathedral') then
+		npcHandler:playerSay(cid, "What was once planned as the most impressive cathedral of all times, lies now in ruins. ...", 1)
+		npcHandler:playerSay(cid, "All what the earthquake has left over is a heap of rubble. The ruins are cursed and everybody who dares to go there will draw the ire of heaven on himself. ...", 5)
+		npcHandler:playerSay(cid, "All those that travel there are infested with bad luck. But only few have returned from this treacherous ground. Noxious fumes are killing intruders almost unnoticed. ...", 9)
+		npcHandler:playerSay(cid, "Crumbling structures might kill you instantly. ...", 13)
+		npcHandler:playerSay(cid, "Those who survive the dangers of nature will face the soul-eating ghosts of those who have died in the catastrophe. ...", 17)
+		npcHandler:playerSay(cid, "It's not worth to go there, there are no richnesses or treasures left in the ruins, the gold of our order melted away in funding the cathedral's construction. ...", 21)
+		npcHandler:playerSay(cid, "I urge you to stay away from the cursed ground and the ruins. For the safety of your body and your soul keep away from there.", 25)
+
+	elseif msgcontains(msg, 'assassin') or msgcontains(msg, 'dark monk') then
+		npcHandler:playerSay(cid, "I know nothing about that topic. If you would excuse me, I have things to attend.", 1)
+		npcHandler:releaseFocus(cid)
+		npcHandler:resetNpc(cid)
+		
+	end		
+		return true
 end
 
 npcHandler:setCallback(CALLBACK_MESSAGE_DEFAULT, creatureSayCallback)

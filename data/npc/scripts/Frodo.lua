@@ -8,10 +8,10 @@ NpcSystem.parseParameters(npcHandler)
 
 
 -- OTServ event handling functions
-function onCreatureAppear(cid)			npcHandler:onCreatureAppear(cid)			end
-function onCreatureDisappear(cid)		npcHandler:onCreatureDisappear(cid)			end
-function onCreatureSay(cid, type, msg)		npcHandler:onCreatureSay(cid, type, msg)		end
-function onThink()				npcHandler:onThink()					end
+function onCreatureAppear(cid)         npcHandler:onCreatureAppear(cid)         end
+function onCreatureDisappear(cid)      npcHandler:onCreatureDisappear(cid)      end
+function onCreatureSay(cid, type, msg) npcHandler:onCreatureSay(cid, type, msg) end
+function onThink()                     npcHandler:onThink()                     end
 
 
 local shopModule = ShopModule:new()
@@ -74,62 +74,64 @@ keywordHandler:addKeyword({'one eyed stranger'}, StdModule.say, {npcHandler = np
 keywordHandler:addKeyword({'berfasmur'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "Sorry, he spoke only very little. I know nothing more about him."})
 keywordHandler:addKeyword({'time'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "It is exactly |TIME|."})
 
-function creatureSayCallback(cid, type, msg) msg = string.lower(msg)
-	if(npcHandler.focus ~= cid) then
+function creatureSayCallback(cid, type, msg)
+	if not npcHandler:hasFocus(cid) then
 		return false
 	end
-if msgcontains(msg, 'Lynda') or msgcontains(msg, 'lynda') then
-	if getPlayerSex(cid) == 1 then
-	npcHandler:say("Just between you and me: What a babe!", 1)
-	else
-	npcHandler:say("A very noble lady.", 1)
+	msg = string.lower(msg)
+	local cidData = npcHandler:getFocusPlayerData(cid)
+
+	if msgcontains(msg, 'lynda') then
+		if getPlayerSex(cid) == 1 then
+			npcHandler:playerSay(cid, "Just between you and me: What a babe!", 1)
+		else
+			npcHandler:playerSay(cid, "A very noble lady.", 1)
+		end
+		cidData.state = 0
+
+	elseif msgcontains(msg, 'hengis wulfson') then
+		npcHandler:playerSay(cid, "He is a great bard. He often graced my hut with his presence, songs, and rhymes. I wonder what happened to him lately.", 1)
+		cidData.state = 2
+
+	elseif cidData.state == 2 and msgcontains(msg, 'killed') or cidData.state == 2 and msgcontains(msg, 'died') or cidData.state == 2 and msgcontains(msg, 'dea') or cidData.state == 2 and msgcontains(msg, 'slain') then
+		npcHandler:playerSay(cid, "Oh, by the gods! What do you say happened to him?", 1)
+		cidData.state = 3
+
+	elseif cidData.state == 3 and msgcontains(msg, 'cyclops') then
+		npcHandler:playerSay(cid, "That's horrible! I am in grief. I will never hear his songs again. I will even miss that strange rhyme he was obsessed with.", 1)
+		cidData.state = 4
+
+	elseif cidData.state == 4 and msgcontains(msg, 'rhyme') then
+		npcHandler:playerSay(cid, "He recitated it that often that I learned it by heart myself. I would recitate it, but I am not skilled in that kind of things.", 1)
+		cidData.state = 5
+
+	elseif cidData.state == 5 and msgcontains(msg, 'recitate') then
+		npcHandler:playerSay(cid, "Uhm. If you insist, but I am so awful. I will stop now and then and wait, so you can tell if I should proceed, ok?", 1)
+		cidData.state = 6
+
+	elseif cidData.state == 2 and msgcontains(msg, 'yes') then
+		npcHandler:playerSay(cid, "Well ok, but don't blame me. Chhrrr... chhrrrr,... it goes like this... chhrrr: and when the dead feast at midnight...", 1)
+		cidData.state = 7
+
+	elseif cidData.state == 7 and msgcontains(msg, 'proceed') then
+		npcHandler:playerSay(cid, "... the ancient enemy will no longer guard the place of his unlucky heir and the living will walk the paths of the old way...", 1)
+		cidData.state = 8
+
+	elseif cidData.state == 8 and msgcontains(msg, 'proceed') then
+		npcHandler:playerSay(cid, "... Death awaits the greedy and the brave alike and many will be mourned until the long lost treasure is unearthed.", 1)
+		cidData.state = 9
+
+	elseif cidData.state == 9 and msgcontains(msg, 'proceed') then
+		npcHandler:playerSay(cid, "That's all. He recitated it when he was in one of his melancholy moods.", 1)
+		cidData.state = 0
+
+	elseif msgcontains(msg, '') then
+		npcHandler:playerSay(cid, "Maybe next time.", 1)
+		cidData.state = 0
+
 	end
-	talk_state = 0
-			
-elseif msgcontains(msg, 'hengis wulfson') then
-npcHandler:say("He is a great bard. He often graced my hut with his presence, songs, and rhymes. I wonder what happened to him lately.", 1)
-talk_state = 2
-
-elseif talk_state == 2 and msgcontains(msg, 'killed') or talk_state == 2 and msgcontains(msg, 'died') or talk_state == 2 and msgcontains(msg, 'dea') or talk_state == 2 and msgcontains(msg, 'slain') then
-npcHandler:say("Oh, by the gods! What do you say happened to him?", 1)
-talk_state = 3
-
-elseif talk_state == 3 and msgcontains(msg, 'cyclops') then
-npcHandler:say("That's horrible! I am in grief. I will never hear his songs again. I will even miss that strange rhyme he was obsessed with.", 1)
-talk_state = 4
-
-elseif talk_state == 4 and msgcontains(msg, 'rhyme') then
-npcHandler:say("He recitated it that often that I learned it by heart myself. I would recitate it, but I am not skilled in that kind of things.", 1)
-talk_state = 5
-
-elseif talk_state == 5 and msgcontains(msg, 'recitate') then
-npcHandler:say("Uhm. If you insist, but I am so awful. I will stop now and then and wait, so you can tell if I should proceed, ok?", 1)
-talk_state = 6
-
-elseif talk_state == 2 and msgcontains(msg, 'yes') then
-npcHandler:say("Well ok, but don't blame me. Chhrrr... chhrrrr,... it goes like this... chhrrr: and when the dead feast at midnight...", 1)
-talk_state = 7
-
-elseif talk_state == 7 and msgcontains(msg, 'proceed') then
-npcHandler:say("... the ancient enemy will no longer guard the place of his unlucky heir and the living will walk the paths of the old way...", 1)
-talk_state = 8
-
-elseif talk_state == 8 and msgcontains(msg, 'proceed') then
-npcHandler:say("... Death awaits the greedy and the brave alike and many will be mourned until the long lost treasure is unearthed.", 1)
-talk_state = 9
-
-elseif talk_state == 9 and msgcontains(msg, 'proceed') then
-npcHandler:say("That's all. He recitated it when he was in one of his melancholy moods.", 1)
-talk_state = 0
-
-elseif msgcontains(msg, '') then
-npcHandler:say("Maybe next time.", 1)
-talk_state = 0
-
-end		
-    return true
+	return true
 end
-
 
 npcHandler:setCallback(CALLBACK_MESSAGE_DEFAULT, creatureSayCallback)
 npcHandler:addModule(FocusModule:new())

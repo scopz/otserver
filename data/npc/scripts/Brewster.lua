@@ -3,10 +3,10 @@ local npcHandler = NpcHandler:new(keywordHandler)
 NpcSystem.parseParameters(npcHandler)
 
 -- OTServ event handling functions
-function onCreatureAppear(cid)			npcHandler:onCreatureAppear(cid)			end
-function onCreatureDisappear(cid)		npcHandler:onCreatureDisappear(cid)			end
-function onCreatureSay(cid, type, msg)		npcHandler:onCreatureSay(cid, type, msg)		end
-function onThink()				npcHandler:onThink()					end
+function onCreatureAppear(cid)         npcHandler:onCreatureAppear(cid)         end
+function onCreatureDisappear(cid)      npcHandler:onCreatureDisappear(cid)      end
+function onCreatureSay(cid, type, msg) npcHandler:onCreatureSay(cid, type, msg) end
+function onThink()                     npcHandler:onThink()                     end
 
 	function FocusModule:init(handler)
 	FOCUS_GREETSWORDS = {'hi', 'hello'}
@@ -68,25 +68,25 @@ keywordHandler:addKeyword({'blessing'}, StdModule.say, {npcHandler = npcHandler,
 keywordHandler:addKeyword({'bless'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "The vital force of this world is waning. There are no more blessings available on this world."})
 
 function creatureSayCallback(cid, type, msg)
-	if(cid ~= npcHandler.focus) then
+	if not npcHandler:hasFocus(cid) then
 		return false
 	end
 
 	if msgcontains(msg, 'heal') then
 		if hasCondition(cid, CONDITION_FIRE) == true then
-			npcHandler:say('You are burning. I will help you.')
+			npcHandler:playerSay(cid, 'You are burning. I will help you.')
 			doRemoveCondition(cid, CONDITION_FIRE)
 			doSendMagicEffect(getCreaturePosition(cid), 14)
 		elseif hasCondition(cid, CONDITION_POISON) == true then
-			npcHandler:say('You are poisoned. I will help you.')
+			npcHandler:playerSay(cid, 'You are poisoned. I will help you.')
 			doRemoveCondition(cid, CONDITION_POISON)
 			doSendMagicEffect(getCreaturePosition(cid), 13)
 		elseif getCreatureHealth(cid) < 40 then
-			npcHandler:say('You are looking really bad. Let me heal your wounds.')
+			npcHandler:playerSay(cid, 'You are looking really bad. Let me heal your wounds.')
 			doCreatureAddHealth(cid, 40 - getCreatureHealth(cid))
 			doSendMagicEffect(getCreaturePosition(cid), 12)
 		else
-			npcHandler:say('You aren\'t looking that bad. Sorry, I can\'t help you. But if you are looking for additional protection you should go on the pilgrimage of ashes.')
+			npcHandler:playerSay(cid, 'You aren\'t looking that bad. Sorry, I can\'t help you. But if you are looking for additional protection you should go on the pilgrimage of ashes.')
 		end
 	end
 	

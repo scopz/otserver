@@ -9,12 +9,12 @@ function onThink()	npcHandler:onThink() end
 
 function greetCallback(cid)
 	if getPlayerItemCount(cid, 2787) >= 1 then
-		npcHandler:say('AHHH MUSHRRROOOMSSS! NOW MY PAIN WILL BE EASSSED FOR A WHILE! TAKE THISS AND LEAVE THE DRAGONSSS\' CEMETERY AT ONCE!')
+		npcHandler:playerSay(cid, 'AHHH MUSHRRROOOMSSS! NOW MY PAIN WILL BE EASSSED FOR A WHILE! TAKE THISS AND LEAVE THE DRAGONSSS\' CEMETERY AT ONCE!')
 		doPlayerRemoveItem(cid,2787, 1)
 		doPlayerAddItem(cid,2194, 1)
 		setPlayerStorageValue(cid, 66, 1)
 	else
-		npcHandler:say('LEAVE THE DRAGONS\' CEMETERY AT ONCE!')
+		npcHandler:playerSay(cid, 'LEAVE THE DRAGONS\' CEMETERY AT ONCE!')
 		return false
 	end
 end

@@ -5,10 +5,10 @@ local npcHandler = NpcHandler:new(keywordHandler)
 NpcSystem.parseParameters(npcHandler)
 
 -- OTServ event handling functions
-function onCreatureAppear(cid)			npcHandler:onCreatureAppear(cid)			end
-function onCreatureDisappear(cid)		npcHandler:onCreatureDisappear(cid)			end
-function onCreatureSay(cid, type, msg)		npcHandler:onCreatureSay(cid, type, msg)		end
-function onThink()				npcHandler:onThink()					end
+function onCreatureAppear(cid)         npcHandler:onCreatureAppear(cid)         end
+function onCreatureDisappear(cid)      npcHandler:onCreatureDisappear(cid)      end
+function onCreatureSay(cid, type, msg) npcHandler:onCreatureSay(cid, type, msg) end
+function onThink()                     npcHandler:onThink()                     end
 
 function greetCallback(cid)
 	if getPlayerSex(cid) == 1 then
@@ -17,7 +17,7 @@ function greetCallback(cid)
 	else
 		npcHandler:setMessage(MESSAGE_GREET, "Welcome on board, Madam ".. getPlayerName(cid) ..".")
 		return true
-	end	
+	end
 end
 
 npcHandler:setCallback(CALLBACK_GREET, greetCallback)
@@ -63,55 +63,57 @@ addTravelKeyword('thais', 170, BOATPOS_THAIS)
 
 -- (do_later)
 function creatureSayCallback(cid, type, msg)
-	if(npcHandler.focus ~= cid) then
+	if not npcHandler:hasFocus(cid) then
 		return false
 	end
+	msg = string.lower(msg)
+	local cidData = npcHandler:getFocusPlayerData(cid)
 
 	if msgcontains(msg, 'darashia') then
-		npcHandler:say('I warn you! This route is haunted by a ghostship. Do you really want to go there?')
-		talk_state = 2
-	elseif msgcontains(msg, 'yes') and talk_state == 2 then
-		npcHandler:say('Do you seek a passage to Darashia for 60 gold?')
-		talk_state = 3
+		npcHandler:playerSay(cid, 'I warn you! This route is haunted by a ghostship. Do you really want to go there?')
+		cidData.state = 2
+	elseif msgcontains(msg, 'yes') and cidData.state == 2 then
+		npcHandler:playerSay(cid, 'Do you seek a passage to Darashia for 60 gold?')
+		cidData.state = 3
 		town_boat = darashia
 		price = 60
 	-- Ghost Ship
-	elseif msgcontains(msg, 'yes') and talk_state == 3 then
+	elseif msgcontains(msg, 'yes') and cidData.state == 3 then
 		if isPremium(cid) == true then
 			if isPzLocked(cid) == false then
 				if getPlayerMoney(cid) >= price or isPremium(cid) == true then
 					if math.random(1,10) == 1 then
 						doPlayerRemoveMoney(cid, price)
-						selfSay('Set the sails!')
+						npcHandler:playerSay(cid, 'Set the sails!')
 						doTeleportThing(cid, BOATPOS_GHOSTSHIP)
 						doSendMagicEffect(getCreaturePosition(cid), 10)
-						talk_state = 0
+						cidData.state = 0
 					else
-						selfSay('Set the sails!')
+						npcHandler:playerSay(cid, 'Set the sails!')
 						doPlayerRemoveMoney(cid, price)
 						doTeleportThing(cid, BOATPOS_DARASHIA)
 						doSendMagicEffect(getCreaturePosition(cid), 10)
-						talk_state = 0
+						cidData.state = 0
 					end
 				else
-					npcHandler:say('You don\'t have enough money.')
-					talk_state = 0
+					npcHandler:playerSay(cid, 'You don\'t have enough money.')
+					cidData.state = 0
 				end
 			else
-				npcHandler:say('First get rid of those blood stains! You are not going to ruin my vehicle!')
-				talk_state = 0
+				npcHandler:playerSay(cid, 'First get rid of those blood stains! You are not going to ruin my vehicle!')
+				cidData.state = 0
 			end
 		else
-			npcHandler:say('I\'m sorry, but you need a premium account in order to travel onboard our ships.')
-			talk_state = 0
+			npcHandler:playerSay(cid, 'I\'m sorry, but you need a premium account in order to travel onboard our ships.')
+			cidData.state = 0
 		end
-	elseif msgcontains(msg, 'no') and talk_state == 2 then
-		npcHandler:say('We would like to serve you some time.')
-		talk_state = 0	
+	elseif msgcontains(msg, 'no') and cidData.state == 2 then
+		npcHandler:playerSay(cid, 'We would like to serve you some time.')
+		cidData.state = 0
 	end
 
-	return true	
+	return true
 end
-	
+
 npcHandler:setCallback(CALLBACK_MESSAGE_DEFAULT, creatureSayCallback)
 npcHandler:addModule(FocusModule:new())

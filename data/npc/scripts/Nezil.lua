@@ -5,10 +5,10 @@ local npcHandler = NpcHandler:new(keywordHandler)
 NpcSystem.parseParameters(npcHandler)
 
 -- OTServ event handling functions
-function onCreatureAppear(cid)			npcHandler:onCreatureAppear(cid)			end
-function onCreatureDisappear(cid)		npcHandler:onCreatureDisappear(cid)			end
-function onCreatureSay(cid, type, msg)		npcHandler:onCreatureSay(cid, type, msg)		end
-function onThink()				npcHandler:onThink()					end
+function onCreatureAppear(cid)         npcHandler:onCreatureAppear(cid)         end
+function onCreatureDisappear(cid)      npcHandler:onCreatureDisappear(cid)      end
+function onCreatureSay(cid, type, msg) npcHandler:onCreatureSay(cid, type, msg) end
+function onThink()                     npcHandler:onThink()                     end
 
 	function FocusModule:init(handler)
 	FOCUS_GREETSWORDS = {'hi nezil', 'hello nezil', 'hiho nezil'}
@@ -69,27 +69,28 @@ keywordHandler:addKeyword({'offer'}, StdModule.say, {npcHandler = npcHandler, on
 keywordHandler:addKeyword({'time'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "I think it's about |TIME|. If you'd bought a watch you'd know for sure."})
 
 function creatureSayCallback(cid, type, msg)
-	if(npcHandler.focus ~= cid) then
+	if not npcHandler:hasFocus(cid) then
 		return false
 	end
+	msg = string.lower(msg)
+	local cidData = npcHandler:getFocusPlayerData(cid)
 
 	if msgcontains(msg, 'vial') or msgcontains(msg, 'deposit') or msgcontains(msg, 'flask') then
-		npcHandler:say("I will pay you 5 gold for every empty vial. Ok?", 1)
-		talk_state = 857
-	elseif talk_state == 857 and msgcontains(msg, 'yes') then
+		npcHandler:playerSay(cid, "I will pay you 5 gold for every empty vial. Ok?", 1)
+		cidData.state = 857
+	elseif cidData.state == 857 and msgcontains(msg, 'yes') then
 		if sellPlayerEmptyVials(cid) == true then
-			npcHandler:say("Here's your money!", 1)
-			talk_state = 0
+			npcHandler:playerSay(cid, "Here's your money!", 1)
 		else
-			npcHandler:say("You don't have any empty vials!", 1)
-			talk_state = 0
+			npcHandler:playerSay(cid, "You don't have any empty vials!", 1)
 		end
+		cidData.state = 0
 	end
 
-	if  msgcontains(msg, 'bezil') or msgcontains(msg, 'Bezil') then
-	elseif msgcontains(msg, 'hi') or msgcontains(msg, 'Hi') or msgcontains(msg, 'hello') or msgcontains(msg, 'Hello') or msgcontains(msg, 'Hiho') or msgcontains(msg, 'hiho') then
-		npcHandler:say("Uhm, me or my sis', ".. getPlayerName(cid) .."?", 1)
-		talk_state = 0
+	if  msgcontains(msg, 'bezil') then
+	elseif msgcontains(msg, 'hi') or msgcontains(msg, 'hello') or msgcontains(msg, 'hiho') then
+		npcHandler:playerSay(cid, "Uhm, me or my sis', ".. getPlayerName(cid) .."?", 1)
+		cidData.state = 0
 	end	
     return true
 end

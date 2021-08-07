@@ -7,10 +7,10 @@ NpcSystem.parseParameters(npcHandler)
 
 
 -- OTServ event handling functions
-function onCreatureAppear(cid)			npcHandler:onCreatureAppear(cid)			end
-function onCreatureDisappear(cid)		npcHandler:onCreatureDisappear(cid)			end
-function onCreatureSay(cid, type, msg)		npcHandler:onCreatureSay(cid, type, msg)		end
-function onThink()				npcHandler:onThink()					end
+function onCreatureAppear(cid)         npcHandler:onCreatureAppear(cid)         end
+function onCreatureDisappear(cid)      npcHandler:onCreatureDisappear(cid)      end
+function onCreatureSay(cid, type, msg) npcHandler:onCreatureSay(cid, type, msg) end
+function onThink()                     npcHandler:onThink()                     end
 
 
 local shopModule = ShopModule:new()
@@ -58,30 +58,32 @@ keywordHandler:addKeyword({'sell'}, StdModule.say, {npcHandler = npcHandler, onl
 keywordHandler:addKeyword({'buy'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "I buy food of any kind. Since I am a great cook I need much of it."})
 
 function creatureSayCallback(cid, type, msg)
-	if(npcHandler.focus ~= cid) then
+	if not npcHandler:hasFocus(cid) then
 		return false
 	end
+	msg = string.lower(msg)
+	local cidData = npcHandler:getFocusPlayerData(cid)
 	
 	if msgcontains(msg, 'banana') then
-	npcHandler:say('Have you found a banana for me?')
-	topic = 1
-	
-	elseif msgcontains(msg, 'yes') and getPlayerItemCount(cid, 2676) >= 1 and topic == 1 then
-	npcHandler:say('A banana! Great. Take this shield, so the &#@&* monsters don\'t beat the &@*&@ out of you.')
-	doPlayerRemoveItem(cid,2676,1)
-	doPlayerAddItem(cid,2526,1)
-	topic = 0
-	
-	elseif msgcontains(msg, 'yes') and getPlayerItemCount(cid, 2676) < 1 and topic == 1 then
-	npcHandler:say('Hm, you don\'t have it.')
-	topic = 0
-	
-	elseif msgcontains(msg, 'no') and topic == 1 then
-	npcHandler:say('Too bad.')
-	topic = 0
+		npcHandler:playerSay(cid, 'Have you found a banana for me?')
+		cidData.state = 1
+
+	elseif msgcontains(msg, 'yes') and getPlayerItemCount(cid, 2676) >= 1 and cidData.state == 1 then
+		npcHandler:playerSay(cid, 'A banana! Great. Take this shield, so the &#@&* monsters don\'t beat the &@*&@ out of you.')
+		doPlayerRemoveItem(cid,2676,1)
+		doPlayerAddItem(cid,2526,1)
+		cidData.state = 0
+
+	elseif msgcontains(msg, 'yes') and getPlayerItemCount(cid, 2676) < 1 and cidData.state == 1 then
+		npcHandler:playerSay(cid, 'Hm, you don\'t have it.')
+		cidData.state = 0
+
+	elseif msgcontains(msg, 'no') and cidData.state == 1 then
+		npcHandler:playerSay(cid, 'Too bad.')
+		cidData.state = 0
 	end
 	
-return true
+	return true
 end	
 	
 npcHandler:setCallback(CALLBACK_MESSAGE_DEFAULT, creatureSayCallback)

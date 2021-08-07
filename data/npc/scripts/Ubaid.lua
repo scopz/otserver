@@ -7,22 +7,22 @@ NpcSystem.parseParameters(npcHandler)
 
 
 -- OTServ event handling functions
-function onCreatureAppear(cid)			npcHandler:onCreatureAppear(cid)			end
-function onCreatureDisappear(cid)		npcHandler:onCreatureDisappear(cid)			end
-function onCreatureSay(cid, type, msg)		npcHandler:onCreatureSay(cid, type, msg)		end
-function onThink()				npcHandler:onThink()					end
+function onCreatureAppear(cid)         npcHandler:onCreatureAppear(cid)         end
+function onCreatureDisappear(cid)      npcHandler:onCreatureDisappear(cid)      end
+function onCreatureSay(cid, type, msg) npcHandler:onCreatureSay(cid, type, msg) end
+function onThink()                     npcHandler:onThink()                     end
 
 function greetCallback(cid)
 	if getPlayerStorageValue(cid, 8168) <= 0 then
-	npcHandler:say("Shove off, little one! Humans are not welcome here, ".. getPlayerName(cid) .."!", 1)
-	return false
+		npcHandler:playerSay(cid, "Shove off, little one! Humans are not welcome here, ".. getPlayerName(cid) .."!", 1)
+		return false
 	elseif getPlayerStorageValue(cid, 8170) <= 0 then
-	return true
+		return true
 	else
-	npcHandler:say("Shove off, little one! You are not welcome here, ".. getPlayerName(cid) .."!", 1)
-	return false
-	end	
-end	
+		npcHandler:playerSay(cid, "Shove off, little one! You are not welcome here, ".. getPlayerName(cid) .."!", 1)
+		return false
+	end
+end
 npcHandler:setCallback(CALLBACK_GREET, greetCallback)
 
 
@@ -64,84 +64,89 @@ keywordHandler:addKeyword({"fa'hradin"}, StdModule.say, {npcHandler = npcHandler
 keywordHandler:addKeyword({'lamp'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "I am not taking a nap! I am on duty!"})
 
 
-function creatureSayCallback(cid, type, msg) msg = string.lower(msg)
-
-if msgcontains(msg, "mission") or msgcontains(msg, "pass") or msgcontains(msg, "quest") then
-	if getPlayerStorageValue(cid,8171) <= 0 then
-	npcHandler:say("You are not worthy to pass these doors, but I could give you some tests to see if you can become worthy, accept?", 1)
-	talk_state = 801
-	elseif getPlayerStorageValue(cid,8172) <= 99 then
-	npcHandler:say("You're supposed to kill blue djinns, and still here you are..", 1)
-	talk_state = 0
-	elseif getPlayerStorageValue(cid,8172) >= 100 and  getPlayerStorageValue(cid,8173) <= 0 then
-	npcHandler:story("You did kill those djinns.. AND survived.. wow. ...", 1)
-	npcHandler:story("You seems to be worthy, but we still need to test you some more. ...", 5)
-	npcHandler:say("You want another test?", 9)
-	setPlayerStorageValue(cid,8173,1)
-	talk_state = 701
-	elseif getPlayerStorageValue(cid,8173) == 1 then
-	npcHandler:say("You want another test?", 1)
-	talk_state = 701
-	elseif getPlayerStorageValue(cid,8174) == 1 and getPlayerStorageValue(cid,8175) <= 0 then
-	npcHandler:say("oh, did you loot the chest?", 1)
-	talk_state = 601
-	else
-	npcHandler:say("Sorry, no missions to you lil'one!", 1)
-	talk_state = 0
+function creatureSayCallback(cid, type, msg)
+	if not npcHandler:hasFocus(cid) then
+		return false
 	end
-	
-elseif talk_state == 801 and msgcontains(msg, "yes") then
-	npcHandler:story("Okey, here's what you should do. ...", 1)
-	npcHandler:story("Go in through the backdoor of the blue djinn fortress, and assassinate 100 djinns. ...", 5)
-	npcHandler:story("If you come back here alive again, we'll talk about if you're worthy.. now go, be strong!", 9)
-	setPlayerStorageValue(cid,8169,1)
-	setPlayerStorageValue(cid,8171,1)
-	setPlayerStorageValue(cid,8172,0)
-	npcHandler:releaseFocus()
-	npcHandler:resetNpc()
-	talk_state = 0
-elseif talk_state == 801 and msgcontains(msg, "") then
-	npcHandler:say("Then not.. scared kitty..", 1)
-	talk_state = 0
-elseif talk_state == 701 and msgcontains(msg, "yes") then
-	if getPlayerStorageValue(cid,8094) >= 1 and getPlayerStorageValue(cid,8173) == 1 then
-		if getPlayerStorageValue(cid,8165) >= 1 then
-			if getPlayerStorageValue(cid,8147) >= 1 then
-			npcHandler:say("On the top floor of the blue djinn fortress is a chest or a box, steal what's inside it and bring it to me! see you in a bit!", 1)
-			setPlayerStorageValue(cid,8173,2)
-			npcHandler:releaseFocus()
-			npcHandler:resetNpc()	
-			else
-			npcHandler:say("You haven't completed the Triangle tower quest yet, there's your next task! complete it! Byebye.", 1)
-			npcHandler:releaseFocus()
-			npcHandler:resetNpc()		
-			end			
+	msg = string.lower(msg)
+	local cidData = npcHandler:getFocusPlayerData(cid)
+
+	if msgcontains(msg, "mission") or msgcontains(msg, "pass") or msgcontains(msg, "quest") then
+		if getPlayerStorageValue(cid,8171) <= 0 then
+			npcHandler:playerSay(cid, "You are not worthy to pass these doors, but I could give you some tests to see if you can become worthy, accept?", 1)
+			cidData.state = 801
+		elseif getPlayerStorageValue(cid,8172) <= 99 then
+			npcHandler:playerSay(cid, "You're supposed to kill blue djinns, and still here you are..", 1)
+			cidData.state = 0
+		elseif getPlayerStorageValue(cid,8172) >= 100 and  getPlayerStorageValue(cid,8173) <= 0 then
+			npcHandler:story("You did kill those djinns.. AND survived.. wow. ...", 1)
+			npcHandler:story("You seems to be worthy, but we still need to test you some more. ...", 5)
+			npcHandler:playerSay(cid, "You want another test?", 9)
+			setPlayerStorageValue(cid,8173,1)
+			cidData.state = 701
+		elseif getPlayerStorageValue(cid,8173) == 1 then
+			npcHandler:playerSay(cid, "You want another test?", 1)
+			cidData.state = 701
+		elseif getPlayerStorageValue(cid,8174) == 1 and getPlayerStorageValue(cid,8175) <= 0 then
+			npcHandler:playerSay(cid, "oh, did you loot the chest?", 1)
+			cidData.state = 601
 		else
-		npcHandler:say("You haven't completed the arena, the Scrapper yet, there's your next task! complete it! Byebye.", 1)
-		npcHandler:releaseFocus()
-		npcHandler:resetNpc()		
+			npcHandler:playerSay(cid, "Sorry, no missions to you lil'one!", 1)
+			cidData.state = 0
 		end
-	else
-	npcHandler:say("You haven't completed the orc fortress quest yet, there's your next task! complete it! Byebye.", 1)
-	npcHandler:releaseFocus()
-	npcHandler:resetNpc()
-	end
-elseif talk_state == 701 and msgcontains(msg, "") then
-	npcHandler:say("Then not.. scared kitty..", 1)
-	talk_state = 0
 
-elseif talk_state == 601 and msgcontains(msg, "yes") then
-	npcHandler:say("Oh it were empty, damn they knew abou.. herm.. well you are obviously worthy. ..", 1)
-	npcHandler:say("You're welcome as a guest in our fortess, go and kill some blue djinns when ever you want!", 5)
-	setPlayerStorageValue(cid,8175,1)
-	doAddQuestPoint(cid)
-	talk_state = 0
-	
-elseif talk_state == 601 and msgcontains(msg, "") then
-	npcHandler:say("okey, then what are you doing here?", 1)
-	talk_state = 0	
-end		
-    return true
+	elseif cidData.state == 801 and msgcontains(msg, "yes") then
+		npcHandler:story("Okey, here's what you should do. ...", 1)
+		npcHandler:story("Go in through the backdoor of the blue djinn fortress, and assassinate 100 djinns. ...", 5)
+		npcHandler:story("If you come back here alive again, we'll talk about if you're worthy.. now go, be strong!", 9)
+		setPlayerStorageValue(cid,8169,1)
+		setPlayerStorageValue(cid,8171,1)
+		setPlayerStorageValue(cid,8172,0)
+		npcHandler:releaseFocus(cid)
+		npcHandler:resetNpc(cid)
+		cidData.state = 0
+	elseif cidData.state == 801 and msgcontains(msg, "") then
+		npcHandler:playerSay(cid, "Then not.. scared kitty..", 1)
+		cidData.state = 0
+	elseif cidData.state == 701 and msgcontains(msg, "yes") then
+		if getPlayerStorageValue(cid,8094) >= 1 and getPlayerStorageValue(cid,8173) == 1 then
+			if getPlayerStorageValue(cid,8165) >= 1 then
+				if getPlayerStorageValue(cid,8147) >= 1 then
+					npcHandler:playerSay(cid, "On the top floor of the blue djinn fortress is a chest or a box, steal what's inside it and bring it to me! see you in a bit!", 1)
+					setPlayerStorageValue(cid,8173,2)
+					npcHandler:releaseFocus(cid)
+					npcHandler:resetNpc(cid)
+				else
+					npcHandler:playerSay(cid, "You haven't completed the Triangle tower quest yet, there's your next task! complete it! Byebye.", 1)
+					npcHandler:releaseFocus(cid)
+					npcHandler:resetNpc(cid)
+				end
+			else
+				npcHandler:playerSay(cid, "You haven't completed the arena, the Scrapper yet, there's your next task! complete it! Byebye.", 1)
+				npcHandler:releaseFocus(cid)
+				npcHandler:resetNpc(cid)
+			end
+		else
+			npcHandler:playerSay(cid, "You haven't completed the orc fortress quest yet, there's your next task! complete it! Byebye.", 1)
+			npcHandler:releaseFocus(cid)
+			npcHandler:resetNpc(cid)
+		end
+	elseif cidData.state == 701 and msgcontains(msg, "") then
+		npcHandler:playerSay(cid, "Then not.. scared kitty..", 1)
+		cidData.state = 0
+
+	elseif cidData.state == 601 and msgcontains(msg, "yes") then
+		npcHandler:playerSay(cid, "Oh it were empty, damn they knew abou.. herm.. well you are obviously worthy. ..", 1)
+		npcHandler:playerSay(cid, "You're welcome as a guest in our fortess, go and kill some blue djinns when ever you want!", 5)
+		setPlayerStorageValue(cid,8175,1)
+		doAddQuestPoint(cid)
+		cidData.state = 0
+
+	elseif cidData.state == 601 and msgcontains(msg, "") then
+		npcHandler:playerSay(cid, "okey, then what are you doing here?", 1)
+		cidData.state = 0
+	end
+	return true
 end
 
 npcHandler:setCallback(CALLBACK_MESSAGE_DEFAULT, creatureSayCallback)

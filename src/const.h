@@ -116,6 +116,7 @@ enum SpeakClasses {
 	SPEAK_CHANNEL_R1      = 0x0A, // Red - #c text
 	SPEAK_PRIVATE_RED     = 0x0B, // @name@text
 	SPEAK_CHANNEL_O       = 0x0C, // orange
+	SPEAK_CHANNEL_NPC     = 0x0D, // npc
 	SPEAK_CHANNEL_R2      = 0x0E, // red anonymous - #d text
 	SPEAK_CAST            = 0x0F,
 	SPEAK_MONSTER_YELL    = 0x11,

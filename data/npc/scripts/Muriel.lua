@@ -7,19 +7,18 @@ NpcSystem.parseParameters(npcHandler)
 
 
 -- OTServ event handling functions
-function onCreatureAppear(cid)			npcHandler:onCreatureAppear(cid)			end
-function onCreatureDisappear(cid)		npcHandler:onCreatureDisappear(cid)			end
-function onCreatureSay(cid, type, msg)		npcHandler:onCreatureSay(cid, type, msg)		end
-function onThink()				npcHandler:onThink()					end
+function onCreatureAppear(cid)         npcHandler:onCreatureAppear(cid)         end
+function onCreatureDisappear(cid)      npcHandler:onCreatureDisappear(cid)      end
+function onCreatureSay(cid, type, msg) npcHandler:onCreatureSay(cid, type, msg) end
+function onThink()                     npcHandler:onThink()                     end
 
 function greetCallback(cid)
 	if getPlayerVocation(cid) == 1 or getPlayerVocation(cid) == 5 then
-	npcHandler:setMessage(MESSAGE_GREET, "Welcome back, ".. getPlayerName(cid) .."!")
-	return true
+		npcHandler:setMessage(MESSAGE_GREET, "Welcome back, ".. getPlayerName(cid) .."!")
 	else
-	npcHandler:setMessage(MESSAGE_GREET, "Greetings, ".. getPlayerName(cid) .."! Looking for wisdom and power, eh?")
-	return true
+		npcHandler:setMessage(MESSAGE_GREET, "Greetings, ".. getPlayerName(cid) .."! Looking for wisdom and power, eh?")
 	end	
+	return true
 end	
 npcHandler:setCallback(CALLBACK_GREET, greetCallback)
 
@@ -64,27 +63,29 @@ keywordHandler:addKeyword({'wand'}, StdModule.say, {npcHandler = npcHandler, onl
 keywordHandler:addKeyword({'rod'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "I'm sorry, you can find wand and rods at Xodet's magic shop."})
 keywordHandler:addKeyword({'rune'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "Each spell, that starts with 'Ad', needs a rune. You have to hold a blank rune in one of your hands when you cast it. You can buy runes at the magic shop."})
 
-function creatureSayCallback(cid, type, msg) msg = string.lower(msg)
-	if(npcHandler.focus ~= cid) then
+function creatureSayCallback(cid, type, msg)
+	if not npcHandler:hasFocus(cid) then
 		return false
 	end
+	msg = string.lower(msg)
+	local cidData = npcHandler:getFocusPlayerData(cid)
 
 	if msgcontains(msg, 'spellbook') or msgcontains(msg, 'spellbook') then
-		npcHandler:say("In a spellbook, your spells are listed. There you can find the pronunciation of each spell. Do you want to buy one for 150 gold?", 1)
-		talk_state = 814
+		npcHandler:playerSay(cid, "In a spellbook, your spells are listed. There you can find the pronunciation of each spell. Do you want to buy one for 150 gold?", 1)
+		cidData.state = 814
 
-	elseif talk_state == 814 and msgcontains(msg, 'yes') or talk_state == 814 and msgcontains(msg, 'Yes') then
+	elseif cidData.state == 814 and msgcontains(msg, 'yes') then
 		if doPlayerRemoveMoney(cid, 150) == true then
 			doPlayerAddItem(cid, 2175, 1)
-			npcHandler:say("Here you are.", 1)
+			npcHandler:playerSay(cid, "Here you are.", 1)
 		else
-			npcHandler:say("Come back when you have enough money.", 1)
+			npcHandler:playerSay(cid, "Come back when you have enough money.", 1)
 		end
-		talk_state = 0
+		cidData.state = 0
 
-	elseif talk_state == 814 and msgcontains(msg, '') then
-		npcHandler:say("Hmm, maybe next time.", 1)
-		talk_state = 0
+	elseif cidData.state == 814 and msgcontains(msg, '') then
+		npcHandler:playerSay(cid, "Hmm, maybe next time.", 1)
+		cidData.state = 0
 	end		
     return true
 end

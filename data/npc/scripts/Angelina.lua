@@ -5,10 +5,10 @@ local npcHandler = NpcHandler:new(keywordHandler)
 NpcSystem.parseParameters(npcHandler)
 
 -- OTServ event handling functions
-function onCreatureAppear(cid)			npcHandler:onCreatureAppear(cid)			end
-function onCreatureDisappear(cid)		npcHandler:onCreatureDisappear(cid)			end
-function onCreatureSay(cid, type, msg)		npcHandler:onCreatureSay(cid, type, msg)		end
-function onThink()				npcHandler:onThink()					end
+function onCreatureAppear(cid)         npcHandler:onCreatureAppear(cid)         end
+function onCreatureDisappear(cid)      npcHandler:onCreatureDisappear(cid)      end
+function onCreatureSay(cid, type, msg) npcHandler:onCreatureSay(cid, type, msg) end
+function onThink()                     npcHandler:onThink()                     end
 
 local shopModule = ShopModule:new()
 npcHandler:addModule(shopModule)
@@ -40,53 +40,55 @@ keywordHandler:addKeyword({'assassin'}, StdModule.say, {npcHandler = npcHandler,
 keywordHandler:addKeyword({'dark monk'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "The dark monks are the teachers and seducers of this cult. They work covertly in the cities and train thieves and assassins in the underground base here."})
 
 function creatureSayCallback(cid, type, msg)
-	if(npcHandler.focus ~= cid) then
+	if not npcHandler:hasFocus(cid) then
 		return false
 	end
-	
---Give Destination--
-if msgcontains(msg, 'teleport') and npcHandler.focus == cid then
-	bcprice = 0
-	bcdestination = {x=32626, y=32402, z=10}
-	npcHandler:say("I am still gathering my strength for a teleport home, but some power already has returned. Do you wish to be teleported out of this cell?", 1)
-	talk_state = 9166
---End of Give Destination--
-	
---System that does the job after confirm destination--
-elseif talk_state == 9166 and msgcontains(msg, 'yes') and npcHandler.focus == cid then
+	msg = string.lower(msg)
+	local cidData = npcHandler:getFocusPlayerData(cid)
+
+	--Give Destination--
+	if msgcontains(msg, 'teleport') and npcHandler:hasFocus(cid) then
+		bcprice = 0
+		bcdestination = {x=32626, y=32402, z=10}
+		npcHandler:playerSay(cid, "I am still gathering my strength for a teleport home, but some power already has returned. Do you wish to be teleported out of this cell?", 1)
+		cidData.state = 9166
+	--End of Give Destination--
+
+	--System that does the job after confirm destination--
+	elseif cidData.state == 9166 and msgcontains(msg, 'yes') and npcHandler:hasFocus(cid) then
 		if doPlayerRemoveMoney(cid, bcprice) == true then
-		doTeleportThing(cid, bcdestination)
-		doSendMagicEffect(bcdestination, 10)
-		npcHandler:say("So be it!", 1)
-		talk_state = 0
+			doTeleportThing(cid, bcdestination)
+			doSendMagicEffect(bcdestination, 10)
+			npcHandler:playerSay(cid, "So be it!", 1)
+			cidData.state = 0
 		else
-		npcHandler:say("You don't have enough money.", 1)
-		talk_state = 0
+			npcHandler:playerSay(cid, "You don't have enough money.", 1)
+			cidData.state = 0
 		end
---End of the System that does the job after confirm destination--
+	--End of the System that does the job after confirm destination--
 
 
-elseif talk_state == 0 and msgcontains(msg, 'job') and npcHandler.focus == cid then
-	npcHandler:say("I am a priestess and I travelled here to learn about that order of the humble path I heard about. ...", 1)
-	npcHandler:say('But when I started my investigations, this false monk Lorbas thought that I was suspicious and so he ordered his minions to take me as prisoner.', 5)
+	elseif cidData.state == 0 and msgcontains(msg, 'job') and npcHandler:hasFocus(cid) then
+		npcHandler:playerSay(cid, "I am a priestess and I travelled here to learn about that order of the humble path I heard about. ...", 1)
+		npcHandler:playerSay(cid, "But when I started my investigations, this false monk Lorbas thought that I was suspicious and so he ordered his minions to take me as prisoner.", 5)
 
-elseif talk_state == 0 and msgcontains(msg, 'cult') and npcHandler.focus == cid then
-	npcHandler:say("The cult is secretly looking for the unsatisfied, disgrunteled and poor. Its members promise such sad individuals wealth, revenge and a cause. ...", 1)
-	npcHandler:say("They lure them into the cells of their cult. Here they learn how to undermine the authorities of their cities. They are trained as thieves, spies and smugglers first. ...", 5)
-	npcHandler:say("Those who prove themselves as the most promising candidates are recruited to a special hidden circle. There they learn the dark arts of poisoning and murder, or elocution and agitation to become assassins and recruiters for the cult. ...", 9)
-	npcHandler:say("I know nothing about their agenda but I am quite sure there has to be some higher power behind all of this.", 13)
+	elseif cidData.state == 0 and msgcontains(msg, 'cult') and npcHandler:hasFocus(cid) then
+		npcHandler:playerSay(cid, "The cult is secretly looking for the unsatisfied, disgrunteled and poor. Its members promise such sad individuals wealth, revenge and a cause. ...", 1)
+		npcHandler:playerSay(cid, "They lure them into the cells of their cult. Here they learn how to undermine the authorities of their cities. They are trained as thieves, spies and smugglers first. ...", 5)
+		npcHandler:playerSay(cid, "Those who prove themselves as the most promising candidates are recruited to a special hidden circle. There they learn the dark arts of poisoning and murder, or elocution and agitation to become assassins and recruiters for the cult. ...", 9)
+		npcHandler:playerSay(cid, "I know nothing about their agenda but I am quite sure there has to be some higher power behind all of this.", 13)
 
-elseif talk_state == 0 and msgcontains(msg, 'cathedral') and npcHandler.focus == cid then
-	npcHandler:say("The cathedral was meant to be a centre of piety and believe. A prayer to the gods that had become solid. ...", 1)
-	npcHandler:say("The construction works started at the height of the Order of the Nightmare Knights, right after they had won a major battle near the place where the cathedral was to be built. ...", 5)
-	npcHandler:say("The cathedral was meant to become a monument of the victory of good over evil. ...", 9)
-	npcHandler:say("Sadly it was just not meant to be. ...", 13)
-	npcHandler:say("As the cathedral was nearly finished, most of the monks had already moved in and even a small town for all the workers and suppliers had established itself. ...", 17)
-	npcHandler:say("But then the structure was struck by an earthquake and the work of two generations was destroyed. ...", 21)
-	npcHandler:say("Later the dwarven constructors explained that this was caused by volcanic activities and a massive cave-in. ...", 25)
-	npcHandler:say("Since the gods did not interfere and the setting was close to the notorious Pits of Inferno, it was assumed that this was the work of secret demonic powers.", 29)	
-end		
-    return true
+	elseif cidData.state == 0 and msgcontains(msg, 'cathedral') and npcHandler:hasFocus(cid) then
+		npcHandler:playerSay(cid, "The cathedral was meant to be a centre of piety and believe. A prayer to the gods that had become solid. ...", 1)
+		npcHandler:playerSay(cid, "The construction works started at the height of the Order of the Nightmare Knights, right after they had won a major battle near the place where the cathedral was to be built. ...", 5)
+		npcHandler:playerSay(cid, "The cathedral was meant to become a monument of the victory of good over evil. ...", 9)
+		npcHandler:playerSay(cid, "Sadly it was just not meant to be. ...", 13)
+		npcHandler:playerSay(cid, "As the cathedral was nearly finished, most of the monks had already moved in and even a small town for all the workers and suppliers had established itself. ...", 17)
+		npcHandler:playerSay(cid, "But then the structure was struck by an earthquake and the work of two generations was destroyed. ...", 21)
+		npcHandler:playerSay(cid, "Later the dwarven constructors explained that this was caused by volcanic activities and a massive cave-in. ...", 25)
+		npcHandler:playerSay(cid, "Since the gods did not interfere and the setting was close to the notorious Pits of Inferno, it was assumed that this was the work of secret demonic powers.", 29)
+	end
+	return true
 end
 
 npcHandler:setCallback(CALLBACK_MESSAGE_DEFAULT, creatureSayCallback)

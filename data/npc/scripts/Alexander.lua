@@ -5,10 +5,10 @@ local npcHandler = NpcHandler:new(keywordHandler)
 NpcSystem.parseParameters(npcHandler)
 
 -- OTServ event handling functions
-function onCreatureAppear(cid)			npcHandler:onCreatureAppear(cid)			end
-function onCreatureDisappear(cid)		npcHandler:onCreatureDisappear(cid)			end
-function onCreatureSay(cid, type, msg)		npcHandler:onCreatureSay(cid, type, msg)		end
-function onThink()				npcHandler:onThink()					end
+function onCreatureAppear(cid)         npcHandler:onCreatureAppear(cid)         end
+function onCreatureDisappear(cid)      npcHandler:onCreatureDisappear(cid)      end
+function onCreatureSay(cid, type, msg) npcHandler:onCreatureSay(cid, type, msg) end
+function onThink()                     npcHandler:onThink()                     end
 
 local shopModule = ShopModule:new()
 npcHandler:addModule(shopModule)
@@ -59,46 +59,49 @@ shopModule:addBuyableItem({'tempest rod'}, 2183, 15000)
 shopModule:addBuyableItem({'wand of inferno'}, 2187, 15000)
 
 function creatureSayCallback(cid, type, msg)
-	if(npcHandler.focus ~= cid) then
+	if not npcHandler:hasFocus(cid) then
 		return false
 	end
-	
-if getPlayerStorageValue(cid, 999) == -1 and msgcontains(msg, 'rod') or getPlayerStorageValue(cid, 999) == -1 and msgcontains(msg, 'Rod') or getPlayerStorageValue(cid, 999) == -1 and msgcontains(msg, 'wand') or getPlayerStorageValue(cid, 999) == -1 and msgcontains(msg, 'Wand') then	
-	if getPlayerStorageValue(cid, 999) == -1 then
-	if isSorcerer(cid) then
-    	doPlayerAddItem(cid,2190,1)
-		npcHandler:say('Here\'s your wand!', 1)
-		setPlayerStorageValue(cid, 999, 1)
+	msg = string.lower(msg)
 
-	elseif isDruid(cid) then
-    	doPlayerAddItem(cid,2182,1)
-		npcHandler:say('Here\'s your rod!', 1)
-		setPlayerStorageValue(cid, 999, 1)
+	local cidData = npcHandler:getFocusPlayerData(cid)
 
-	else
-		npcHandler:say('I\'m sorry, but you\'re neither sorcerer nor druid!', 1)
-		setPlayerStorageValue(cid, 999, 1)
-	end	
-	talk_state = 0
-end
+	if getPlayerStorageValue(cid, 999) == -1 and msgcontains(msg, 'rod') or getPlayerStorageValue(cid, 999) == -1 and msgcontains(msg, 'wand') then
+		if getPlayerStorageValue(cid, 999) == -1 then
+		if isSorcerer(cid) then
+			doPlayerAddItem(cid,2190,1)
+			npcHandler:playerSay(cid, 'Here\'s your wand!', 1)
+			setPlayerStorageValue(cid, 999, 1)
 
-elseif msgcontains(msg, 'rod') or msgcontains(msg, 'Rod') then
-	npcHandler:say("Rods can be wielded by druids only and have a certain level requirement. There are five different rods, would you like to hear about them?", 1)
-	talk_state = 7613
-			
-elseif talk_state == 7613 and msgcontains(msg, 'yes') or talk_state == 7613 and msgcontains(msg, 'Yes') then
-	npcHandler:say("The names of the rods are 'Snakebite Rod', 'Moonlight Rod', 'Volcanic Rod', 'Quagmire Rod', and 'Tempest Rod'. Which one would you like to buy?", 1)
-	talk_state = 7613
+		elseif isDruid(cid) then
+	    	doPlayerAddItem(cid,2182,1)
+			npcHandler:playerSay(cid, 'Here\'s your rod!', 1)
+			setPlayerStorageValue(cid, 999, 1)
 
-elseif msgcontains(msg, 'wand') or msgcontains(msg, 'Wand') then
-	npcHandler:say("Wands can be wielded by sorcerers only and have a certain level requirement. There are five different wands, would you like to hear about them?", 1)
-	talk_state = 7624
-			
-elseif talk_state == 7624 and msgcontains(msg, 'yes') or talk_state == 7624 and msgcontains(msg, 'Yes') then
-	npcHandler:say("The names of the wands are 'Wand of Vortex', 'Wand of Dragonbreath', 'Wand of Plague', 'Wand of Cosmic Energy' and 'Wand of Inferno'. Which one would you like to buy?", 1)
-	talk_state = 7624
+		else
+			npcHandler:playerSay(cid, 'I\'m sorry, but you\'re neither sorcerer nor druid!', 1)
+			setPlayerStorageValue(cid, 999, 1)
+		end
+		cidData.state = 0
+	end
 
-end		
+	elseif msgcontains(msg, 'rod') then
+		npcHandler:playerSay(cid, "Rods can be wielded by druids only and have a certain level requirement. There are five different rods, would you like to hear about them?", 1)
+		cidData.state = 7613
+
+	elseif cidData.state == 7613 and msgcontains(msg, 'yes') then
+		npcHandler:playerSay(cid, "The names of the rods are 'Snakebite Rod', 'Moonlight Rod', 'Volcanic Rod', 'Quagmire Rod', and 'Tempest Rod'. Which one would you like to buy?", 1)
+		cidData.state = 7613
+
+	elseif msgcontains(msg, 'wand') then
+		npcHandler:playerSay(cid, "Wands can be wielded by sorcerers only and have a certain level requirement. There are five different wands, would you like to hear about them?", 1)
+		cidData.state = 7624
+
+	elseif cidData.state == 7624 and msgcontains(msg, 'yes') then
+		npcHandler:playerSay(cid, "The names of the wands are 'Wand of Vortex', 'Wand of Dragonbreath', 'Wand of Plague', 'Wand of Cosmic Energy' and 'Wand of Inferno'. Which one would you like to buy?", 1)
+		cidData.state = 7624
+
+	end
     return true
 end
 

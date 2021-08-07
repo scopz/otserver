@@ -5,10 +5,10 @@ local npcHandler = NpcHandler:new(keywordHandler)
 NpcSystem.parseParameters(npcHandler)
 
 -- OTServ event handling functions
-function onCreatureAppear(cid)			npcHandler:onCreatureAppear(cid)			end
-function onCreatureDisappear(cid)		npcHandler:onCreatureDisappear(cid)			end
-function onCreatureSay(cid, type, msg)		npcHandler:onCreatureSay(cid, type, msg)		end
-function onThink()				npcHandler:onThink()					end
+function onCreatureAppear(cid)         npcHandler:onCreatureAppear(cid)         end
+function onCreatureDisappear(cid)      npcHandler:onCreatureDisappear(cid)      end
+function onCreatureSay(cid, type, msg) npcHandler:onCreatureSay(cid, type, msg) end
+function onThink()                     npcHandler:onThink()                     end
 
 local shopModule = ShopModule:new()
 npcHandler:addModule(shopModule)
@@ -93,27 +93,30 @@ keywordHandler:addKeyword({'club'}, StdModule.say, {npcHandler = npcHandler, onl
 keywordHandler:addKeyword({'time'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "It is about |TIME|. I am so sorry, I have no watches to sell. Do you want to buy something else?"})
 
 function creatureSayCallback(cid, type, msg)
-	if(npcHandler.focus ~= cid) then
+	if not npcHandler:hasFocus(cid) then
 		return false
 	end
-	
-	if msgcontains(msg, 'pick') then
-	npcHandler:say('Picks are hard to come by. I trade them only for high quality small axes. Do you want to trade?')
-	talk_state = 1
-	
-	elseif msgcontains(msg, 'yes') and talk_state == 1 and getPlayerItemCount(cid,2559) >= 1 then
-	npcHandler:say('Splendid! Here take your pickaxe.')
-	doPlayerRemoveItem(cid,2559,1)
-	doPlayerAddItem(cid,2553,1)
-	talk_state = 0
-	elseif msgcontains(msg, 'yes') and talk_state == 1 and getPlayerItemCount(cid,2559) == 0 then
-	npcHandler:say('Sorry, I am looking for a SMALL axe.')
-	talk_state = 0
-	elseif msgcontains(msg, 'no') and talk_state == 1 then
-	npcHandler:say('Well, then not.')
-	talk_state = 0
-	end
 
+	local cidData = npcHandler:getFocusPlayerData(cid)
+
+	if msgcontains(msg, 'pick') then
+		npcHandler:playerSay(cid, 'Picks are hard to come by. I trade them only for high quality small axes. Do you want to trade?')
+		cidData.state = 1
+
+	elseif msgcontains(msg, 'yes') and cidData.state == 1 and getPlayerItemCount(cid,2559) >= 1 then
+		npcHandler:playerSay(cid, 'Splendid! Here take your pickaxe.')
+		doPlayerRemoveItem(cid,2559,1)
+		doPlayerAddItem(cid,2553,1)
+		cidData.state = 0
+
+	elseif msgcontains(msg, 'yes') and cidData.state == 1 and getPlayerItemCount(cid,2559) == 0 then
+		npcHandler:playerSay(cid, 'Sorry, I am looking for a SMALL axe.')
+		cidData.state = 0
+
+	elseif msgcontains(msg, 'no') and cidData.state == 1 then
+		npcHandler:playerSay(cid, 'Well, then not.')
+		cidData.state = 0
+	end
 	return true
 end
 

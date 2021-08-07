@@ -109,7 +109,6 @@ if(KeywordHandler == nil) then
 	
 	KeywordHandler = {
 		root = nil,
-		lastNode = nil
 	}
 	
 	-- Creates a new keywordhandler with an empty rootnode. 
@@ -121,16 +120,10 @@ if(KeywordHandler == nil) then
 		return obj
 	end
 	
-	-- Resets the lastNode field, and this resetting the current position in the node hierarchy to root.
-	function KeywordHandler:reset()
-		self.lastNode = nil
-	end
-	
-	
 	-- Makes sure the correct childNode of lastNode gets a chance to process the message. 
 	--	The behavior of this function depends much on the KEYWORD_BEHAVIOR.
 	function KeywordHandler:processMessage(cid, message)
-		local node = self:getLastNode()
+		local node = self.getLastNode(cid)
 		if(node == nil) then
 			error('No root node found.')
 			return false
@@ -185,13 +178,13 @@ if(KeywordHandler == nil) then
 		local messageLower = string.lower(message)
 		for i, childNode in pairs(node.children) do
 			if(childNode:checkMessage(messageLower)) then
-				local oldLast = self.lastNode
-				self.lastNode = childNode
+				local oldLast = self.getLastNode(cid)
+				self.setLastNode(cid, childNode)
 				childNode.parent = node -- Make sure node is the parent of childNode (as one node can be parent to several nodes).
 				if(childNode:processMessage(cid, message)) then
 					return true
 				else
-					self.lastNode = oldLast
+					self.setLastNode(cid, oldLast)
 				end
 			end
 		end
@@ -203,15 +196,6 @@ if(KeywordHandler == nil) then
 		return self.root
 	end
 	
-	-- Returns the last processed keywordnode or root if no last node is found. 
-	function KeywordHandler:getLastNode()
-		if(KEYWORD_BEHAVIOR == BEHAVIOR_SIMPLE) then
-			return self:getRoot()
-		else
-			return self.lastNode or self:getRoot()
-		end
-	end
-	
 	-- Adds a new keyword to the root keywordnode. Returns the new node. 
 	function KeywordHandler:addKeyword(keys, callback, parameters)
 		return self:getRoot():addChildKeyword(keys, callback, parameters)
@@ -219,18 +203,20 @@ if(KeywordHandler == nil) then
 	
 	-- Moves the current position in the keyword hierarchy count steps upwards. Count defalut value = 1.
 	--	This function MIGHT not work properly yet. Use at your own risk.
-	function KeywordHandler:moveUp(count)
+	function KeywordHandler:moveUp(cid, count)
 		local steps = count
 		if(steps == nil) then
 			steps = 1
 		end
+		local lastNode = self.getLastNode(cid)
 		for i=1,steps,1 do
-			if(self.lastNode == nil) then
+			if(lastNode == nil) then
 				break
 			else
-				self.lastNode = self.lastNode:getParent() or self:getRoot()
+				lastNode = lastNode:getParent() or self:getRoot()
 			end
 		end
+		self.setLastNode(cid, lastNode)
 		return self.lastNode
 	end
 	

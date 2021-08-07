@@ -5,10 +5,10 @@ local npcHandler = NpcHandler:new(keywordHandler)
 NpcSystem.parseParameters(npcHandler)
 
 -- OTServ event handling functions
-function onCreatureAppear(cid)			npcHandler:onCreatureAppear(cid)			end
-function onCreatureDisappear(cid)		npcHandler:onCreatureDisappear(cid)			end
-function onCreatureSay(cid, type, msg)		npcHandler:onCreatureSay(cid, type, msg)		end
-function onThink()				npcHandler:onThink()					end
+function onCreatureAppear(cid)         npcHandler:onCreatureAppear(cid)         end
+function onCreatureDisappear(cid)      npcHandler:onCreatureDisappear(cid)      end
+function onCreatureSay(cid, type, msg) npcHandler:onCreatureSay(cid, type, msg) end
+function onThink()                     npcHandler:onThink()                     end
 
 function greetCallback(cid)
 	if getPlayerLevel(cid) <= 15 then
@@ -51,18 +51,18 @@ keywordHandler:addKeyword({'excalibug'}, StdModule.say, {npcHandler = npcHandler
 keywordHandler:addKeyword({'time'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "It is |TIME|."})
 
 function creatureSayCallback(cid, type, msg)
-	if(npcHandler.focus ~= cid) then
+	if not npcHandler:hasFocus(cid) then
 		return false
 	end
-if msgcontains(msg, 'sewer') or msgcontains(msg, 'Sewer') then
-	if getPlayerSex(cid) == 1 then
-	npcHandler:say("An interesting place you should consider to visit.", 1)
-	else
-	npcHandler:say("The sewers of Carlin are a disgusting place. Better never crawl around in these stinking tunnels.", 1)
-	end
-	talk_state = 0
+	msg = string.lower(msg)
 
-end		
+	if msgcontains(msg, 'sewer') then
+		if getPlayerSex(cid) == 1 then
+			npcHandler:playerSay(cid, "An interesting place you should consider to visit.", 1)
+		else
+			npcHandler:playerSay(cid, "The sewers of Carlin are a disgusting place. Better never crawl around in these stinking tunnels.", 1)
+		end
+	end		
     return true
 end
 

@@ -3,10 +3,10 @@ local npcHandler = NpcHandler:new(keywordHandler)
 NpcSystem.parseParameters(npcHandler)
 
 -- OTServ event handling functions
-function onCreatureAppear(cid)			npcHandler:onCreatureAppear(cid)			end
-function onCreatureDisappear(cid)		npcHandler:onCreatureDisappear(cid)			end
-function onCreatureSay(cid, type, msg)		npcHandler:onCreatureSay(cid, type, msg)		end
-function onThink()				npcHandler:onThink()					end
+function onCreatureAppear(cid)         npcHandler:onCreatureAppear(cid)         end
+function onCreatureDisappear(cid)      npcHandler:onCreatureDisappear(cid)      end
+function onCreatureSay(cid, type, msg) npcHandler:onCreatureSay(cid, type, msg) end
+function onThink()                     npcHandler:onThink()                     end
 local fire = createConditionObject(CONDITION_FIRE)
 setConditionParam(fire, CONDITION_PARAM_DELAYED, 10)
 addDamageCondition(fire, 1, 2000, -10)
@@ -21,14 +21,14 @@ addDamageCondition(fire, 1, 2000, -10)
 			obj.callback = FOCUS_GREETSWORDS.callback or FocusModule.messageMatcher
 			handler.keywordHandler:addKeyword(obj, FocusModule.onGreet, {module = self})
 		end
-		
+
 		for i, word in pairs(FOCUS_FAREWELLSWORDS) do
 			local obj = {}
 			table.insert(obj, word)
 			obj.callback = FOCUS_FAREWELLSWORDS.callback or FocusModule.messageMatcher
 			handler.keywordHandler:addKeyword(obj, FocusModule.onFarewell, {module = self})
 		end
-		
+
 		return true
 	end
 
@@ -77,151 +77,67 @@ keywordHandler:addKeyword({'cemetary'}, StdModule.say, {npcHandler = npcHandler,
 keywordHandler:addKeyword({'crypt'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "Bah! Just men's tales! Who believes in such bullshit? Perhaps we should put some men there over night and see what happens. Hehehe!"})
 
 function creatureSayCallback(cid, type, msg)
-	if(npcHandler.focus ~= cid) then
+	if not npcHandler:hasFocus(cid) then
 		return false
 	end
-	
-if msgcontains(msg, 'hi') or msgcontains(msg, 'hello') then
-	npcHandler:say("Address me properly ".. getPlayerName(cid) .."!", 1)
-	talk_state = 0
-			
-elseif msgcontains(msg, 'hail') or msgcontains(msg, 'salutations') then
-	npcHandler:say("Address me with my title, commoner ".. getPlayerName(cid) .."!", 1)
-	talk_state = 0
 
-elseif msgcontains(msg, 'job') and npcHandler.focus == cid then
-	if getPlayerSex(cid) == 1 then
-	npcHandler:say("I am the general of the queen's army and have not the time to explain this concept to you.", 1)
-	else
-	npcHandler:say("I am the general of the queen's army! You really should consider to join, sister.", 1)
+	local cidData = npcHandler:getFocusPlayerData(cid)
+
+	if msgcontains(msg, 'hi') or msgcontains(msg, 'hello') then
+		npcHandler:playerSay(cid, "Address me properly ".. getPlayerName(cid) .."!", 1)
+		cidData.state = 0
+
+	elseif msgcontains(msg, 'hail') or msgcontains(msg, 'salutations') then
+		npcHandler:playerSay(cid, "Address me with my title, commoner ".. getPlayerName(cid) .."!", 1)
+		cidData.state = 0
+
+	elseif msgcontains(msg, 'job') and npcHandler:hasFocus(cid) then
+		if getPlayerSex(cid) == 1 then
+			npcHandler:playerSay(cid, "I am the general of the queen's army and have not the time to explain this concept to you.", 1)
+		else
+			npcHandler:playerSay(cid, "I am the general of the queen's army! You really should consider to join, sister.", 1)
+		end
+		cidData.state = 0
+
+	elseif msgcontains(msg, 'quest') and npcHandler:hasFocus(cid) or msgcontains(msg, 'mission') and npcHandler:hasFocus(cid) then
+		if getPlayerSex(cid) == 1 then
+			npcHandler:playerSay(cid, "Yeah. Entrusting a male with an important quest. Get serious!", 1)
+		else
+			npcHandler:playerSay(cid, "Sometimes the queen calls for heroines. Keep eyes and ears open!", 1)
+		end
+		cidData.state = 0
+
+	elseif msgcontains(msg, 'sell') and npcHandler:hasFocus(cid) then
+		npcHandler:playerSay(cid, "Are you suggesting I am corruptible?", 1)
+		cidData.state = 2
+
+	elseif cidData.state == 2 and msgcontains(msg, 'yes') and npcHandler:hasFocus(cid) then
+		doSendMagicEffect(getCreaturePosition(getNpcCid()), 13)
+		doSendMagicEffect(getPlayerPosition(cid), 15)
+		doAddCondition(cid, fire)
+		npcHandler:playerSay(cid, "Take this!", 0.5)
+		cidData.state = 0
+
+	elseif cidData.state == 2 and msgcontains(msg, '') and npcHandler:hasFocus(cid) then
+		npcHandler:playerSay(cid, "You should be careful with your words!", 1)
+		cidData.state = 0
+
+	elseif msgcontains(msg, "idiot")   or msgcontains(msg, "asshole")
+		or msgcontains(msg, "retard")  or msgcontains(msg, "sucker")
+		or msgcontains(msg, "fag")     or msgcontains(msg, "fuck")
+		or msgcontains(msg, "shut up") or msgcontains(msg, "shit")
+		or msgcontains(msg, "ugly")    or msgcontains(msg, "smell")
+		or msgcontains(msg, "blow")    or msgcontains(msg, "cock")
+		or msgcontains(msg, "dick")    or msgcontains(msg, "pussy")
+		or msgcontains(msg, "vagina")  or msgcontains(msg, "bitch")
+		or msgcontains(msg, "nigger") then
+
+		doSendMagicEffect(getCreaturePosition(getNpcCid()), 13)
+		doSendMagicEffect(getPlayerPosition(cid), 15)
+		doAddCondition(cid, fire)
+		npcHandler:playerSay(cid, "Take this!", 0.5)
+		cidData.state = 0
 	end
-	talk_state = 0
-
-elseif msgcontains(msg, 'quest') and npcHandler.focus == cid or msgcontains(msg, 'mission') and npcHandler.focus == cid then
-	if getPlayerSex(cid) == 1 then
-	npcHandler:say("Yeah. Entrusting a male with an important quest. Get serious!", 1)
-	else
-	npcHandler:say("Sometimes the queen calls for heroines. Keep eyes and ears open!", 1)
-	end
-	talk_state = 0
-	
-elseif msgcontains(msg, 'sell') and npcHandler.focus == cid then
-	npcHandler:say("Are you suggesting I am corruptible?", 1)
-	talk_state = 2
-
-elseif talk_state == 2 and msgcontains(msg, 'yes') and npcHandler.focus == cid then
-	doSendMagicEffect(getCreaturePosition(getNpcCid(  )), 13)
-	doSendMagicEffect(getPlayerPosition(cid), 15)
-	doAddCondition(cid, fire)
-	npcHandler:say("Take this!", 0.5)
-	talk_state = 0
-elseif talk_state == 2 and msgcontains(msg, '') and npcHandler.focus == cid then
-	npcHandler:say("You should be careful with your words!", 1)
-	talk_state = 0	
-	
-elseif msgcontains(msg, "idiot") then
-	doSendMagicEffect(getCreaturePosition(getNpcCid(  )), 13)
-	doSendMagicEffect(getPlayerPosition(cid), 15)
-	doAddCondition(cid, fire)
-	npcHandler:say("Take this!", 0.5)
-	talk_state = 0
-	elseif msgcontains(msg, "asshole") then
-	doSendMagicEffect(getCreaturePosition(getNpcCid(  )), 13)
-	doSendMagicEffect(getPlayerPosition(cid), 15)
-	doAddCondition(cid, fire)
-	npcHandler:say("Take this!", 0.5)
-	talk_state = 0
-	elseif msgcontains(msg, "retard") then
-	doSendMagicEffect(getCreaturePosition(getNpcCid(  )), 13)
-	doSendMagicEffect(getPlayerPosition(cid), 15)
-	doAddCondition(cid, fire)
-	npcHandler:say("Take this!", 0.5)
-	talk_state = 0
-	elseif msgcontains(msg, "sucker") then
-	doSendMagicEffect(getCreaturePosition(getNpcCid(  )), 13)
-	doSendMagicEffect(getPlayerPosition(cid), 15)
-	doAddCondition(cid, fire)
-	npcHandler:say("Take this!", 0.5)
-	talk_state = 0
-	elseif msgcontains(msg, "fag") then
-	doSendMagicEffect(getCreaturePosition(getNpcCid(  )), 13)
-	doSendMagicEffect(getPlayerPosition(cid), 15)
-	doAddCondition(cid, fire)
-	npcHandler:say("Take this!", 0.5)
-	talk_state = 0
-	elseif msgcontains(msg, "fuck") then
-	doSendMagicEffect(getCreaturePosition(getNpcCid(  )), 13)
-	doSendMagicEffect(getPlayerPosition(cid), 15)
-	doAddCondition(cid, fire)
-	npcHandler:say("Take this!", 0.5)
-	talk_state = 0
-	elseif msgcontains(msg, "shut up") then
-	doSendMagicEffect(getCreaturePosition(getNpcCid(  )), 13)
-	doSendMagicEffect(getPlayerPosition(cid), 15)
-	doAddCondition(cid, fire)
-	npcHandler:say("Take this!", 0.5)
-	talk_state = 0
-	elseif msgcontains(msg, "shit") then
-	doSendMagicEffect(getCreaturePosition(getNpcCid(  )), 13)
-	doSendMagicEffect(getPlayerPosition(cid), 15)
-	doAddCondition(cid, fire)
-	npcHandler:say("Take this!", 0.5)
-	talk_state = 0		
-	elseif msgcontains(msg, "ugly") then
-	doSendMagicEffect(getCreaturePosition(getNpcCid(  )), 13)
-	doSendMagicEffect(getPlayerPosition(cid), 15)
-	doAddCondition(cid, fire)
-	npcHandler:say("Take this!", 0.5)
-	talk_state = 0
-	elseif msgcontains(msg, "smell") then
-	doSendMagicEffect(getCreaturePosition(getNpcCid(  )), 13)
-	doSendMagicEffect(getPlayerPosition(cid), 15)
-	doAddCondition(cid, fire)
-	npcHandler:say("Take this!", 0.5)
-	talk_state = 0
-	elseif msgcontains(msg, "blow") then
-	doSendMagicEffect(getCreaturePosition(getNpcCid(  )), 13)
-	doSendMagicEffect(getPlayerPosition(cid), 15)
-	doAddCondition(cid, fire)
-	npcHandler:say("Take this!", 0.5)
-	talk_state = 0
-	elseif msgcontains(msg, "cock") then
-	doSendMagicEffect(getCreaturePosition(getNpcCid(  )), 13)
-	doSendMagicEffect(getPlayerPosition(cid), 15)
-	doAddCondition(cid, fire)
-	npcHandler:say("Take this!", 0.5)
-	talk_state = 0
-	elseif msgcontains(msg, "dick") then
-	doSendMagicEffect(getCreaturePosition(getNpcCid(  )), 13)
-	doSendMagicEffect(getPlayerPosition(cid), 15)
-	doAddCondition(cid, fire)
-	npcHandler:say("Take this!", 0.5)
-	talk_state = 0
-	elseif msgcontains(msg, "pussy") then
-	doSendMagicEffect(getCreaturePosition(getNpcCid(  )), 13)
-	doSendMagicEffect(getPlayerPosition(cid), 15)
-	doAddCondition(cid, fire)
-	npcHandler:say("Take this!", 0.5)
-	talk_state = 0	
-	elseif msgcontains(msg, "vagina") then
-	doSendMagicEffect(getCreaturePosition(getNpcCid(  )), 13)
-	doSendMagicEffect(getPlayerPosition(cid), 15)
-	doAddCondition(cid, fire)
-	npcHandler:say("Take this!", 0.5)
-	talk_state = 0
-	elseif msgcontains(msg, "bitch") then
-	doSendMagicEffect(getCreaturePosition(getNpcCid(  )), 13)
-	doSendMagicEffect(getPlayerPosition(cid), 15)
-	doAddCondition(cid, fire)
-	npcHandler:say("Take this!", 0.5)
-	talk_state = 0
-			elseif msgcontains(msg, "nigger") then
-	doSendMagicEffect(getCreaturePosition(getNpcCid(  )), 13)
-	doSendMagicEffect(getPlayerPosition(cid), 15)
-	doAddCondition(cid, fire)
-	npcHandler:say("Take this!", 0.5)
-	talk_state = 0
-end
 	return true
 end
 

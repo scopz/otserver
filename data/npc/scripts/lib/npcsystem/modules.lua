@@ -43,7 +43,7 @@ if(Modules == nil) then
 		if(npcHandler == nil) then
 			error('StdModule.say called without any npcHandler instance.')
 		end
-		if(cid ~= npcHandler.focus and (parameters.onlyFocus == nil or parameters.onlyFocus == true)) then
+		if not npcHandler:hasFocus(cid) and (parameters.onlyFocus == nil or parameters.onlyFocus == true) then
 			return false
 		end
 		
@@ -64,11 +64,11 @@ if(Modules == nil) then
 				[TAG_TRAVELCOST] = costMessage,
 			}
 		msgout = npcHandler:parseMessage(parameters.text or parameters.message, parseInfo)
-		npcHandler:say(msgout)
+		npcHandler:playerSay(cid, msgout)
 		if(parameters.reset == true) then
-			npcHandler:resetNpc()
+			npcHandler:resetNpc(cid)
 		elseif(parameters.moveup ~= nil and type(parameters.moveup) == 'number') then
-			npcHandler.keywordHandler:moveUp(parameters.moveup)
+			npcHandler.keywordHandler:moveUp(cid, parameters.moveup)
 		end
 		return true
 	end
@@ -84,7 +84,7 @@ if(Modules == nil) then
 		if(npcHandler == nil) then
 			error('StdModule.promotePlayer called without any npcHandler instance.')
 		end
-		if(cid ~= npcHandler.focus) then
+		if not npcHandler:hasFocus(cid) then
 			return false
 		end
 
@@ -92,23 +92,23 @@ if(Modules == nil) then
 		local prom = getPromotedVocation(oldVoc);
 
 		if oldVoc == 0 then
-			npcHandler:say('You can\'t promote!')
+			npcHandler:playerSay(cid, 'You can\'t promote!')
 		elseif(prom == 0) then
-			npcHandler:say('You are already promoted!')
+			npcHandler:playerSay(cid, 'You are already promoted!')
 		elseif isPlayerPremiumCallback(cid) == false then
-			npcHandler:say('You need a premium account in order to promote.')
+			npcHandler:playerSay(cid, 'You need a premium account in order to promote.')
 		elseif(getPlayerLevel(cid) < parameters.level) then
-			npcHandler:say('You need to be at least level ' .. parameters.level .. ' in order to be promoted.')
+			npcHandler:playerSay(cid, 'You need to be at least level ' .. parameters.level .. ' in order to be promoted.')
 		elseif(doPlayerRemoveMoney(cid, parameters.cost) ~= true) then
-			npcHandler:say('You do not have enough money!')
+			npcHandler:playerSay(cid, 'You do not have enough money!')
 		else
 			doPlayerSetVocation(cid, prom)
 			doPlayerRemoveSkillLossPercent(cid, 30)
 			doSendMagicEffect(getCreaturePosition(cid), CONST_ME_MAGIC_BLUE)
-			npcHandler:say(parameters.text)
+			npcHandler:playerSay(cid, parameters.text)
 		end
 
-		npcHandler:resetNpc()
+		npcHandler:resetNpc(cid)
 		return true
 		
 	end
@@ -118,50 +118,50 @@ if(Modules == nil) then
 		if(npcHandler == nil) then
 			error('StdModule.promotePlayer called without any npcHandler instance.')
 		end
-		if(cid ~= npcHandler.focus) then
+		if not npcHandler:hasFocus(cid) then
 			return false
 		end
 
-		npcHandler:say('You need to be at least level 100, and you will lose all your levels and skills. You\'ll need to start all over again. ' .. 
+		npcHandler:playerSay(cid, 'You need to be at least level 100, and you will lose all your levels and skills. You\'ll need to start all over again. ' .. 
 			'However, not everything is negative. Do you want to hear the positive part?')
 
 		local node1 = node:addChildKeyword({'yes'}, function()
-			if(cid ~= npcHandler.focus) then return false end
+			if not npcHandler:hasFocus(cid) then return false end
 
-			npcHandler:say('Once you reach to Tibia, you will develop as a stronger class. Also, and your lost skills can be recoved back once you reach a least level 110 again. '..
+			npcHandler:playerSay(cid, 'Once you reach to Tibia, you will develop as a stronger class. Also, and your lost skills can be recoved back once you reach a least level 110 again. '..
 				'You can see this process as a sacrifice. All your equipment will be sent automatically to your depot. Did you understand?')
 
 			return true;
 		end, {})
 
 		local node2 = node1:addChildKeyword({'yes'}, function()
-			if(cid ~= npcHandler.focus) then return false end
+			if not npcHandler:hasFocus(cid) then return false end
 
-			npcHandler:say('This process is not easy either, it has a cost of 100000 gold coins. DO YOU WANT TO PROCEED?')
+			npcHandler:playerSay(cid, 'This process is not easy either, it has a cost of 100000 gold coins. DO YOU WANT TO PROCEED?')
 
 			return true;
 		end, {})
 
 		node2:addChildKeyword({'yes'}, function()
-			if(cid ~= npcHandler.focus) then return false end
+			if not npcHandler:hasFocus(cid) then return false end
 
 			local oldVoc = getPlayerVocation(cid)
 			local reb = getRebirthVocation(oldVoc)
 
 			if oldVoc == 0 then
-				npcHandler:say('You can\'t rebirth!')
+				npcHandler:playerSay(cid, 'You can\'t rebirth!')
 
 			elseif reb == 0 then
-				npcHandler:say('You are already reborn!')
+				npcHandler:playerSay(cid, 'You are already reborn!')
 
 			elseif not isPlayerPremiumCallback(cid) then
-				npcHandler:say('You need a premium account in order to rebirth.')
+				npcHandler:playerSay(cid, 'You need a premium account in order to rebirth.')
 
 			elseif getPlayerLevel(cid) < 110 then
-				npcHandler:say('You need to be at least level 110 in order to be reborn.')
+				npcHandler:playerSay(cid, 'You need to be at least level 110 in order to be reborn.')
 
 			elseif not doPlayerRemoveMoney(cid, 100000) then
-				npcHandler:say('You do not have 100000 gold!')
+				npcHandler:playerSay(cid, 'You do not have 100000 gold!')
 
 			else
 				doSendMagicEffect(getCreaturePosition(cid), CONST_ME_MAGIC_RED)
@@ -169,8 +169,8 @@ if(Modules == nil) then
 					doSendMagicEffect(getCreaturePosition(cid), CONST_ME_MAGIC_RED)
 					setFirstItems(cid);
 				end
-				npcHandler:say(parameters.text)
-				npcHandler:releaseFocus()
+				npcHandler:playerSay(cid, parameters.text)
+				npcHandler:releaseFocus(cid)
 			end
 
 			return true;
@@ -185,39 +185,39 @@ if(Modules == nil) then
 
 	function StdModule.recoverSkills(cid, message, keywords, parameters, node)
 		local npcHandler = parameters.npcHandler
-		if(cid ~= npcHandler.focus) then
+		if not npcHandler:hasFocus(cid) then
 			return false
 		end
 
 		if not isReborn(cid) then
-			npcHandler:say('You haven\'t lost anything yet...')
+			npcHandler:playerSay(cid, 'You haven\'t lost anything yet...')
 			return true
 		end
 
-		npcHandler:say('You will recover the skills you lost when you reborn, but this is not free... It will cost you exactly 50000 gold coins. Are you Sure?')
+		npcHandler:playerSay(cid, 'You will recover the skills you lost when you reborn, but this is not free... It will cost you exactly 50000 gold coins. Are you Sure?')
 
 		node:addChildKeyword({'yes'}, function()
-			if(cid ~= npcHandler.focus) then return false end
+			if not npcHandler:hasFocus(cid) then return false end
 
 			if not canRecoverSkills(cid) then
-				npcHandler:say('You don\'t have anything to recover.')
+				npcHandler:playerSay(cid, 'You don\'t have anything to recover.')
 
 			elseif not isPlayerPremiumCallback(cid) then
-				npcHandler:say('You need a premium account in order to recover what you lost.')
+				npcHandler:playerSay(cid, 'You need a premium account in order to recover what you lost.')
 
 			elseif getPlayerLevel(cid) < 110 then
-				npcHandler:say('You need to be at least level 110 to recover your skills.')
+				npcHandler:playerSay(cid, 'You need to be at least level 110 to recover your skills.')
 
 			elseif not doPlayerRemoveMoney(cid, 50000) then
-				npcHandler:say('You do not have 50000 gold!')
+				npcHandler:playerSay(cid, 'You do not have 50000 gold!')
 
 			else
 				doPlayerRecoverSkills(cid)
 				doSendMagicEffect(getCreaturePosition(cid), CONST_ME_MAGIC_RED)
-				npcHandler:say("Done. There you are.")
+				npcHandler:playerSay(cid, "Done. There you are.")
 			end
 
-			npcHandler:resetNpc()
+			npcHandler:resetNpc(cid)
 			return true;
 		end, {})
 
@@ -231,7 +231,7 @@ if(Modules == nil) then
 		if(npcHandler == nil) then
 			error('StdModule.travel called without any npcHandler instance.')
 		end
-		if(cid ~= npcHandler.focus) then
+		if not npcHandler:hasFocus(cid) then
 			return false
 		end
 		
@@ -249,20 +249,20 @@ if(Modules == nil) then
 		
 		if(isPlayerPremiumCallback == nil or isPlayerPremiumCallback(cid) == true or parameters.premium == false) then
 			if(parameters.level ~= nil and getPlayerLevel(cid) < parameters.level) then
-				npcHandler:say('You must reach level ' .. parameters.level .. ' before I can let you go there.')
+				npcHandler:playerSay(cid, 'You must reach level ' .. parameters.level .. ' before I can let you go there.')
 			elseif isPzLocked(cid) then
-				npcHandler:say("Get out of there with this blood.")	
+				npcHandler:playerSay(cid, "Get out of there with this blood.")	
 			elseif(doPlayerRemoveMoney(cid, cost) ~= true) then
-				npcHandler:say('You do not have enough money!')
+				npcHandler:playerSay(cid, 'You do not have enough money!')
 			else
 				doTeleportThing(cid, parameters.destination)
 				doSendMagicEffect(parameters.destination, 10)
 			end
 		else
-			npcHandler:say('I can only allow premium players to travel with me.')
+			npcHandler:playerSay(cid, 'I can only allow premium players to travel with me.')
 		end
 		
-		npcHandler:resetNpc()
+		npcHandler:resetNpc(cid)
 		return true
 	end
 	
@@ -309,8 +309,8 @@ if(Modules == nil) then
 	
 	-- UnGreeting callback function.
 	function FocusModule.onFarewell(cid, message, keywords, parameters)
-		if(parameters.module.npcHandler.focus == cid) then
-			parameters.module.npcHandler:onFarewell()
+		if parameters.module.npcHandler:hasFocus(cid) then
+			parameters.module.npcHandler:onFarewell(cid)
 			return true
 		else
 			return false
@@ -486,7 +486,7 @@ if(Modules == nil) then
 	
 	function TravelModule.travel(cid, message, keywords, parameters, node)
 		local module = parameters.module
-		if(cid ~= module.npcHandler.focus) then
+		if not module.npcHandler:hasFocus(cid) then
 			return false
 		end
 		node:addChildKeywordNode(self.yesNode)
@@ -498,14 +498,14 @@ if(Modules == nil) then
 		local destination = parameters.destination
 		local premium = parameters.premium
 		
-		module.npcHandler:say('Do you want to travel to ' .. keywords[1] .. ' for ' .. cost .. ' gold coins?')
+		module.npcHandler:playerSay(cid, 'Do you want to travel to ' .. keywords[1] .. ' for ' .. cost .. ' gold coins?')
 		return true
 		
 	end
 	
 	function TravelModule.onConfirm(cid, message, keywords, parameters, node)
 		local module = parameters.module
-		if(cid ~= module.npcHandler.focus) then
+		if not module.npcHandler:hasFocus(cid) then
 			return false
 		end
 		
@@ -524,27 +524,27 @@ if(Modules == nil) then
 		
 		if(isPlayerPremiumCallback == nil or isPlayerPremiumCallback(cid) == true or parameters.premium ~= true) then
 			if isPzLocked(cid) then
-				npcHandler:say("Get out of there with this blood.")	
+				npcHandler:playerSay(cid, "Get out of there with this blood.")	
 			elseif(doPlayerRemoveMoney(cid, cost) ~= true) then
-				npcHandler:say('You do not have enough money!')
+				npcHandler:playerSay(cid, 'You do not have enough money!')
 			else
-				npcHandler:say('It was a pleasure doing business with you.', false)
-				npcHandler:releaseFocus()
+				npcHandler:playerSay(cid, 'It was a pleasure doing business with you.', false)
+				npcHandler:releaseFocus(cid)
 				doTeleportThing(cid, destination)
 				doSendMagicEffect(destination, 10)
 			end
 		else
-			npcHandler:say('I can only allow premium players to travel there.')
+			npcHandler:playerSay(cid, 'I can only allow premium players to travel there.')
 		end
 		
-		npcHandler:resetNpc()
+		npcHandler:resetNpc(cid)
 		return true
 	end
 	
 	-- onDecliune keyword callback function. Generally called when the player sais 'no' after wanting to buy an item. 
 	function TravelModule.onDecline(cid, message, keywords, parameters, node)
 		local module = parameters.module
-		if(cid ~= module.npcHandler.focus) then
+		if not module.npcHandler:hasFocus(cid) then
 			return false
 		end
 		local parentParameters = node:getParent():getParameters()
@@ -552,14 +552,14 @@ if(Modules == nil) then
 				[TAG_PLAYERNAME] = getPlayerName(cid),
 			}
 		local msg = module.npcHandler:parseMessage(module.npcHandler:getMessage(MESSAGE_DECLINE), parseInfo)
-		module.npcHandler:say(msg)
-		module.npcHandler:resetNpc()
+		module.npcHandler:playerSay(cid, msg)
+		module.npcHandler:resetNpc(cid)
 		return true
 	end
 	
 	function TravelModule.bringMeTo(cid, message, keywords, parameters, node)
 		local module = parameters.module
-		if(cid == module.npcHandler.focus) then
+		if module.npcHandler:hasFocus(cid) then
 			return false
 		end
 		
@@ -579,7 +579,7 @@ if(Modules == nil) then
 	
 	function TravelModule.listDestinations(cid, message, keywords, parameters, node)
 		local module = parameters.module
-		if(cid ~= module.npcHandler.focus) then
+		if not module.npcHandler:hasFocus(cid) then
 			return false
 		end
 		
@@ -598,8 +598,8 @@ if(Modules == nil) then
 			i = i+1
 		end
 		
-		module.npcHandler:say(msg)
-		module.npcHandler:resetNpc()
+		module.npcHandler:playerSay(cid, msg)
+		module.npcHandler:resetNpc(cid)
 		return true
 	end
 	
@@ -612,7 +612,6 @@ if(Modules == nil) then
 		npcHandler = nil,
 		noText = '',
 		maxCount = 500,
-		amount = 0,
 		autosellConfirm = "Here you are.",
 		autosellCancel = "You can't sell that.",
 	}
@@ -728,7 +727,6 @@ if(Modules == nil) then
 	
 	-- Resets the module-specific variables.
 	function ShopModule:reset()
-		self.amount = 0
 	end
 	
 	-- Function used to match a number value from a string.
@@ -750,7 +748,7 @@ if(Modules == nil) then
 	-- Start selling transaction with player
 	function ShopModule.startSellingTransaction(cid, message, keywords, parameters, node)
 		local module = parameters.module
-		if(cid ~= module.npcHandler.focus) then
+		if not module.npcHandler:hasFocus(cid) then
 			return false
 		end
 		module.npcHandler:startSelling(cid)
@@ -758,19 +756,19 @@ if(Modules == nil) then
 	end
 
 	function ShopModule:sellItemToPlayer(cid, posX, posY, posZ, stackPos, itemId)
-		if(cid ~= self.npcHandler.focus) then
+		if not self.npcHandler:hasFocus(cid) then
 			return false
 		end
 
 		if self.sellableItems[itemId] ~= nil then 
 			local ret = doPlayerSellItemByPosition(cid, posX, posY, posZ, stackPos, itemId, self.sellableItems[itemId])
 			if(ret == LUA_NO_ERROR) then
-				self.npcHandler:say(ShopModule.autosellConfirm, false)
+				self.npcHandler:playerSay(cid, ShopModule.autosellConfirm, false)
 			else
-				self.npcHandler:say(ShopModule.autosellCancel, false)
+				self.npcHandler:playerSay(cid, ShopModule.autosellCancel, false)
 			end
 		else
-			self.npcHandler:say(ShopModule.autosellCancel, false)
+			self.npcHandler:playerSay(cid, ShopModule.autosellCancel, false)
 		end
 	end
 	
@@ -840,11 +838,12 @@ if(Modules == nil) then
 	-- tradeItem callback function. Makes the npc say the message defined by MESSAGE_BUY or MESSAGE_SELL
 	function ShopModule.tradeItem(cid, message, keywords, parameters, node)
 		local module = parameters.module
-		if(cid ~= module.npcHandler.focus) then
+		if not module.npcHandler:hasFocus(cid) then
 			return false
 		end
 		local count = module:getCount(message)
-		module.amount = count
+		local cidData = module.npcHandler:getFocusPlayerData(cid)
+		cidData.amount = count
 		local tmpName = nil
 		local article = nil
 		if count > 1 then
@@ -859,19 +858,19 @@ if(Modules == nil) then
 		end
 		local parseInfo = {
 				[TAG_PLAYERNAME] = getPlayerName(cid),
-				[TAG_ITEMCOUNT] = article or module.amount,
-				[TAG_TOTALCOST] = parameters.cost*module.amount,
+				[TAG_ITEMCOUNT] = article or cidData.amount,
+				[TAG_TOTALCOST] = parameters.cost*cidData.amount,
 				[TAG_ITEMNAME] = parameters.realname or tmpName
 			}
 		
 		if(parameters.eventType == SHOPMODULE_SELL_ITEM) then
 			local msg = module.npcHandler:getMessage(MESSAGE_SELL)
 			msg = module.npcHandler:parseMessage(msg, parseInfo)
-			module.npcHandler:say(msg)
+			module.npcHandler:playerSay(cid, msg)
 		elseif(parameters.eventType == SHOPMODULE_BUY_ITEM) then
 			local msg = module.npcHandler:getMessage(MESSAGE_BUY)
 			msg = module.npcHandler:parseMessage(msg, parseInfo)
-			module.npcHandler:say(msg)
+			module.npcHandler:playerSay(cid, msg)
 		end
 		
 		return true
@@ -882,61 +881,63 @@ if(Modules == nil) then
 	-- onConfirm keyword callback function. Sells/buys the actual item.
 	function ShopModule.onConfirm(cid, message, keywords, parameters, node)
 		local module = parameters.module
-		if(cid ~= module.npcHandler.focus) then
+		if not module.npcHandler:hasFocus(cid) then
 			return false
 		end
+		local cidData = module.npcHandler:getFocusPlayerData(cid)
 		local parentParameters = node:getParent():getParameters()
 		local parseInfo = {
 				[TAG_PLAYERNAME] = getPlayerName(cid),
-				[TAG_ITEMCOUNT] = module.amount,
-				[TAG_TOTALCOST] = parentParameters.cost*module.amount,
+				[TAG_ITEMCOUNT] = cidData.amount,
+				[TAG_TOTALCOST] = parentParameters.cost*cidData.amount,
 				[TAG_ITEMNAME] = parentParameters.realname or node:getParent():getKeywords()[1]
 			}
 		
 		if(parentParameters.eventType == SHOPMODULE_SELL_ITEM) then
-			local ret = doPlayerSellItem(cid, parentParameters.itemid, module.amount, parentParameters.cost*module.amount)
+			local ret = doPlayerSellItem(cid, parentParameters.itemid, cidData.amount, parentParameters.cost*cidData.amount)
 			if(ret == LUA_NO_ERROR) then
 				local msg = module.npcHandler:getMessage(MESSAGE_ONSELL)
 				msg = module.npcHandler:parseMessage(msg, parseInfo)
-				module.npcHandler:say(msg)
+				module.npcHandler:playerSay(cid, msg)
 			else
 				local msg = module.npcHandler:getMessage(MESSAGE_NOTHAVEITEM)
 				msg = module.npcHandler:parseMessage(msg, parseInfo)
-				module.npcHandler:say(msg)
+				module.npcHandler:playerSay(cid, msg)
 			end
 		elseif(parentParameters.eventType == SHOPMODULE_BUY_ITEM) then
-			local ret = doPlayerBuyItem(cid, parentParameters.itemid, module.amount, parentParameters.cost*module.amount, parentParameters.charges)
+			local ret = doPlayerBuyItem(cid, parentParameters.itemid, cidData.amount, parentParameters.cost*cidData.amount, parentParameters.charges)
 			if(ret == LUA_NO_ERROR) then
 				local msg = module.npcHandler:getMessage(MESSAGE_ONBUY)
 				msg = module.npcHandler:parseMessage(msg, parseInfo)
-				module.npcHandler:say(msg)
+				module.npcHandler:playerSay(cid, msg)
 			else
 				local msg = module.npcHandler:getMessage(MESSAGE_NEEDMOREMONEY)
 				msg = module.npcHandler:parseMessage(msg, parseInfo)
-				module.npcHandler:say(msg)
+				module.npcHandler:playerSay(cid, msg)
 			end
 		end
 		
-		module.npcHandler:resetNpc()
+		module.npcHandler:resetNpc(cid)
 		return true
 	end
 	
 	-- onDecliune keyword callback function. Generally called when the player sais 'no' after wanting to buy an item. 
 	function ShopModule.onDecline(cid, message, keywords, parameters, node)
 		local module = parameters.module
-		if(cid ~= module.npcHandler.focus) then
+		if not module.npcHandler:hasFocus(cid) then
 			return false
 		end
+		local cidData = module.npcHandler:getFocusPlayerData(cid)
 		local parentParameters = node:getParent():getParameters()
 		local parseInfo = {
 				[TAG_PLAYERNAME] = getPlayerName(cid),
-				[TAG_ITEMCOUNT] = module.amount,
-				[TAG_TOTALCOST] = parentParameters.cost*module.amount,
+				[TAG_ITEMCOUNT] = cidData.amount,
+				[TAG_TOTALCOST] = parentParameters.cost*cidData.amount,
 				[TAG_ITEMNAME] = parentParameters.realname or node:getParent():getKeywords()[1]
 			}
 		local msg = module.npcHandler:parseMessage(module.noText, parseInfo)
-		module.npcHandler:say(msg)
-		module.npcHandler:resetNpc()
+		module.npcHandler:playerSay(cid, msg)
+		module.npcHandler:resetNpc(cid)
 		return true
 	end
 
@@ -1021,23 +1022,23 @@ if(Modules == nil) then
 	-- tradeItem callback function. Makes the npc say the message defined by MESSAGE_BUY or MESSAGE_SELL
 	function SpellSellModule.listSpell(cid, message, keywords, parameters, node)
 		local module = parameters.module
-		if(cid ~= module.npcHandler.focus) then
+		if not module.npcHandler:hasFocus(cid) then
 			return false
 		end
 
-		module.npcHandler:say(module.listPreText .. " '" .. table.concat(module.spellsList, "', '") .. "'.")
+		module.npcHandler:playerSay(cid, module.listPreText .. " '" .. table.concat(module.spellsList, "', '") .. "'.")
 		return true
 	end
 
 	-- tradeItem callback function. Makes the npc say the message defined by MESSAGE_BUY or MESSAGE_SELL
 	function SpellSellModule.buySpell(cid, message, keywords, parameters, node)
 		local module = parameters.module
-		if(cid ~= module.npcHandler.focus) then
+		if not module.npcHandler:hasFocus(cid) then
 			return false
 		end
 
 		if not module.condition(cid) then
-			module.npcHandler:say(module.conditionFailText)
+			module.npcHandler:playerSay(cid, module.conditionFailText)
 			return false
 		end
 
@@ -1059,24 +1060,24 @@ if(Modules == nil) then
 
 			if spell.available==1 then
 				local msg = module.npcHandler:parseMessage(module.askText, parseInfo)
-				module.npcHandler:say(msg)
+				module.npcHandler:playerSay(cid, msg)
 				return true
 
 			elseif spell.known==1 then
 				local msg = module.npcHandler:parseMessage(module.alreadyKnownText, parseInfo)
-				module.npcHandler:say(msg)
+				module.npcHandler:playerSay(cid, msg)
 
 			elseif getPlayerMagLevel(cid) < spell.mlevel then
 				local msg = module.npcHandler:parseMessage(module.mlevelFailText, parseInfo)
-				module.npcHandler:say(msg)
+				module.npcHandler:playerSay(cid, msg)
 
 			elseif getPlayerLevel(cid) < spell.level then
 				local msg = module.npcHandler:parseMessage(module.levelFailText, parseInfo)
-				module.npcHandler:say(msg)
+				module.npcHandler:playerSay(cid, msg)
 
 			else
 				local msg = module.npcHandler:parseMessage(module.cantLearnText, parseInfo)
-				module.npcHandler:say(msg)
+				module.npcHandler:playerSay(cid, msg)
 			end
 
 			return false
@@ -1089,7 +1090,7 @@ if(Modules == nil) then
 	-- onConfirm keyword callback function. Sells/buys the actual item.
 	function SpellSellModule.onConfirm(cid, message, keywords, parameters, node)
 		local module = parameters.module
-		if(cid ~= module.npcHandler.focus) then
+		if not module.npcHandler:hasFocus(cid) then
 			return false
 		end
 
@@ -1109,23 +1110,23 @@ if(Modules == nil) then
 				doSendMagicEffect(getPlayerPosition(cid), 14)
 
 				local msg = module.npcHandler:parseMessage(module.okText, parseInfo)
-				module.npcHandler:say(msg)
+				module.npcHandler:playerSay(cid, msg)
 
 			else
 				local msg = module.npcHandler:getMessage(MESSAGE_NEEDMOREMONEY)
 				msg = module.npcHandler:parseMessage(msg, parseInfo)
-				module.npcHandler:say(msg)
+				module.npcHandler:playerSay(cid, msg)
 			end
 		end
 		
-		module.npcHandler:resetNpc()
+		module.npcHandler:resetNpc(cid)
 		return true
 	end
 	
 	-- onDecliune keyword callback function. Generally called when the player sais 'no' after wanting to buy an item. 
 	function SpellSellModule.onDecline(cid, message, keywords, parameters, node)
 		local module = parameters.module
-		if(cid ~= module.npcHandler.focus) then
+		if not module.npcHandler:hasFocus(cid) then
 			return false
 		end
 		local parentNode = node:getParent()
@@ -1135,28 +1136,15 @@ if(Modules == nil) then
 				[TAG_ITEMNAME] = parentNode.spell.name
 			}
 		local msg = module.npcHandler:parseMessage(module.noText, parseInfo)
-		module.npcHandler:say(msg)
-		module.npcHandler:resetNpc()
+		module.npcHandler:playerSay(cid, msg)
+		module.npcHandler:resetNpc(cid)
 		return true
 	end
 
 
 
 	OracleModule = {
-		yesNode = nil,
-		noNode = nil,
 		npcHandler = nil,
-		spellsList = nil,
-
-		askText = "Do you want to learn the spell '|ITEMNAME|' for |TOTALCOST| gold?",
-		okText = "Here you are, you can find it in your spellbook now. Cast it by pronouncing '|SPELLWORDS|'.",
-		alreadyKnownText = "You already know how to cast this spell. Just say '|SPELLWORDS|'.",
-		mlevelFailText = "You must have at least magic level |SPELLMLEVEL| to learn this spell.",
-		levelFailText = "You must have at least level |SPELLLEVEL| to learn this spell.",
-		cantLearnText = "I am sorry but you can not learn this spell.",
-		noText = "Maybe next time",
-		conditionFailText = "Sorry, I can not teach you spells.",
-		listPreText = "I sell",
 		condition = function() return true end
 	}
 	-- Add it to the parseable module list.
@@ -1220,14 +1208,14 @@ if(Modules == nil) then
 	-- tradeItem callback function. Makes the npc say the message defined by MESSAGE_BUY or MESSAGE_SELL
 	function OracleModule.askTown(cid, message, keywords, parameters, node)
 		local module = parameters.module
-		if(cid ~= module.npcHandler.focus) then
+		if not module.npcHandler:hasFocus(cid) then
 			return false
 		end
 
 		if module.premmy then
-			module.npcHandler:say('IN WHICH TOWN DO YOU WANT TO LIVE: EDRON, ANKRAHMUN, PORT HOPE OR DARASHIA?')
+			module.npcHandler:playerSay(cid, 'IN WHICH TOWN DO YOU WANT TO LIVE: EDRON, ANKRAHMUN, PORT HOPE OR DARASHIA?')
 		else
-			module.npcHandler:say('IN WHICH TOWN DO YOU WANT TO LIVE: CARLIN, THAIS, VENORE, AB\'DENDRIEL OR KAZORDOON?')
+			module.npcHandler:playerSay(cid, 'IN WHICH TOWN DO YOU WANT TO LIVE: CARLIN, THAIS, VENORE, AB\'DENDRIEL OR KAZORDOON?')
 		end
 
 		return true
@@ -1237,7 +1225,7 @@ if(Modules == nil) then
 	function OracleModule.askVocation(cid, message, keywords, parameters, node)
 		local module = parameters.module
 
-		if(cid ~= module.npcHandler.focus) then
+		if not module.npcHandler:hasFocus(cid) then
 			return false
 		end
 
@@ -1254,10 +1242,10 @@ if(Modules == nil) then
 			parameters.vocName = vocName
 			parameters.rebirth = true
 
-			module.npcHandler:say('IN ' .. parameters.town .. '! AND YOUR PROFESSION WILL BE ' .. vocName .. '! ARE YOU SURE? THIS DECISION IS IRREVERSIBLE!')
+			module.npcHandler:playerSay(cid, 'IN ' .. parameters.town .. '! AND YOUR PROFESSION WILL BE ' .. vocName .. '! ARE YOU SURE? THIS DECISION IS IRREVERSIBLE!')
 		else
 			parameters.rebirth = false
-			module.npcHandler:say('IN ' .. parameters.town .. '! AND WHAT PROFESSION HAVE YOU CHOSEN: KNIGHT, PALADIN, SORCERER, OR DRUID?')
+			module.npcHandler:playerSay(cid, 'IN ' .. parameters.town .. '! AND WHAT PROFESSION HAVE YOU CHOSEN: KNIGHT, PALADIN, SORCERER, OR DRUID?')
 		end
 
 		return true
@@ -1267,7 +1255,7 @@ if(Modules == nil) then
 	-- tradeItem callback function. Makes the npc say the message defined by MESSAGE_BUY or MESSAGE_SELL
 	function OracleModule.chooseVocation(cid, message, keywords, parameters, node)
 		local module = parameters.module
-		if(cid ~= module.npcHandler.focus) then
+		if not module.npcHandler:hasFocus(cid) then
 			return false
 		end
 
@@ -1280,14 +1268,14 @@ if(Modules == nil) then
 		node:getParent():getParameters().vocName = parameters.vocName;
 
 
-		module.npcHandler:say('A ' .. parameters.vocName .. '! ARE YOU SURE? THIS DECISION IS IRREVERSIBLE!')
+		module.npcHandler:playerSay(cid, 'A ' .. parameters.vocName .. '! ARE YOU SURE? THIS DECISION IS IRREVERSIBLE!')
 
 		return true
 	end
 
 	function OracleModule.onConfirm(cid, message, keywords, parameters, node)
 		local module = parameters.module
-		if(cid ~= module.npcHandler.focus) then
+		if not module.npcHandler:hasFocus(cid) then
 			return false
 		end
 
@@ -1302,10 +1290,10 @@ if(Modules == nil) then
 		end
 
 		if getPlayerLevel(cid) < 8 then
-			module.npcHandler:say('CHILD! COME BACK WHEN YOU HAVE GROWN UP!')
+			module.npcHandler:playerSay(cid, 'CHILD! COME BACK WHEN YOU HAVE GROWN UP!')
 
 		else
-			module.npcHandler:say('SO BE IT!')
+			module.npcHandler:playerSay(cid, 'SO BE IT!')
 			doPlayerSetVocation(cid,vocNode:getParameters().vocId)
 			doPlayerSetTown(cid,vocNode:getParameters().townId)
 			doTeleportThing(cid,vocNode:getParameters().destination)
@@ -1318,10 +1306,10 @@ if(Modules == nil) then
 
 	function OracleModule.onCancel(cid, message, keywords, parameters, node)
 		local module = parameters.module
-		if(cid ~= module.npcHandler.focus) then
+		if not module.npcHandler:hasFocus(cid) then
 			return false
 		end
-		module.npcHandler:say('COME BACK WHEN YOU ARE PREPARED TO FACE YOUR DESTINY!')
+		module.npcHandler:playerSay(cid, 'COME BACK WHEN YOU ARE PREPARED TO FACE YOUR DESTINY!')
 		return true
 	end
 

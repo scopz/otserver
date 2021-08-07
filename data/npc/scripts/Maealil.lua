@@ -5,10 +5,10 @@ local npcHandler = NpcHandler:new(keywordHandler)
 NpcSystem.parseParameters(npcHandler)
 
 -- OTServ event handling functions
-function onCreatureAppear(cid)			npcHandler:onCreatureAppear(cid)			end
-function onCreatureDisappear(cid)		npcHandler:onCreatureDisappear(cid)			end
-function onCreatureSay(cid, type, msg)		npcHandler:onCreatureSay(cid, type, msg)		end
-function onThink()				npcHandler:onThink()					end
+function onCreatureAppear(cid)         npcHandler:onCreatureAppear(cid)         end
+function onCreatureDisappear(cid)      npcHandler:onCreatureDisappear(cid)      end
+function onCreatureSay(cid, type, msg) npcHandler:onCreatureSay(cid, type, msg) end
+function onThink()                     npcHandler:onThink()                     end
 
 keywordHandler:addKeyword({'job'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "I am a mystic."})
 keywordHandler:addKeyword({'name'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "I am known as Maealil."})
@@ -35,23 +35,20 @@ keywordHandler:addKeyword({'bles'}, StdModule.say, {npcHandler = npcHandler, onl
 keywordHandler:addKeyword({'magic'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "I can heal you or even teach you some spells of healing."})
 
 function creatureSayCallback(cid, type, msg)
-	if(npcHandler.focus ~= cid) then
+	if not npcHandler:hasFocus(cid) then
 		return false
 	end
+	msg = string.lower(msg)
 
 	if msg == "heal" then
 		if getCreatureHealth(cid) <= 39 then
-		npcHandler:say("You are looking really bad. Let me heal your wounds.", 1)
-		doCreatureAddHealth(cid, -getCreatureHealth(cid)+40)
-		doSendMagicEffect(getPlayerPosition(cid), 12)
-		talk_state = 0
-		return true
+			npcHandler:playerSay(cid, "You are looking really bad. Let me heal your wounds.", 1)
+			doCreatureAddHealth(cid, -getCreatureHealth(cid)+40)
+			doSendMagicEffect(getPlayerPosition(cid), 12)
 		else
-		npcHandler:say("You aren't looking really bad. Sorry, I can't help you.", 1)
-		return true
+			npcHandler:playerSay(cid, "You aren't looking really bad. Sorry, I can't help you.", 1)
 		end
-		talk_state = 0	
-	    return true
+		return true
 	end
 end
 

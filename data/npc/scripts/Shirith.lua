@@ -5,10 +5,10 @@ local npcHandler = NpcHandler:new(keywordHandler)
 NpcSystem.parseParameters(npcHandler)
 
 -- OTServ event handling functions
-function onCreatureAppear(cid)			npcHandler:onCreatureAppear(cid)			end
-function onCreatureDisappear(cid)		npcHandler:onCreatureDisappear(cid)			end
-function onCreatureSay(cid, type, msg)		npcHandler:onCreatureSay(cid, type, msg)		end
-function onThink()				npcHandler:onThink()					end
+function onCreatureAppear(cid)         npcHandler:onCreatureAppear(cid)         end
+function onCreatureDisappear(cid)      npcHandler:onCreatureDisappear(cid)      end
+function onCreatureSay(cid, type, msg) npcHandler:onCreatureSay(cid, type, msg) end
+function onThink()                     npcHandler:onThink()                     end
 
 keywordHandler:addKeyword({'job'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "I am the overseer of the mines."})
 keywordHandler:addKeyword({'name'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "I am called Shirith Blooddancer."})
@@ -34,32 +34,32 @@ keywordHandler:addKeyword({'new'}, StdModule.say, {npcHandler = npcHandler, only
 keywordHandler:addKeyword({'time'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "It is |TIME|."})
 
 function creatureSayCallback(cid, type, msg)
-	if(npcHandler.focus ~= cid) then
+	if not npcHandler:hasFocus(cid) then
 		return false
 	end
-	
-if msgcontains(msg, 'key') or msgcontains(msg, 'Key') then
-	npcHandler:say("I would sell you a key for 50 gold, ok?", 1)
-	talk_state = 1
-			
-elseif talk_state == 1 and msgcontains(msg, 'yes') or talk_state == 1 and msgcontains(msg, 'Yes') then
-	if doPlayerRemoveMoney(cid, 50) == true then
-	SHADOWCAVEKEY = doPlayerAddItem(cid, 2088, 1)
-	doSetItemActionId(SHADOWCAVEKEY, 2013)
-	doSetItemSpecialDescription(SHADOWCAVEKEY, "(Key: 3033)")
-	npcHandler:say("Here it is.", 1)
-	else
-	npcHandler:say("You do not have enough gold.", 1)
-	end
-	talk_state = 0
+	msg = string.lower(msg)
+	local cidData = npcHandler:getFocusPlayerData(cid)
 
-elseif talk_state == 1 and msgcontains(msg, '') then
-	npcHandler:say("Ok, then not.", 1)
-	talk_state = 0
-	
-	
-end		
-    return true
+	if msgcontains(msg, 'key') then
+		npcHandler:playerSay(cid, "I would sell you a key for 50 gold, ok?", 1)
+		cidData.state = 1
+
+	elseif cidData.state == 1 and msgcontains(msg, 'yes') then
+		if doPlayerRemoveMoney(cid, 50) == true then
+			SHADOWCAVEKEY = doPlayerAddItem(cid, 2088, 1)
+			doSetItemActionId(SHADOWCAVEKEY, 2013)
+			doSetItemSpecialDescription(SHADOWCAVEKEY, "(Key: 3033)")
+			npcHandler:playerSay(cid, "Here it is.", 1)
+		else
+			npcHandler:playerSay(cid, "You do not have enough gold.", 1)
+		end
+		cidData.state = 0
+
+	elseif cidData.state == 1 and msgcontains(msg, '') then
+		npcHandler:playerSay(cid, "Ok, then not.", 1)
+		cidData.state = 0
+	end
+	return true
 end
 
 npcHandler:setCallback(CALLBACK_MESSAGE_DEFAULT, creatureSayCallback)

@@ -7,10 +7,10 @@ NpcSystem.parseParameters(npcHandler)
 
 
 -- OTServ event handling functions
-function onCreatureAppear(cid)			npcHandler:onCreatureAppear(cid)			end
-function onCreatureDisappear(cid)		npcHandler:onCreatureDisappear(cid)			end
-function onCreatureSay(cid, type, msg)		npcHandler:onCreatureSay(cid, type, msg)		end
-function onThink()				npcHandler:onThink()					end
+function onCreatureAppear(cid)         npcHandler:onCreatureAppear(cid)         end
+function onCreatureDisappear(cid)      npcHandler:onCreatureDisappear(cid)      end
+function onCreatureSay(cid, type, msg) npcHandler:onCreatureSay(cid, type, msg) end
+function onThink()                     npcHandler:onThink()                     end
 
 
 keywordHandler:addKeyword({'name'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "I am known as the riddler. That is all you need to know."})
@@ -25,9 +25,11 @@ keywordHandler:addKeyword({'key'}, StdModule.say, {npcHandler = npcHandler, only
 keywordHandler:addKeyword({'door'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "The key of this tower! You will never find it! A malicious plant spirit is guarding it!"})
 
 function creatureSayCallback(cid, type, msg)
-    if(npcHandler.focus ~= cid) then
+    if not npcHandler:hasFocus(cid) then
         return false
     end
+    msg = string.lower(msg)
+    local cidData = npcHandler:getFocusPlayerData(cid)
     
     -- start config
 	local queststate1 = getPlayerStorageValue(cid,6667)
@@ -72,180 +74,180 @@ function creatureSayCallback(cid, type, msg)
 
     -- end config
     if msgcontains(msg, keyword01) and queststate2 == 1 then
-        selfSay(response01)
-        talkState = 13
-    elseif msgcontains(msg, keyword02) and talkState == 13 then
-        selfSay(response02)
-        talkState = 14
-    elseif msgcontains(msg, keywordAbadon) and talkState == 13 then
-        selfSay(abadon)
-        talkState = 0
+        npcHandler:playerSay(cid, response01)
+        cidData.state = 13
+    elseif msgcontains(msg, keyword02) and cidData.state == 13 then
+        npcHandler:playerSay(cid, response02)
+        cidData.state = 14
+    elseif msgcontains(msg, keywordAbadon) and cidData.state == 13 then
+        npcHandler:playerSay(cid, abadon)
+        cidData.state = 0
     -- let's start the right answers
-    elseif msgcontains(msg, keyword03) and talkState == 14 then
-        selfSay(response03)
-        talkState = 15
-    elseif msgcontains(msg, keyword04) and talkState == 15 then
-        selfSay(response04)
-        talkState = 16
-    elseif msgcontains(msg, keyword05) and talkState == 16 then
-        selfSay(response05)
-        talkState = 17
-    elseif msgcontains(msg, keyword06) and talkState == 17 then
-        selfSay(response06)
-        talkState = 18
-    elseif msgcontains(msg, keyword07) and talkState == 18 then
-        selfSay(response07)
-        talkState = 19
-    elseif msgcontains(msg, keyword08) and talkState == 19 then
-        selfSay(response08)
-        talkState = 20
-    elseif msgcontains(msg, keyword09) and talkState == 20 then
-        selfSay(response09)
-        talkState = 21
-    elseif msgcontains(msg, keyword10) and talkState == 21 then
-        selfSay(response10)
-        talkState = 22
-    elseif msgcontains(msg, keyword11) and talkState == 22 then
-        selfSay(response11)
-        talkState = 23
-    elseif msgcontains(msg, keyword12) and talkState == 23 then
-        selfSay(response12)
-        talkState = 24
-    elseif msgcontains(msg, keyword14) and talkState == 24 then
+    elseif msgcontains(msg, keyword03) and cidData.state == 14 then
+        npcHandler:playerSay(cid, response03)
+        cidData.state = 15
+    elseif msgcontains(msg, keyword04) and cidData.state == 15 then
+        npcHandler:playerSay(cid, response04)
+        cidData.state = 16
+    elseif msgcontains(msg, keyword05) and cidData.state == 16 then
+        npcHandler:playerSay(cid, response05)
+        cidData.state = 17
+    elseif msgcontains(msg, keyword06) and cidData.state == 17 then
+        npcHandler:playerSay(cid, response06)
+        cidData.state = 18
+    elseif msgcontains(msg, keyword07) and cidData.state == 18 then
+        npcHandler:playerSay(cid, response07)
+        cidData.state = 19
+    elseif msgcontains(msg, keyword08) and cidData.state == 19 then
+        npcHandler:playerSay(cid, response08)
+        cidData.state = 20
+    elseif msgcontains(msg, keyword09) and cidData.state == 20 then
+        npcHandler:playerSay(cid, response09)
+        cidData.state = 21
+    elseif msgcontains(msg, keyword10) and cidData.state == 21 then
+        npcHandler:playerSay(cid, response10)
+        cidData.state = 22
+    elseif msgcontains(msg, keyword11) and cidData.state == 22 then
+        npcHandler:playerSay(cid, response11)
+        cidData.state = 23
+    elseif msgcontains(msg, keyword12) and cidData.state == 23 then
+        npcHandler:playerSay(cid, response12)
+        cidData.state = 24
+    elseif msgcontains(msg, keyword14) and cidData.state == 24 then
 		doTeleportThing(cid,posPass)
-        selfSay(response14)
+        npcHandler:playerSay(cid, response14)
     -- let's start the wrong answers and the "death" teleport :D
-    elseif msgcontains(msg, keyword03) == nil and talkState == 13 then
-        selfSay(wrong)
-        talkState = 0
+    elseif msgcontains(msg, keyword03) == nil and cidData.state == 13 then
+        npcHandler:playerSay(cid, wrong)
+        cidData.state = 0
         doTeleportThing(cid,posFail)
-    elseif msgcontains(msg, keyword04) == nil and talkState == 14 then
-        selfSay(wrong)
-        talkState = 0
+    elseif msgcontains(msg, keyword04) == nil and cidData.state == 14 then
+        npcHandler:playerSay(cid, wrong)
+        cidData.state = 0
         doTeleportThing(cid,posFail)
-    elseif msgcontains(msg, keyword05) == nil and talkState == 15 then
-        selfSay(wrong)
-        talkState = 0
+    elseif msgcontains(msg, keyword05) == nil and cidData.state == 15 then
+        npcHandler:playerSay(cid, wrong)
+        cidData.state = 0
         doTeleportThing(cid,posFail)
-    elseif msgcontains(msg, keyword06) == nil and talkState == 16 then
-        selfSay(wrong)
-        talkState = 0
+    elseif msgcontains(msg, keyword06) == nil and cidData.state == 16 then
+        npcHandler:playerSay(cid, wrong)
+        cidData.state = 0
         doTeleportThing(cid,posFail)
-    elseif msgcontains(msg, keyword07) == nil and talkState == 17 then
-        selfSay(wrong)
-        talkState = 0
+    elseif msgcontains(msg, keyword07) == nil and cidData.state == 17 then
+        npcHandler:playerSay(cid, wrong)
+        cidData.state = 0
         doTeleportThing(cid,posFail)
-    elseif msgcontains(msg, keyword08) == nil and talkState == 18 then
-        selfSay(wrong)
-        talkState = 0
+    elseif msgcontains(msg, keyword08) == nil and cidData.state == 18 then
+        npcHandler:playerSay(cid, wrong)
+        cidData.state = 0
         doTeleportThing(cid,posFail)
-    elseif msgcontains(msg, keyword09) == nil and talkState == 19 then
-        selfSay(wrong)
-        talkState = 0
+    elseif msgcontains(msg, keyword09) == nil and cidData.state == 19 then
+        npcHandler:playerSay(cid, wrong)
+        cidData.state = 0
         doTeleportThing(cid,posFail)
-    elseif msgcontains(msg, keyword10) == nil and talkState == 20 then
-        selfSay(wrong)
-        talkState = 0
+    elseif msgcontains(msg, keyword10) == nil and cidData.state == 20 then
+        npcHandler:playerSay(cid, wrong)
+        cidData.state = 0
         doTeleportThing(cid,posFail)
-    elseif msgcontains(msg, keyword11) == nil and talkState == 21 then
-        selfSay(wrong)
-        talkState = 0
+    elseif msgcontains(msg, keyword11) == nil and cidData.state == 21 then
+        npcHandler:playerSay(cid, wrong)
+        cidData.state = 0
         doTeleportThing(cid,posFail)
-    elseif msgcontains(msg, keyword12) == nil and talkState == 22 then
-        selfSay(wrong)
-        talkState = 0
+    elseif msgcontains(msg, keyword12) == nil and cidData.state == 22 then
+        npcHandler:playerSay(cid, wrong)
+        cidData.state = 0
         doTeleportThing(cid,posFail)
-    elseif msgcontains(msg, keyword13) == nil and talkState == 23 then
-        selfSay(wrong)
-        talkState = 0
+    elseif msgcontains(msg, keyword13) == nil and cidData.state == 23 then
+        npcHandler:playerSay(cid, wrong)
+        cidData.state = 0
 	--1st--
     elseif msgcontains(msg, keyword01) and queststate1 == 1 then
-        selfSay(response01)
-        talkState = 1
-    elseif msgcontains(msg, keyword02) and talkState == 1 then
-        selfSay(response02)
-        talkState = 2
-    elseif msgcontains(msg, keywordAbadon) and talkState == 1 then
-        selfSay(abadon)
-        talkState = 0
+        npcHandler:playerSay(cid, response01)
+        cidData.state = 1
+    elseif msgcontains(msg, keyword02) and cidData.state == 1 then
+        npcHandler:playerSay(cid, response02)
+        cidData.state = 2
+    elseif msgcontains(msg, keywordAbadon) and cidData.state == 1 then
+        npcHandler:playerSay(cid, abadon)
+        cidData.state = 0
     -- let's start the right answers
-    elseif msgcontains(msg, keyword03) and talkState == 2 then
-        selfSay(response03)
-        talkState = 3
-    elseif msgcontains(msg, keyword04) and talkState == 3 then
-        selfSay(response04)
-        talkState = 4
-    elseif msgcontains(msg, keyword05) and talkState == 4 then
-        selfSay(response05)
-        talkState = 5
-    elseif msgcontains(msg, keyword06) and talkState == 5 then
-        selfSay(response06)
-        talkState = 6
-    elseif msgcontains(msg, keyword07) and talkState == 6 then
-        selfSay(response07)
-        talkState = 7
-    elseif msgcontains(msg, keyword08) and talkState == 7 then
-        selfSay(response08)
-        talkState = 8
-    elseif msgcontains(msg, keyword09) and talkState == 8 then
-        selfSay(response09)
-        talkState = 9
-    elseif msgcontains(msg, keyword10) and talkState == 9 then
-        selfSay(response10)
-        talkState = 10
-    elseif msgcontains(msg, keyword11) and talkState == 10 then
-        selfSay(response11)
-        talkState = 11
-    elseif msgcontains(msg, keyword12) and talkState == 11 then
-        selfSay(response12)
-        talkState = 12
-    elseif getNumber(msg) >= 1 and talkState == 12 then
-        selfSay(response13)
+    elseif msgcontains(msg, keyword03) and cidData.state == 2 then
+        npcHandler:playerSay(cid, response03)
+        cidData.state = 3
+    elseif msgcontains(msg, keyword04) and cidData.state == 3 then
+        npcHandler:playerSay(cid, response04)
+        cidData.state = 4
+    elseif msgcontains(msg, keyword05) and cidData.state == 4 then
+        npcHandler:playerSay(cid, response05)
+        cidData.state = 5
+    elseif msgcontains(msg, keyword06) and cidData.state == 5 then
+        npcHandler:playerSay(cid, response06)
+        cidData.state = 6
+    elseif msgcontains(msg, keyword07) and cidData.state == 6 then
+        npcHandler:playerSay(cid, response07)
+        cidData.state = 7
+    elseif msgcontains(msg, keyword08) and cidData.state == 7 then
+        npcHandler:playerSay(cid, response08)
+        cidData.state = 8
+    elseif msgcontains(msg, keyword09) and cidData.state == 8 then
+        npcHandler:playerSay(cid, response09)
+        cidData.state = 9
+    elseif msgcontains(msg, keyword10) and cidData.state == 9 then
+        npcHandler:playerSay(cid, response10)
+        cidData.state = 10
+    elseif msgcontains(msg, keyword11) and cidData.state == 10 then
+        npcHandler:playerSay(cid, response11)
+        cidData.state = 11
+    elseif msgcontains(msg, keyword12) and cidData.state == 11 then
+        npcHandler:playerSay(cid, response12)
+        cidData.state = 12
+    elseif getNumber(msg) >= 1 and cidData.state == 12 then
+        npcHandler:playerSay(cid, response13)
         doTeleportThing(cid,posFail)
     -- let's start the wrong answers and the "death" teleport :D
-    elseif msgcontains(msg, keyword03) == nil and talkState == 2 then
-        selfSay(wrong)
-        talkState = 0
+    elseif msgcontains(msg, keyword03) == nil and cidData.state == 2 then
+        npcHandler:playerSay(cid, wrong)
+        cidData.state = 0
         doTeleportThing(cid,posFail)
-    elseif msgcontains(msg, keyword04) == nil and talkState == 3 then
-        selfSay(wrong)
-        talkState = 0
+    elseif msgcontains(msg, keyword04) == nil and cidData.state == 3 then
+        npcHandler:playerSay(cid, wrong)
+        cidData.state = 0
         doTeleportThing(cid,posFail)
-    elseif msgcontains(msg, keyword05) == nil and talkState == 4 then
-        selfSay(wrong)
-        talkState = 0
+    elseif msgcontains(msg, keyword05) == nil and cidData.state == 4 then
+        npcHandler:playerSay(cid, wrong)
+        cidData.state = 0
         doTeleportThing(cid,posFail)
-    elseif msgcontains(msg, keyword06) == nil and talkState == 5 then
-        selfSay(wrong)
-        talkState = 0
+    elseif msgcontains(msg, keyword06) == nil and cidData.state == 5 then
+        npcHandler:playerSay(cid, wrong)
+        cidData.state = 0
         doTeleportThing(cid,posFail)
-    elseif msgcontains(msg, keyword07) == nil and talkState == 6 then
-        selfSay(wrong)
-        talkState = 0
+    elseif msgcontains(msg, keyword07) == nil and cidData.state == 6 then
+        npcHandler:playerSay(cid, wrong)
+        cidData.state = 0
         doTeleportThing(cid,posFail)
-    elseif msgcontains(msg, keyword08) == nil and talkState == 7 then
-        selfSay(wrong)
-        talkState = 0
+    elseif msgcontains(msg, keyword08) == nil and cidData.state == 7 then
+        npcHandler:playerSay(cid, wrong)
+        cidData.state = 0
         doTeleportThing(cid,posFail)
-    elseif msgcontains(msg, keyword09) == nil and talkState == 8 then
-        selfSay(wrong)
-        talkState = 0
+    elseif msgcontains(msg, keyword09) == nil and cidData.state == 8 then
+        npcHandler:playerSay(cid, wrong)
+        cidData.state = 0
         doTeleportThing(cid,posFail)
-    elseif msgcontains(msg, keyword10) == nil and talkState == 9 then
-        selfSay(wrong)
-        talkState = 0
+    elseif msgcontains(msg, keyword10) == nil and cidData.state == 9 then
+        npcHandler:playerSay(cid, wrong)
+        cidData.state = 0
         doTeleportThing(cid,posFail)
-    elseif msgcontains(msg, keyword11) == nil and talkState == 10 then
-        selfSay(wrong)
-        talkState = 0
+    elseif msgcontains(msg, keyword11) == nil and cidData.state == 10 then
+        npcHandler:playerSay(cid, wrong)
+        cidData.state = 0
         doTeleportThing(cid,posFail)
-    elseif msgcontains(msg, keyword12) == nil and talkState == 11 then
-        selfSay(wrong)
-        talkState = 0
+    elseif msgcontains(msg, keyword12) == nil and cidData.state == 11 then
+        npcHandler:playerSay(cid, wrong)
+        cidData.state = 0
         doTeleportThing(cid,posFail)
-    elseif msgcontains(msg, keyword13) == nil and talkState == 12 then
-        selfSay(wrong)
-        talkState = 0
+    elseif msgcontains(msg, keyword13) == nil and cidData.state == 12 then
+        npcHandler:playerSay(cid, wrong)
+        cidData.state = 0
     end
     return true
 end

@@ -7,10 +7,10 @@ NpcSystem.parseParameters(npcHandler)
 
 
 -- OTServ event handling functions
-function onCreatureAppear(cid)			npcHandler:onCreatureAppear(cid)			end
-function onCreatureDisappear(cid)		npcHandler:onCreatureDisappear(cid)			end
-function onCreatureSay(cid, type, msg)		npcHandler:onCreatureSay(cid, type, msg)		end
-function onThink()				npcHandler:onThink()					end
+function onCreatureAppear(cid)         npcHandler:onCreatureAppear(cid)         end
+function onCreatureDisappear(cid)      npcHandler:onCreatureDisappear(cid)      end
+function onCreatureSay(cid, type, msg) npcHandler:onCreatureSay(cid, type, msg) end
+function onThink()                     npcHandler:onThink()                     end
 
 local shopModule = ShopModule:new()
 npcHandler:addModule(shopModule)
@@ -52,20 +52,20 @@ keywordHandler:addKeyword({'furniture'}, StdModule.say, {npcHandler = npcHandler
 keywordHandler:addKeyword({'equipment'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "I sell pillows and tapestries."})
 
 function creatureSayCallback(cid, type, msg)
-	if(npcHandler.focus ~= cid) then
+	if not npcHandler:hasFocus(cid) then
 		return false
 	end
-	
+	msg = string.lower(msg)
+
 	if msgcontains(msg, 'time') then
 		if getPlayerSex(cid) == 1 then
-			npcHandler:say('It\'s '.. getTibiaTime() ..', sire.')
+			npcHandler:playerSay(cid, 'It\'s '.. getTibiaTime() ..', sire.')
 		else
-			npcHandler:say('It\'s '.. getTibiaTime() ..', my lady.')
+			npcHandler:playerSay(cid, 'It\'s '.. getTibiaTime() ..', my lady.')
 		end
-	end		
+	end
+	return true
+end
 
-return true
-end	
-		
 npcHandler:setCallback(CALLBACK_MESSAGE_DEFAULT, creatureSayCallback)
 npcHandler:addModule(FocusModule:new())

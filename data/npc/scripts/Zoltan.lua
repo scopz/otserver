@@ -5,10 +5,10 @@ local npcHandler = NpcHandler:new(keywordHandler)
 NpcSystem.parseParameters(npcHandler)
 
 -- OTServ event handling functions
-function onCreatureAppear(cid)			npcHandler:onCreatureAppear(cid)			end
-function onCreatureDisappear(cid)		npcHandler:onCreatureDisappear(cid)			end
-function onCreatureSay(cid, type, msg)		npcHandler:onCreatureSay(cid, type, msg)		end
-function onThink()				npcHandler:onThink()					end
+function onCreatureAppear(cid)         npcHandler:onCreatureAppear(cid)         end
+function onCreatureDisappear(cid)      npcHandler:onCreatureDisappear(cid)      end
+function onCreatureSay(cid, type, msg) npcHandler:onCreatureSay(cid, type, msg) end
+function onThink()                     npcHandler:onThink()                     end
 
 keywordHandler:addKeyword({'job'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "I am a teacher of the most powerful spells in Tibia."})
 keywordHandler:addKeyword({'name'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "I am known in this world as Zoltan."})
@@ -29,30 +29,31 @@ keywordHandler:addKeyword({'spellbook'}, StdModule.say, {npcHandler = npcHandler
 keywordHandler:addKeyword({'time'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "It's |TIME|."})
 
 function creatureSayCallback(cid, type, msg)
-	if(npcHandler.focus ~= cid) then
+	if not npcHandler:hasFocus(cid) then
 		return false
 	end
-	
+	msg = string.lower(msg)
+	local cidData = npcHandler:getFocusPlayerData(cid)
 	local queststate = getPlayerStorageValue(cid,6664)
 	
 	if msgcontains(msg, 'yenny the gentle') and queststate == 1 then
-    	npcHandler:say('Ah, Yenny the Gentle was one of the founders of the druid order called Crunor\'s Caress, that has been originated in her hometown Carlin.')
-    	talk_state = 1
-	elseif msgcontains(msg, 'crunor\'s caress') and talk_state == 1 then
-        npcHandler:say('A quite undruidic order of druids they were, as far as we know. I have no more enlightening knowledge about them though.')
+    	npcHandler:playerSay(cid, 'Ah, Yenny the Gentle was one of the founders of the druid order called Crunor\'s Caress, that has been originated in her hometown Carlin.')
+    	cidData.state = 1
+	elseif msgcontains(msg, 'crunor\'s caress') and cidData.state == 1 then
+        npcHandler:playerSay(cid, 'A quite undruidic order of druids they were, as far as we know. I have no more enlightening knowledge about them though.')
 		setPlayerStorageValue(cid,6665,1)
-        talk_state = 2
-	elseif msgcontains(msg, 'no') and (talk_state >= 1 and talk_state <= 2) then
-		npcHandler:say('Use your knowledge wisely')
-		talk_state = 0
+        cidData.state = 2
+	elseif msgcontains(msg, 'no') and (cidData.state >= 1 and cidData.state <= 2) then
+		npcHandler:playerSay(cid, 'Use your knowledge wisely')
+		cidData.state = 0
 	end
 	
 	if msgcontains(msg, 'ferumbras') then
 		npcHandler:story('A fallen sorcerer, indeed. What a shame. ...', 1)
 		npcHandler:story('I see, you managed to reach Kharos, the harbinger isle, and discovered the gates to Ferumbras citadel, and now you are here full of questions. Are you ready to listen?', 5)
-		talk_state = 3
+		cidData.state = 3
 	
-	elseif msgcontains(msg,'yes') and talk_state == 3 then
+	elseif msgcontains(msg,'yes') and cidData.state == 3 then
 		npcHandler:story('So know that destroying the mortal shell of the being called Ferumbras was the best we were able to achieve with our combined efforts in the past. ...', 1)
 		npcHandler:story('He was destroyed not only once but several times. Eventually we were able to figure out the secret of his seeming immortality. ...', 5)
 		npcHandler:story('On one of the most remote islands of the Shattered Isles, he built a citadel with demonic aid right around a powerful magical nexus. ...', 9)
@@ -64,20 +65,20 @@ function creatureSayCallback(cid, type, msg)
 		npcHandler:story('On the other hand, WHEN Ferumbras re-enters the world we need heroes like you to face him on his very own ground before he can escape. ...', 33)
 		npcHandler:story('His return is not very likely but it can happen each and every day. If you should manage to defeat him, bring a proof of his death here and you will be rewarded. ...', 37)
 		npcHandler:story('Use your knowledge wisely.', 41)
-		talk_state = 4
+		cidData.state = 4
 	
-	elseif msgcontains(msg, 'permission') and talk_state == 4 then
-		npcHandler:say('The attuning to our seals is a costly process and it will grant you access to the citadel ONLY ONCE. Each time you want toenter, you will need a new attuning. Are you willing to ***SECRET*** to become attuned to the seal of the citadel?')
-		talk_state = 5
+	elseif msgcontains(msg, 'permission') and cidData.state == 4 then
+		npcHandler:playerSay(cid, 'The attuning to our seals is a costly process and it will grant you access to the citadel ONLY ONCE. Each time you want toenter, you will need a new attuning. Are you willing to ***SECRET*** to become attuned to the seal of the citadel?')
+		cidData.state = 5
 	
-	elseif msgcontains(msg,'yes') and talk_state == 5 then
-		selfSay('SO BE IT!')
+	elseif msgcontains(msg,'yes') and cidData.state == 5 then
+		npcHandler:playerSay(cid, 'SO BE IT!')
 		doTeleportThing(cid, {x=32416, y=32646, z=7})
 		doSendMagicEffect(getCreaturePosition(cid), 10)
-		talk_state = 0
-	elseif msgcontains(msg,'no') and talk_state == 5 then
-		npcHandler:say('You do better stay here then.')
-		talk_state = 0
+		cidData.state = 0
+	elseif msgcontains(msg,'no') and cidData.state == 5 then
+		npcHandler:playerSay(cid, 'You do better stay here then.')
+		cidData.state = 0
 	end
 	
     return true

@@ -5,12 +5,11 @@ local npcHandler = NpcHandler:new(keywordHandler)
 NpcSystem.parseParameters(npcHandler)
 
 
-
 -- OTServ event handling functions
-function onCreatureAppear(cid)			npcHandler:onCreatureAppear(cid)			end
-function onCreatureDisappear(cid)		npcHandler:onCreatureDisappear(cid)			end
-function onCreatureSay(cid, type, msg)		npcHandler:onCreatureSay(cid, type, msg)		end
-function onThink()				npcHandler:onThink()					end
+function onCreatureAppear(cid)         npcHandler:onCreatureAppear(cid)         end
+function onCreatureDisappear(cid)      npcHandler:onCreatureDisappear(cid)      end
+function onCreatureSay(cid, type, msg) npcHandler:onCreatureSay(cid, type, msg) end
+function onThink()                     npcHandler:onThink()                     end
 
 local shopModule = ShopModule:new()
 npcHandler:addModule(shopModule)
@@ -46,7 +45,6 @@ shopModule:addBuyableItem({'arrow'}, 2544, 2)
 shopModule:addBuyableItem({'bolt'}, 2543, 3)
 
 
-
 keywordHandler:addKeyword({'job'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "I sell general goods which are, if I am allowed to say that, crucial when you explore the jungle."})
 keywordHandler:addKeyword({'time'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "I won't tell you, but you can buy one of my quality watches to find out."})
 keywordHandler:addKeyword({'king'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "The king is far away and yet we are still his subjects. Strange, isn't it?"})
@@ -80,21 +78,20 @@ keywordHandler:addKeyword({'book'}, StdModule.say, {npcHandler = npcHandler, onl
 keywordHandler:addKeyword({'ammo'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "Do you need arrows for a bow, or bolts for a crossbow?"})
 keywordHandler:addKeyword({'ammunition'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "Do you need arrows for a bow, or bolts for a crossbow?"})
 
-function creatureSayCallback(cid, type, msg) msg = string.lower(msg)
-	if(npcHandler.focus ~= cid) then
+function creatureSayCallback(cid, type, msg)
+	if not npcHandler:hasFocus(cid) then
 		return false
 	end
-if msgcontains(msg, 'name') or msgcontains(msg, 'Name') then
-	npcHandler:say("I am Perod, how could you forget that, ".. getPlayerName(cid) .."? We fought back-to-back in those troll caves on Rookgard a long time ago.", 1)
-	talk_state = 0
-			
-elseif msgcontains(msg, 'jungle') or msgcontains(msg, 'Jungle') then
-	npcHandler:say("The jungle is full of adventures and secrets that wait to be explored. Some years ago I would have surely enjoyed that. ...", 1)
-	npcHandler:say("But now that I setteled down here, I don't feel excited anymore by the thought of exploring an inhospitable forest full of animals that want to kill me.", 5)
-	talk_state = 0
+	msg = string.lower(msg)
 
-end		
-    return true
+	if msgcontains(msg, 'name') then
+		npcHandler:playerSay(cid, "I am Perod, how could you forget that, ".. getPlayerName(cid) .."? We fought back-to-back in those troll caves on Rookgard a long time ago.", 1)
+
+	elseif msgcontains(msg, 'jungle') then
+		npcHandler:playerSay(cid, "The jungle is full of adventures and secrets that wait to be explored. Some years ago I would have surely enjoyed that. ...", 1)
+		npcHandler:playerSay(cid, "But now that I setteled down here, I don't feel excited anymore by the thought of exploring an inhospitable forest full of animals that want to kill me.", 5)
+	end
+	return true
 end
 
 npcHandler:setCallback(CALLBACK_MESSAGE_DEFAULT, creatureSayCallback)

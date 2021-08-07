@@ -5,10 +5,10 @@ local npcHandler = NpcHandler:new(keywordHandler)
 NpcSystem.parseParameters(npcHandler)
 
 -- OTServ event handling functions
-function onCreatureAppear(cid)			npcHandler:onCreatureAppear(cid)			end
-function onCreatureDisappear(cid)		npcHandler:onCreatureDisappear(cid)			end
-function onCreatureSay(cid, type, msg)		npcHandler:onCreatureSay(cid, type, msg)		end
-function onThink()				npcHandler:onThink()					end
+function onCreatureAppear(cid)         npcHandler:onCreatureAppear(cid)         end
+function onCreatureDisappear(cid)      npcHandler:onCreatureDisappear(cid)      end
+function onCreatureSay(cid, type, msg) npcHandler:onCreatureSay(cid, type, msg) end
+function onThink()                     npcHandler:onThink()                     end
 
 function greetCallback(cid)
 	if getPlayerSex(cid) == 1 then
@@ -17,8 +17,8 @@ function greetCallback(cid)
 	else
 	npcHandler:setMessage(MESSAGE_GREET, "Welcome home, Lady ".. getPlayerName(cid) ..".")
 	return true
-	end	
-end	
+	end
+end
 
 npcHandler:setCallback(CALLBACK_GREET, greetCallback)
 
@@ -29,17 +29,16 @@ keywordHandler:addKeyword({'record'}, StdModule.say, {npcHandler = npcHandler, o
 keywordHandler:addKeyword({'mail'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "You can get a letter from me."})
 
 function creatureSayCallback(cid, type, msg)
-	if(npcHandler.focus ~= cid) then
+	if not npcHandler:hasFocus(cid) then
 		return false
 	end
-	
-if msgcontains(msg, 'letter') then
-	doPlayerAddItem(cid, 2597, 1)
-	npcHandler:say("Here you are.", 1)
-	talk_state = 0
+	msg = string.lower(msg)
 
-end		
-    return true
+	if msgcontains(msg, 'letter') then
+		doPlayerAddItem(cid, 2597, 1)
+		npcHandler:playerSay(cid, "Here you are.", 1)
+	end
+	return true
 end
 
 npcHandler:setCallback(CALLBACK_MESSAGE_DEFAULT, creatureSayCallback)

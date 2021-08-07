@@ -5,10 +5,10 @@ local npcHandler = NpcHandler:new(keywordHandler)
 NpcSystem.parseParameters(npcHandler)
 
 -- OTServ event handling functions
-function onCreatureAppear(cid)			npcHandler:onCreatureAppear(cid)			end
-function onCreatureDisappear(cid)		npcHandler:onCreatureDisappear(cid)			end
-function onCreatureSay(cid, type, msg)		npcHandler:onCreatureSay(cid, type, msg)		end
-function onThink()				npcHandler:onThink()					end
+function onCreatureAppear(cid)         npcHandler:onCreatureAppear(cid)         end
+function onCreatureDisappear(cid)      npcHandler:onCreatureDisappear(cid)      end
+function onCreatureSay(cid, type, msg) npcHandler:onCreatureSay(cid, type, msg) end
+function onThink()                     npcHandler:onThink()                     end
 
 function greetCallback(cid)
 	if getPlayerVocation(cid) == 2 or getPlayerVocation(cid) == 6 then
@@ -17,8 +17,8 @@ function greetCallback(cid)
 	else
 	npcHandler:setMessage(MESSAGE_GREET, "Welcome to our humble guild, wanderer. May I be of any assistance to you?")
 	return true
-	end	
-end	
+	end
+end
 
 npcHandler:setCallback(CALLBACK_GREET, greetCallback)
 
@@ -34,25 +34,24 @@ keywordHandler:addKeyword({'vocation'}, StdModule.say, {npcHandler = npcHandler,
 keywordHandler:addKeyword({'spellbook'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "In a spellbook, your spells are listed. There you will find the pronunciation of each spell. If you want to buy one, visit Rachel."})
 
 function creatureSayCallback(cid, type, msg)
-	if(npcHandler.focus ~= cid) then
+	if not npcHandler:hasFocus(cid) then
 		return false
 	end
-	
+	msg = string.lower(msg)
+	local cidData = npcHandler:getFocusPlayerData(cid)
+
 	local queststate = getPlayerStorageValue(cid,6665)
-	
+
 	if msgcontains(msg, 'crunor\'s caress') and queststate == 1 then
-    	npcHandler:say('Don\'t ask. They were only an unimportant footnote of history.')
-    	talk_state = 1
-	elseif msgcontains(msg, 'footnote') and talk_state == 1 then
-    	npcHandler:say('They thought they have to bring Crunor to the people, if people did not find to Crunor of their own. To achieve that they founded the inn Crunor\'s Cottage, south of Mt. Sternum.')
+		npcHandler:playerSay(cid, 'Don\'t ask. They were only an unimportant footnote of history.')
+		cidData.state = 1
+	elseif msgcontains(msg, 'footnote') and cidData.state == 1 then
+		npcHandler:playerSay(cid, 'They thought they have to bring Crunor to the people, if people did not find to Crunor of their own. To achieve that they founded the inn Crunor\'s Cottage, south of Mt. Sternum.')
 		setPlayerStorageValue(cid,6666,1)
-    	talk_state = 2
+		cidData.state = 2
 	end
-
-    return true
+	return true
 end
-
-
 
 local spellSellModule = SpellSellModule:new()
 npcHandler:addModule(spellSellModule)

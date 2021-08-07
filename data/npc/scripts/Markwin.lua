@@ -9,8 +9,8 @@ function onThink()	npcHandler:onThink() end
 
 function greetCallback(cid)
 	if getPlayerStorageValue(cid,222) == -1 then
-		npcHandler:say('No! The hornless have reached my city! BODYGUARDS TO ME!')
-		
+		npcHandler:playerSay(cid, 'No! The hornless have reached my city! BODYGUARDS TO ME!')
+
 		pos = getCreaturePosition(getNpcCid())
 		local northEast = {x=pos.x+1,y=pos.y-1,z=pos.z}
 		local northWest = {x=pos.x-1,y=pos.y-1,z=pos.z}
@@ -34,7 +34,7 @@ function greetCallback(cid)
 		npcHandler:setMessage(MESSAGE_GREET, 'Well ... you defeated my guards! Now everything is over! I guess I will have to answer your questions now.')
 		return true
 	end
-	
+
 	if getPlayerStorageValue(cid,245) == 2 then
 		npcHandler:setMessage(MESSAGE_GREET, 'Oh, it\'s you again. What do you want, hornless messenger?')
 		return true
@@ -71,32 +71,34 @@ keywordHandler:addKeyword({'karl'}, StdModule.say, {npcHandler = npcHandler, onl
 keywordHandler:addKeyword({'milk'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = 'No! I won\'t tell you the powers of our milk!'})
 
 function creatureSayCallback(cid, type, msg)
-	if(npcHandler.focus ~= cid) then
+	if not npcHandler:hasFocus(cid) then
 		return false
 	end
-	
+	msg = string.lower(msg)
+	local cidData = npcHandler:getFocusPlayerData(cid)
+
 	-- The Postman Missions Quest
 	if msgcontains(msg, 'letter') and getPlayerStorageValue(cid,245) == 1 then
-	npcHandler:say('A letter from my Moohmy?? Do you have a letter from my Moohmy to me?')
-	topic = 1
-	
-	elseif topic == 1 and msgcontains(msg, 'yes') and getPlayerItemCount(cid,2333) >= 1 then
-	npcHandler:say('Uhm, well thank you, hornless beeing.')
-	doPlayerRemoveItem(cid,2333,1)
-	setPlayerStorageValue(cid,245,2)
-	topic = 0
-	
-	elseif topic == 1 and msgcontains(msg, 'yes') and getPlayerItemCount(cid,2333) < 1 then
-	npcHandler:say('Don\'t mock the king of the minotaurs or you will regret that!')
-	topic = 0
-	
-	elseif topic == 1 and msgcontains(msg, '') then
-	npcHandler:say('Uh? What??')
-	topic = 0
+		npcHandler:playerSay(cid, 'A letter from my Moohmy?? Do you have a letter from my Moohmy to me?')
+		cidData.state = 1
+
+	elseif cidData.state == 1 and msgcontains(msg, 'yes') and getPlayerItemCount(cid,2333) >= 1 then
+		npcHandler:playerSay(cid, 'Uhm, well thank you, hornless beeing.')
+		doPlayerRemoveItem(cid,2333,1)
+		setPlayerStorageValue(cid,245,2)
+		cidData.state = 0
+
+	elseif cidData.state == 1 and msgcontains(msg, 'yes') and getPlayerItemCount(cid,2333) < 1 then
+		npcHandler:playerSay(cid, 'Don\'t mock the king of the minotaurs or you will regret that!')
+		cidData.state = 0
+
+	elseif cidData.state == 1 and msgcontains(msg, '') then
+		npcHandler:playerSay(cid, 'Uh? What??')
+		cidData.state = 0
 	end
-	
+
 	return true
 end
-	
+
 npcHandler:setCallback(CALLBACK_MESSAGE_DEFAULT, creatureSayCallback)
 npcHandler:addModule(FocusModule:new())

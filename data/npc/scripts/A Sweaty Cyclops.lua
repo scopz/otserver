@@ -5,10 +5,10 @@ local npcHandler = NpcHandler:new(keywordHandler)
 NpcSystem.parseParameters(npcHandler)
 
 -- OTServ event handling functions
-function onCreatureAppear(cid)			npcHandler:onCreatureAppear(cid)			end
-function onCreatureDisappear(cid)		npcHandler:onCreatureDisappear(cid)			end
-function onCreatureSay(cid, type, msg)		npcHandler:onCreatureSay(cid, type, msg)		end
-function onThink()				npcHandler:onThink()					end
+function onCreatureAppear(cid)         npcHandler:onCreatureAppear(cid)         end
+function onCreatureDisappear(cid)      npcHandler:onCreatureDisappear(cid)      end
+function onCreatureSay(cid, type, msg) npcHandler:onCreatureSay(cid, type, msg) end
+function onThink()                     npcHandler:onThink()                     end
 
 keywordHandler:addKeyword({'tibia'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "One day I'll go and look."})
 keywordHandler:addKeyword({"ab'dendriel"}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "Me parents live here before town was. Me not care about lil' ones."})
@@ -38,46 +38,48 @@ keywordHandler:addKeyword({'cyclops'}, StdModule.say, {npcHandler = npcHandler, 
 keywordHandler:addKeyword({'excalibug'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "Me wish I could make weapon like it."})
 
 function creatureSayCallback(cid, type, msg)
-	if(npcHandler.focus ~= cid) then
+	if not npcHandler:hasFocus(cid) then
 		return false
 	end
-	
-if msgcontains(msg, 'fire sword') then
-	npcHandler:say("Do lil' one want to trade a fire sword?", 1)
-	talk_state = 1
-			
-elseif msgcontains(msg, 'bright sword') then
-	npcHandler:say("Do lil' one want to trade a bright sword?", 1)
-	talk_state = 1
 
-elseif msgcontains(msg, 'warlord sword') then
-	npcHandler:say("Do lil' one want to trade a warlord sword?", 1)
-	talk_state = 1
+	local cidData = npcHandler:getFocusPlayerData(cid)
 
-elseif msgcontains(msg, 'sword of valor') then
-	npcHandler:say("Do lil' one want to trade a sword of valor?", 1)
-	talk_state = 1
+	if msgcontains(msg, 'fire sword') then
+		npcHandler:playerSay(cid, "Do lil' one want to trade a fire sword?", 1)
+		cidData.state = 1
 
-elseif msgcontains(msg, 'serpent sword') then
-	npcHandler:say("Do lil' one want to trade a serpent sword?", 1)
-	talk_state = 1
+	elseif msgcontains(msg, 'bright sword') then
+		npcHandler:playerSay(cid, "Do lil' one want to trade a bright sword?", 1)
+		cidData.state = 1
 
-elseif msgcontains(msg, 'enchanted plate') then
-	npcHandler:say("Do lil' one want to trade an enchanted plate armor?", 1)
-	talk_state = 1
-	
-elseif msgcontains(msg, 'dragon shield') then
-	npcHandler:say("Do lil' one want to trade a dragon shield?", 1)
-	talk_state = 1
+	elseif msgcontains(msg, 'warlord sword') then
+		npcHandler:playerSay(cid, "Do lil' one want to trade a warlord sword?", 1)
+		cidData.state = 1
 
-elseif talk_state == 1 and msgcontains(msg, 'yes') then
-	npcHandler:say("You not have stuff me want for.", 1)
-	talk_state = 1
-elseif talk_state == 1 and msgcontains(msg, '') then
-	npcHandler:say("Silly lil' one you are.", 1)
-	talk_state = 1
-	
-end		
+	elseif msgcontains(msg, 'sword of valor') then
+		npcHandler:playerSay(cid, "Do lil' one want to trade a sword of valor?", 1)
+		cidData.state = 1
+
+	elseif msgcontains(msg, 'serpent sword') then
+		npcHandler:playerSay(cid, "Do lil' one want to trade a serpent sword?", 1)
+		cidData.state = 1
+
+	elseif msgcontains(msg, 'enchanted plate') then
+		npcHandler:playerSay(cid, "Do lil' one want to trade an enchanted plate armor?", 1)
+		cidData.state = 1
+
+	elseif msgcontains(msg, 'dragon shield') then
+		npcHandler:playerSay(cid, "Do lil' one want to trade a dragon shield?", 1)
+		cidData.state = 1
+
+	elseif cidData.state == 1 and msgcontains(msg, 'yes') then
+		npcHandler:playerSay(cid, "You not have stuff me want for.", 1)
+		cidData.state = 1
+
+	elseif cidData.state == 1 and msgcontains(msg, '') then
+		npcHandler:playerSay(cid, "Silly lil' one you are.", 1)
+		cidData.state = 1
+	end
     return true
 end
 

@@ -7,10 +7,10 @@ NpcSystem.parseParameters(npcHandler)
 
 
 -- OTServ event handling functions
-function onCreatureAppear(cid)			npcHandler:onCreatureAppear(cid)			end
-function onCreatureDisappear(cid)		npcHandler:onCreatureDisappear(cid)			end
-function onCreatureSay(cid, type, msg)		npcHandler:onCreatureSay(cid, type, msg)		end
-function onThink()				npcHandler:onThink()					end
+function onCreatureAppear(cid)         npcHandler:onCreatureAppear(cid)         end
+function onCreatureDisappear(cid)      npcHandler:onCreatureDisappear(cid)      end
+function onCreatureSay(cid, type, msg) npcHandler:onCreatureSay(cid, type, msg) end
+function onThink()                     npcHandler:onThink()                     end
 
 local shopModule = ShopModule:new()
 npcHandler:addModule(shopModule)
@@ -111,19 +111,22 @@ keywordHandler:addKeyword({'trousers'}, StdModule.say, {npcHandler = npcHandler,
 keywordHandler:addKeyword({'legs'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "I am selling chain legs. Do you want to buy any?"})
 
 
-function creatureSayCallback(cid, type, msg) msg = string.lower(msg)
-	if(npcHandler.focus ~= cid) then
+function creatureSayCallback(cid, type, msg)
+	if not npcHandler:hasFocus(cid) then
 		return false
 	end
-if msgcontains(msg, 'rumour') or msgcontains(msg, 'Rumour') or msgcontains(msg, 'gossip') or msgcontains(msg, 'Gossip') or msgcontains(msg, 'new') or msgcontains(msg, 'New') then
-	npcHandler:say("You know a rumour? Well then - don't keep it to yourself.", 1)
-	talk_state = 1
-			
-elseif talk_state == 3 and msgcontains(msg, '') then
-	npcHandler:say("Go on! I can't wait to hear more!", 1)
-	talk_state = 0
-end		
-    return true
+	msg = string.lower(msg)
+	local cidData = npcHandler:getFocusPlayerData(cid)
+
+	if msgcontains(msg, 'rumo') or msgcontains(msg, 'gossip') or msgcontains(msg, 'new') then
+		npcHandler:say("You know a rumour? Well then - don't keep it to yourself.", 1)
+		cidData.state = 3
+
+	elseif cidData.state == 3 and msgcontains(msg, '') then
+		npcHandler:say("Go on! I can't wait to hear more!", 1)
+		cidData.state = 0
+	end
+	return true
 end
 
 

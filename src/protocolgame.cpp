@@ -1703,6 +1703,14 @@ void ProtocolGame::sendNpcFocusLost(const Npc* npc)
 	writeToOutputBuffer(msg);
 }
 
+void ProtocolGame::sendNpcFocus(const Npc* npc)
+{
+	NetworkMessage msg;
+	msg.addByte(0xBA);
+	msg.addU32(npc->getID());
+	writeToOutputBuffer(msg);
+}
+
 void ProtocolGame::sendCancel(const std::string& message)
 {
 	NetworkMessage msg;
@@ -2382,6 +2390,7 @@ void ProtocolGame::addCreatureSpeak(NetworkMessage& msg, const Creature* creatur
 		case SPEAK_CAST:
 		case SPEAK_MONSTER_SAY:
 		case SPEAK_MONSTER_YELL:
+		case SPEAK_CHANNEL_NPC:
 			assert(creature);
 			msg.addPosition(creature->getPosition());
 			break;

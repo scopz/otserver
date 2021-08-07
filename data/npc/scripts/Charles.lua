@@ -5,10 +5,10 @@ local npcHandler = NpcHandler:new(keywordHandler)
 NpcSystem.parseParameters(npcHandler)
 
 -- OTServ event handling functions
-function onCreatureAppear(cid)			npcHandler:onCreatureAppear(cid)			end
-function onCreatureDisappear(cid)		npcHandler:onCreatureDisappear(cid)			end
-function onCreatureSay(cid, type, msg)		npcHandler:onCreatureSay(cid, type, msg)		end
-function onThink()				npcHandler:onThink()					end
+function onCreatureAppear(cid)         npcHandler:onCreatureAppear(cid)         end
+function onCreatureDisappear(cid)      npcHandler:onCreatureDisappear(cid)      end
+function onCreatureSay(cid, type, msg) npcHandler:onCreatureSay(cid, type, msg) end
+function onThink()                     npcHandler:onThink()                     end
 
 function greetCallback(cid)
 	npcHandler:setMessage(MESSAGE_GREET, "Ahoi.")
@@ -40,31 +40,33 @@ keywordHandler:addKeyword({'dworcs'}, StdModule.say, {npcHandler = npcHandler, o
 keywordHandler:addKeyword({'time'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "It is precisely |TIME|."})
 
 function creatureSayCallback(cid, type, msg)
-	if(npcHandler.focus ~= cid) then
+	if not npcHandler:hasFocus(cid) then
 		return false
 	end
+	msg = string.lower(msg)
+	local cidData = npcHandler:getFocusPlayerData(cid)
 
-	if msgcontains(msg, 'major') and npcHandler.focus == cid or msgcontains(msg, 'harbour') and npcHandler.focus == cid then
-		npcHandler:say("Well the harbours of thais, venore, carlin, edron, darashia and ankrahmun. Do you have any questions about one of those harbours?", 1)
-		talk_state = 921
-	elseif talk_state == 921 and msgcontains(msg, 'venore') and npcHandler.focus == cid and npcHandler.focus == cid then
-		npcHandler:say("The Venorans build fine ships. Enough said about them.", 1)
-		talk_state = 0		
-	elseif talk_state == 921 and msgcontains(msg, 'thais') and npcHandler.focus == cid and npcHandler.focus == cid then
-		npcHandler:say("Thais is the proud capital of the largest kingdom in the known world.", 1)
-		talk_state = 0
-	elseif talk_state == 921 and msgcontains(msg, 'carlin') and npcHandler.focus == cid and npcHandler.focus == cid then
-		npcHandler:say("Rebellious women might be amusing for a while, but it is time for them to stop this nonsense and return to the kingdom.", 1)
-		talk_state = 0
-	elseif talk_state == 921 and msgcontains(msg, 'edron') and npcHandler.focus == cid and npcHandler.focus == cid then
-		npcHandler:say("The coastline of Edron is treacherous and it takes some skills to sail a ship safely into the harbour.", 1)
-		talk_state = 0
-	elseif talk_state == 921 and msgcontains(msg, 'darashia') and npcHandler.focus == cid and npcHandler.focus == cid then
-		npcHandler:say("An unremarkable little town with a small harbour and quiet people.", 1)
-		talk_state = 0
-	elseif talk_state == 921 and msgcontains(msg, 'ankrahmun') and npcHandler.focus == cid and npcHandler.focus == cid then
-		npcHandler:say("The city is surely worth a look although its inhabitants are somewhat strange and their customs oddish.", 1)
-		talk_state = 0		
+	if msgcontains(msg, 'major') and npcHandler:hasFocus(cid) or msgcontains(msg, 'harbour') and npcHandler:hasFocus(cid) then
+		npcHandler:playerSay(cid, "Well the harbours of thais, venore, carlin, edron, darashia and ankrahmun. Do you have any questions about one of those harbours?", 1)
+		cidData.state = 921
+	elseif cidData.state == 921 and msgcontains(msg, 'venore') and npcHandler:hasFocus(cid) and npcHandler:hasFocus(cid) then
+		npcHandler:playerSay(cid, "The Venorans build fine ships. Enough said about them.", 1)
+		cidData.state = 0		
+	elseif cidData.state == 921 and msgcontains(msg, 'thais') and npcHandler:hasFocus(cid) and npcHandler:hasFocus(cid) then
+		npcHandler:playerSay(cid, "Thais is the proud capital of the largest kingdom in the known world.", 1)
+		cidData.state = 0
+	elseif cidData.state == 921 and msgcontains(msg, 'carlin') and npcHandler:hasFocus(cid) and npcHandler:hasFocus(cid) then
+		npcHandler:playerSay(cid, "Rebellious women might be amusing for a while, but it is time for them to stop this nonsense and return to the kingdom.", 1)
+		cidData.state = 0
+	elseif cidData.state == 921 and msgcontains(msg, 'edron') and npcHandler:hasFocus(cid) and npcHandler:hasFocus(cid) then
+		npcHandler:playerSay(cid, "The coastline of Edron is treacherous and it takes some skills to sail a ship safely into the harbour.", 1)
+		cidData.state = 0
+	elseif cidData.state == 921 and msgcontains(msg, 'darashia') and npcHandler:hasFocus(cid) and npcHandler:hasFocus(cid) then
+		npcHandler:playerSay(cid, "An unremarkable little town with a small harbour and quiet people.", 1)
+		cidData.state = 0
+	elseif cidData.state == 921 and msgcontains(msg, 'ankrahmun') and npcHandler:hasFocus(cid) and npcHandler:hasFocus(cid) then
+		npcHandler:playerSay(cid, "The city is surely worth a look although its inhabitants are somewhat strange and their customs oddish.", 1)
+		cidData.state = 0		
 	end
 	
 	return true

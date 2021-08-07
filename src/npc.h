@@ -54,6 +54,7 @@ protected:
 	virtual void registerFunctions();
 
 	static int luaActionSay(lua_State *L);
+	static int luaActionPlayerSay(lua_State *L);
 	static int luaActionSell(lua_State *L);
 	static int luaActionMove(lua_State *L);
 	static int luaActionMoveTo(lua_State *L);
@@ -67,6 +68,7 @@ protected:
 	static int luaGetNpcName(lua_State *L);
 	static int luaGetNpcParameter(lua_State *L);
 	static int luaSendFocusLost(lua_State *L);
+	static int luaSendFocus(lua_State *L);
 
 private:
 	virtual bool initState();

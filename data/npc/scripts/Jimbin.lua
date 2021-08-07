@@ -7,10 +7,10 @@ NpcSystem.parseParameters(npcHandler)
 
 
 -- OTServ event handling functions
-function onCreatureAppear(cid)			npcHandler:onCreatureAppear(cid)			end
-function onCreatureDisappear(cid)		npcHandler:onCreatureDisappear(cid)			end
-function onCreatureSay(cid, type, msg)		npcHandler:onCreatureSay(cid, type, msg)		end
-function onThink()				npcHandler:onThink()					end
+function onCreatureAppear(cid)         npcHandler:onCreatureAppear(cid)         end
+function onCreatureDisappear(cid)      npcHandler:onCreatureDisappear(cid)      end
+function onCreatureSay(cid, type, msg) npcHandler:onCreatureSay(cid, type, msg) end
+function onThink()                     npcHandler:onThink()                     end
 
 	function FocusModule:init(handler)
 	FOCUS_GREETSWORDS = {'hi jimbin', 'hello jimbin'}
@@ -60,21 +60,22 @@ keywordHandler:addKeyword({'food'}, StdModule.say, {npcHandler = npcHandler, onl
 keywordHandler:addKeyword({'time'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "It is about |TIME|."})
 
 function creatureSayCallback(cid, type, msg)
-	if(npcHandler.focus ~= cid) then
+	if not npcHandler:hasFocus(cid) then
 		return false
 	end
+	msg = string.lower(msg)
 
-if msgcontains(msg, 'hi maryza') and npcHandler.focus == cid or msgcontains(msg, 'hello maryza') and npcHandler.focus == cid then
-npcHandler:say("Come back if you enjoyed my tavern, if not ... well, get eaten by a dragon, jawoll.", 1)
-npcHandler:releaseFocus()
-npcHandler:resetNpc()
+	if msgcontains(msg, 'hi maryza') and npcHandler:hasFocus(cid) or msgcontains(msg, 'hello maryza') and npcHandler:hasFocus(cid) then
+		npcHandler:playerSay(cid, "Come back if you enjoyed my tavern, if not ... well, get eaten by a dragon, jawoll.", 1)
+		npcHandler:releaseFocus(cid)
+		npcHandler:resetNpc(cid)
 
-elseif msgcontains(msg, 'maryza') and npcHandler.focus == cid then
-npcHandler:say("She's a fine cook; likes it bloddy, though. Humans call her Bloody Mary, but don't mention that to her if you're smart.", 1)
+	elseif msgcontains(msg, 'maryza') and npcHandler:hasFocus(cid) then
+		npcHandler:playerSay(cid, "She's a fine cook; likes it bloddy, though. Humans call her Bloody Mary, but don't mention that to her if you're smart.", 1)
 
-elseif msgcontains(msg, 'hi') or msgcontains(msg, 'Hi') or msgcontains(msg, 'hello') or msgcontains(msg, 'Hello') then
-	npcHandler:say("Talking to me, ".. getPlayerName(cid) .."?", 1)
-end		
+	elseif msgcontains(msg, 'hi') or msgcontains(msg, 'hello') then
+		npcHandler:playerSay(cid, "Talking to me, ".. getPlayerName(cid) .."?", 1)
+	end		
     return true
 end
 

@@ -162,6 +162,7 @@ private:
 	void sendToChannel(const Creature* creature, SpeakClasses type, const std::string& text, uint16_t channelId, uint32_t time = 0);
 	void sendStartSellingTransaction(const Npc* npc);
 	void sendNpcFocusLost(const Npc* npc);
+	void sendNpcFocus(const Npc* npc);
 	void sendRemoveReport(const std::string& name);
 	void sendLockRuleViolation();
 	void sendRuleViolationCancel(const std::string& name);

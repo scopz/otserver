@@ -5,10 +5,10 @@ local npcHandler = NpcHandler:new(keywordHandler)
 NpcSystem.parseParameters(npcHandler)
 
 -- OTServ event handling functions
-function onCreatureAppear(cid)			npcHandler:onCreatureAppear(cid)			end
-function onCreatureDisappear(cid)		npcHandler:onCreatureDisappear(cid)			end
-function onCreatureSay(cid, type, msg)		npcHandler:onCreatureSay(cid, type, msg)		end
-function onThink()				npcHandler:onThink()					end
+function onCreatureAppear(cid)         npcHandler:onCreatureAppear(cid)         end
+function onCreatureDisappear(cid)      npcHandler:onCreatureDisappear(cid)      end
+function onCreatureSay(cid, type, msg) npcHandler:onCreatureSay(cid, type, msg) end
+function onThink()                     npcHandler:onThink()                     end
 
 local shopModule = ShopModule:new()
 npcHandler:addModule(shopModule)
@@ -66,21 +66,22 @@ keywordHandler:addKeyword({'offer'}, StdModule.say, {npcHandler = npcHandler, on
 keywordHandler:addKeyword({'stuff'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "Water hoses, pitchforks, presents, buckets, bottles, and the like."})
 
 function creatureSayCallback(cid, type, msg)
-	if(npcHandler.focus ~= cid) then
+	if not npcHandler:hasFocus(cid) then
 		return false
 	end
+	msg = string.lower(msg)
+	local cidData = npcHandler:getFocusPlayerData(cid)
 
 	if msgcontains(msg, 'vial') or msgcontains(msg, 'deposit') or msgcontains(msg, 'flask') then
-		npcHandler:say("I will pay you 5 gold for every empty vial. Ok?", 1)
-		talk_state = 857
-	elseif talk_state == 857 and msgcontains(msg, 'yes') then
+		npcHandler:playerSay(cid, "I will pay you 5 gold for every empty vial. Ok?", 1)
+		cidData.state = 857
+	elseif cidData.state == 857 and msgcontains(msg, 'yes') then
 		if sellPlayerEmptyVials(cid) == true then
-			npcHandler:say("Here's your money!", 1)
-			talk_state = 0
+			npcHandler:playerSay(cid, "Here's your money!", 1)
 		else
-			npcHandler:say("You don't have any empty vials!", 1)
-			talk_state = 0
+			npcHandler:playerSay(cid, "You don't have any empty vials!", 1)
 		end
+		cidData.state = 0
 	end
 
 	return true

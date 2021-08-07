@@ -7,10 +7,10 @@ NpcSystem.parseParameters(npcHandler)
 
 
 -- OTServ event handling functions
-function onCreatureAppear(cid)			npcHandler:onCreatureAppear(cid)			end
-function onCreatureDisappear(cid)		npcHandler:onCreatureDisappear(cid)			end
-function onCreatureSay(cid, type, msg)		npcHandler:onCreatureSay(cid, type, msg)		end
-function onThink()				npcHandler:onThink()					end
+function onCreatureAppear(cid)         npcHandler:onCreatureAppear(cid)         end
+function onCreatureDisappear(cid)      npcHandler:onCreatureDisappear(cid)      end
+function onCreatureSay(cid, type, msg) npcHandler:onCreatureSay(cid, type, msg) end
+function onThink()                     npcHandler:onThink()                     end
 
 local shopModule = ShopModule:new()
 npcHandler:addModule(shopModule)
@@ -74,23 +74,25 @@ keywordHandler:addKeyword({'equipment'}, StdModule.say, {npcHandler = npcHandler
 keywordHandler:addKeyword({'time'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "Time does not matter to a dwarf who understands the ways of the worm."})
 keywordHandler:addKeyword({'fish'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "Go away with that waterthing!"})
 
-function creatureSayCallback(cid, type, msg) msg = string.lower(msg)
-	if(npcHandler.focus ~= cid) then
+function creatureSayCallback(cid, type, msg)
+	if not npcHandler:hasFocus(cid) then
 		return false
 	end
-if msgcontains(msg, 'buy') and msgcontains(msg, 'rotworm') then
-	npcHandler:say("Do you want to buy a rotworm?", 1)
-	talk_state = 1
-elseif talk_state == 1 and msgcontains(msg, 'yes') then
-	npcHandler:say("Hey, you don't own a drilling licence. No deal!", 1)
-	talk_state = 0	
-	
-elseif talk_state == 1 and msgcontains(msg, '') then
-	npcHandler:say("You will regret that.", 1)
-	talk_state = 0	
+	msg = string.lower(msg)
+	local cidData = npcHandler:getFocusPlayerData(cid)
 
+	if msgcontains(msg, 'buy') and msgcontains(msg, 'rotworm') then
+		npcHandler:playerSay(cid, "Do you want to buy a rotworm?", 1)
+		cidData.state = 1
 
-end		
+	elseif cidData.state == 1 and msgcontains(msg, 'yes') then
+		npcHandler:playerSay(cid, "Hey, you don't own a drilling licence. No deal!", 1)
+		cidData.state = 0
+
+	elseif cidData.state == 1 and msgcontains(msg, '') then
+		npcHandler:playerSay(cid, "You will regret that.", 1)
+		cidData.state = 0
+	end
     return true
 end
 

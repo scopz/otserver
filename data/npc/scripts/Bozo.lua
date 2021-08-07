@@ -5,10 +5,10 @@ local npcHandler = NpcHandler:new(keywordHandler)
 NpcSystem.parseParameters(npcHandler)
 
 -- OTServ event handling functions
-function onCreatureAppear(cid)			npcHandler:onCreatureAppear(cid)			end
-function onCreatureDisappear(cid)		npcHandler:onCreatureDisappear(cid)			end
-function onCreatureSay(cid, type, msg)		npcHandler:onCreatureSay(cid, type, msg)		end
-function onThink()				npcHandler:onThink()					end
+function onCreatureAppear(cid)         npcHandler:onCreatureAppear(cid)         end
+function onCreatureDisappear(cid)      npcHandler:onCreatureDisappear(cid)      end
+function onCreatureSay(cid, type, msg) npcHandler:onCreatureSay(cid, type, msg) end
+function onThink()                     npcHandler:onThink()                     end
 
 function greetCallback(cid)
 	if getPlayerSex(cid) == 1 then
@@ -17,8 +17,8 @@ function greetCallback(cid)
 	else
 	npcHandler:setMessage(MESSAGE_GREET, "Hello, hello, hello, little lady ".. getPlayerName(cid) .."!")
 	return true
-	end	
-end	
+	end
+end
 
 npcHandler:setCallback(CALLBACK_GREET, greetCallback)
 
@@ -81,124 +81,125 @@ keywordHandler:addKeyword({'hugo'}, StdModule.say, {npcHandler = npcHandler, onl
 keywordHandler:addKeyword({'cousin'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "He died some years ago."})
 
 function creatureSayCallback(cid, type, msg)
-	if(npcHandler.focus ~= cid) then
+	if not npcHandler:hasFocus(cid) then
 		return false
 	end
-	
-if msgcontains(msg, 'job') then
-	npcHandler:say("I am the royal jes ... uhm ... the royal tax-collector! Do you want to pay your taxes?", 1)
-	talk_state = 1
-			
-elseif talk_state == 1 and msgcontains(msg, 'yes') then
-	if doPlayerRemoveMoney(cid, 50) == true then
-	npcHandler:say("Thank you very much. I will have a drink or two on your health!", 1)
-	else
-	npcHandler:say("Come back, when you have enough money.", 1)
-	end
-elseif talk_state == 1 and msgcontains(msg, '') then
-npcHandler:say("Well, perhaps later.", 1)
+	msg = string.lower(msg)
+	local cidData = npcHandler:getFocusPlayerData(cid)
 
-elseif msgcontains(msg, 'jester') or msgcontains(msg, 'fool') then
-	npcHandler:say("Do you wish to join the fools' guild?", 1)
-	talk_state = 6
-elseif talk_state == 6 and msgcontains(msg, 'yes') then	
-	npcHandler:say("Sorry, you already are a member.", 1)
-	talk_state = 0
-elseif talk_state == 6 and msgcontains(msg, '') then	
-	npcHandler:say("Well, you are already a member anyway.", 1)
-	talk_state = 0
-elseif msgcontains(msg, 'weapon') then	
-	npcHandler:say("Do you want to buy a 'mace of the fury' for 250 gold?", 1)
-	talk_state = 3
-elseif talk_state == 3 and msgcontains(msg, 'yes') then	
-	if doPlayerRemoveMoney(cid, 250) == true then
-	doPlayerAddItem(cid, 2570)
-	npcHandler:say("And here it is, it suits you well!", 1)
-	else
-	npcHandler:say("Come back, when you have enough money.", 1)
-	end
-	talk_state = 0
-elseif talk_state == 3 and msgcontains(msg, '') then	
-	npcHandler:say("You dont know what offer you have passed!", 1)
-	talk_state = 0	
-	
-elseif msgcontains(msg, 'magic') or msgcontains(msg, 'spell') then	
-	npcHandler:say("I actually know some spells! Do you want to learn how to 'lessen your load' for 200 gold?", 1)
-	talk_state = 2	
-	
-elseif talk_state == 2 and msgcontains(msg, 'yes') then	
-	if doPlayerRemoveMoney(cid, 200) == true then
-	npcHandler:say("Here you are, I already lessened your load.", 1)
-	else
-	npcHandler:say("Come back, when you have enough money.", 1)
-	end
-	talk_state = 0	
-elseif talk_state == 2 and msgcontains(msg, '') then	
-	npcHandler:say("You don't know what offer you have passed!", 1)
-	talk_state = 0
+	if msgcontains(msg, 'job') then
+		npcHandler:playerSay(cid, "I am the royal jes ... uhm ... the royal tax-collector! Do you want to pay your taxes?", 1)
+		cidData.state = 1
 
-elseif msgcontains(msg, 'paladin') then	
-	if isPaladin(cid) then
-	npcHandler:say("I wanted to become a paladin, too, but I was overqualified!", 1)
-	else
-	npcHandler:say("They are the king's favourites, because they know how to 'bow'.", 1)
+	elseif cidData.state == 1 and msgcontains(msg, 'yes') then
+		if doPlayerRemoveMoney(cid, 50) == true then
+			npcHandler:playerSay(cid, "Thank you very much. I will have a drink or two on your health!", 1)
+		else
+			npcHandler:playerSay(cid, "Come back, when you have enough money.", 1)
+		end
+	elseif cidData.state == 1 and msgcontains(msg, '') then
+		npcHandler:playerSay(cid, "Well, perhaps later.", 1)
+
+	elseif msgcontains(msg, 'jester') or msgcontains(msg, 'fool') then
+		npcHandler:playerSay(cid, "Do you wish to join the fools' guild?", 1)
+		cidData.state = 6
+	elseif cidData.state == 6 and msgcontains(msg, 'yes') then
+		npcHandler:playerSay(cid, "Sorry, you already are a member.", 1)
+		cidData.state = 0
+	elseif cidData.state == 6 and msgcontains(msg, '') then
+		npcHandler:playerSay(cid, "Well, you are already a member anyway.", 1)
+		cidData.state = 0
+	elseif msgcontains(msg, 'weapon') then
+		npcHandler:playerSay(cid, "Do you want to buy a 'mace of the fury' for 250 gold?", 1)
+		cidData.state = 3
+	elseif cidData.state == 3 and msgcontains(msg, 'yes') then
+		if doPlayerRemoveMoney(cid, 250) == true then
+			doPlayerAddItem(cid, 2570)
+			npcHandler:playerSay(cid, "And here it is, it suits you well!", 1)
+		else
+			npcHandler:playerSay(cid, "Come back, when you have enough money.", 1)
+		end
+		cidData.state = 0
+	elseif cidData.state == 3 and msgcontains(msg, '') then
+		npcHandler:playerSay(cid, "You dont know what offer you have passed!", 1)
+		cidData.state = 0
+
+	elseif msgcontains(msg, 'magic') or msgcontains(msg, 'spell') then
+		npcHandler:playerSay(cid, "I actually know some spells! Do you want to learn how to 'lessen your load' for 200 gold?", 1)
+		cidData.state = 2
+
+	elseif cidData.state == 2 and msgcontains(msg, 'yes') then
+		if doPlayerRemoveMoney(cid, 200) == true then
+			npcHandler:playerSay(cid, "Here you are, I already lessened your load.", 1)
+		else
+			npcHandler:playerSay(cid, "Come back, when you have enough money.", 1)
+		end
+		cidData.state = 0
+	elseif cidData.state == 2 and msgcontains(msg, '') then
+		npcHandler:playerSay(cid, "You don't know what offer you have passed!", 1)
+		cidData.state = 0
+
+	elseif msgcontains(msg, 'paladin') then
+		if isPaladin(cid) then
+			npcHandler:playerSay(cid, "I wanted to become a paladin, too, but I was overqualified!", 1)
+		else
+			npcHandler:playerSay(cid, "They are the king's favourites, because they know how to 'bow'.", 1)
+		end
+		cidData.state = 0
+	elseif msgcontains(msg, 'sorcerer') then
+		if isSorcerer(cid) then
+			npcHandler:playerSay(cid, "I wanted to become a sorcerer, too, but I was overqualified!", 1)
+		else
+			npcHandler:playerSay(cid, "The good thing about them is that they can't be at two places at the same time.", 1)
+		end
+		cidData.state = 0
+	elseif msgcontains(msg, 'druid') then
+		if isDruid(cid) then
+			npcHandler:playerSay(cid, "I wanted to become a Druid, too, but I was overqualified!", 1)
+		else
+			npcHandler:playerSay(cid, "If you are in Druidville, do as the rabbits do.", 1)
+		end
+		cidData.state = 0
+	elseif msgcontains(msg, 'knight') then
+		if isKnight(cid) then
+			npcHandler:playerSay(cid, "I wanted to become a knight, too, but I was overqualified!", 1)
+		else
+			npcHandler:playerSay(cid, "Did you notice that old knights have their scars just on their backs?", 1)
+		end
+		cidData.state = 0
+	elseif msgcontains(msg, 'lady') then
+		if getPlayerSex(cid) == 1 then
+			npcHandler:playerSay(cid, "Well, you don't behave ladylike just because you dress like one!", 1)
+			cidData.state = 0
+		else
+			npcHandler:playerSay(cid, "Has any man said to you that you're not only beautiful but also intelligent?", 1)
+			cidData.state = 5
+		end
+	elseif cidData.state == 5 and msgcontains(msg, 'yes') then
+		npcHandler:playerSay(cid, "This is a world of fantasy and full of surprises!", 1)
+		cidData.state = 0
+	elseif cidData.state == 5 and msgcontains(msg, '') then
+		npcHandler:playerSay(cid, "Well, think about it!", 1)
+		cidData.state = 0
+	elseif msgcontains(msg, 'kiss') then
+		if getPlayerSex(cid) == 1 then
+			npcHandler:playerSay(cid, "Uh, go away!", 1)
+			cidData.state = 0
+			npcHandler:releaseFocus(cid)
+			npcHandler:resetNpc(cid)
+		else
+			npcHandler:playerSay(cid, "Do you want to kiss me?", 1)
+			cidData.state = 4
+		end
+	elseif cidData.state == 4 and msgcontains(msg, 'yes') then
+		doSendMagicEffect(getCreaturePosition(getNpcCid()), 14)
+		npcHandler:playerSay(cid, "Uh, oh! ... I am seeing stars!", 1)
+		cidData.state = 0
+	elseif cidData.state == 4 and msgcontains(msg, '') then
+		npcHandler:playerSay(cid, "Pah, I didn't want to kiss you anyway!", 1)
+		cidData.state = 0
 	end
-	talk_state = 0	
-elseif msgcontains(msg, 'sorcerer') then	
-	if isSorcerer(cid) then
-	npcHandler:say("I wanted to become a sorcerer, too, but I was overqualified!", 1)
-	else
-	npcHandler:say("The good thing about them is that they can't be at two places at the same time.", 1)
-	end
-	talk_state = 0	
-elseif msgcontains(msg, 'druid') then	
-	if isDruid(cid) then
-	npcHandler:say("I wanted to become a Druid, too, but I was overqualified!", 1)
-	else
-	npcHandler:say("If you are in Druidville, do as the rabbits do.", 1)
-	end
-	talk_state = 0	
-elseif msgcontains(msg, 'knight') then	
-	if isKnight(cid) then
-	npcHandler:say("I wanted to become a knight, too, but I was overqualified!", 1)
-	else
-	npcHandler:say("Did you notice that old knights have their scars just on their backs?", 1)
-	end
-	talk_state = 0
-elseif msgcontains(msg, 'lady') then	
-	if getPlayerSex(cid) == 1 then
-	npcHandler:say("Well, you don't behave ladylike just because you dress like one!", 1)
-	talk_state = 0
-	else
-	npcHandler:say("Has any man said to you that you're not only beautiful but also intelligent?", 1)
-	talk_state = 5
-	end	
-elseif talk_state == 5 and msgcontains(msg, 'yes') then
-	npcHandler:say("This is a world of fantasy and full of surprises!", 1)
-	talk_state = 0
-elseif talk_state == 5 and msgcontains(msg, '') then
-	npcHandler:say("Well, think about it!", 1)
-	talk_state = 0
-elseif msgcontains(msg, 'kiss') then	
-	if getPlayerSex(cid) == 1 then
-	npcHandler:say("Uh, go away!", 1)
-	talk_state = 0
-	npcHandler:releaseFocus()
-	npcHandler:resetNpc()
-	else
-	npcHandler:say("Do you want to kiss me?", 1)
-	talk_state = 4
-	end	
-elseif talk_state == 4 and msgcontains(msg, 'yes') then
-	doSendMagicEffect(getCreaturePosition(getNpcCid(  )), 14)
-	npcHandler:say("Uh, oh! ... I am seeing stars!", 1)
-	talk_state = 0
-elseif talk_state == 4 and msgcontains(msg, '') then
-	npcHandler:say("Pah, I didn't want to kiss you anyway!", 1)
-	talk_state = 0
-	
-end		
-    return true
+	return true
 end
 
 npcHandler:setCallback(CALLBACK_MESSAGE_DEFAULT, creatureSayCallback)

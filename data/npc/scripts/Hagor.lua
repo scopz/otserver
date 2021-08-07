@@ -5,10 +5,10 @@ local npcHandler = NpcHandler:new(keywordHandler)
 NpcSystem.parseParameters(npcHandler)
 
 -- OTServ event handling functions
-function onCreatureAppear(cid)			npcHandler:onCreatureAppear(cid)			end
-function onCreatureDisappear(cid)		npcHandler:onCreatureDisappear(cid)			end
-function onCreatureSay(cid, type, msg)		npcHandler:onCreatureSay(cid, type, msg)		end
-function onThink()				npcHandler:onThink()					end
+function onCreatureAppear(cid)         npcHandler:onCreatureAppear(cid)         end
+function onCreatureDisappear(cid)      npcHandler:onCreatureDisappear(cid)      end
+function onCreatureSay(cid, type, msg) npcHandler:onCreatureSay(cid, type, msg) end
+function onThink()                     npcHandler:onThink()                     end
 
 keywordHandler:addKeyword({'name'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "My name is Hagor, the old hunter."})
 keywordHandler:addKeyword({'job'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "I travel through the lands of Tibia and now Jakundaf Desert since years."})
@@ -37,35 +37,35 @@ keywordHandler:addKeyword({'library'}, StdModule.say, {npcHandler = npcHandler, 
 keywordHandler:addKeyword({'roll'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "Oh, yes, I love them!"})
 
 function creatureSayCallback(cid, type, msg)
-	if(npcHandler.focus ~= cid) then
+	if not npcHandler:hasFocus(cid) then
 		return false
 	end
-	
-if msgcontains(msg, 'morrin') or msgcontains(msg, 'Morrin') then
-	npcHandler:say("Ah, I remember that man. We made a deal, guess about what.", 1)
-	talk_state = 1
+	msg = string.lower(msg)
+	local cidData = npcHandler:getFocusPlayerData(cid)
 
-elseif talk_state == 1 and msgcontains(msg, 'key') or talk_state == 1 and  msgcontains(msg, 'Key') then
-	npcHandler:say("Right! We can make the same deal if you give a fresh delicious roll. Do you have any?", 1)
-	talk_state = 2	
+	if msgcontains(msg, 'morrin') then
+		npcHandler:playerSay(cid, "Ah, I remember that man. We made a deal, guess about what.", 1)
+		cidData.state = 1
 
-elseif talk_state == 2 and msgcontains(msg, 'yes') or talk_state == 1 and  msgcontains(msg, 'Yes') then
-	if doPlayerRemoveItem(cid, 2690, 1) == true then
-	npcHandler:say("Oh, fine! Here you are.", 1)
-	KEY = doPlayerAddItem(cid, 2088, 1)
-	doSetItemActionId(KEY, 2010)
-	doSetItemSpecialDescription(KEY, "(Key: 4022)")
-	else
-	npcHandler:say("Hey, you do not have one!", 1)
+	elseif cidData.state == 1 and msgcontains(msg, 'key') then
+		npcHandler:playerSay(cid, "Right! We can make the same deal if you give a fresh delicious roll. Do you have any?", 1)
+		cidData.state = 2
+
+	elseif cidData.state == 2 and msgcontains(msg, 'yes') then
+		if doPlayerRemoveItem(cid, 2690, 1) == true then
+			npcHandler:playerSay(cid, "Oh, fine! Here you are.", 1)
+			KEY = doPlayerAddItem(cid, 2088, 1)
+			doSetItemActionId(KEY, 2010)
+			doSetItemSpecialDescription(KEY, "(Key: 4022)")
+		else
+			npcHandler:playerSay(cid, "Hey, you do not have one!", 1)
+		end
+		cidData.state = 0
+
+	elseif cidData.state == 2 and msgcontains(msg, '') then
+		npcHandler:playerSay(cid, "Maybe next time.", 1)
+		cidData.state = 0
 	end
-	talk_state = 0	
-	
-	
-elseif talk_state == 2 and msgcontains(msg, '') then
-	npcHandler:say("Maybe next time.", 1)
-	talk_state = 0
-
-end		
     return true
 end
 

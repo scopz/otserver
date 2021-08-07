@@ -9,10 +9,10 @@ setConditionParam(poison, CONDITION_PARAM_DELAYED, 10)
 addDamageCondition(poison, 2, 3000, -10)
 
 -- OTServ event handling functions
-function onCreatureAppear(cid)			npcHandler:onCreatureAppear(cid)			end
-function onCreatureDisappear(cid)		npcHandler:onCreatureDisappear(cid)			end
-function onCreatureSay(cid, type, msg)		npcHandler:onCreatureSay(cid, type, msg)		end
-function onThink()				npcHandler:onThink()					end
+function onCreatureAppear(cid)         npcHandler:onCreatureAppear(cid)         end
+function onCreatureDisappear(cid)      npcHandler:onCreatureDisappear(cid)      end
+function onCreatureSay(cid, type, msg) npcHandler:onCreatureSay(cid, type, msg) end
+function onThink()                     npcHandler:onThink()                     end
 
 
 local shopModule = ShopModule:new()
@@ -37,37 +37,39 @@ keywordHandler:addKeyword({'thing'}, StdModule.say, {npcHandler = npcHandler, on
 keywordHandler:addKeyword({'help'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "I sell maces, staffs, daggers and brass helmets."})
 
 
-function creatureSayCallback(cid, type, msg) msg = string.lower(msg)
-	if(npcHandler.focus ~= cid) then
+function creatureSayCallback(cid, type, msg)
+	if not npcHandler:hasFocus(cid) then
 		return false
 	end
-if msgcontains(msg, 'rebellion') or msgcontains(msg, 'Rebellion') then
-	npcHandler:say("Uhm... who sent you?", 1)
-	talk_state = 3
+	msg = string.lower(msg)
+	local cidData = npcHandler:getFocusPlayerData(cid)
 
-elseif talk_state == 3 and msgcontains(msg, 'berfasmur') or talk_state == 3 and msgcontains(msg, 'Berfasmur') then
-	npcHandler:say("So, you are a new recruit in the ranks of the rebellion! To proof your worthyness, go and get us a magic crystal.", 1)
-	talk_state = 0	
+	if msgcontains(msg, 'rebellion') then
+		npcHandler:playerSay(cid, "Uhm... who sent you?", 1)
+		cidData.state = 3
 
-elseif msgcontains(msg, 'magic') and msgcontains(msg, 'crystal') or msgcontains(msg, 'Magic') and msgcontains(msg, 'crystal') then
-	npcHandler:say("Did you bring me a magic crystal?", 1)
-	talk_state = 4
+	elseif cidData.state == 3 and msgcontains(msg, 'berfasmur') then
+		npcHandler:playerSay(cid, "So, you are a new recruit in the ranks of the rebellion! To proof your worthyness, go and get us a magic crystal.", 1)
+		cidData.state = 0
 
-elseif talk_state == 4 and msgcontains(msg, 'yes') then
-	if getPlayerItemCount(cid, 2177) >= 1 then
-	npcHandler:say("Brilliant! Bring it to the priest Lugri so that he can cast a deathcurse on the king. The password is 'death to noodles'.", 1)
-	else
-	npcHandler:say("Idiot! You don't have the crystal!", 1)
-	doSendMagicEffect(getCreaturePosition(getNpcCid(  )), 13)
-	doSendMagicEffect(getPlayerPosition(cid), 8)
-	doAddCondition(cid, poison)
+	elseif msgcontains(msg, 'magic') and msgcontains(msg, 'crystal') then
+		npcHandler:playerSay(cid, "Did you bring me a magic crystal?", 1)
+		cidData.state = 4
+
+	elseif cidData.state == 4 and msgcontains(msg, 'yes') then
+		if getPlayerItemCount(cid, 2177) >= 1 then
+			npcHandler:playerSay(cid, "Brilliant! Bring it to the priest Lugri so that he can cast a deathcurse on the king. The password is 'death to noodles'.", 1)
+		else
+			npcHandler:playerSay(cid, "Idiot! You don't have the crystal!", 1)
+			doSendMagicEffect(getCreaturePosition(getNpcCid()), 13)
+			doSendMagicEffect(getPlayerPosition(cid), 8)
+			doAddCondition(cid, poison)
+		end
+
+	elseif msgcontains(msg, 'berfasmur') then
+		npcHandler:playerSay(cid, "Never heard that name!", 1)
+		cidData.state = 0
 	end
-	
-
-elseif msgcontains(msg, 'berfasmur') or msgcontains(msg, 'Berfasmur') then
-	npcHandler:say("Never heard that name!", 1)
-	talk_state = 0	
-end		
     return true
 end
 

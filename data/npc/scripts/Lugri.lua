@@ -9,10 +9,10 @@ setConditionParam(fire, CONDITION_PARAM_DELAYED, 10)
 addDamageCondition(fire, 25, 3000, -25)
 
 -- OTServ event handling functions
-function onCreatureAppear(cid)			npcHandler:onCreatureAppear(cid)			end
-function onCreatureDisappear(cid)		npcHandler:onCreatureDisappear(cid)			end
-function onCreatureSay(cid, type, msg)		npcHandler:onCreatureSay(cid, type, msg)		end
-function onThink()				npcHandler:onThink()					end
+function onCreatureAppear(cid)         npcHandler:onCreatureAppear(cid)         end
+function onCreatureDisappear(cid)      npcHandler:onCreatureDisappear(cid)      end
+function onCreatureSay(cid, type, msg) npcHandler:onCreatureSay(cid, type, msg) end
+function onThink()                     npcHandler:onThink()                     end
 
 keywordHandler:addKeyword({'job'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "I am a priest of Zathroth, the bringer of dark secrets."})
 keywordHandler:addKeyword({'name'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "My name is Lugri."})
@@ -67,53 +67,56 @@ keywordHandler:addKeyword({'nightmare'}, StdModule.say, {npcHandler = npcHandler
 keywordHandler:addKeyword({'goshnar'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "The necromant king was only defeated by the nightmare knights due to a bad twist of fate."})
 keywordHandler:addKeyword({'necromant nectar'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "That's none of your business!"})
 
-function creatureSayCallback(cid, type, msg) msg = string.lower(msg)
-	if(npcHandler.focus ~= cid) then
+function creatureSayCallback(cid, type, msg)
+	if not npcHandler:hasFocus(cid) then
 		return false
 	end
-if msgcontains(msg, 'god') or msgcontains(msg, 'God') then
-	npcHandler:say("The gods of darkness give us the chance to reach our whole potentials, the gods of good want to capture us in eternal stasis!", 1)
-	talk_state = 2
+	msg = string.lower(msg)
+	local cidData = npcHandler:getFocusPlayerData(cid)
 
-elseif talk_state == 2 and msgcontains(msg, 'good') or talk_state == 2 and msgcontains(msg, 'light') then
-	npcHandler:say("The so called gods of good are Fardos, Uman, the elements, Suon, Crunor, Nornur, Bastesh, Kirok, Toth, and Banor.", 1)
-	talk_state = 0	
-elseif talk_state == 2 and msgcontains(msg, 'tibia') or talk_state == 2 and msgcontains(msg, 'Tibia') then
-	npcHandler:say("Tibia is just the mindless elemental power of earth.", 1)
-	talk_state = 0	
-elseif talk_state == 2 and msgcontains(msg, 'evil') or talk_state == 2 and msgcontains(msg, 'darkness') then
-	npcHandler:say("The glorious gods of darkness are Zathroth, Fafnar, Brog, Urgith, and the Archdemons.", 1)
-	talk_state = 0
-	
-elseif msgcontains(msg, 'gold') or msgcontains(msg, 'money') or msgcontains(msg, 'donation') then	
-	npcHandler:say("Do you want to make a donation?", 1)
-	talk_state = 1	
-	
-elseif talk_state == 1 and msgcontains(msg, 'yes') then
-	if doPlayerRemoveMoney(cid, 10) == true then
-	doSendMagicEffect(getPlayerPosition(cid), 13)
-	npcHandler:say("May the gods bless you!", 1)
-	else
-	npcHandler:say("Don't be ashamed but you lack the gold.", 1)
+	if msgcontains(msg, 'god') then
+		npcHandler:playerSay(cid, "The gods of darkness give us the chance to reach our whole potentials, the gods of good want to capture us in eternal stasis!", 1)
+		cidData.state = 2
+
+	elseif cidData.state == 2 and msgcontains(msg, 'good') or cidData.state == 2 and msgcontains(msg, 'light') then
+		npcHandler:playerSay(cid, "The so called gods of good are Fardos, Uman, the elements, Suon, Crunor, Nornur, Bastesh, Kirok, Toth, and Banor.", 1)
+		cidData.state = 0
+	elseif cidData.state == 2 and msgcontains(msg, 'tibia') then
+		npcHandler:playerSay(cid, "Tibia is just the mindless elemental power of earth.", 1)
+		cidData.state = 0
+	elseif cidData.state == 2 and msgcontains(msg, 'evil') or cidData.state == 2 and msgcontains(msg, 'darkness') then
+		npcHandler:playerSay(cid, "The glorious gods of darkness are Zathroth, Fafnar, Brog, Urgith, and the Archdemons.", 1)
+		cidData.state = 0
+
+	elseif msgcontains(msg, 'gold') or msgcontains(msg, 'money') or msgcontains(msg, 'donation') then
+		npcHandler:playerSay(cid, "Do you want to make a donation?", 1)
+		cidData.state = 1
+
+	elseif cidData.state == 1 and msgcontains(msg, 'yes') then
+		if doPlayerRemoveMoney(cid, 10) == true then
+			doSendMagicEffect(getPlayerPosition(cid), 13)
+			npcHandler:playerSay(cid, "May the gods bless you!", 1)
+		else
+			npcHandler:playerSay(cid, "Don't be ashamed but you lack the gold.", 1)
+		end
+		cidData.state = 0
+	elseif cidData.state == 1 and msgcontains(msg, '') then
+		npcHandler:playerSay(cid, "As you wish.", 1)
+		cidData.state = 0
+	elseif msgcontains(msg, 'death to noodles') then
+		npcHandler:playerSay(cid, "So, I guess you bring me a magic crystal?", 1)
+		cidData.state = 3
+	elseif cidData.state == 3 and msgcontains(msg, 'yes') then
+		if doPlayerRemoveItem(cid, 2177, 1) == true then
+		end
+		npcHandler:playerSay(cid, "Fine. Now you get what you deserve, you fool! DIE IN AGONY!", 1)
+		doSendMagicEffect(getCreaturePosition(getNpcCid()), 13)
+		doSendMagicEffect(getPlayerPosition(cid), 15)
+		doAddCondition(cid, fire)
+		cidData.state = 0
+
 	end
-	talk_state = 0
-elseif talk_state == 1 and msgcontains(msg, '') then
-	npcHandler:say("As you wish.", 1)
-	talk_state = 0
-elseif msgcontains(msg, 'death to noodles') then
-	npcHandler:say("So, I guess you bring me a magic crystal?", 1)
-	talk_state = 3
-elseif talk_state == 3 and msgcontains(msg, 'yes') then
-	if doPlayerRemoveItem(cid, 2177, 1) == true then
-	end
-	npcHandler:say("Fine. Now you get what you deserve, you fool! DIE IN AGONY!", 1)
-	doSendMagicEffect(getCreaturePosition(getNpcCid(  )), 13)
-	doSendMagicEffect(getPlayerPosition(cid), 15)
-	doAddCondition(cid, fire)
-	talk_state = 0
-	
-end		
-    return true
+	return true
 end
 
 

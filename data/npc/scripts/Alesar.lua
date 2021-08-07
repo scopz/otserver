@@ -5,10 +5,10 @@ local npcHandler = NpcHandler:new(keywordHandler)
 NpcSystem.parseParameters(npcHandler)
 
 -- OTServ event handling functions
-function onCreatureAppear(cid)			npcHandler:onCreatureAppear(cid)			end
-function onCreatureDisappear(cid)		npcHandler:onCreatureDisappear(cid)			end
-function onCreatureSay(cid, type, msg)		npcHandler:onCreatureSay(cid, type, msg)		end
-function onThink()				npcHandler:onThink()					end
+function onCreatureAppear(cid)         npcHandler:onCreatureAppear(cid)         end
+function onCreatureDisappear(cid)      npcHandler:onCreatureDisappear(cid)      end
+function onCreatureSay(cid, type, msg) npcHandler:onCreatureSay(cid, type, msg) end
+function onThink()                     npcHandler:onThink()                     end
 
 local shopModule = ShopModule:new()
 npcHandler:addModule(shopModule)
@@ -84,154 +84,163 @@ keywordHandler:addKeyword({"bo'ques"}, StdModule.say, {npcHandler = npcHandler, 
 keywordHandler:addKeyword({"fa'hradin"}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "Fa'hradin, that old cynic is way too smart to believe in Daraman's lies. He should reconsider his loyalties."})
 
 function creatureSayCallback(cid, type, msg)
-	if(npcHandler.focus ~= cid) then
+	if not npcHandler:hasFocus(cid) then
 		return false
 	end
-	
-if msgcontains(msg, 'haroun') or msgcontains(msg, 'Haroun') then
-	selfSay("Haroun? What? You know ... where do you know that name from? Did he send you?")
-	talk_state = 1
-			
-elseif talk_state == 1 and msgcontains(msg, 'yes') then
-	selfSay("Treacherous liar! You would not be here if you had really talked to him. Get out of my sight or I will test my latest sabre on you!")
-	talk_state = 0
-	npcHandler:releaseFocus()
-	npcHandler:resetNpc()
-elseif talk_state == 1 and msgcontains(msg, '') then
-	selfSay("<sighs> Of course not. How could you ... Well, at least you are honest, human. I appreciate that.")
-	talk_state = 0
+	msg = string.lower(msg)
 
-elseif msgcontains(msg, 'human') then
-	npcHandler:story("I used to have illusions about you humans. I thought humans were good, noble creatures. ...")
-	talk_state = 0
-	addEvent(message11, 5000, pos)
-elseif msgcontains(msg, 'efreet') then
-	npcHandler:story("The efreet are those djinn who never fell for Daraman's insidious propaganda. I wish I would have been as smart from the start. ...")
-	talk_state = 0
-	addEvent(message21, 5000, pos)
-elseif msgcontains(msg, 'marid') then
-	npcHandler:story("Those among my brothers and sisters who still do not see the truth call themselves the Marid. I used to be one of them, but I left them when the truth dawned upon me. ...")
-	talk_state = 0
-	addEvent(message31, 5000, pos)
-elseif msgcontains(msg, 'gabel') then
-	npcHandler:story("Gabel is a kind-hearted, honest djinn. I would hate to see him die just because he believes in Daraman's lies. ...")
-	talk_state = 0
-	addEvent(message41, 5000, pos)
-elseif msgcontains(msg, 'malor') then
-	npcHandler:story("Malor is overambitious and unnecessarily cruel, but he is the only djinn who could unite our race, so I follow him. ...")
-	talk_state = 0
-	addEvent(message51, 5000, pos)
-elseif msgcontains(msg, "mal'ouquah") then
-	npcHandler:story("I do not like this place. But then it does not really matter where I am. I have a forge and I don't see any humans. That's all I need. ...")
-	talk_state = 0
-	addEvent(message61, 5000, pos)	
-	
-elseif msgcontains(msg, "ashta'daramai") then
-	npcHandler:story("Ashta'daramai is Gabel's fortress which lies to the north. ...")
-	talk_state = 0
-	addEvent(message71, 5000, pos)	
-elseif msgcontains(msg, "zathroth") then
-	npcHandler:story("Legend has it that Zathroth was trying to make us beings of unalloyed evil, but he found us to be impure, so he abandoned us and started over. ...")
-	talk_state = 0
-	addEvent(message81, 5000, pos)	
-	
-end		
+	local cidData = npcHandler:getFocusPlayerData(cid)
+
+	if msgcontains(msg, 'haroun') then
+		npcHandler:playerSay(cid, "Haroun? What? You know ... where do you know that name from? Did he send you?")
+		cidData.state = 1
+
+	elseif cidData.state == 1 and msgcontains(msg, 'yes') then
+		npcHandler:playerSay(cid, "Treacherous liar! You would not be here if you had really talked to him. Get out of my sight or I will test my latest sabre on you!")
+		cidData.state = 0
+		npcHandler:releaseFocus(cid)
+		npcHandler:resetNpc(cid)
+
+	elseif cidData.state == 1 and msgcontains(msg, '') then
+		npcHandler:playerSay(cid, "<sighs> Of course not. How could you ... Well, at least you are honest, human. I appreciate that.")
+		cidData.state = 0
+
+	elseif msgcontains(msg, 'human') then
+		npcHandler:story("I used to have illusions about you humans. I thought humans were good, noble creatures. ...")
+		cidData.state = 0
+		addEvent(message11, 5000, pos)
+
+	elseif msgcontains(msg, 'efreet') then
+		npcHandler:story("The efreet are those djinn who never fell for Daraman's insidious propaganda. I wish I would have been as smart from the start. ...")
+		cidData.state = 0
+		addEvent(message21, 5000, pos)
+
+	elseif msgcontains(msg, 'marid') then
+		npcHandler:story("Those among my brothers and sisters who still do not see the truth call themselves the Marid. I used to be one of them, but I left them when the truth dawned upon me. ...")
+		cidData.state = 0
+		addEvent(message31, 5000, pos)
+
+	elseif msgcontains(msg, 'gabel') then
+		npcHandler:story("Gabel is a kind-hearted, honest djinn. I would hate to see him die just because he believes in Daraman's lies. ...")
+		cidData.state = 0
+		addEvent(message41, 5000, pos)
+
+	elseif msgcontains(msg, 'malor') then
+		npcHandler:story("Malor is overambitious and unnecessarily cruel, but he is the only djinn who could unite our race, so I follow him. ...")
+		cidData.state = 0
+		addEvent(message51, 5000, pos)
+
+	elseif msgcontains(msg, "mal'ouquah") then
+		npcHandler:story("I do not like this place. But then it does not really matter where I am. I have a forge and I don't see any humans. That's all I need. ...")
+		cidData.state = 0
+		addEvent(message61, 5000, pos)
+
+	elseif msgcontains(msg, "ashta'daramai") then
+		npcHandler:story("Ashta'daramai is Gabel's fortress which lies to the north. ...")
+		cidData.state = 0
+		addEvent(message71, 5000, pos)
+
+	elseif msgcontains(msg, "zathroth") then
+		npcHandler:story("Legend has it that Zathroth was trying to make us beings of unalloyed evil, but he found us to be impure, so he abandoned us and started over. ...")
+		cidData.state = 0
+		addEvent(message81, 5000, pos)
+	end
     return true
 end
 
 function message11(cid, type, msg)
-npcHandler:say("I thought djinns and humans shared a destiny, and that we could live side by side peacefully. ...")
-addEvent(message12, 5000, pos)
+	npcHandler:playerSay(cid, "I thought djinns and humans shared a destiny, and that we could live side by side peacefully. ...")
+	addEvent(message12, 5000, pos)
 end
 function message12(cid, type, msg)
-npcHandler:say("But now I have learnt my lesson. I have had the privilege to look deep into the human mind, much deeper than most of my brothers. ...")
-addEvent(message13, 5000, pos)
+	npcHandler:playerSay(cid, "But now I have learnt my lesson. I have had the privilege to look deep into the human mind, much deeper than most of my brothers. ...")
+	addEvent(message13, 5000, pos)
 end
 function message13(cid, type, msg)
-npcHandler:say("And guess what! I did not like what I see. You are nothing but a race of cruel, perfidious bloodsuckers who hide their wickedness behind a thin layer of civilisation and so-called humanity. ...")
-addEvent(message14, 5000, pos)
+	npcHandler:playerSay(cid, "And guess what! I did not like what I see. You are nothing but a race of cruel, perfidious bloodsuckers who hide their wickedness behind a thin layer of civilisation and so-called humanity. ...")
+	addEvent(message14, 5000, pos)
 end
 function message14(cid, type, msg)
-npcHandler:say("Your race is a blemish on the face of Tibia. The sooner it is gone the better!")
+	npcHandler:playerSay(cid, "Your race is a blemish on the face of Tibia. The sooner it is gone the better!")
 end
 function message21(cid, type, msg)
-npcHandler:say("But errors can be corrected!")
+	npcHandler:playerSay(cid, "But errors can be corrected!")
 end
 function message31(cid, type, msg)
-npcHandler:say("Now I follow Malor, although I would never fight against my kind.")
+	npcHandler:playerSay(cid, "Now I follow Malor, although I would never fight against my kind.")
 end
 function message41(cid, type, msg)
-npcHandler:say("After all, I believed them myself.")
+	npcHandler:playerSay(cid, "After all, I believed them myself.")
 end
 function message51(cid, type, msg)
-npcHandler:say("The truth is I despise him, but that is of no importance as long as you humans will be exterminated.")
+	npcHandler:playerSay(cid, "The truth is I despise him, but that is of no importance as long as you humans will be exterminated.")
 end
 function message61(cid, type, msg)
-npcHandler:say("Of course, now you are here. Doesn't help me to feel myself at home here.")
+	npcHandler:playerSay(cid, "Of course, now you are here. Doesn't help me to feel myself at home here.")
 end
 function message61(cid, type, msg)
-npcHandler:say("Of course you cannot enter it through the front door. ...")
-addEvent(message62, 5000, pos)
+	npcHandler:playerSay(cid, "Of course you cannot enter it through the front door. ...")
+	addEvent(message62, 5000, pos)
 end
 function message62(cid, type, msg)
-npcHandler:say("But from my time there, I know that there is also an unguarded back door in the north of the fortress.")
+	npcHandler:playerSay(cid, "But from my time there, I know that there is also an unguarded back door in the north of the fortress.")
 end
 function message81(cid, type, msg)
-npcHandler:say("It is not flattering to think we are nothing but examples of bad workmanship, but I see it from a different perspective: Since our god left us on our own it is up to ourselves to forge our destiny. ...")
-addEvent(message82, 5000, pos)
+	npcHandler:playerSay(cid, "It is not flattering to think we are nothing but examples of bad workmanship, but I see it from a different perspective: Since our god left us on our own it is up to ourselves to forge our destiny. ...")
+	addEvent(message82, 5000, pos)
 end
 function message82(cid, type, msg)
-npcHandler:say("One day Zathroth will look at us in amazement.")
+	npcHandler:playerSay(cid, "One day Zathroth will look at us in amazement.")
 end
 function message91(cid, type, msg)
-npcHandler:say("Personally, I don't understand why you haven't been slaughtered right at the gates. ...")
-addEvent(message92, 5000, pos)
+	npcHandler:playerSay(cid, "Personally, I don't understand why you haven't been slaughtered right at the gates. ...")
+	addEvent(message92, 5000, pos)
 end
 function message92(cid, type, msg)
-npcHandler:say("Anyway. Are you prepared to embark on a dangerous mission for us?")
+	npcHandler:playerSay(cid, "Anyway. Are you prepared to embark on a dangerous mission for us?")
 end
 function message101(cid, type, msg)
-npcHandler:say("They are precious gemstones made of some unknown blue mineral and possess enormous magical power. ...")
-addEvent(message102, 5000, pos)
+	npcHandler:playerSay(cid, "They are precious gemstones made of some unknown blue mineral and possess enormous magical power. ...")
+	addEvent(message102, 5000, pos)
 end
 function message102(cid, type, msg)
-npcHandler:say("If you want to learn more about these gemstones don't forget to visit our library. ...")
-addEvent(message103, 5000, pos)
+	npcHandler:playerSay(cid, "If you want to learn more about these gemstones don't forget to visit our library. ...")
+	addEvent(message103, 5000, pos)
 end
 function message103(cid, type, msg)
-npcHandler:say("Anyway, one of them is enough to create thousands of our mighty djinn blades. ...")
-addEvent(message104, 5000, pos)
+	npcHandler:playerSay(cid, "Anyway, one of them is enough to create thousands of our mighty djinn blades. ...")
+	addEvent(message104, 5000, pos)
 end
 function message104(cid, type, msg)
-npcHandler:say("Unfortunately my last gemstone broke and therefore I'm not able to create new blades anymore. ...")
-addEvent(message105, 5000, pos)
+	npcHandler:playerSay(cid, "Unfortunately my last gemstone broke and therefore I'm not able to create new blades anymore. ...")
+	addEvent(message105, 5000, pos)
 end
 function message105(cid, type, msg)
-npcHandler:say("To my knowledge there is only one place where you can find these gemstones - I know for a fact that the Marid have at least one of them. ...")
-addEvent(message106, 5000, pos)
+	npcHandler:playerSay(cid, "To my knowledge there is only one place where you can find these gemstones - I know for a fact that the Marid have at least one of them. ...")
+	addEvent(message106, 5000, pos)
 end
 function message106(cid, type, msg)
-npcHandler:say("Well... to cut a long story short, your mission is to sneak into Ashta'daramai and to steal it. ...")
-addEvent(message107, 5000, pos)
+	npcHandler:playerSay(cid, "Well... to cut a long story short, your mission is to sneak into Ashta'daramai and to steal it. ...")
+	addEvent(message107, 5000, pos)
 end
 function message108(cid, type, msg)
-npcHandler:say("Needless to say, the Marid won't be too eager to part with it. Try not to get killed until you have delivered the stone to me.")
+	npcHandler:playerSay(cid, "Needless to say, the Marid won't be too eager to part with it. Try not to get killed until you have delivered the stone to me.")
 end
 
 function message111(cid, type, msg)
-npcHandler:say("Amazing how you humans are just impossible to get rid of. Incidentally, you have this character trait in common with many insects and with other vermin. ...")
-addEvent(message112, 5000, pos)
+	npcHandler:playerSay(cid, "Amazing how you humans are just impossible to get rid of. Incidentally, you have this character trait in common with many insects and with other vermin. ...")
+	addEvent(message112, 5000, pos)
 end
 function message112(cid, type, msg)
-npcHandler:say("Nevermind. I hate to say it, but it you have done us a favour, human. That gemstone will serve us well. ...")
-addEvent(message113, 5000, pos)
+	npcHandler:playerSay(cid, "Nevermind. I hate to say it, but it you have done us a favour, human. That gemstone will serve us well. ...")
+	addEvent(message113, 5000, pos)
 end
 function message113(cid, type, msg)
-npcHandler:say("Baa'leal, wants you to talk to Malor concerning some new mission. ...")
-addEvent(message114, 5000, pos)
+	npcHandler:playerSay(cid, "Baa'leal, wants you to talk to Malor concerning some new mission. ...")
+	addEvent(message114, 5000, pos)
 end
 function message114(cid, type, msg)
-npcHandler:say("Looks like you have managed to extended your life expectancy - for just a bit longer.")
+	npcHandler:playerSay(cid, "Looks like you have managed to extended your life expectancy - for just a bit longer.")
 end
 
 npcHandler:setCallback(CALLBACK_MESSAGE_DEFAULT, creatureSayCallback)

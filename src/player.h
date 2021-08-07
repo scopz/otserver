@@ -492,6 +492,8 @@ public:
 		{if(client) client->sendStartSellingTransaction(npc);}
 	void sendNpcFocusLost(const Npc* npc)
 		{if(client) client->sendNpcFocusLost(npc);}
+	void sendNpcFocus(const Npc* npc)
+		{if(client) client->sendNpcFocus(npc);}
 	void sendCreatureSquare(const Creature* creature, SquareColor_t color)
 		{if(client) client->sendCreatureSquare(creature, color);}
 	void sendCreatureChangeOutfit(const Creature* creature, const Outfit_t& outfit)

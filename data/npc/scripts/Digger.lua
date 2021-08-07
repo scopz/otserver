@@ -39,21 +39,22 @@ keywordHandler:addKeyword({'potion'}, StdModule.say, {npcHandler = npcHandler, o
 keywordHandler:addKeyword({'fluid'}, StdModule.say, {npcHandler = npcHandler, onlyFocus = true, text = "You may be interested in my life and mana fluids."})
 
 function creatureSayCallback(cid, type, msg)
-	if(npcHandler.focus ~= cid) then
+	if not npcHandler:hasFocus(cid) then
 		return false
 	end
+	msg = string.lower(msg)
+	local cidData = npcHandler:getFocusPlayerData(cid)
 	
 	if msgcontains(msg, 'vial') or msgcontains(msg, 'deposit') or msgcontains(msg, 'flask') then
-		npcHandler:say("I will pay you 5 gold for every empty vial. Ok?", 1)
-		talk_state = 857
-	elseif talk_state == 857 and msgcontains(msg, 'yes') then
+		npcHandler:playerSay(cid, "I will pay you 5 gold for every empty vial. Ok?", 1)
+		cidData.state = 857
+	elseif cidData.state == 857 and msgcontains(msg, 'yes') then
 		if sellPlayerEmptyVials(cid) == true then
-		npcHandler:say("Here's your money!", 1)
-		talk_state = 0
+			npcHandler:playerSay(cid, "Here's your money!", 1)
 		else
-		npcHandler:say("You don't have any empty vials!", 1)
-		talk_state = 0
+			npcHandler:playerSay(cid, "You don't have any empty vials!", 1)
 		end
+		cidData.state = 0
 	end
 	
 	return true
