@@ -410,7 +410,7 @@ class ConditionFrozen: public Condition
 {
 public:
 	ConditionFrozen(ConditionId_t _id, ConditionType_t _type, int32_t _duration, Item* _item);
-	virtual ~ConditionFrozen(){};
+	virtual ~ConditionFrozen();
 
 	virtual bool startCondition(Creature* creature);
 	virtual uint16_t getIcons() const;
@@ -423,6 +423,7 @@ public:
 
 private:
 	Item* relatedItem;
+	uint32_t eventId;
 };
 
 

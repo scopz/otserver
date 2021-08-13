@@ -1926,6 +1926,14 @@ bool ConditionLight::serialize(PropWriteStream& propWriteStream)
 ConditionFrozen::ConditionFrozen(ConditionId_t _id, ConditionType_t _type, int32_t _duration, Item* _item) :
 Condition(_id, _type, _duration), relatedItem(_item)
 {
+	eventId = 0;
+}
+
+ConditionFrozen::~ConditionFrozen()
+{
+	if (g_scheduler.stopEvent(eventId) && relatedItem) {
+		g_game.internalRemoveItem(relatedItem, 1);
+	}
 }
 
 uint16_t ConditionFrozen::getIcons() const
@@ -1937,7 +1945,7 @@ uint16_t ConditionFrozen::getIcons() const
 
 bool ConditionFrozen::startCondition(Creature* creature)
 {
-	g_scheduler.addEvent(createSchedulerTask(getTicks(), [=]{
+	eventId = g_scheduler.addEvent(createSchedulerTask(getTicks(), [&, creature]{
 		endTime = 0;
 		if (relatedItem) {
 			g_game.internalRemoveItem(relatedItem, 1);
