@@ -4692,9 +4692,11 @@ bool Player::transferMoneyTo(const std::string& name, uint32_t amount)
 	}
 
 	if(target->isOffline()){
-		IOPlayer::instance()->savePlayer(target);
+		if (result) {
+			IOPlayer::instance()->savePlayer(target);
+		}
 		delete target;
-	} else {
+	} else if (result) {
 		target->sendBalance();
 	}
 
