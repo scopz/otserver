@@ -129,8 +129,18 @@ void closeRunfile(void)
 }
 #endif
 
+#include <boost/stacktrace.hpp>
+
+void handler(int sig) {
+	std::cout << "Segmentation fault (core dumped) (" << sig << ")" << std::endl;
+	std::cout << boost::stacktrace::stacktrace();
+	exit(1);
+}
+
 int main(int argc, char** argv)
 {
+	signal(SIGSEGV, handler);   // install our handler
+
 	// Provides stack traces when the server crashes
 	ExceptionHandler mainExceptionHandler;
 	mainExceptionHandler.InstallHandler();
