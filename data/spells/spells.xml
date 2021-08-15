@@ -32,73 +32,75 @@
 	<rune name="adevo grav tera" id="2293" maglv="9" blocktype="all" conjureCount="3" script="support/magic_wall_rune.lua" />
 
 	<!-- Instant Spells -->
-	<instant name="Light" set="1" words="utevo lux" price="100" maglv="0" needlearn="0" lvl="5" mana="20" selftarget="1" aggressive="0" script="support/light.lua"/>
-	<instant name="Great Light" set="1" words="utevo gran lux" price="500" maglv="3" needlearn="1" lvl="13" mana="60" selftarget="1" aggressive="0" script="support/great_light.lua">
+	<instant name="Light" set="1" words="utevo lux" price="0" maglv="0" needlearn="0" lvl="5" mana="20" selftarget="1" aggressive="0" script="support/light.lua"/>
+	<instant name="Great Light" set="1" words="utevo gran lux" price="700" maglv="3" needlearn="1" lvl="13" mana="40" selftarget="1" aggressive="0" script="support/great_light.lua">
 		<vocation id="1"/>
 		<vocation id="2"/>
 		<vocation id="3"/>
 		<vocation id="4"/>
 	</instant>
-	<instant name="Ultimate Light" set="1" words="utevo vis lux" price="1600" maglv="12" needlearn="1" lvl="26" mana="140" aggressive="0" selftarget="1" script="support/ultimate_light.lua">
+	<instant name="Ultimate Light" set="1" words="utevo vis lux" price="2000" maglv="12" needlearn="1" lvl="26" mana="90" aggressive="0" selftarget="1" script="support/ultimate_light.lua">
 		<vocation id="1"/>
 		<vocation id="2"/>
 	</instant>
 
-	<instant name="Light Healing" set="2" type="healing" words="exura" price="170" maglv="1" needlearn="1" lvl="9" mana="22" selftarget="1" aggressive="0" script="healing/light_healing.lua">
+	<instant name="Light Healing" set="2" type="healing" words="exura" price="30" maglv="1" needlearn="1" lvl="8" mana="22" selftarget="1" aggressive="0" script="healing/light_healing.lua">
 		<vocation id="1"/>
 		<vocation id="2"/>
 		<vocation id="3"/>
 		<vocation id="4"/>
 	</instant>
-	<instant name="Intense Healing" set="2" type="healing" words="exura gran" price="350" maglv="2" needlearn="1" lvl="11" mana="66" selftarget="1" aggressive="0" script="healing/intense_healing.lua">
+	<instant name="Intense Healing" set="2" type="healing" words="exura gran" price="400" maglv="2" needlearn="1" lvl="15" mana="66" selftarget="1" aggressive="0" script="healing/intense_healing.lua">
 		<vocation id="1"/>
 		<vocation id="2"/>
 		<vocation id="3"/>
 	</instant>
-	<instant name="Ultimate Healing" set="2" type="healing" words="exura vita" price="1000" maglv="8" needlearn="1" lvl="20" mana="198" selftarget="1" aggressive="0" script="healing/ultimate_healing.lua">
+	<instant name="Ultimate Healing" set="2" type="healing" words="exura vita" price="3000" maglv="8" needlearn="1" lvl="35" mana="198" selftarget="1" aggressive="0" script="healing/ultimate_healing.lua">
 		<vocation id="1"/>
 		<vocation id="2"/>
 		<vocation id="3"/>
 	</instant>
 
-	<instant name="Magic Rope" set="3" type="movement" words="exani tera" price="200" maglv="1" needlearn="1" lvl="9" mana="10" aggressive="0" script="support/magic_rope.lua">
+	<instant name="Levitate" set="3" type="movement" words="exani hur" price="200" maglv="3" needlearn="1" lvl="12" prem="1" mana="14" params="1" function="levitate">
 		<vocation id="1"/>
 		<vocation id="2"/>
 		<vocation id="3"/>
 		<vocation id="4"/>
 	</instant>
-	<instant name="Magic Shovel" set="3" type="movement" words="exani grav" price="300" maglv="1" needlearn="1" lvl="11" mana="10" aggressive="0" script="support/magic_shovel.lua">
+	<instant name="Magic Rope" set="3" type="movement" words="exani tera" price="2000" maglv="1" needlearn="1" lvl="20" mana="10" aggressive="0" script="support/magic_rope.lua">
 		<vocation id="1"/>
 		<vocation id="2"/>
 		<vocation id="3"/>
 		<vocation id="4"/>
 	</instant>
-	<instant name="Levitate" set="3" type="movement" words="exani hur" price="500" maglv="3" needlearn="1" lvl="12" prem="1" mana="14" params="1" function="levitate">
-		<vocation id="1"/>
-		<vocation id="2"/>
-		<vocation id="3"/>
-		<vocation id="4"/>
-	</instant>
-
-	<instant name="Haste" set="4" type="movement" words="utani hur" price="600" maglv="4" needlearn="1" lvl="14" prem="1" mana="60" selftarget="1" aggressive="0" script="support/haste.lua">
-		<vocation id="1"/>
-		<vocation id="2"/>
-		<vocation id="3"/>
-		<vocation id="4"/>
-	</instant>
-	<instant name="Strong Haste" type="movement" set="4" words="utani gran hur" price="1300" maglv="8" needlearn="1" lvl="20" prem="1" mana="100" selftarget="1" aggressive="0" script="support/strong_haste.lua">
-		<vocation id="1"/>
-		<vocation id="2"/>
-	</instant>
-
-	<instant name="Recovery" type="healing" words="utura" price="4000" maglv="0" needlearn="1" lvl="50" mana="76" selftarget="1" aggressive="0" script="healing/recovery.lua">
+	<instant name="Magic Shovel" set="3" type="movement" words="exani grav" price="3000" maglv="1" needlearn="1" lvl="30" mana="10" aggressive="0" script="support/magic_shovel.lua">
 		<vocation id="1"/>
 		<vocation id="2"/>
 		<vocation id="3"/>
 		<vocation id="4"/>
 	</instant>
 
-	<instant name="Find Person" words="exiva" price="80" maglv="0" needlearn="1" lvl="8" mana="20" params="1" function="searchPlayer">
+	<instant name="Haste" set="4" type="movement" words="utani hur" price="1000" maglv="4" needlearn="1" lvl="15" prem="1" mana="50" selftarget="1" aggressive="0" script="support/haste.lua">
+		<vocation id="1"/>
+		<vocation id="2"/>
+		<vocation id="3"/>
+		<vocation id="4"/>
+	</instant>
+	<instant name="Strong Haste" type="movement" set="4" words="utani gran hur" price="5000" maglv="4" needlearn="1" lvl="60" prem="1" mana="100" selftarget="1" aggressive="0" script="support/strong_haste.lua">
+		<vocation id="1"/>
+		<vocation id="2"/>
+		<vocation id="3"/>
+		<vocation id="4"/>
+	</instant>
+
+	<instant name="Recovery" type="healing" words="utura" price="4000" maglv="0" needlearn="1" lvl="50" mana="80" selftarget="1" aggressive="0" script="healing/recovery.lua">
+		<vocation id="1"/>
+		<vocation id="2"/>
+		<vocation id="3"/>
+		<vocation id="4"/>
+	</instant>
+
+	<instant name="Find Person" words="exiva" price="280" maglv="0" needlearn="1" lvl="14" mana="20" params="1" function="searchPlayer">
 		<vocation id="1"/>
 		<vocation id="2"/>
 		<vocation id="3"/>
@@ -198,7 +200,7 @@
 	</instant>
 
 	<!-- Target Requirement Spells -->
-	<aim name="Deploy Trap" words="osevo ani" price="500" maglv="7" needlearn="1" lvl="20" mana="18" exhaustion="1000" range="6" uses="position" script="support/deploy_trap.lua">
+	<aim name="Deploy Trap" words="osevo ani" price="500" maglv="7" needlearn="1" lvl="20" mana="26" exhaustion="1000" range="6" uses="position" script="support/deploy_trap.lua">
 		<vocation id="3"/>
 	</aim>
 	<aim name="Target Force Strike" type="attack" words="osori corp" price="600" maglv="1" needlearn="1" lvl="20" mana="14" exhaustion="2000" range="6" uses="creature" script="attack/target_force_strike.lua">
@@ -229,77 +231,100 @@
 	</aim>
 
 	<!-- Attack Spells -->
-	<attack name="Empowered Attack" type="attack" words="exori inv" price="1500" maglv="4" needlearn="1" lvl="30" mana="50" exhaustion="1000" range="6" usages="8" script="attack/empowered_attack.lua">
+	<attack name="Empowered Attack" set="5" type="attack" words="exori inv" price="1000" maglv="3" needlearn="1" lvl="25" mana="45" exhaustion="1000" range="6" usages="8" script="attack/empowered_attack.lua">
 		<vocation id="3"/>
 		<vocation id="4"/>
 	</attack>
 
-	<attack name="Empowered Ice Attack" type="ice" words="exori inv frigo" price="1500" maglv="10" needlearn="1" lvl="30" mana="60" exhaustion="1000" range="6" usages="8" script="attack/empowered_ice_attack.lua">
+	<attack name="Empowered Earth Attack" set="5" type="earth" words="exori inv tera" price="2000" maglv="4" needlearn="1" lvl="30" mana="70" exhaustion="1000" range="6" usages="8" script="attack/empowered_earth_attack.lua">
 		<vocation id="3"/>
+		<vocation id="4"/>
+	</attack>
+
+	<attack name="Empowered Energy Attack" set="5" type="energy" words="exori inv vis" price="2500" maglv="4" needlearn="1" lvl="35" mana="70" exhaustion="1000" range="6" usages="8" script="attack/empowered_energy_attack.lua">
+		<vocation id="3"/>
+		<vocation id="4"/>
+	</attack>
+
+	<attack name="Empowered Flame Attack" set="5" type="fire" words="exori inv flam" price="3000" maglv="4" needlearn="1" lvl="40" mana="70" exhaustion="1000" range="6" usages="8" script="attack/empowered_flame_attack.lua">
+		<vocation id="3"/>
+		<vocation id="4"/>
+	</attack>
+
+	<attack name="Empowered Ice Attack" set="5" type="ice" words="exori inv frigo" price="3500" maglv="4" needlearn="1" lvl="45" mana="70" exhaustion="1000" range="6" usages="8" script="attack/empowered_ice_attack.lua">
+		<vocation id="3"/>
+		<vocation id="4"/>
+	</attack>
+
+	<attack name="Empowered Holy Attack" set="5" type="holy" words="exori inv san" price="4000" maglv="4" needlearn="1" lvl="50" mana="70" exhaustion="1000" range="6" usages="8" script="attack/empowered_holy_attack.lua">
+		<vocation id="3"/>
+	</attack>
+
+	<attack name="Empowered Death Attack" set="5" type="death" words="exori inv mort" price="4000" maglv="4" needlearn="1" lvl="50" mana="70" exhaustion="1000" range="6" usages="8" script="attack/empowered_death_attack.lua">
 		<vocation id="4"/>
 	</attack>
 
 	<!-- Conjure Spells -->
-	<conjure name="Conjure Arrow" set="5" type="conjure" words="exevo con" price="450" maglv="2" needlearn="1" lvl="13" mana="80" soul="1" conjureId="2544" conjureCount="25" function="conjureItem">
+	<conjure name="Conjure Arrow" set="6" type="conjure" words="exevo con" price="450" maglv="2" needlearn="1" lvl="13" mana="80" soul="1" conjureId="2544" conjureCount="25" function="conjureItem">
 		<vocation id="3"/>
 	</conjure>
-	<conjure name="Conjure Poisoned Arrow" set="5" type="conjure" words="exevo con pox" maglv="5" price="700" needlearn="1" lvl="16" mana="140" soul="2" conjureId="2545" conjureCount="12" function="conjureItem">
+	<conjure name="Conjure Poisoned Arrow" set="6" type="conjure" words="exevo con pox" maglv="5" price="700" needlearn="1" lvl="16" mana="140" soul="2" conjureId="2545" conjureCount="12" function="conjureItem">
 		<vocation id="3"/>
 	</conjure>
-	<conjure name="Conjure Bolt" set="5" type="conjure" words="exevo con mort" price="750" maglv="6" needlearn="1" lvl="17" mana="110" soul="2" conjureId="2543" conjureCount="25" function="conjureItem">
+	<conjure name="Conjure Bolt" set="6" type="conjure" words="exevo con mort" price="750" maglv="6" needlearn="1" lvl="17" mana="110" soul="2" conjureId="2543" conjureCount="25" function="conjureItem">
 		<vocation id="3"/>
 	</conjure>
-	<conjure name="Conjure Explosive Arrow" set="5" type="conjure" words="exevo con flam" price="1000" maglv="10" needlearn="1" lvl="25" mana="240" soul="3" conjureId="2546" conjureCount="5" function="conjureItem">
+	<conjure name="Conjure Explosive Arrow" set="6" type="conjure" words="exevo con flam" price="1000" maglv="10" needlearn="1" lvl="25" mana="240" soul="3" conjureId="2546" conjureCount="5" function="conjureItem">
 		<vocation id="3"/>
 	</conjure>
-	<conjure name="Conjure Power Bolt" set="5" type="conjure" words="exevo con vis" price="2000" maglv="12" promotion="1" needlearn="1" lvl="59" mana="400" soul="3" conjureId="2547" conjureCount="20" function="conjureItem">
-		<vocation id="3"/>
-	</conjure>
-
-	<conjure name="Destroy Field" set="6" type="rune" words="adito grav" price="350" maglv="6" needlearn="1" lvl="17" mana="120" soul="2" reagentId="2260" conjureId="2261" conjureCount="3" function="conjureRune">
-		<vocation id="1"/>
-		<vocation id="2"/>
-		<vocation id="3"/>
-	</conjure>
-	<conjure name="Desintegrate" set="6" type="rune" words="adito tera" price="900" maglv="8" needlearn="1" lvl="21" mana="200" soul="3" reagentId="2260" conjureId="2310" conjureCount="3" function="conjureRune">
-		<vocation id="1"/>
-		<vocation id="2"/>
+	<conjure name="Conjure Power Bolt" set="6" type="conjure" words="exevo con vis" price="2000" maglv="12" promotion="1" needlearn="1" lvl="59" mana="400" soul="3" conjureId="2547" conjureCount="20" function="conjureItem">
 		<vocation id="3"/>
 	</conjure>
 
-	<conjure name="Poison Field" set="7" type="rune" words="adevo grav pox" price="300" maglv="2" needlearn="1" lvl="14" mana="200" soul="1" aggressive="0" reagentId="2260" conjureId="2285" conjureCount="3" function="conjureRune">
+	<conjure name="Destroy Field" set="7" type="rune" words="adito grav" price="350" maglv="6" needlearn="1" lvl="17" mana="120" soul="2" reagentId="2260" conjureId="2261" conjureCount="3" function="conjureRune">
+		<vocation id="1"/>
+		<vocation id="2"/>
+		<vocation id="3"/>
+	</conjure>
+	<conjure name="Desintegrate" set="7" type="rune" words="adito tera" price="900" maglv="8" needlearn="1" lvl="21" mana="200" soul="3" reagentId="2260" conjureId="2310" conjureCount="3" function="conjureRune">
+		<vocation id="1"/>
+		<vocation id="2"/>
+		<vocation id="3"/>
+	</conjure>
+
+	<conjure name="Poison Field" set="8" type="rune" words="adevo grav pox" price="300" maglv="2" needlearn="1" lvl="14" mana="200" soul="1" aggressive="0" reagentId="2260" conjureId="2285" conjureCount="3" function="conjureRune">
 		<vocation id="1"/>
 		<vocation id="2"/>
 	</conjure>
-	<conjure name="Fire Field" set="7" type="rune" words="adevo grav flam" price="500" maglv="3" needlearn="1" lvl="15" mana="240" soul="1" reagentId="2260" conjureId="2301" conjureCount="3" function="conjureRune">
+	<conjure name="Fire Field" set="8" type="rune" words="adevo grav flam" price="500" maglv="3" needlearn="1" lvl="15" mana="240" soul="1" reagentId="2260" conjureId="2301" conjureCount="3" function="conjureRune">
 		<vocation id="1"/>
 		<vocation id="2"/>
 	</conjure>
-	<conjure name="Energy Field" set="7" type="rune" words="adevo grav vis" price="700" maglv="5" needlearn="1" lvl="18" mana="320" soul="2" reagentId="2260" conjureId="2277" conjureCount="3" function="conjureRune">
+	<conjure name="Energy Field" set="8" type="rune" words="adevo grav vis" price="700" maglv="5" needlearn="1" lvl="18" mana="320" soul="2" reagentId="2260" conjureId="2277" conjureCount="3" function="conjureRune">
 		<vocation id="1"/>
 		<vocation id="2"/>
 	</conjure>
 
-	<conjure name="Poison Bomb" set="8" type="rune" words="adevo mas pox" price="1000" maglv="8" needlearn="1" lvl="25" mana="520" soul="2" reagentId="2260" conjureId="2286" conjureCount="2" function="conjureRune">
+	<conjure name="Poison Bomb" set="9" type="rune" words="adevo mas pox" price="1000" maglv="8" needlearn="1" lvl="25" mana="520" soul="2" reagentId="2260" conjureId="2286" conjureCount="2" function="conjureRune">
 		<vocation id="2"/>
 	</conjure>
-	<conjure name="Fire Bomb" set="8" type="rune" words="adevo mas flam" price="1500" maglv="9" needlearn="1" lvl="27" mana="600" soul="4" reagentId="2260" conjureId="2305" conjureCount="2" function="conjureRune">
+	<conjure name="Fire Bomb" set="9" type="rune" words="adevo mas flam" price="1500" maglv="9" needlearn="1" lvl="27" mana="600" soul="4" reagentId="2260" conjureId="2305" conjureCount="2" function="conjureRune">
 		<vocation id="1"/>
 		<vocation id="2"/>
 	</conjure>
-	<conjure name="Energy Bomb" set="8" type="rune" words="adevo mas vis" price="2300" maglv="18" needlearn="1" lvl="37" mana="880" soul="5" reagentId="2260" conjureId="2262" conjureCount="2" function="conjureRune">
+	<conjure name="Energy Bomb" set="9" type="rune" words="adevo mas vis" price="2300" maglv="18" needlearn="1" lvl="37" mana="880" soul="5" reagentId="2260" conjureId="2262" conjureCount="2" function="conjureRune">
 		<vocation id="1"/>
 	</conjure>
 
-	<conjure name="Poison Wall" set="9" type="rune" words="adevo mas grav pox" price="1600" maglv="11" needlearn="1" lvl="29" mana="640" soul="3" reagentId="2260" conjureId="2289" conjureCount="4" function="conjureRune">
+	<conjure name="Poison Wall" set="10" type="rune" words="adevo mas grav pox" price="1600" maglv="11" needlearn="1" lvl="29" mana="640" soul="3" reagentId="2260" conjureId="2289" conjureCount="4" function="conjureRune">
 		<vocation id="1"/>
 		<vocation id="2"/>
 	</conjure>
-	<conjure name="Fire Wall" set="9" type="rune" words="adevo mas grav flam" price="2000" maglv="13" needlearn="1" lvl="33" mana="780" soul="4" reagentId="2260" conjureId="2303" conjureCount="4" function="conjureRune">
+	<conjure name="Fire Wall" set="10" type="rune" words="adevo mas grav flam" price="2000" maglv="13" needlearn="1" lvl="33" mana="780" soul="4" reagentId="2260" conjureId="2303" conjureCount="4" function="conjureRune">
 		<vocation id="1"/>
 		<vocation id="2"/>
 	</conjure>
-	<conjure name="Energy Wall" set="9" type="rune" words="adevo mas grav vis" price="2500" maglv="18" needlearn="1" lvl="41" mana="1000" soul="5" reagentId="2260" conjureId="2279" conjureCount="4" function="conjureRune">
+	<conjure name="Energy Wall" set="10" type="rune" words="adevo mas grav vis" price="2500" maglv="18" needlearn="1" lvl="41" mana="1000" soul="5" reagentId="2260" conjureId="2279" conjureCount="4" function="conjureRune">
 		<vocation id="1"/>
 	</conjure>
 

@@ -1,6 +1,6 @@
 local combat = createCombatObject()
-setCombatParam(combat, COMBAT_PARAM_TYPE, COMBAT_ICEDAMAGE)
-setCombatParam(combat, COMBAT_PARAM_EFFECT, CONST_ME_HITBYICE)
+setCombatParam(combat, COMBAT_PARAM_TYPE, COMBAT_FIREDAMAGE)
+setCombatParam(combat, COMBAT_PARAM_EFFECT, CONST_ME_HITBYFIRE)
 
 function onGetFormulaValues(cid, level, attackSkill, attackValue, attackFactor)
 	local min = math.floor((attackSkill*0.56 + attackValue*0.79 + level*0.45) / attackFactor * 0.8)
