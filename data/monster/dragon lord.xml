@@ -53,9 +53,7 @@
 	<loot>
 		<item id="2672" chance="60000" countmax="5"/><!-- 5 60% dragon ham -->
 		<item id="2796" chance="12000"/><!-- 12% green mushroom -->
-		<item id="2148" chance="80000" countmax="100"/><!-- 100 80% gold coin -->
-		<item id="2148" chance="40000" countmax="50"/><!-- 50 40% gold coin-->
-		<item id="2148" chance="60000" countmax="100"/><!-- 100 60% gold coin-->
+		<item id="2148" chance="60000" countmax="250"/><!-- 250 60% gold coin-->
 		<item id="2146" chance="5000"/><!-- 5% small sapphire -->
 		<item id="2547" chance="6000"/><!-- 6% power bolt -->
 		<item id="2177" chance="600"/><!-- 0.6% life crystal -->
