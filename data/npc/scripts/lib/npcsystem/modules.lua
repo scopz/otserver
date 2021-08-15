@@ -1145,7 +1145,6 @@ if(Modules == nil) then
 
 	OracleModule = {
 		npcHandler = nil,
-		condition = function() return true end
 	}
 	-- Add it to the parseable module list.
 	
@@ -1157,12 +1156,12 @@ if(Modules == nil) then
 		self.__index = self
 		return obj
 	end
-	
+
 	-- Initializes the module and associates handler to it.
 	function OracleModule:init(handler)
 		self.npcHandler = handler
 
-		local node1 = handler.keywordHandler:addKeyword({ 'yes' }, OracleModule.askTown, {module = self})
+		local node1 = handler.keywordHandler:addKeyword({ 'yes' }, OracleModule.askTown, {module = self, premmy = self.premmy})
 
 		if self.premmy then
 
@@ -1212,7 +1211,7 @@ if(Modules == nil) then
 			return false
 		end
 
-		if module.premmy then
+		if parameters.premmy then
 			module.npcHandler:playerSay(cid, 'IN WHICH TOWN DO YOU WANT TO LIVE: EDRON, ANKRAHMUN, PORT HOPE OR DARASHIA?')
 		else
 			module.npcHandler:playerSay(cid, 'IN WHICH TOWN DO YOU WANT TO LIVE: CARLIN, THAIS, VENORE, AB\'DENDRIEL OR KAZORDOON?')
@@ -1314,5 +1313,520 @@ if(Modules == nil) then
 	end
 
 
-end
 
+
+	BankModule = {
+		npcHandler = nil,
+
+		balanceText = "Your account balance is |BALANCE| gold.",
+
+		askChangeText = "How many |NAMECOINS| do you want to get?",
+		askChangeDowngradeText = "How many |NAMEFROMCOINS| do you want to change to |NAMETOCOINS|?",
+		changeCoinsConfirmText = "So I should change |AMOUNTFROMCOINS| of your |NAMEFROMCOINS| to |AMOUNTTOCOINS| |NAMETOCOINS| for you?",
+		changeGoldOrCrystalText = "Do you want to change your platinum coins to gold or crystal?",
+		okChangeText = "Here you are.",
+		failChangeText = "You don't have money.",
+
+		depositConfirmText = "Would you like to deposit |DEPOSITAMOUNT| gold?",
+		askDepositPartialText = "How much would you like to deposit?",
+		okDepositText = "You have added |DEPOSITAMOUNT| gold to your bank account.",
+		failDepositText = "You don't have that money amount!",
+		failNoMoneyDepositText = "You don't have money.",
+		invalidDepositText = "I'm sorry, but you must give me an valid amount of how much you would like to deposit.",
+
+		withdrawConfirmText = "Would you like to withdraw |WITHDRAWAMOUNT| gold?",
+		askWithdrawPartialText = "How much would you like to withdraw?",
+		okWithdrawText = "Here you are.",
+		failWithdrawText = "There is not enough gold on your account.",
+		failNoMoneyWithdrawText = "You don't have money on your bank account!",
+		invalidWithdrawText = "I'm sorry, but you must give me a valid amount of how much you would like to withdraw.",
+
+		transferConfirmText = 'Would you like to transfer |TRANSFERAMOUNT| gold to |SENDPLAYERNAME|?',
+		askTransferPartialText = "Please tell me the amount of gold you would like to transfer.",
+		askTransferMissingPlayerText = 'Who would you like transfer |TRANSFERAMOUNT| gold to?',
+		okTransferText = "Very well. You have transferred |TRANSFERAMOUNT| gold to |SENDPLAYERNAME|.",
+		failTransferNoPlayerText = 'This player does not exist.',
+		failTransferRookText = 'You can not send money to Rookgaard!',
+		failTransferYourselfText = 'You can not send money to yourself.',
+		failTransferText = "There is not enough gold on your account.",
+
+		GOLD_ID = 2148,
+		PLATINUM_ID = 2152,
+		CRYSTAL_ID = 2160,
+	}
+	-- Add it to the parseable module list.
+
+	-- Creates a new instance of BankModule
+	function BankModule:new()
+		local obj = {}
+		setmetatable(obj, self)
+		self.__index = self
+		return obj
+	end
+
+	-- Initializes the module and associates handler to it.
+	function BankModule:init(handler)
+		self.npcHandler = handler
+
+		local changeNode = handler.keywordHandler:addKeyword({ 'balance' }, BankModule.showBalance, {module = self})
+
+		local changeNode = handler.keywordHandler:addKeyword({ 'change' }, BankModule.initChange, {module = self})
+		changeNode:addChildKeyword({""}, BankModule.manageChange, {module = self})
+
+		local depositNode = handler.keywordHandler:addKeyword({ 'deposit' }, BankModule.initDeposit, {module = self})
+		depositNode:addChildKeyword({""}, BankModule.manageDeposit, {module = self})
+
+		local withdrawNode = handler.keywordHandler:addKeyword({ 'withdraw' }, BankModule.initWithdraw, {module = self})
+		withdrawNode:addChildKeyword({""}, BankModule.manageWithdraw, {module = self})
+
+		local transferNode = handler.keywordHandler:addKeyword({ 'transfer' }, BankModule.initTransfer, {module = self})
+		transferNode:addChildKeyword({""}, BankModule.manageTransfer, {module = self})
+
+		return true
+	end
+
+	function BankModule.showBalance(cid, message, keywords, parameters, node)
+		local module = parameters.module
+		if not module.npcHandler:hasFocus(cid) then
+			return false
+		end
+
+		local msg = module.npcHandler:parseMessage(module.balanceText, {
+			['|BALANCE|'] = getPlayerBalance(cid),
+		})
+		module.npcHandler:playerSay(cid, msg)
+		return true
+	end
+
+	function BankModule.initChange(cid, message, keywords, parameters, node)
+		local module = parameters.module
+		if not module.npcHandler:hasFocus(cid) then
+			return false
+		end
+		local cidData = module.npcHandler:getFocusPlayerData(cid)
+
+		if msgcontains(message, 'change gold') then
+			cidData.changeFrom = module.GOLD_ID
+			cidData.changeTo = module.PLATINUM_ID
+			cidData.amountFrom = nil
+			cidData.amountTo = nil
+			local msg = module.npcHandler:parseMessage(module.askChangeText, {
+				['|NAMECOINS|'] = 'platinum coins',
+			})
+			module.npcHandler:playerSay(cid, msg)
+
+		elseif msgcontains(message, 'change platinum') then
+			cidData.changeFrom = module.PLATINUM_ID
+			cidData.changeTo = nil
+			cidData.amountFrom = nil
+			cidData.amountTo = nil
+			module.npcHandler:playerSay(cid, module.changeGoldOrCrystalText)
+
+		elseif msgcontains(message, 'change crystal') then
+			cidData.changeFrom = module.CRYSTAL_ID
+			cidData.changeTo = module.PLATINUM_ID
+			cidData.amountFrom = nil
+			cidData.amountTo = nil
+			local msg = module.npcHandler:parseMessage(module.askChangeDowngradeText, {
+				['|NAMEFROMCOINS|'] = 'crystal coins',
+				['|NAMETOCOINS|'] = 'platinum',
+			})
+			module.npcHandler:playerSay(cid, msg)
+
+		else
+			module.npcHandler:resetNpc(cid)
+		end
+		return true
+	end
+
+	function BankModule.manageChange(cid, message, keywords, parameters, node)
+		local module = parameters.module
+		if not module.npcHandler:hasFocus(cid) then
+			return false
+		end
+		local cidData = module.npcHandler:getFocusPlayerData(cid)
+
+		if not cidData.changeTo then
+			if msgcontains(message, 'gold') then
+				cidData.changeTo = module.GOLD_ID
+				local msg = module.npcHandler:parseMessage(module.askChangeDowngradeText, {
+					['|NAMEFROMCOINS|'] = 'platinum coins',
+					['|NAMETOCOINS|'] = 'gold',
+				})
+				module.npcHandler:playerSay(cid, msg)
+
+
+			elseif msgcontains(message, 'crystal') then
+				cidData.changeTo = module.CRYSTAL_ID
+				local msg = module.npcHandler:parseMessage(module.askChangeText, {
+					['|NAMECOINS|'] = 'crystal coins',
+				})
+				module.npcHandler:playerSay(cid, msg)
+			end
+			return true
+
+
+		elseif not cidData.amountFrom or not cidData.amountTo then
+
+			local amount = getMoneyCount(message)
+
+			if amount > 0 then
+				if cidData.changeFrom == module.GOLD_ID then -- gold to platinum
+					cidData.amountFrom = amount * 1000
+					cidData.amountTo = amount
+
+				elseif cidData.changeFrom == module.CRYSTAL_ID then -- crystal to platinum
+					cidData.amountFrom = amount
+					cidData.amountTo = amount * 1000
+
+				elseif cidData.changeTo == module.GOLD_ID then -- platinum to gold
+					cidData.amountFrom = amount
+					cidData.amountTo = amount * 1000
+
+				elseif cidData.changeTo == module.CRYSTAL_ID then -- platinum to crystal
+					cidData.amountFrom = amount * 1000
+					cidData.amountTo = amount
+				end
+
+				local msg = module.npcHandler:parseMessage(module.changeCoinsConfirmText, {
+					['|AMOUNTFROMCOINS|'] = cidData.amountFrom,
+					['|NAMEFROMCOINS|'] = cidData.changeFrom == module.GOLD_ID and "gold coins" or (cidData.changeFrom == module.CRYSTAL_ID and "crystal coins" or "platinum coins"),
+					['|AMOUNTTOCOINS|'] = cidData.amountTo,
+					['|NAMETOCOINS|'] = cidData.changeTo == module.GOLD_ID and "gold coins" or (cidData.changeTo == module.CRYSTAL_ID and "crystal coins" or "platinum coins"),
+				})
+				module.npcHandler:playerSay(cid, msg)
+				cidData.amount = amount
+				return true
+
+			else
+				module.npcHandler:playerSay(cid, module.invalidTransferText)
+			end
+
+
+		else
+			if msgcontains(message, 'yes') then
+				if doPlayerRemoveItem(cid, cidData.changeFrom, cidData.amountFrom) then
+					doPlayerAddItem(cid, cidData.changeTo, cidData.amountTo)
+					module.npcHandler:playerSay(cid, module.okChangeText)
+				else
+					module.npcHandler:playerSay(cid, module.failChangeText)
+				end
+
+			elseif msgcontains(message, 'no') then
+				module.npcHandler:playerSay(cid, "Ok. We cancel", 1)
+			else
+				return true
+			end
+			cidData.amountFrom = nil
+			cidData.amountTo = nil
+			cidData.changeFrom = nil
+			cidData.changeTo = nil
+
+		end
+		module.npcHandler:resetNpc(cid)
+		return true
+	end
+
+	function BankModule.initDeposit(cid, message, keywords, parameters, node)
+		local module = parameters.module
+		if not module.npcHandler:hasFocus(cid) then
+			return false
+		end
+		local cidData = module.npcHandler:getFocusPlayerData(cid)
+
+		local amount = 0
+		if msgcontains(message, ' all') then
+			amount = getPlayerMoney(cid)
+			if amount == 0 then
+				module.npcHandler:playerSay(cid, module.failNoMoneyDepositText)
+				module.npcHandler:resetNpc(cid)
+				return true
+			end
+		else
+			amount = getMoneyCount(message)
+		end
+
+		if amount > 0 then
+			local msg = module.npcHandler:parseMessage(module.depositConfirmText, {
+				['|DEPOSITAMOUNT|'] = amount
+			})
+			module.npcHandler:playerSay(cid, msg)
+			cidData.amount = amount
+
+		else
+			module.npcHandler:playerSay(cid, module.askDepositPartialText)
+			cidData.amount = nil
+		end
+		return true
+	end
+
+	function BankModule.manageDeposit(cid, message, keywords, parameters, node)
+		local module = parameters.module
+		if not module.npcHandler:hasFocus(cid) then
+			return false
+		end
+		local cidData = module.npcHandler:getFocusPlayerData(cid)
+
+		if not cidData.amount then
+			local amount = 0
+			if msgcontains(message, 'all') then
+				amount = getPlayerMoney(cid)
+				if amount == 0 then
+					module.npcHandler:playerSay(cid, module.failNoMoneyDepositText)
+					module.npcHandler:resetNpc(cid)
+					return true
+				end
+			else
+				amount = getMoneyCount(message)
+			end
+
+			if amount > 0 then
+				local msg = module.npcHandler:parseMessage(module.depositConfirmText, {
+					['|DEPOSITAMOUNT|'] = amount
+				})
+				module.npcHandler:playerSay(cid, msg)
+				cidData.amount = amount
+				return true
+
+			else
+				module.npcHandler:playerSay(cid, module.invalidDepositText)
+			end
+
+
+		else
+			if msgcontains(message, 'yes') then
+				if doPlayerDepositMoney(cid, cidData.amount) then
+					local msg = module.npcHandler:parseMessage(module.okDepositText, {
+						['|DEPOSITAMOUNT|'] = cidData.amount
+					})
+					module.npcHandler:playerSay(cid, msg, 1)
+
+				else
+					module.npcHandler:playerSay(cid, module.failDepositText, 1)
+				end
+
+			elseif msgcontains(message, 'no') then
+				module.npcHandler:playerSay(cid, "Ok then.", 1)
+			else
+				return true
+			end
+			cidData.amount = nil
+		end
+		module.npcHandler:resetNpc(cid)
+		return true
+	end
+
+	function BankModule.initWithdraw(cid, message, keywords, parameters, node)
+		local module = parameters.module
+		if not module.npcHandler:hasFocus(cid) then
+			return false
+		end
+		local cidData = module.npcHandler:getFocusPlayerData(cid)
+
+		local amount = 0
+		if msgcontains(message, ' all') then
+			amount = getPlayerBalance(cid)
+			if amount == 0 then
+				module.npcHandler:playerSay(cid, module.failNoMoneyWithdrawText)
+				module.npcHandler:resetNpc(cid)
+				return true
+			end
+		else
+			amount = getMoneyCount(message)
+		end
+
+		if amount > 0 then
+			local msg = module.npcHandler:parseMessage(module.withdrawConfirmText, {
+				['|WITHDRAWAMOUNT|'] = amount
+			})
+			module.npcHandler:playerSay(cid, msg)
+			cidData.amount = amount
+
+		else
+			module.npcHandler:playerSay(cid, module.askWithdrawPartialText)
+			cidData.amount = nil
+		end
+		return true
+	end
+
+	function BankModule.manageWithdraw(cid, message, keywords, parameters, node)
+		local module = parameters.module
+		if not module.npcHandler:hasFocus(cid) then
+			return false
+		end
+		local cidData = module.npcHandler:getFocusPlayerData(cid)
+
+		if not cidData.amount then
+			local amount = 0
+			if msgcontains(message, 'all') then
+				amount = getPlayerBalance(cid)
+				if amount == 0 then
+					module.npcHandler:playerSay(cid, module.failNoMoneyWithdrawText)
+					module.npcHandler:resetNpc(cid)
+					return true
+				end
+			else
+				amount = getMoneyCount(message)
+			end
+
+			if amount > 0 then
+				local msg = module.npcHandler:parseMessage(module.withdrawConfirmText, {
+					['|WITHDRAWAMOUNT|'] = amount
+				})
+				module.npcHandler:playerSay(cid, msg)
+				cidData.amount = amount
+				return true
+
+			else
+				module.npcHandler:playerSay(cid, module.invalidWithdrawText)
+			end
+
+
+		else
+			if msgcontains(message, 'yes') then
+				if doPlayerWithdrawMoney(cid, cidData.amount) then
+					module.npcHandler:playerSay(cid, module.okWithdrawText, 1)
+				else
+					module.npcHandler:playerSay(cid, module.failWithdrawText, 1)
+				end
+
+			elseif msgcontains(message, 'no') then
+				module.npcHandler:playerSay(cid, "Ok then.", 1)
+			else
+				return true
+			end
+			cidData.amount = nil
+		end
+
+		module.npcHandler:resetNpc(cid)
+		return true
+	end
+
+	function BankModule.initTransfer(cid, message, keywords, parameters, node)
+		local module = parameters.module
+		if not module.npcHandler:hasFocus(cid) then
+			return false
+		end
+		local cidData = module.npcHandler:getFocusPlayerData(cid)
+
+		local amount = getMoneyCount(message)
+		if amount > 0 then
+			cidData.amount = amount
+			cidData.transferPlayer = nil
+
+			local idxStart, idxEnd = string.find(message:lower(), ' to ')
+			if idxEnd ~= nil then
+				local name = string.sub(message, idxEnd+1)
+				if name and #name > 0 then
+					local transferPlayer = getPlayerGUIDByName(name)
+					if transferPlayer > 0 then
+						cidData.transferPlayer = {
+							guid = transferPlayer,
+							name = string.upper(string.sub(name, 0, 1)) .. string.sub(name, 2),
+							message = name,
+						}
+					end
+				end
+			end
+
+			local msg
+			if cidData.transferPlayer then
+				msg = module.npcHandler:parseMessage(module.transferConfirmText, {
+					['|TRANSFERAMOUNT|'] = cidData.amount,
+					['|SENDPLAYERNAME|'] = cidData.transferPlayer.name,
+				})
+			else
+				msg = module.npcHandler:parseMessage(module.askTransferMissingPlayerText, {
+					['|TRANSFERAMOUNT|'] = amount
+				})
+			end
+			module.npcHandler:playerSay(cid, msg)
+
+		else
+			module.npcHandler:playerSay(cid, module.askTransferPartialText)
+			cidData.amount = nil
+			cidData.transferPlayer = nil
+		end
+
+		return true
+	end
+
+	function BankModule.manageTransfer(cid, message, keywords, parameters, node)
+		local module = parameters.module
+		if not module.npcHandler:hasFocus(cid) then
+			return false
+		end
+		local cidData = module.npcHandler:getFocusPlayerData(cid)
+
+
+		if not cidData.amount then
+			local amount = getMoneyCount(message)
+
+			if amount > 0 then
+				local msg = module.npcHandler:parseMessage(module.askTransferMissingPlayerText, {
+					['|TRANSFERAMOUNT|'] = amount
+				})
+				module.npcHandler:playerSay(cid, msg)
+				cidData.amount = amount
+				cidData.transferPlayer = nil
+				return true
+
+			else
+				module.npcHandler:playerSay(cid, module.invalidTransferText)
+			end
+
+
+		elseif not cidData.transferPlayer then
+			local transferPlayer = getPlayerGUIDByName(message)
+			if transferPlayer > 0 then
+
+				cidData.transferPlayer = {
+					guid = transferPlayer,
+					name = string.upper(string.sub(message, 0, 1)) .. string.sub(message, 2),
+					message = message,
+				}
+
+				local msg = module.npcHandler:parseMessage(module.transferConfirmText, {
+					['|TRANSFERAMOUNT|'] = cidData.amount,
+					['|SENDPLAYERNAME|'] = cidData.transferPlayer.name,
+				})
+				module.npcHandler:playerSay(cid, msg, 1)
+				return true
+
+			else
+				module.npcHandler:playerSay(cid, module.failTransferNoPlayerText, 1)
+			end
+
+
+		else
+			if msgcontains(message, 'yes') then
+
+				if getVocationByPlayerGUID(cidData.transferPlayer.guid) <= 0 then
+					module.npcHandler:playerSay(cid, module.failTransferRookText, 1)
+
+				elseif cidData.transferPlayer.guid == getPlayerGUIDByName(getPlayerName(cid)) then
+					module.npcHandler:playerSay(cid, module.failTransferYourselfText, 1)
+
+				elseif doPlayerTransferMoneyTo(cid, cidData.transferPlayer.message, cidData.amount) then
+					local msg = module.npcHandler:parseMessage(module.okTransferText, {
+						['|TRANSFERAMOUNT|'] = cidData.amount,
+						['|SENDPLAYERNAME|'] = cidData.transferPlayer.name,
+					})
+					module.npcHandler:playerSay(cid, msg, 1)
+				else
+					module.npcHandler:playerSay(cid, module.failTransferText, 1)
+				end
+
+			elseif msgcontains(message, 'no') then
+				module.npcHandler:playerSay(cid, "Ok then.", 1)
+			else
+				return true
+			end
+			cidData.amount = nil
+			cidData.transferPlayer = nil
+		end
+
+		module.npcHandler:resetNpc(cid)
+		return true
+	end
+end
