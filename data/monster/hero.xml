@@ -64,7 +64,7 @@
 		<item id="2488" chance="500"/><!-- 0.5% crown legs -->
 		<item id="1987" chance="100000"><!-- bag -->
 			<inside>
-				<item id="2456" chance="13000"/><!-- 13% bow -->
+				<item id="2456" chance="20000"/><!-- 20% bow -->
 				<item id="2392" chance="500"/><!-- 0.5% fire sword -->
 				<item id="2377" chance="1500"/><!-- 1.5% two handed sword -->
 				<item id="2391" chance="1000"/><!-- 1% war hammer -->

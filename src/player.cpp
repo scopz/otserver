@@ -518,24 +518,32 @@ int32_t Player::getWeaponSkill(const Item* item) const
 
 int32_t Player::getArmor() const
 {
-	int32_t armor = 0;
-
-	Item* item;
-	if((item = getInventoryItem(SLOT_HEAD)))
-		armor += item->getArmor() + item->getRank();
-	if((item = getInventoryItem(SLOT_NECKLACE)))
-		armor += item->getArmor();
-	if((item = getInventoryItem(SLOT_ARMOR)))
-		armor += item->getArmor() + item->getRank();
-	if((item = getInventoryItem(SLOT_LEGS)))
-		armor += item->getArmor() + item->getRank();
-	if((item = getInventoryItem(SLOT_FEET)))
-		armor += item->getArmor() + item->getRank();
-	if((item = getInventoryItem(SLOT_RING)))
-		armor += item->getArmor();
+	int32_t armor = (int32_t) (
+		calcArmor(getInventoryItem(SLOT_HEAD)) +
+		calcArmor(getInventoryItem(SLOT_NECKLACE), false) +
+		calcArmor(getInventoryItem(SLOT_ARMOR)) +
+		calcArmor(getInventoryItem(SLOT_LEGS)) +
+		calcArmor(getInventoryItem(SLOT_FEET)) +
+		calcArmor(getInventoryItem(SLOT_RING), false)
+	);
 
 	return (vocation->getArmorDefense() != 1.0 ? int32_t(armor * vocation->getArmorDefense()) : armor);
 }
+
+float Player::calcArmor(const Item* item, bool useRank /*= true*/) const
+{
+	if (!item) {
+		return 0;
+	}
+	float armor = item->getArmor();
+	if (useRank) armor += item->getRank();
+
+	if (armor > 10) {
+		armor = (armor - 10) * 0.75f + 10;
+	}
+	return armor;
+}
+
 
 void Player::getShieldAndWeapon(const Item* &shield, const Item* &weapon) const
 {

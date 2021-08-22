@@ -50,7 +50,7 @@
 		<item id="2484" chance="12000"/><!-- 12% studded armor -->
 		<item id="1987" chance="100000"><!-- bag -->
 			<inside>
-				<item id="2456" chance="4000"/><!-- 4% bow -->
+				<item id="2456" chance="30000"/><!-- 30% bow -->
 				<item id="2397" chance="6000"/><!-- 6% longsword -->
 			</inside>
 		</item>

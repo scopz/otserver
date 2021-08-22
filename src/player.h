@@ -709,6 +709,7 @@ protected:
 	void setNextWalkActionTask(SchedulerTask* task);
 	void setNextActionTask(SchedulerTask* task);
 
+	float calcArmor(const Item* item, bool useRank = true) const;
 	void sendToRook();
 	bool rebirth(const uint32_t &voc);
 	bool recoverSkills(const bool &onlyCheck = false);
