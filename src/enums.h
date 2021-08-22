@@ -32,6 +32,22 @@ enum RaceType_t {
 	RACE_ENERGY	= 5
 };
 
+enum MonsterBehavior_t {
+	ACTIVE_AGGRESSIVE = 0,
+	ACTIVE_FLEE = 1,
+	PASIVE = 2,
+	PASIVE_FOLLOW = 3,
+	PASIVE_AGGRESSIVE = 4,
+	PASIVE_FLEE = 5,
+};
+
+enum MonsterReact_t {
+	NONE = 0,
+	BLOOD = 1,
+	RACE_DAMAGE = 2,
+	SELF_TYPE_DAMAGE = 3,
+};
+
 enum CombatType_t {
 	COMBAT_NONE            = 0,
 	COMBAT_FIRST           = COMBAT_NONE,

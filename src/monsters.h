@@ -116,6 +116,8 @@ public:
 	int conditionImmunities;
 	int damageImmunities;
 	RaceType_t race;
+	MonsterBehavior_t behavior;
+	MonsterReact_t reactsTo;
 	bool isSummonable;
 	bool isIllusionable;
 	bool isConvinceable;

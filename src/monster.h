@@ -78,13 +78,15 @@ public:
 
 	bool canPushItems() const {return mType->canPushItems;}
 	bool canPushCreatures() const {return mType->canPushCreatures;}
-	bool isHostile() const { return mType->isHostile;}
+	bool isHostile() const;
+	bool isFleeing() const;
 	virtual bool canSeeInvisibility() const {return Creature::isImmune(CONDITION_INVISIBLE);}
 	uint32_t getManaCost() const {return mType->manaCost;}
 	void setSpawn(Spawn* _spawn) {spawn = _spawn;};
 
 	virtual void onAttackedCreatureDisappear(bool isLogout);
 	virtual void onFollowCreatureDisappear(bool isLogout);
+	virtual void onWitnessAttack(Creature* attacker, Creature* target, CombatType_t combatType, BlockType_t blockType, int32_t damage);
 	virtual void onAttackedCreature(Creature* target);
 	virtual void onAttackedCreatureDrainHealth(Creature* target, int32_t points);
 	virtual void onAttackedCreatureDrainMana(Creature* target, int32_t points);
@@ -122,7 +124,6 @@ public:
 	bool hadRecentBattle() const { return hadRecentBattleVar; }
 	bool isTarget(Creature* creature);
 	bool getIdleStatus() const { return isIdle;}
-	bool isFleeing() const {return getHealth() <= mType->runAwayHealth;}
 	
 	bool getFleeStep(const Position& targetPos, Direction& direction);
 	bool getDistanceStep(const Position& targetPos, Direction& direction);
@@ -151,6 +152,7 @@ private:
 	bool extraMeleeAttack;
 	bool semiIdle;
 	bool hadRecentBattleVar;
+	bool behaviorActivated;
 	Position attackingLastPosition;
 	int64_t timeOfLastHit;
 

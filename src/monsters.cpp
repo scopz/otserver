@@ -70,6 +70,8 @@ void MonsterType::reset()
 	conditionImmunities = 0;
 	damageImmunities = 0;
 	race = RACE_BLOOD;
+	behavior = ACTIVE_AGGRESSIVE;
+	reactsTo = NONE;
 	isSummonable = false;
 	isIllusionable = false;
 	isConvinceable = false;
@@ -967,6 +969,48 @@ bool Monsters::loadMonster(const std::string& file, const std::string& monster_n
 				xmlNodePtr tmpNode = p->children;
 				while(tmpNode){
 					if(xmlStrcmp(tmpNode->name, (const xmlChar*)"flag") == 0){
+
+						if(readXMLString(tmpNode, "behavior", strValue)){
+							if(asLowerCaseString(strValue) == "aggressive"){
+								mType->behavior = ACTIVE_AGGRESSIVE;
+
+							} else if(asLowerCaseString(strValue) == "flee"){
+								mType->behavior = ACTIVE_FLEE;
+
+							} else if(asLowerCaseString(strValue) == "pasive"){
+								mType->behavior = PASIVE;
+
+							} else if(asLowerCaseString(strValue) == "pasive-follow"){
+								mType->behavior = PASIVE_FOLLOW;
+
+							} else if(asLowerCaseString(strValue) == "pasive-aggressive"){
+								mType->behavior = PASIVE_AGGRESSIVE;
+
+							} else if(asLowerCaseString(strValue) == "pasive-flee"){
+								mType->behavior = PASIVE_FLEE;
+
+							} else{
+								SHOW_XML_WARNING("Unknown behavior type " << strValue);
+							}
+						}
+
+						if(readXMLString(tmpNode, "reaction", strValue)){
+							if(asLowerCaseString(strValue) == "none"){
+								mType->reactsTo = NONE;
+
+							} else if(asLowerCaseString(strValue) == "blood"){
+								mType->reactsTo = BLOOD;
+
+							} else if(asLowerCaseString(strValue) == "race"){
+								mType->reactsTo = RACE_DAMAGE;
+
+							} else if(asLowerCaseString(strValue) == "type"){
+								mType->reactsTo = SELF_TYPE_DAMAGE;
+
+							} else{
+								SHOW_XML_WARNING("Unknown reaction type " << strValue);
+							}
+						}
 
 						if(readXMLInteger(tmpNode, "summonable", intValue)){
 							mType->isSummonable = (intValue != 0);
