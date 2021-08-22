@@ -1614,7 +1614,7 @@ void Player::onCreatureAppear(const Creature* creature, bool isLogin)
 	}
 }
 
-void Player::onAttackedCreatureDissapear(bool isLogout)
+void Player::onAttackedCreatureDisappear(bool isLogout)
 {
 	sendCancelTarget();
 
@@ -1623,7 +1623,7 @@ void Player::onAttackedCreatureDissapear(bool isLogout)
 	}
 }
 
-void Player::onFollowCreatureDissapear(bool isLogout)
+void Player::onFollowCreatureDisappear(bool isLogout)
 {
 	sendCancelTarget();
 
@@ -1638,7 +1638,7 @@ void Player::onChangeZone(ZoneType_t zone)
 		if(zone == ZONE_PROTECTION){
 			if(!hasFlag(PlayerFlag_IgnoreProtectionZone)){
 				setAttackedCreature(NULL);
-				onAttackedCreatureDissapear(false);
+				onAttackedCreatureDisappear(false);
 			}
 		}
 		else if(zone == ZONE_NOPVP){
@@ -1646,7 +1646,7 @@ void Player::onChangeZone(ZoneType_t zone)
 					(attackedCreature->isPlayerSummon()) ) &&
 					!hasFlag(PlayerFlag_IgnoreProtectionZone)){
 				setAttackedCreature(NULL);
-				onAttackedCreatureDissapear(false);
+				onAttackedCreatureDisappear(false);
 			}
 		}
 	}
@@ -1659,13 +1659,13 @@ void Player::onAttackedCreatureChangeZone(ZoneType_t zone)
 	if(zone == ZONE_PROTECTION){
 		if(!hasFlag(PlayerFlag_IgnoreProtectionZone)){
 			setAttackedCreature(NULL);
-			onAttackedCreatureDissapear(false);
+			onAttackedCreatureDisappear(false);
 		}
 	}
 	else if(zone == ZONE_NOPVP){
 		if(attackedCreature->getPlayer() && !hasFlag(PlayerFlag_IgnoreProtectionZone)){
 			setAttackedCreature(NULL);
-			onAttackedCreatureDissapear(false);
+			onAttackedCreatureDisappear(false);
 		}
 	}
 	else if(zone == ZONE_NORMAL){
@@ -1673,7 +1673,7 @@ void Player::onAttackedCreatureChangeZone(ZoneType_t zone)
 		if (g_game.getWorldType() == WORLD_TYPE_NO_PVP){
 			if(attackedCreature->getPlayer()){
 				setAttackedCreature(NULL);
-				onAttackedCreatureDissapear(false);
+				onAttackedCreatureDisappear(false);
 			}
 		}
 	}

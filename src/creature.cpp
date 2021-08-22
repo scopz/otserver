@@ -389,12 +389,12 @@ void Creature::internalCreatureDisappear(const Creature* creature, bool isLogout
 {
 	if(attackedCreature == creature){
 		setAttackedCreature(NULL);
-		onAttackedCreatureDissapear(isLogout);
+		onAttackedCreatureDisappear(isLogout);
 	}
 
 	if(followCreature == creature){
 		setFollowCreature(NULL);
-		onFollowCreatureDissapear(isLogout);
+		onFollowCreatureDisappear(isLogout);
 	}
 }
 

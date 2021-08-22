@@ -83,8 +83,8 @@ public:
 	uint32_t getManaCost() const {return mType->manaCost;}
 	void setSpawn(Spawn* _spawn) {spawn = _spawn;};
 
-	virtual void onAttackedCreatureDissapear(bool isLogout);
-	virtual void onFollowCreatureDissapear(bool isLogout);
+	virtual void onAttackedCreatureDisappear(bool isLogout);
+	virtual void onFollowCreatureDisappear(bool isLogout);
 	virtual void onAttackedCreature(Creature* target);
 	virtual void onAttackedCreatureDrainHealth(Creature* target, int32_t points);
 	virtual void onAttackedCreatureDrainMana(Creature* target, int32_t points);

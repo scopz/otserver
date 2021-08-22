@@ -117,20 +117,20 @@ Monster::~Monster()
 #endif
 }
 
-void Monster::onAttackedCreatureDissapear(bool isLogout)
+void Monster::onAttackedCreatureDisappear(bool isLogout)
 {
 #ifdef __DEBUG__
-	std::cout << "Attacked creature dissapeared." << std::endl;
+	std::cout << "Attacked creature disappeared." << std::endl;
 #endif
 
 	attackTicks = 0;
 	extraMeleeAttack = true;
 }
 
-void Monster::onFollowCreatureDissapear(bool isLogout)
+void Monster::onFollowCreatureDisappear(bool isLogout)
 {
 #ifdef __DEBUG__
-	std::cout << "Follow creature dissapeared." << std::endl;
+	std::cout << "Follow creature disappeared." << std::endl;
 #endif
 }
 

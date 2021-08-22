@@ -379,8 +379,8 @@ public:
 		const Tile* oldTile, const Position& oldPos, bool teleport);
 
 	virtual bool onStepOnItem(Item* item);
-	virtual void onAttackedCreatureDissapear(bool isLogout) {};
-	virtual void onFollowCreatureDissapear(bool isLogout) {};
+	virtual void onAttackedCreatureDisappear(bool isLogout) {};
+	virtual void onFollowCreatureDisappear(bool isLogout) {};
 
 	virtual void onCreatureTurn(const Creature* creature) { };
 	virtual void onCreatureSay(const Creature* creature, SpeakClasses type, const std::string& text) { };
