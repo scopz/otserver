@@ -342,6 +342,7 @@ public:
 	virtual void onCombatRemoveCondition(const Creature* attacker, Condition* condition);
 	virtual void onAttackedCreature(Creature* target) {};
 	virtual void onSummonAttackedCreature(Creature* summon, Creature* target) {};
+	virtual void onWitnessAttack(Creature* attacker, Creature* target, CombatType_t combatType, BlockType_t blockType, int32_t damage) {};
 	virtual void onAttacked() {};
 	virtual void onAttackedCreatureDrainHealth(Creature* target, int32_t points);
 	virtual void onSummonAttackedCreatureDrainHealth(Creature* summon, Creature* target, int32_t points) {};

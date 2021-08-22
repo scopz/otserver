@@ -4020,6 +4020,10 @@ bool Game::combatBlockHit(CombatType_t combatType, Creature* attacker, Creature*
 	BlockType_t blockType = target->blockHit(attacker, combatType, damage, checkDefense, checkArmor);
 	healthChange = -damage;
 
+	for(SpectatorVec::const_iterator it = list.begin(); it != list.end(); ++it){
+		(*it)->onWitnessAttack(attacker, target, combatType, blockType, damage);
+	}
+
 	if(blockType == BLOCK_DEFENSE){
 		addMagicEffect(list, targetPos, NM_ME_PUFF);
 		return true;
@@ -4087,7 +4091,6 @@ bool Game::combatChangeHealth(CombatType_t combatType, MagicEffectClasses custom
 		target->gainHealth(attacker, healthChange);
 	}
 	else{
-
 		if(!target->isAttackable() || Combat::canDoCombat(attacker, target) != RET_NOERROR){
 			addMagicEffect(list, targetPos, NM_ME_PUFF);
 			return true;

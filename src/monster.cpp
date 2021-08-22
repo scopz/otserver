@@ -62,6 +62,7 @@ Creature()
 {
 	isIdle = true;
 	semiIdle = false;
+	behaviorActivated = false;
 	isMasterInRange = false;
 	mType = _mtype;
 	spawn = NULL;
@@ -117,6 +118,34 @@ Monster::~Monster()
 #endif
 }
 
+
+bool Monster::isHostile() const {
+	switch(mType->behavior) {
+		case ACTIVE_AGGRESSIVE:
+//			return true;
+			return mType->isHostile;
+
+		case PASIVE_AGGRESSIVE:
+			return behaviorActivated;
+
+		default:
+			return false;
+	}
+}
+
+bool Monster::isFleeing() const {
+	switch(mType->behavior) {
+		case ACTIVE_FLEE:
+			return true;
+
+		case PASIVE_FLEE:
+			return behaviorActivated || getHealth() <= mType->runAwayHealth;
+
+		default:
+			return getHealth() <= mType->runAwayHealth;
+	}
+}
+
 void Monster::onAttackedCreatureDisappear(bool isLogout)
 {
 #ifdef __DEBUG__
@@ -132,6 +161,71 @@ void Monster::onFollowCreatureDisappear(bool isLogout)
 #ifdef __DEBUG__
 	std::cout << "Follow creature disappeared." << std::endl;
 #endif
+}
+
+void Monster::onWitnessAttack(Creature* attacker, Creature* target, CombatType_t combatType, BlockType_t blockType, int32_t damage)
+{
+	if (!attacker || !target)
+		return;
+
+	if ((mType->behavior == PASIVE_AGGRESSIVE || mType->behavior == PASIVE_FLEE) && !behaviorActivated) {
+		Creature* toAttack = nullptr;
+
+		if (target == this) {
+			toAttack = attacker;
+
+		} else {
+			switch(mType->reactsTo) {
+				case BLOOD:
+					toAttack = attacker->getPlayer()? attacker : target;
+					break;
+
+				case RACE_DAMAGE:
+					if (target->getMonster()) {
+						if (getRace() == target->getRace())
+							toAttack = attacker;
+
+					} else if (attacker->getMonster()) {
+						if (getRace() == attacker->getRace())
+							toAttack = target;
+					}
+					break;
+
+				case SELF_TYPE_DAMAGE:
+					if (target->getMonster()) {
+						if (getRace() == target->getRace())
+							toAttack = attacker;
+
+					} else if (attacker->getMonster()) {
+						if (getRace() == attacker->getRace())
+							toAttack = target;
+					}
+					break;
+
+				default:
+					break;
+			}
+		}
+
+		if (toAttack && toAttack->getPlayer() && canSee(toAttack->getPosition())) {
+			behaviorActivated = true;
+			setAttackedCreature(toAttack);
+
+			const Position& creaturePos = toAttack->getPosition();
+			if(creaturePos.z == getPosition().z && canSee(creaturePos)){
+
+				if(!listWalkDir.empty()){
+					listWalkDir.clear();
+					onWalkAborted();
+				}
+
+				hasFollowPath = false;
+				forceUpdateFollowPath = false;
+				followCreature = toAttack;
+				isUpdatingPath = true;
+			}
+		}
+	}
 }
 
 void Monster::onAttackedCreature(Creature* target)
@@ -720,10 +814,14 @@ bool Monster::selectTarget(Creature* creature)
 #ifdef __DEBUG__
 	std::cout << "Selecting target... " << std::endl;
 #endif
-
-	if(!isTarget(creature)){
+	if (mType->behavior == PASIVE)
 		return false;
-	}
+
+	if ((mType->behavior == PASIVE_AGGRESSIVE || mType->behavior == PASIVE_FLEE) && !behaviorActivated)
+		return false;
+
+	if(!isTarget(creature))
+		return false;
 
 	CreatureList::iterator it = std::find(targetList.begin(), targetList.end(), creature);
 	if(it == targetList.end()){
