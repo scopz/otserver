@@ -456,11 +456,6 @@ void Tile::onUpdateTile()
 			tmpPlayer->sendUpdateTile(this, cylinderMapPos);
 		}
 	}
-
-	//event methods
-	for(it = list.begin(); it != list.end(); ++it){
-		(*it)->onUpdateTile(this, cylinderMapPos);
-	}
 }
 
 void Tile::moveCreature(Creature* creature, Cylinder* toCylinder, bool teleport /* = false*/)
@@ -925,16 +920,16 @@ void Tile::__addThing(int32_t index, Thing* thing)
 				//remove old splash if exists
 				if(items){
 					for(ItemVector::iterator it = items->getBeginTopItem(); it != items->getEndTopItem(); ++it){
-						if((*it)->isSplash()){
-							int32_t oldSplashIndex = __getIndexOfThing(*it);
-							Item* oldSplash = *it;
-							__removeThing(oldSplash, 1);
-							oldSplash->setParent(NULL);
-							g_game.FreeThing(oldSplash);
-							onUpdateTile();
-							postRemoveNotification(oldSplash, NULL, oldSplashIndex, true);
-							break;
+						Item* oldSplash = *it;
+						if (!Item::items[oldSplash->getID()].isSplash()) {
+							continue;
 						}
+
+						__removeThing(oldSplash, 1);
+						oldSplash->setParent(nullptr);
+						g_game.FreeThing(oldSplash);
+						postRemoveNotification(oldSplash, NULL, 0, true);
+						break;
 					}
 				}
 			}
@@ -942,7 +937,7 @@ void Tile::__addThing(int32_t index, Thing* thing)
 			bool isInserted = false;
 
 			if(items){
-				for(ItemVector::iterator it = items->getBeginTopItem(); it != items->getEndTopItem(); ++it){
+				for(ItemVector::iterator it = items->getBeginTopItem(), end = items->getEndTopItem(); it != end; ++it){
 					//Note: this is different from internalAddThing
 					if(Item::items[item->getID()].alwaysOnTopOrder <= Item::items[(*it)->getID()].alwaysOnTopOrder){
 						items->insert(it, item);
@@ -1031,7 +1026,6 @@ void Tile::__updateThing(Thing* thing, uint16_t itemId, uint32_t count)
 	updateTileFlags(item, false);
 
 	onUpdateTileItem(item, oldType, item, newType);
-	onUpdateTile();
 }
 
 void Tile::__replaceThing(uint32_t index, Thing* thing)
@@ -1135,7 +1129,7 @@ void Tile::__removeThing(Thing* thing, uint32_t count)
 				std::cout << "Failure: [Tile::__removeThing] creature not found" << std::endl;
 				DEBUG_REPORT
 #endif
-				return; //RET_NOTPOSSIBLE;
+				return; //RET_NOTPOSSIBLE
 			}
 
 			g_game.clearSpectatorCache();
@@ -1148,7 +1142,7 @@ void Tile::__removeThing(Thing* thing, uint32_t count)
 			std::cout << "Failure: [Tile::__removeThing] creature not found" << std::endl;
 			DEBUG_REPORT
 #endif
-			return; //RET_NOTPOSSIBLE;
+			return; //RET_NOTPOSSIBLE
 		}
 	}
 	else{
@@ -1158,7 +1152,7 @@ void Tile::__removeThing(Thing* thing, uint32_t count)
 			std::cout << "Failure: [Tile::__removeThing] item == NULL" << std::endl;
 			DEBUG_REPORT
 #endif
-			return /*RET_NOTPOSSIBLE*/;
+			return; //RET_NOTPOSSIBLE
 		}
 
 		int32_t index = __getIndexOfThing(item);
@@ -1167,7 +1161,7 @@ void Tile::__removeThing(Thing* thing, uint32_t count)
 			std::cout << "Failure: [Tile::__removeThing] index == -1" << std::endl;
 			DEBUG_REPORT
 #endif
-			return /*RET_NOTPOSSIBLE*/;
+			return; //RET_NOTPOSSIBLE
 		}
 
 		if(item == ground){
@@ -1185,7 +1179,7 @@ void Tile::__removeThing(Thing* thing, uint32_t count)
 			--thingCount;
 			onRemoveTileItem(list, oldStackPosVector, item);
 
-			return /*RET_NOERROR*/;
+			return; //RET_NOERROR
 		}
 
 		if(item->isAlwaysOnTop()){
@@ -1206,7 +1200,7 @@ void Tile::__removeThing(Thing* thing, uint32_t count)
 						items->erase(it);
 						--thingCount;
 						onRemoveTileItem(list, oldStackPosVector, item);
-						return /*RET_NOERROR*/;
+						return; //RET_NOERROR
 					}
 				}
 			}
@@ -1243,7 +1237,7 @@ void Tile::__removeThing(Thing* thing, uint32_t count)
 							onRemoveTileItem(list, oldStackPosVector, item);
 						}
 
-						return /*RET_NOERROR*/;
+						return; //RET_NOERROR
 					}
 				}
 			}
