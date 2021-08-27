@@ -2522,6 +2522,7 @@ void ProtocolGame::addTileItem(NetworkMessage &msg, const Position& pos, uint32_
 	if(stackpos < 10){
 		msg.addByte(0x6A);
 		msg.addPosition(pos);
+		msg.addByte(stackpos);
 		msg.addItem(item);
 	}
 }
@@ -2531,6 +2532,7 @@ void ProtocolGame::addTileCreature(NetworkMessage &msg, const Position& pos, uin
 	//if(stackpos < 10){
 		msg.addByte(0x6A);
 		msg.addPosition(pos);
+		msg.addByte(stackpos);
 
 		bool known;
 		uint32_t removedKnown;
