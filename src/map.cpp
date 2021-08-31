@@ -528,9 +528,6 @@ bool Map::canThrowObjectTo(const Position& fromPos, const Position& toPos, bool 
 	}
 
 	int deltaz = std::abs(fromPos.z - toPos.z);
-	if(deltaz > 2){
-		return false;
-	}
 
 	int deltax, deltay;
 	deltax = std::abs(fromPos.x - toPos.x);
