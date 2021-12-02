@@ -47,7 +47,7 @@ DatabaseMySQL::DatabaseMySQL()
 	}
 
 	// automatic reconnect
-	my_bool reconnect = true;
+	bool reconnect = true;
 	mysql_options(&m_handle, MYSQL_OPT_RECONNECT, &reconnect);
 
 	// connects to database

@@ -24,14 +24,13 @@
 
 #include "definitions.h"
 
-#include <sys/types.h>
-#include <sys/timeb.h>
+#include <chrono>
 
 inline int64_t OTSYS_TIME()
 {
-	timeb t;
-	ftime(&t);
-	return int64_t(t.millitm) + int64_t(t.time) * 1000;
+	return std::chrono::duration_cast<std::chrono::milliseconds>(
+	    std::chrono::system_clock::now().time_since_epoch()
+	).count();
 }
 
 #endif
