@@ -2537,7 +2537,7 @@
 	</spawn>
 	<spawn centerx="33142" centery="32530" centerz="6" radius="1" />
 	<spawn centerx="33179" centery="32530" centerz="6" radius="1">
-		<monster name="hyaena" x="1" y="0" z="6" spawntime="60" />
+		<monster name="hyaena" x="-1" y="1" z="6" spawntime="60" />
 	</spawn>
 	<spawn centerx="33101" centery="32532" centerz="6" radius="1">
 		<npc name="Umar" x="1" y="-1" z="6" spawntime="60" direction="2" />
@@ -7664,15 +7664,15 @@
 	<spawn centerx="32638" centery="32282" centerz="7" radius="1">
 		<monster name="bandit" x="1" y="0" z="7" spawntime="60" />
 	</spawn>
+	<spawn centerx="32767" centery="32282" centerz="7" radius="1">
+		<monster name="giant spider" x="0" y="0" z="7" spawntime="90" />
+	</spawn>
 	<spawn centerx="32289" centery="32283" centerz="7" radius="2" />
 	<spawn centerx="32293" centery="32283" centerz="7" radius="1">
 		<monster name="snake" x="1" y="0" z="7" spawntime="60" />
 	</spawn>
 	<spawn centerx="32633" centery="32283" centerz="7" radius="1">
 		<monster name="wild warrior" x="0" y="0" z="7" spawntime="60" />
-	</spawn>
-	<spawn centerx="32766" centery="32283" centerz="7" radius="1">
-		<monster name="tarantula" x="1" y="0" z="7" spawntime="60" />
 	</spawn>
 	<spawn centerx="32787" centery="32283" centerz="7" radius="1">
 		<monster name="tarantula" x="1" y="0" z="7" spawntime="60" />
@@ -7781,6 +7781,9 @@
 	<spawn centerx="32673" centery="32295" centerz="7" radius="1">
 		<monster name="poison spider" x="1" y="0" z="7" spawntime="60" />
 	</spawn>
+	<spawn centerx="32781" centery="32295" centerz="7" radius="1">
+		<monster name="giant spider" x="0" y="1" z="7" spawntime="200" />
+	</spawn>
 	<spawn centerx="32641" centery="32296" centerz="7" radius="1">
 		<monster name="wild warrior" x="0" y="0" z="7" spawntime="60" />
 	</spawn>
@@ -7802,14 +7805,11 @@
 	<spawn centerx="32408" centery="32298" centerz="7" radius="1">
 		<monster name="wolf" x="1" y="0" z="7" spawntime="60" />
 	</spawn>
-	<spawn centerx="32782" centery="32299" centerz="7" radius="1">
-		<monster name="tarantula" x="1" y="0" z="7" spawntime="60" />
+	<spawn centerx="32794" centery="32299" centerz="7" radius="1">
+		<monster name="hunter" x="0" y="0" z="7" spawntime="60" />
 	</spawn>
 	<spawn centerx="32370" centery="32300" centerz="7" radius="1">
 		<monster name="deer" x="1" y="0" z="7" spawntime="60" />
-	</spawn>
-	<spawn centerx="32795" centery="32300" centerz="7" radius="1">
-		<monster name="hunter" x="-1" y="-1" z="7" spawntime="60" />
 	</spawn>
 	<spawn centerx="32298" centery="32301" centerz="7" radius="1">
 		<monster name="rabbit" x="1" y="0" z="7" spawntime="60" />
@@ -7899,9 +7899,6 @@
 	</spawn>
 	<spawn centerx="32285" centery="32319" centerz="7" radius="1">
 		<monster name="deer" x="1" y="0" z="7" spawntime="60" />
-	</spawn>
-	<spawn centerx="32821" centery="32319" centerz="7" radius="1">
-		<monster name="tarantula" x="1" y="0" z="7" spawntime="60" />
 	</spawn>
 	<spawn centerx="32806" centery="32320" centerz="7" radius="1">
 		<monster name="giant spider" x="0" y="0" z="7" spawntime="60" />
@@ -14921,8 +14918,20 @@
 	<spawn centerx="33315" centery="32282" centerz="8" radius="5">
 		<monster name="minotaur" x="-1" y="0" z="8" spawntime="60" />
 	</spawn>
+	<spawn centerx="32788" centery="32283" centerz="8" radius="1">
+		<monster name="giant spider" x="-1" y="0" z="8" spawntime="180" />
+	</spawn>
 	<spawn centerx="32817" centery="32284" centerz="8" radius="5">
 		<monster name="giant spider" x="0" y="-1" z="8" spawntime="60" />
+	</spawn>
+	<spawn centerx="32758" centery="32288" centerz="8" radius="1">
+		<monster name="giant spider" x="0" y="1" z="8" spawntime="240" />
+	</spawn>
+	<spawn centerx="32761" centery="32288" centerz="8" radius="1">
+		<monster name="giant spider" x="1" y="0" z="8" spawntime="180" />
+	</spawn>
+	<spawn centerx="32774" centery="32289" centerz="8" radius="1">
+		<monster name="giant spider" x="0" y="1" z="8" spawntime="180" />
 	</spawn>
 	<spawn centerx="33244" centery="32289" centerz="8" radius="1">
 		<monster name="rotworm" x="1" y="0" z="8" spawntime="60" />
@@ -14931,6 +14940,9 @@
 		<monster name="troll" x="3" y="-4" z="8" spawntime="60" />
 		<monster name="troll" x="0" y="0" z="8" spawntime="60" />
 		<monster name="troll" x="-4" y="5" z="8" spawntime="60" />
+	</spawn>
+	<spawn centerx="32748" centery="32290" centerz="8" radius="1">
+		<monster name="giant spider" x="1" y="0" z="8" spawntime="180" />
 	</spawn>
 	<spawn centerx="33303" centery="32290" centerz="8" radius="5">
 		<monster name="minotaur" x="0" y="0" z="8" spawntime="60" />
@@ -14951,6 +14963,21 @@
 		<monster name="troll" x="0" y="0" z="8" spawntime="60" />
 		<monster name="troll" x="5" y="5" z="8" spawntime="60" />
 	</spawn>
+	<spawn centerx="32783" centery="32296" centerz="8" radius="1">
+		<monster name="giant spider" x="-1" y="0" z="8" spawntime="180" />
+	</spawn>
+	<spawn centerx="32742" centery="32297" centerz="8" radius="1">
+		<monster name="giant spider" x="0" y="0" z="8" spawntime="60" />
+	</spawn>
+	<spawn centerx="32798" centery="32297" centerz="8" radius="1">
+		<monster name="giant spider" x="1" y="0" z="8" spawntime="180" />
+	</spawn>
+	<spawn centerx="32768" centery="32299" centerz="8" radius="1">
+		<monster name="giant spider" x="0" y="0" z="8" spawntime="60" />
+	</spawn>
+	<spawn centerx="32755" centery="32300" centerz="8" radius="1">
+		<monster name="giant spider" x="0" y="0" z="8" spawntime="60" />
+	</spawn>
 	<spawn centerx="32433" centery="32302" centerz="8" radius="5">
 		<monster name="wasp" x="0" y="0" z="8" spawntime="60" />
 	</spawn>
@@ -14967,12 +14994,18 @@
 		<monster name="rotworm" x="-1" y="3" z="8" spawntime="60" />
 		<monster name="rotworm" x="-5" y="5" z="8" spawntime="60" />
 	</spawn>
+	<spawn centerx="32755" centery="32311" centerz="8" radius="1">
+		<monster name="giant spider" x="0" y="0" z="8" spawntime="60" />
+	</spawn>
 	<spawn centerx="33236" centery="32311" centerz="8" radius="5">
 		<monster name="rotworm" x="0" y="0" z="8" spawntime="60" />
 		<monster name="rotworm" x="2" y="3" z="8" spawntime="60" />
 	</spawn>
 	<spawn centerx="32427" centery="32312" centerz="8" radius="5">
 		<monster name="wasp" x="0" y="0" z="8" spawntime="60" />
+	</spawn>
+	<spawn centerx="32778" centery="32312" centerz="8" radius="1">
+		<monster name="giant spider" x="1" y="0" z="8" spawntime="180" />
 	</spawn>
 	<spawn centerx="33204" centery="32312" centerz="8" radius="5">
 		<monster name="rotworm" x="-2" y="0" z="8" spawntime="60" />
@@ -14993,6 +15026,12 @@
 	<spawn centerx="33299" centery="32317" centerz="8" radius="5">
 		<monster name="rotworm" x="0" y="0" z="8" spawntime="60" />
 		<monster name="rotworm" x="1" y="4" z="8" spawntime="60" />
+	</spawn>
+	<spawn centerx="32770" centery="32319" centerz="8" radius="1">
+		<monster name="giant spider" x="1" y="0" z="8" spawntime="180" />
+	</spawn>
+	<spawn centerx="32756" centery="32320" centerz="8" radius="1">
+		<monster name="giant spider" x="0" y="0" z="8" spawntime="60" />
 	</spawn>
 	<spawn centerx="33217" centery="32322" centerz="8" radius="5">
 		<monster name="rotworm" x="-3" y="-4" z="8" spawntime="60" />
