@@ -3914,7 +3914,7 @@
 		<attribute key="transformDeEquipTo" value="2169"/>
 		<attribute key="duration" value="600"/>
 		<attribute key="showduration" value="1"/>
-		<attribute key="speed" value="30"/>
+		<attribute key="speed" value="120"/>
 	</item>
 	<item id="2207" article="a" name="thrust ring">
 		<attribute key="weight" value="90"/>
