@@ -83,25 +83,21 @@ function creatureSayCallback(cid, type, msg)
 
 	if getPlayerStorageValue(cid, 999) == -1 and msgcontains(msg, 'rod') or getPlayerStorageValue(cid, 999) == -1 and msgcontains(msg, 'wand') then
 		if getPlayerStorageValue(cid, 999) == -1 then
-			if isSorcerer(cid) then
+			if isMage(cid) then
 				doPlayerAddItem(cid,2190,1)
-				npcHandler:playerSay(cid, 'Here\'s your wand!', 1)
-				setPlayerStorageValue(cid, 999, 1)
-
-			elseif isDruid(cid) then
 				doPlayerAddItem(cid,2182,1)
-				npcHandler:playerSay(cid, 'Here\'s your rod!', 1)
+				npcHandler:playerSay(cid, 'Here\'s your wand and rod!', 1)
 				setPlayerStorageValue(cid, 999, 1)
 
 			else
-				npcHandler:playerSay(cid, 'I\'m sorry, but you\'re neither sorcerer nor druid!', 1)
+				npcHandler:playerSay(cid, 'I\'m sorry, but you\'re not a mage!', 1)
 				setPlayerStorageValue(cid, 999, 1)
 			end
 			cidData.state = 0
 		end
 
 	elseif msgcontains(msg, 'rod') then
-		npcHandler:playerSay(cid, "Rods can be wielded by druids only and have a certain level requirement. There are five different rods, would you like to hear about them?", 1)
+		npcHandler:playerSay(cid, "Rods can be wielded by mages only and have a certain level requirement. There are five different rods, would you like to hear about them?", 1)
 		cidData.state = 7613
 
 	elseif cidData.state == 7613 and msgcontains(msg, 'yes') then
@@ -109,7 +105,7 @@ function creatureSayCallback(cid, type, msg)
 		cidData.state = 7613
 
 	elseif msgcontains(msg, 'wand') then
-		npcHandler:playerSay(cid, "Wands can be wielded by sorcerers only and have a certain level requirement. There are five different wands, would you like to hear about them?", 1)
+		npcHandler:playerSay(cid, "Wands can be wielded by mages only and have a certain level requirement. There are five different wands, would you like to hear about them?", 1)
 		cidData.state = 7624
 
 	elseif cidData.state == 7624 and msgcontains(msg, 'yes') then

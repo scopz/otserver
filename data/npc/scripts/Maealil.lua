@@ -57,8 +57,8 @@ end
 local spellSellModule = SpellSellModule:new()
 npcHandler:addModule(spellSellModule)
 
-spellSellModule.condition = function(cid) return isDruid(cid) or isPaladin(cid) end
-spellSellModule.conditionFailText = "Sorry, I only teach paladins and druids!"
+spellSellModule.condition = function(cid) return isMage(cid) or isPaladin(cid) end
+spellSellModule.conditionFailText = "Sorry, I only teach paladins and mages!"
 spellSellModule.listPreText = "I teach the spells"
 spellSellModule:addSpellStock({
 	"Light Healing",

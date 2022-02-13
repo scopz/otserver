@@ -11,7 +11,7 @@ function onCreatureSay(cid, type, msg) npcHandler:onCreatureSay(cid, type, msg) 
 function onThink()                     npcHandler:onThink()                     end
 
 function greetCallback(cid)
-	if getPlayerVocation(cid) == 4 or getPlayerVocation(cid) == 8 then
+	if isKnight(cid) then
 	npcHandler:setMessage(MESSAGE_GREET, "Hiho, fellow knight ".. getPlayerName(cid) .."!")
 	return true
 	else

@@ -252,22 +252,13 @@ function isNoneVocation(cid)
 	return getPlayerVocation(cid) == 0
 end
 
-function isSorcerer(cid)
+function isMage(cid)
 	if not isPlayer(cid) then
-		debugPrint("isSorcerer: Player not found.")
+		debugPrint("isMage: Player not found.")
 		return false
 	end
 	local base = getPlayerBaseVocation(cid)
 	return base == 1
-end
-
-function isDruid(cid)
-	if not isPlayer(cid) then
-		debugPrint("isDruid: Player not found.")
-		return false
-	end
-	local base = getPlayerBaseVocation(cid)
-	return base == 2
 end
 
 function isPaladin(cid)
@@ -276,7 +267,7 @@ function isPaladin(cid)
 		return false
 	end
 	local base = getPlayerBaseVocation(cid)
-	return base == 3
+	return base == 2
 end
 
 function isKnight(cid)
@@ -285,7 +276,7 @@ function isKnight(cid)
 		return false
 	end
 	local base = getPlayerBaseVocation(cid)
-	return base == 4
+	return base == 3
 end
 
 function getPlayerBaseVocation(cid)

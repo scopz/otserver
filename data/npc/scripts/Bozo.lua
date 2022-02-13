@@ -146,18 +146,11 @@ function creatureSayCallback(cid, type, msg)
 			npcHandler:playerSay(cid, "They are the king's favourites, because they know how to 'bow'.", 1)
 		end
 		cidData.state = 0
-	elseif msgcontains(msg, 'sorcerer') then
-		if isSorcerer(cid) then
-			npcHandler:playerSay(cid, "I wanted to become a sorcerer, too, but I was overqualified!", 1)
+	elseif msgcontains(msg, 'mage') then
+		if isMage(cid) then
+			npcHandler:playerSay(cid, "I wanted to become a mage too, but I was overqualified!", 1)
 		else
 			npcHandler:playerSay(cid, "The good thing about them is that they can't be at two places at the same time.", 1)
-		end
-		cidData.state = 0
-	elseif msgcontains(msg, 'druid') then
-		if isDruid(cid) then
-			npcHandler:playerSay(cid, "I wanted to become a Druid, too, but I was overqualified!", 1)
-		else
-			npcHandler:playerSay(cid, "If you are in Druidville, do as the rabbits do.", 1)
 		end
 		cidData.state = 0
 	elseif msgcontains(msg, 'knight') then

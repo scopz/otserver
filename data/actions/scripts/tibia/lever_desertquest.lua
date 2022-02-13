@@ -51,7 +51,7 @@ function onUse(cid, item, fromPosition, itemEx, toPosition)
  
 	-- Check if all players has the correct vocation
 	if isKnight(player1.uid) and isPaladin(player2.uid) and
-	isDruid(player3.uid) and isSorcerer(player4.uid) then
+	isMage(player3.uid) and isMage(player4.uid) then
  
 	-- Check if all players are standing on the correct positions
 	if player1.itemid > 0 and player2.itemid > 0 and player3.itemid > 0 and player4.itemid > 0 then

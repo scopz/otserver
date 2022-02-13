@@ -11,7 +11,7 @@ function onCreatureSay(cid, type, msg) npcHandler:onCreatureSay(cid, type, msg) 
 function onThink()                     npcHandler:onThink()                     end
 
 function greetCallback(cid)
-	if getPlayerVocation(cid) >= 5 and getPlayerVocation(cid) <= 8 then
+	if isPromoted(cid) then
 	npcHandler:setMessage(MESSAGE_GREET, "Welcome to my little garden, humble ".. getPlayerName(cid) .."!")
 	return true
 	else

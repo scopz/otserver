@@ -20,13 +20,11 @@ function greetCallback(cid)
 		npcHandler:resetNpc(cid)
 		return false
 	else
-		if getPlayerVocation(cid) == 1 or getPlayerVocation(cid) == 5 then
+		if isMage(cid) then
 			npcHandler:setMessage(MESSAGE_GREET, "It's good to see somebody who has chosen the path of wisdom. What do you want?")
-		elseif getPlayerVocation(cid) == 2 or getPlayerVocation(cid) == 6 then
-			npcHandler:setMessage(MESSAGE_GREET, "Hail, friend of nature! How may I help you?")
-		elseif getPlayerVocation(cid) == 3 or getPlayerVocation(cid) == 7 then
+		elseif isPaladin(cid) then
 			npcHandler:setMessage(MESSAGE_GREET, "Neither strong enough to be a knight nor wise enough to be a real mage. You like it easy, don't you? Why are you disturbing me?")
-		elseif getPlayerVocation(cid) == 4 or getPlayerVocation(cid) == 8 then
+		elseif isKnight(cid) then
 			npcHandler:setMessage(MESSAGE_GREET, "Another creature who believes thinks physical strength is more important than wisdom! Why are you disturbing me?")
 		end
 		return true

@@ -11,19 +11,12 @@ function onCreatureSay(cid, type, msg) npcHandler:onCreatureSay(cid, type, msg) 
 function onThink()                     npcHandler:onThink()                     end
 
 function greetCallback(cid)
-	if getPlayerVocation(cid) == 2 or getPlayerVocation(cid) == 6 then
+	if isMage(cid) then
 		if getPlayerItemCount(cid, 2182) or getPlayerItemCount(cid, 2186) or getPlayerItemCount(cid, 2185) or getPlayerItemCount(cid, 2181) or getPlayerItemCount(cid, 2183) then
 			npcHandler:setMessage(MESSAGE_GREET, "Welcome back, ".. getPlayerName(cid) ..". Hey, nice wand you have there!")
 		else
-			npcHandler:setMessage(MESSAGE_GREET, "Welcome to my hut, ".. getPlayerName(cid) .."! It's always nice to see a druid here.")
+			npcHandler:setMessage(MESSAGE_GREET, "Welcome to my hut, ".. getPlayerName(cid) .."! It's always nice to see a mage here.")
 		end
-		return true
-
-	elseif getPlayerVocation(cid) == 1 or getPlayerVocation(cid) == 5 then
-		npcHandler:setMessage(MESSAGE_GREET, "What do you want, ".. getPlayerName(cid) .."?")
-		return true
-	else
-		npcHandler:setMessage(MESSAGE_GREET, "Good day, ".. getPlayerName(cid) ..".")
 		return true
 	end
 end
@@ -130,10 +123,8 @@ function creatureSayCallback(cid, type, msg)
 
 	elseif cidData.state == 1 and msgcontains(msg, 'yes') or cidData.state == 1 and msgcontains(msg, 'yes') then
 		if doPlayerRemoveItem(cid, 2798, 1) == true then
-			if getPlayerVocation(cid) == 1 or getPlayerVocation(cid) == 5 then
+			if isMage(cid) then
 				doPlayerAddMoney(cid, 400)
-				npcHandler:playerSay(cid, "Hmm, thanks. Take this.", 1)
-			elseif getPlayerVocation(cid) == 2 or getPlayerVocation(cid) == 6 then
 				doPlayerAddItem(cid, 2324, 1)
 				npcHandler:playerSay(cid, "Thank you so much! Here, let me give you a reward...", 1)
 			else

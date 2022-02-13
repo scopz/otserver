@@ -13,13 +13,12 @@ function onCreatureSay(cid, type, msg) npcHandler:onCreatureSay(cid, type, msg) 
 function onThink()                     npcHandler:onThink()                     end
 
 function greetCallback(cid)
-	if getPlayerVocation(cid) == 3 or getPlayerVocation(cid) == 7 then
-	npcHandler:setMessage(MESSAGE_GREET, "Hello, ".. getPlayerName(cid) .."! Nice to see you.")
-	return true
+	if isPaladin(cid) then
+		npcHandler:setMessage(MESSAGE_GREET, "Hello, ".. getPlayerName(cid) .."! Nice to see you.")
 	else
-	npcHandler:setMessage(MESSAGE_GREET, "Welcome to the Paladins, ".. getPlayerName(cid) .."! What is your business here?")
-	return true
+		npcHandler:setMessage(MESSAGE_GREET, "Welcome to the Paladins, ".. getPlayerName(cid) .."! What is your business here?")
 	end	
+	return true
 end	
 npcHandler:setCallback(CALLBACK_GREET, greetCallback)
 

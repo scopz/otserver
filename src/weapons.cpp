@@ -254,15 +254,17 @@ bool Weapon::configureEvent(xmlNodePtr p)
 	xmlNodePtr vocationNode = p->children;
 	while(vocationNode){
 		if(xmlStrcmp(vocationNode->name,(const xmlChar*)"vocation") == 0){
-			if(readXMLString(vocationNode, "name", strValue)){
-				int32_t vocationId = 0;
-				if(g_vocations.getVocationId(strValue, vocationId)){
+			if(readXMLInteger(vocationNode, "id", intValue)){
+				int32_t vocationId = intValue;
+				Vocation* vocation = nullptr;
+				if (g_vocations.getVocation(vocationId, vocation)) {
 					vocWeaponMap[vocationId] = true;
 					intValue = 1;
 					readXMLInteger(vocationNode, "showInDescription", intValue);
 					if(intValue != 0){
-						toLowerCaseString(strValue);
-						vocStringList.push_back(strValue);
+						std::string name = vocation->getName();
+						toLowerCaseString(name);
+						vocStringList.push_back(name);
 					}
 				}
 			}

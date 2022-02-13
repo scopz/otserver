@@ -47,8 +47,8 @@ keywordHandler:addKeyword({'magic'}, StdModule.say, {npcHandler = npcHandler, on
 local spellSellModule = SpellSellModule:new()
 npcHandler:addModule(spellSellModule)
 
-spellSellModule.condition = function(cid) return isPaladin(cid) or isDruid(cid) end
-spellSellModule.conditionFailText = "Sorry, I only teach paladins and druids!"
+spellSellModule.condition = function(cid) return isPaladin(cid) or isMage(cid) end
+spellSellModule.conditionFailText = "Sorry, I only teach paladins and mages!"
 spellSellModule.listPreText = "For you my friend, I sell"
 spellSellModule:addSpellStock({
 	"Magic Shield",

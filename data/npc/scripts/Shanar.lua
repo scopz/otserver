@@ -128,8 +128,8 @@ end
 local spellSellModule = SpellSellModule:new()
 npcHandler:addModule(spellSellModule)
 
-spellSellModule.condition = function(cid) return isDruid(cid) or isSorcerer(cid) end
-spellSellModule.conditionFailText = "Sorry, I only teach druids or sorcerers!"
+spellSellModule.condition = function(cid) return isMage(cid) end
+spellSellModule.conditionFailText = "Sorry, I only teach mages!"
 spellSellModule.listPreText = "I teach"
 spellSellModule:addSpellStock({
 	"Poison Field",
