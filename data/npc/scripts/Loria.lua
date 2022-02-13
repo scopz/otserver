@@ -101,15 +101,12 @@ function creatureSayCallback(cid, type, msg)
 		npcHandler:playerSay(cid, "I'll teach you 'exevo gran mas vis', but bring me this bone first!", 1)
 		cidData.state = 4
 
-	elseif msgcontains(msg, 'magic') then
-		if getPlayerVocation(cid) == 4 or getPlayerVocation(cid) == 8 then
-		npcHandler:playerSay(cid, "I could tell you much about all sorcerer spells, but you won't understand it. Anyway, feel free to ask me.", 1)
+	elseif msgcontains(msg, 'magic') or msgcontains(msg, 'spell') then
+		if isKnight(cid) then
+			npcHandler:playerSay(cid, "I could tell you much about all mage spells, but you won't understand it. Anyway, feel free to ask me.", 1)
 		else
-		npcHandler:playerSay(cid, "Oh, I can tell you a lot about all sorcerer spells. Feel free to ask me.", 1)
+			npcHandler:playerSay(cid, "Oh, I can tell you a lot about all mage spells. Feel free to ask me.", 1)
 		end
-		cidData.state = 0
-	elseif msgcontains(msg, 'spell') then
-		npcHandler:playerSay(cid, "Oh, I can tell you a lot about all sorcerer spells. Feel free to ask me.", 1)
 		cidData.state = 0
 
 	elseif msgcontains(msg, 'find person') then

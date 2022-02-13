@@ -33,8 +33,8 @@ keywordHandler:addKeyword({'spellbook'}, StdModule.say, {npcHandler = npcHandler
 local spellSellModule = SpellSellModule:new()
 npcHandler:addModule(spellSellModule)
 
-spellSellModule.condition = function(cid) return isDruid(cid) end
-spellSellModule.conditionFailText = "... sell to... Only druids.."
+spellSellModule.condition = function(cid) return isMage(cid) end
+spellSellModule.conditionFailText = "... sell to... Only mages.."
 spellSellModule.listPreText = "... I teach..."
 spellSellModule:addSpellStock({
 	"Find Person",

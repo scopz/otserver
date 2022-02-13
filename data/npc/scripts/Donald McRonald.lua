@@ -30,8 +30,8 @@ function onThink()                     npcHandler:onThink()                     
 	end
 
 function greetCallback(cid)
-	if isDruid(cid) then
-	npcHandler:setMessage(MESSAGE_GREET, "Hello, Druid ".. getPlayerName(cid) .."!")
+	if isMage(cid) then
+	npcHandler:setMessage(MESSAGE_GREET, "Hello, Mage ".. getPlayerName(cid) .."!")
 	return true
 	else
 	npcHandler:setMessage(MESSAGE_GREET, "Hmmm, well, hello ".. getPlayerName(cid) .."!")
@@ -78,8 +78,8 @@ function creatureSayCallback(cid, type, msg)
 	local cidData = npcHandler:getFocusPlayerData(cid)
 
 	if msgcontains(msg, 'bye') or msgcontains(msg, 'farewell') then
-		if isDruid(cid) then
-			npcHandler:playerSay(cid, "May Crunor bless you, Druid ".. getPlayerName(cid) .."!", 1)
+		if isMage(cid) then
+			npcHandler:playerSay(cid, "May Crunor bless you, Mage ".. getPlayerName(cid) .."!", 1)
 		else
 			npcHandler:playerSay(cid, "Yes, bye!", 1)
 		end
@@ -88,53 +88,49 @@ function creatureSayCallback(cid, type, msg)
 		npcHandler:resetNpc(cid)
 
 	elseif msgcontains(msg, 'job') then
-		if isDruid(cid) then
+		if isMage(cid) then
 			npcHandler:playerSay(cid, "My wife and I run this farm as good as we can.", 1)
 		else
 			npcHandler:playerSay(cid, "I run a farm, what else?!", 1)
 		end
 
 	elseif msgcontains(msg, 'wife') then
-		if isDruid(cid) then
+		if isMage(cid) then
 			npcHandler:playerSay(cid, "Sherry is my beloved wife.", 1)
 		else
 			npcHandler:playerSay(cid, "Sherry is my wife.", 1)
 		end
 
 	elseif msgcontains(msg, 'donald') then
-		if isDruid(cid) then
+		if isMage(cid) then
 			npcHandler:playerSay(cid, "I was named Donald, like my grandfather.", 1)
 		else
 			npcHandler:playerSay(cid, "I am Donald.", 1)
 		end
 
 	elseif msgcontains(msg, 'farm') then
-		if isDruid(cid) then
+		if isMage(cid) then
 			npcHandler:playerSay(cid, "It's a hard but rewarding task to run this farm.", 1)
 		else
 			npcHandler:playerSay(cid, "It is my farm, yes.", 1)
 		end
 
-	elseif msgcontains(msg, 'time') then
-		if isDruid(cid) then
-			npcHandler:playerSay(cid, "My name is Donald McRonald, noble druid.", 1)
+	elseif msgcontains(msg, 'name') then
+		if isMage(cid) then
+			npcHandler:playerSay(cid, "My name is Donald McRonald, noble mage.", 1)
 		else
 			npcHandler:playerSay(cid, "Donald McRonald.", 1)
 		end
 
 	elseif msgcontains(msg, 'time') then
-		if isDruid(cid) then
-			npcHandler:playerSay(cid, "Unfortunately I can't help you with that, noble druid.", 1)
+		if isMage(cid) then
+			npcHandler:playerSay(cid, "Unfortunately I can't help you with that, noble mage.", 1)
 		else
 			npcHandler:playerSay(cid, "Who cares?", 1)
 		end
 
 	elseif msgcontains(msg, 'muriel') then
-		if isSorcerer(cid) then
-			npcHandler:playerSay(cid, "I dont trust sorcerers like you.", 1)
-		else
-			npcHandler:playerSay(cid, "I dont trust sorcerers.", 1)
-		end
+		npcHandler:playerSay(cid, "I dont trust sorcerers.", 1)
 
 	elseif msgcontains(msg, 'gregor') then
 		if isKnight(cid) then
@@ -144,11 +140,7 @@ function creatureSayCallback(cid, type, msg)
 		end
 
 	elseif msgcontains(msg, 'marvik') then
-		if isDruid(cid) then
-			npcHandler:playerSay(cid, "Druids like you are a great help for us, they know much about nature.", 1)
-		else
-			npcHandler:playerSay(cid, "Druids are a great help for us, they know much about nature.", 1)
-		end
+		npcHandler:playerSay(cid, "Druids are a great help for us, they know much about nature.", 1)
 
 	elseif msgcontains(msg, 'spider') then
 		npcHandler:playerSay(cid, "I will give you 2 gold for every spider you bring me. But not a rotten spider that was already dead for some time. Do you have any with you?", 1)

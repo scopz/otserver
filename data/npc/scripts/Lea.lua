@@ -13,13 +13,12 @@ function onCreatureSay(cid, type, msg) npcHandler:onCreatureSay(cid, type, msg) 
 function onThink()                     npcHandler:onThink()                     end
 
 function greetCallback(cid)
-	if getPlayerVocation(cid) == 1 or getPlayerVocation(cid) == 5 then
-	npcHandler:setMessage(MESSAGE_GREET, "Welcome back, ".. getPlayerName(cid) .."!")
-	return true
+	if isMage(cid) then
+		npcHandler:setMessage(MESSAGE_GREET, "Welcome back, ".. getPlayerName(cid) .."!")
 	else
-	npcHandler:setMessage(MESSAGE_GREET, "Greetings, ".. getPlayerName(cid) ..".")
-	return true
+		npcHandler:setMessage(MESSAGE_GREET, "Greetings, ".. getPlayerName(cid) ..".")
 	end	
+	return true
 end	
 npcHandler:setCallback(CALLBACK_GREET, greetCallback)
 
@@ -42,8 +41,8 @@ keywordHandler:addKeyword({'rod'}, StdModule.say, {npcHandler = npcHandler, only
 local spellSellModule = SpellSellModule:new()
 npcHandler:addModule(spellSellModule)
 
-spellSellModule.condition = function(cid) return isSorcerer(cid) end
-spellSellModule.conditionFailText = "Sorry, I only sell spells to Sorcerers."
+spellSellModule.condition = function(cid) return isMage(cid) end
+spellSellModule.conditionFailText = "Sorry, I only sell spells to mages."
 spellSellModule:addSpellStock({
 	"Find Person",
 	"Fire Field",

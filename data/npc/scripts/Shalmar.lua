@@ -36,8 +36,8 @@ keywordHandler:addKeyword({'time'}, StdModule.say, {npcHandler = npcHandler, onl
 local spellSellModule = SpellSellModule:new()
 npcHandler:addModule(spellSellModule)
 
-spellSellModule.condition = function(cid) return isSorcerer(cid) or isDruid(cid) end
-spellSellModule.conditionFailText = "Sorry, I only teach sorcerers and druids!"
+spellSellModule.condition = function(cid) return isMage(cid) end
+spellSellModule.conditionFailText = "Sorry, I only teach mages!"
 spellSellModule:addSpellStock({
 	"Find Person",
 	"Sudden Death",

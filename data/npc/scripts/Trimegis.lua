@@ -13,17 +13,17 @@ function onCreatureSay(cid, type, msg) npcHandler:onCreatureSay(cid, type, msg) 
 function onThink()                     npcHandler:onThink()                     end
 
 function greetCallback(cid)
-	if getPlayerVocation(cid) == 1 or getPlayerVocation(cid) == 5 then
+	if isMage(cid) then
 		if getPlayerSex(cid) == 1 then
-		npcHandler:setMessage(MESSAGE_GREET, "<mumbles> Greetings, brother ".. getPlayerName(cid) ..".")
-		return true		
+			npcHandler:setMessage(MESSAGE_GREET, "<mumbles> Greetings, brother ".. getPlayerName(cid) ..".")
+			return true		
 		else
-		npcHandler:setMessage(MESSAGE_GREET, "<mumbles> Greetings, sister ".. getPlayerName(cid) ..".")
-		return true		
+			npcHandler:setMessage(MESSAGE_GREET, "<mumbles> Greetings, sister ".. getPlayerName(cid) ..".")
+			return true		
 		end
 	else
-	npcHandler:setMessage(MESSAGE_GREET, "<mumbles> Greetings, ".. getPlayerName(cid) ..".")
-	return true
+		npcHandler:setMessage(MESSAGE_GREET, "<mumbles> Greetings, ".. getPlayerName(cid) ..".")
+		return true
 	end	
 end	
 npcHandler:setCallback(CALLBACK_GREET, greetCallback)

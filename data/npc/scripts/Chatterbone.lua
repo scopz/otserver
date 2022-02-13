@@ -32,8 +32,8 @@ keywordHandler:addKeyword({'rune'}, StdModule.say, {npcHandler = npcHandler, onl
 local spellSellModule = SpellSellModule:new()
 npcHandler:addModule(spellSellModule)
 
-spellSellModule.condition = function(cid) return isSorcerer(cid) end
-spellSellModule.conditionFailText = "... Only sorcerers..."
+spellSellModule.condition = function(cid) return isMage(cid) end
+spellSellModule.conditionFailText = "... Only mages..."
 spellSellModule.listPreText = "... I teach for.."
 spellSellModule:addSpellStock({
 	"Find Person",

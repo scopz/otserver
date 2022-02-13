@@ -1186,10 +1186,9 @@ if(Modules == nil) then
 
 	function addCityNode(module, parentNode, keyword, townId, destinadion, town)
 		local node = parentNode:addChildKeyword({keyword}, OracleModule.askVocation, {module = module, townId = townId, destination = destinadion, town = town})
-		addVocationNode(module, node, 'sorcerer', 1, 'SORCERER')
-		addVocationNode(module, node, 'druid',    2, 'DRUID')
-		addVocationNode(module, node, 'paladin',  3, 'PALADIN')
-		addVocationNode(module, node, 'knight',   4, 'KNIGHT')
+		addVocationNode(module, node, 'mage',    1, 'MAGE')
+		addVocationNode(module, node, 'paladin', 2, 'PALADIN')
+		addVocationNode(module, node, 'knight',  3, 'KNIGHT')
 		andConfirmNode(module, node)
 	end
 
@@ -1230,22 +1229,21 @@ if(Modules == nil) then
 
 		local mustRebirth = getPlayerRebirthsTo(cid)
 
-		if (mustRebirth>0) then
-			local vocName = "DOOMCASTER"
-			if mustRebirth==10     then vocName = "SAGE"
-			elseif mustRebirth==11 then vocName = "TEMPLAR"
-			elseif mustRebirth==12 then vocName = "GUARDIAN"
-			end
-
-			parameters.vocId = mustRebirth
-			parameters.vocName = vocName
-			parameters.rebirth = true
-
-			module.npcHandler:playerSay(cid, 'IN ' .. parameters.town .. '! AND YOUR PROFESSION WILL BE ' .. vocName .. '! ARE YOU SURE? THIS DECISION IS IRREVERSIBLE!')
+		local vocName
+		if mustRebirth == 7     then vocName = "SAGE"
+		elseif mustRebirth == 8 then vocName = "TEMPLAR"
+		elseif mustRebirth == 9 then vocName = "GUARDIAN"
 		else
 			parameters.rebirth = false
-			module.npcHandler:playerSay(cid, 'IN ' .. parameters.town .. '! AND WHAT PROFESSION HAVE YOU CHOSEN: KNIGHT, PALADIN, SORCERER, OR DRUID?')
+			module.npcHandler:playerSay(cid, 'IN ' .. parameters.town .. '! AND WHAT PROFESSION HAVE YOU CHOSEN: KNIGHT, PALADIN OR MAGE?')
+			return true
 		end
+
+		parameters.vocId = mustRebirth
+		parameters.vocName = vocName
+		parameters.rebirth = true
+
+		module.npcHandler:playerSay(cid, 'IN ' .. parameters.town .. '! AND YOUR PROFESSION WILL BE ' .. vocName .. '! ARE YOU SURE? THIS DECISION IS IRREVERSIBLE!')
 
 		return true
 	end
