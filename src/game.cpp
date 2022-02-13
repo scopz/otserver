@@ -1259,6 +1259,7 @@ ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder,
 	}
 
 	Item* toItem = NULL;
+	Item* postAddToItem = NULL;
 
 	Cylinder* subCylinder;
 	int floorN = 0;
@@ -1283,31 +1284,53 @@ ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder,
 		int32_t fromIndex = fromCylinder->__getIndexOfThing(item);
 
 		ret = fromCylinder->__queryAdd(fromIndex, toItem, toItem->getItemCount(), 0);
-		if(ret == RET_NOERROR){
+		if(ret == RET_NOERROR || ret == RET_NEEDEXCHANGE) {
 			//check how much we can move
 			uint32_t maxExchangeQueryCount = 0;
 			ReturnValue retExchangeMaxCount = fromCylinder->__queryMaxCount(-1, toItem, toItem->getItemCount(), maxExchangeQueryCount, 0);
 
 			if(retExchangeMaxCount != RET_NOERROR && maxExchangeQueryCount == 0){
-				return retExchangeMaxCount;
+				if (retExchangeMaxCount == RET_CONTAINERNOTENOUGHROOM) {
+					int32_t toIndex = toCylinder->__getIndexOfThing(toItem);
+					ret = fromCylinder->__queryAdd(toIndex, item, item->getItemCount(), 0);
+					if (ret != RET_NOERROR && ret != RET_NEEDEXCHANGE) {
+						return retExchangeMaxCount;
+					}
+				} else {
+					return retExchangeMaxCount;
+				}
 			}
 
-			if((toCylinder->__queryRemove(toItem, toItem->getItemCount(), flags) == RET_NOERROR) && ret == RET_NOERROR){
-				int32_t oldToItemIndex = toCylinder->__getIndexOfThing(toItem);
-				toCylinder->__removeThing(toItem, toItem->getItemCount());
-				fromCylinder->__addThing(toItem);
+			if(toCylinder->__queryRemove(toItem, toItem->getItemCount(), flags) == RET_NOERROR) {
+				if(ret == RET_NOERROR){
+					int32_t oldToItemIndex = toCylinder->__getIndexOfThing(toItem);
+					toCylinder->__removeThing(toItem, toItem->getItemCount());
+					fromCylinder->__addThing(toItem);
 
-				if(oldToItemIndex != -1){
-					toCylinder->postRemoveNotification(toItem, fromCylinder, oldToItemIndex, true);
+					if(oldToItemIndex != -1){
+						toCylinder->postRemoveNotification(toItem, fromCylinder, oldToItemIndex, true);
+					}
+
+					int32_t newToItemIndex = fromCylinder->__getIndexOfThing(toItem);
+					if(newToItemIndex != -1){
+						fromCylinder->postAddNotification(toItem, toCylinder, newToItemIndex);
+					}
+
+					ret = toCylinder->__queryAdd(index, item, count, flags);
+					toItem = NULL;
+
+				} else if(ret == RET_NEEDEXCHANGE) {
+					int32_t oldToItemIndex = toCylinder->__getIndexOfThing(toItem);
+					toCylinder->__removeThing(toItem, toItem->getItemCount());
+					postAddToItem = toItem;
+
+					if(oldToItemIndex != -1){
+						toCylinder->postRemoveNotification(toItem, fromCylinder, oldToItemIndex, true);
+					}
+
+					ret = toCylinder->__queryAdd(index, item, count, flags);
+					toItem = NULL;
 				}
-
-				int32_t newToItemIndex = fromCylinder->__getIndexOfThing(toItem);
-				if(newToItemIndex != -1){
-					fromCylinder->postAddNotification(toItem, toCylinder, newToItemIndex);
-				}
-
-				ret = toCylinder->__queryAdd(index, item, count, flags);
-				toItem = NULL;
 			}
 		}
 	}
@@ -1388,6 +1411,17 @@ ReturnValue Game::internalMoveItem(Cylinder* fromCylinder, Cylinder* toCylinder,
 		if(updateItemIndex != -1){
 			toCylinder->postAddNotification(updateItem, fromCylinder, updateItemIndex);
 		}
+	}
+
+	if (postAddToItem) {
+		fromCylinder->__addThing(itemIndex, postAddToItem);
+
+		int32_t newToItemIndex = fromCylinder->__getIndexOfThing(postAddToItem);
+		if(newToItemIndex != -1){
+			fromCylinder->postAddNotification(postAddToItem, toCylinder, newToItemIndex);
+		}
+
+		postAddToItem = NULL;
 	}
 
 	if(_moveItem){
