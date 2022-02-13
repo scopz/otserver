@@ -223,6 +223,12 @@ Player::~Player()
 #endif
 }
 
+uint8_t Player::getManaGainAmount() const {
+	float percentManaRegain = getMaxMana() / 60.f / (vocation->getPromotion() == 0? 12.f : 15.f);
+	uint8_t calculatedRecovery = std::round(vocation->getManaGainTicks() * percentManaRegain);
+	return std::max<uint8_t>(vocation->getManaGainAmount(), calculatedRecovery);
+}
+
 bool Player::setVocation(uint32_t vocId)
 {
 	if(!g_vocations.getVocation(vocId, vocation)){
@@ -239,7 +245,7 @@ bool Player::setVocation(uint32_t vocId)
 
 	condition = getCondition(CONDITION_REGENERATION_MANA, CONDITIONID_DEFAULT, 0);
 	if(condition){
-		condition->setParam(CONDITIONPARAM_MANAGAIN, vocation->getManaGainAmount());
+		condition->setParam(CONDITIONPARAM_MANAGAIN, getManaGainAmount());
 		condition->setParam(CONDITIONPARAM_MANATICKS, vocation->getManaGainTicks() * 1000);
 	}
 
@@ -1593,7 +1599,7 @@ void Player::onCreatureAppear(const Creature* creature, bool isLogin)
 
 		// add default mana regeneration
 		Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_REGENERATION_MANA, -1, 0);
-		condition->setParam(CONDITIONPARAM_MANAGAIN, vocation->getManaGainAmount());
+		condition->setParam(CONDITIONPARAM_MANAGAIN, getManaGainAmount());
 		condition->setParam(CONDITIONPARAM_MANATICKS, vocation->getManaGainTicks() * 1000);
 		addCondition(condition);
 
@@ -2199,6 +2205,11 @@ void Player::addExperience(uint64_t exp)
 
 		int32_t newSpeed = getBaseSpeed();
 		setBaseSpeed(newSpeed);
+
+		Condition* condition = getCondition(CONDITION_REGENERATION_MANA, CONDITIONID_DEFAULT, 0);
+		if(condition){
+			condition->setParam(CONDITIONPARAM_MANAGAIN, getManaGainAmount());
+		}
 
 		g_game.changeSpeed(this, 0);
 		g_game.addCreatureHealth(this);

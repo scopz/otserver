@@ -226,6 +226,7 @@ public:
 	bool setVocation(uint32_t vocId);
 	uint32_t getVocationId() const;
 	Vocation* getVocation() const {return vocation;};
+	uint8_t getManaGainAmount() const;
 
 	PlayerSex_t getSex() const {return sex;}
 	bool isMale() const {return getSex() % 2 != 0;}
