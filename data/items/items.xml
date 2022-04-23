@@ -3753,7 +3753,7 @@
 		<attribute key="weight" value="2500"/>
 		<attribute key="weaponType" value="wand"/>
 		<attribute key="shootType" value="poison"/>
-		<attribute key="range" value="2"/>
+		<attribute key="range" value="3"/>
 	</item>
 	<item id="2182" article="a" name="snakebite rod">
 		<attribute key="weight" value="1900"/>
@@ -3765,7 +3765,7 @@
 		<attribute key="weight" value="2700"/>
 		<attribute key="weaponType" value="wand"/>
 		<attribute key="shootType" value="energy"/>
-		<attribute key="range" value="1"/>
+		<attribute key="range" value="3"/>
 	</item>
 	<item id="2184" article="a" name="crystal wand">
 		<attribute key="weight" value="2800"/>
@@ -3786,13 +3786,13 @@
 		<attribute key="weight" value="2700"/>
 		<attribute key="weaponType" value="wand"/>
 		<attribute key="shootType" value="fire"/>
-		<attribute key="range" value="2"/>
+		<attribute key="range" value="3"/>
 	</item>
 	<item id="2188" article="a" name="wand of plague">
 		<attribute key="weight" value="2300"/>
 		<attribute key="weaponType" value="wand"/>
 		<attribute key="shootType" value="poison"/>
-		<attribute key="range" value="2"/>
+		<attribute key="range" value="3"/>
 	</item>
 	<item id="2189" article="a" name="wand of cosmic energy">
 		<attribute key="weight" value="2500"/>
