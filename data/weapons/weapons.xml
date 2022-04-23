@@ -1,36 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <weapons>
 	<!-- Rods -->
-	<wand id="2182" level="7" mana="2" min="8" max="18" type="earth" function="default"> <!-- Snakebit Rod -->
+	<wand id="2182" level="7" mana="1" min="19" max="25" type="earth" function="default"> <!-- Snakebit Rod -->
 		<vocation id="1"/>
 	</wand>
-	<wand id="2186" level="13" mana="3" min="13" max="25" type="energy" function="default"> <!-- Moonlight Rod -->
+	<wand id="2186" level="13" mana="2" min="30" max="34" type="energy" function="default"> <!-- Moonlight Rod -->
 		<vocation id="1"/>
 	</wand>
-	<wand id="2185" level="19" mana="5" min="27" max="33" type="fire" function="default"> <!-- Volcanic Rod -->
+	<wand id="2185" level="19" mana="3" min="45" max="49" type="fire" function="default"> <!-- Volcanic Rod -->
 		<vocation id="1"/>
 	</wand>
-	<wand id="2181" level="26" mana="8" min="42" max="48" type="earth" function="default"> <!-- Quagmire Rod -->
+	<wand id="2181" level="26" mana="5" min="65" max="75" type="earth" function="default"> <!-- Quagmire Rod -->
 		<vocation id="1"/>
 	</wand>
-	<wand id="2183" level="33" mana="13" min="55" max="75" type="energy" function="default"> <!-- Tempest Rod -->
+	<wand id="2183" level="33" mana="8" min="77" max="88" type="energy" function="default"> <!-- Tempest Rod -->
 		<vocation id="1"/>
 	</wand>
 
 	<!-- Wands -->
-	<wand id="2190" level="7" mana="2" min="8" max="18" type="energy" function="default"> <!-- Wand of Vortex -->
+	<wand id="2190" level="7" mana="1" min="19" max="25" type="energy" function="default"> <!-- Wand of Vortex -->
 		<vocation id="1"/>
 	</wand>
-	<wand id="2191" level="13" mana="3" min="13" max="25" type="fire" function="default"> <!-- Wand of Dragonbreath -->
+	<wand id="2191" level="13" mana="2" min="30" max="34" type="fire" function="default"> <!-- Wand of Dragonbreath -->
 		<vocation id="1"/>
 	</wand>
-	<wand id="2188" level="19" mana="5" min="27" max="33" type="earth" function="default"> <!-- Wand of Plague -->
+	<wand id="2188" level="19" mana="3" min="45" max="49" type="earth" function="default"> <!-- Wand of Plague -->
 		<vocation id="1"/>
 	</wand>
-	<wand id="2189" level="26" mana="8" min="42" max="48" type="energy" function="default"> <!-- Wand of Cosmic Energy -->
+	<wand id="2189" level="26" mana="5" min="65" max="75" type="energy" function="default"> <!-- Wand of Cosmic Energy -->
 		<vocation id="1"/>
 	</wand>
-	<wand id="2187" level="33" mana="13" min="55" max="75" type="fire" function="default"> <!-- Wand of Inferno -->
+	<wand id="2187" level="33" mana="8" min="77" max="88" type="fire" function="default"> <!-- Wand of Inferno -->
 		<vocation id="1"/>
 	</wand>
 	
