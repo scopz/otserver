@@ -46,8 +46,7 @@
 		<item id="2671" chance="40000"/><!-- 40% ham -->
 		<item id="2666" chance="70000" countmax="2"/><!-- 2 70% meat -->
 		<item id="2792" chance="8000"/><!-- 8% dark mushroom -->
-		<item id="2148" chance="80000" countmax="30"/><!-- 30 80% gold coin -->
-		<item id="2148" chance="40000" countmax="10"/><!-- 10 40% gold coin -->
+		<item id="2148" chance="88000" countmax="32"/><!-- 32 88% gold -->
 		<item id="2804" chance="1000"/><!-- 1% shadow herb -->
 		<item id="2802" chance="500"/><!-- 0.5% sling herb -->
 		<item id="2802" chance="500"/><!-- 0.5% sling herb -->

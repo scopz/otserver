@@ -37,17 +37,13 @@
 	</voices>
 	<loot>
 		<item id="2148" chance="16000" countmax="15"/><!-- 15 16% gold coin -->
-		<item id="1294" chance="13000" countmax="4"/><!-- 4 13% small stone -->
+		<item id="1294" chance="60000" countmax="6"/><!-- 6 60% small stone -->
 		<item id="2156" chance="100"/><!-- 0.1% red gem -->
 		<item id="2483" chance="5000"/><!-- 5% scale armor -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2050" chance="5500"/><!-- 5.5% torch -->
-				<item id="2395" chance="1500"/><!-- 1.5% carlin sword -->
-				<item id="2509" chance="7000"/><!-- 7% steel shield -->
-				<item id="2166" chance="5000"/><!-- 5% power ring -->
-				<item id="2124" chance="200"/><!-- 0.2% crystal ring -->
-			</inside>
-		</item>
+		<item id="2050" chance="5500"/><!-- 5.5% torch -->
+		<item id="2395" chance="1500"/><!-- 1.5% carlin sword -->
+		<item id="2509" chance="7000"/><!-- 7% steel shield -->
+		<item id="2166" chance="5000"/><!-- 5% power ring -->
+		<item id="2124" chance="200"/><!-- 0.2% crystal ring -->
 	</loot>
 </monster>

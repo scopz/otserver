@@ -58,19 +58,13 @@
 	</voices>
 	<loot>
 		<item id="2349" chance="100000"/><!-- 100% blue note -->
-		<item id="2148" chance="70000" countmax="80"/><!-- 80 70% gold -->
-		<item id="2148" chance="50000" countmax="85"/><!-- 85 50% gold -->
-		<item id="2148" chance="35000" countmax="95"/><!-- 95 35% gold -->
+		<item id="2148" chance="90250" countmax="146"/><!-- 146 90.25% gold -->
 		<item id="2143" chance="10000"/><!-- 10% white pearl -->
 		<item id="2072" chance="10000"/><!-- 10% lute -->
 		<item id="2074" chance="200"/><!-- 0.2% panpipes -->
 		<item id="2124" chance="1500"/><!-- 1.5% crystal ring -->
 		<item id="2656" chance="1000"/><!-- 1% blue robe -->
 		<item id="2139" chance="100"/><!-- 0.1% ancient tiara -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2445" chance="100"/><!-- 0.1% crystal mace -->
-			</inside>
-		</item>
+		<item id="2445" chance="100"/><!-- 0.1% crystal mace -->
 	</loot>
 </monster>

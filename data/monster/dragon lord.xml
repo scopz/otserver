@@ -62,12 +62,8 @@
 		<item id="2479" chance="400"/><!-- 0.4% strange helmet -->
 		<item id="2492" chance="100"/><!-- 0.1% dragon scale mail -->
 		<item id="2498" chance="200"/><!-- 0.2% royal helmet -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2392" chance="300"/><!-- 0.3% fire sword -->
-				<item id="2528" chance="300"/><!-- 0.3% tower shield -->
-				<item id="2167" chance="5000"/><!-- 5% energy ring -->
-			</inside>
-		</item>
+		<item id="2392" chance="300"/><!-- 0.3% fire sword -->
+		<item id="2528" chance="300"/><!-- 0.3% tower shield -->
+		<item id="2167" chance="5000"/><!-- 5% energy ring -->
 	</loot>
 </monster>

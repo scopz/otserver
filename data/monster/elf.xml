@@ -45,11 +45,7 @@
 		<item id="2482" chance="15000"/><!-- 15% studded helmet -->
 		<item id="2643" chance="11000"/><!-- 11% leather boots -->
 		<item id="2484" chance="11000"/><!-- 11% studded armor -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2397" chance="8000"/><!-- 8% longsword -->
-				<item id="2511" chance="13000"/><!-- 13% brass shield -->
-			</inside>
-		</item>
+		<item id="2397" chance="8000"/><!-- 8% longsword -->
+		<item id="2511" chance="13000"/><!-- 13% brass shield -->
 	</loot>
 </monster>

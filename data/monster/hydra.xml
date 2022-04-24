@@ -51,9 +51,7 @@
 	<loot>
 		<item id="2671" chance="60000" countmax="3"/><!-- 3 60% ham -->
 		<item id="2666" chance="90000" countmax="4"/><!-- 4 90% meat -->
-		<item id="2148" chance="60000" countmax="100"/><!-- 100 60% gold coin -->
-		<item id="2148" chance="40000" countmax="50"/><!-- 50 40% gold coin -->
-		<item id="2148" chance="80000" countmax="100"/><!-- 100 80% gold coin -->
+		<item id="2148" chance="95200" countmax="169"/><!-- 169 95.2% gold -->
 		<item id="2146" chance="5000"/><!-- 5% small sapphire -->
 		<item id="4850" chance="900"/><!-- 0.9% hydra egg -->
 		<item id="2177" chance="600"/><!-- 0.6% life crystal -->
@@ -61,12 +59,8 @@
 		<item id="2475" chance="1000"/><!-- 1% warrior helmet -->
 		<item id="2498" chance="200"/><!-- 0.2% royal helmet -->
 		<item id="2195" chance="100"/><!-- 0.1% boots of haste -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2536" chance="100"/><!-- 0.1% medusa shield -->
-				<item id="2197" chance="800"/><!-- 0.8% stone skin amulet -->
-				<item id="2214" chance="1200"/><!-- 1.2% ring of healing -->
-			</inside>
-		</item>
+		<item id="2536" chance="100"/><!-- 0.1% medusa shield -->
+		<item id="2197" chance="800"/><!-- 0.8% stone skin amulet -->
+		<item id="2214" chance="1200"/><!-- 1.2% ring of healing -->
 	</loot>
 </monster>

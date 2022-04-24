@@ -69,18 +69,12 @@
 	</voices>
 	<loot>
 		<item id="2351" chance="100000"/><!-- 100% cobrafang dagger -->
-		<item id="2148" chance="70000" countmax="80"/><!-- 80 70% gold -->
-		<item id="2148" chance="50000" countmax="85"/><!-- 85 50% gold -->
-		<item id="2148" chance="35000" countmax="95"/><!-- 95 35% gold -->
+		<item id="2148" chance="90250" countmax="146"/><!-- 146 90.25% gold -->
 		<item id="2149" chance="10000" countmax="3"/><!-- 3 10% small emerald -->
 		<item id="2155" chance="1000"/><!-- 1% green gem -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-			<item id="2169" chance="5000"/><!-- 5% time ring -->
-			<item id="2409" chance="2000"/><!-- 2% serpent sword -->
-			<item id="2411" chance="20000"/><!-- 20% poison dagger -->
-			<item id="2451" chance="1500"/><!-- 1.5% djinn blade -->
-			</inside>
-		</item>
+		<item id="2169" chance="5000"/><!-- 5% time ring -->
+		<item id="2409" chance="2000"/><!-- 2% serpent sword -->
+		<item id="2411" chance="20000"/><!-- 20% poison dagger -->
+		<item id="2451" chance="1500"/><!-- 1.5% djinn blade -->
 	</loot>
 </monster>

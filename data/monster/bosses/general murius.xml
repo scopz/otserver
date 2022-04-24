@@ -51,15 +51,11 @@
 	</voices>
 	<loot>
 		<item id="2666" chance="10000"/><!-- 10% meat -->
-		<item id="2148" chance="50000" countmax="20"/><!-- 50 60% gold coin -->
+		<item id="2148" chance="60000" countmax="50"/><!-- 50 60% gold coin -->
 		<item id="2465" chance="28000"/><!-- 28% brass armor -->
 		<item id="2648" chance="35000"/><!-- 35% chain legs -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2387" chance="7500"/><!-- 7.5% double axe -->
-				<item id="2513" chance="18000"/><!-- 18% battle shield -->
-				<item id="2580" chance="5000"/><!-- 5% fishing rod -->
-			</inside>
-		</item>
+		<item id="2387" chance="7500"/><!-- 7.5% double axe -->
+		<item id="2513" chance="18000"/><!-- 18% battle shield -->
+		<item id="2580" chance="5000"/><!-- 5% fishing rod -->
 	</loot>
 </monster>

@@ -67,18 +67,12 @@
 	</voices>
 	<loot>
 		<item id="2350" chance="100000"/><!-- 100% sword hilt -->
-		<item id="2148" chance="70000" countmax="80"/><!-- 80 70% gold -->
-		<item id="2148" chance="50000" countmax="85"/><!-- 85 50% gold -->
-		<item id="2148" chance="35000" countmax="95"/><!-- 95 35% gold -->
+		<item id="2148" chance="90250" countmax="146"/><!-- 146 90.25% gold -->
 		<item id="2144" chance="10000"/><!-- 10% black pear -->
 		<item id="2136" chance="100"/><!-- 0.1% demonbone amulet -->
 		<item id="2645" chance="100"/><!-- 0.1% steel boots -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2443" chance="100"/><!-- 0.1% ravager's axe -->
-				<item id="2430" chance="5000"/><!-- 5% knight axe -->
-				<item id="2197" chance="5000"/><!-- 5% stone skin amulet -->
-			</inside>
-		</item>	
+		<item id="2443" chance="100"/><!-- 0.1% ravager's axe -->
+		<item id="2430" chance="5000"/><!-- 5% knight axe -->
+		<item id="2197" chance="5000"/><!-- 5% stone skin amulet -->
 	</loot>
 </monster>

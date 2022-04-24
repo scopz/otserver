@@ -55,14 +55,9 @@
 		<item id="2465" chance="4000"/><!-- 4% brass armor -->
 		<item id="2649" chance="15000"/><!-- 15% leather legs -->
 		<item id="2648" chance="2000"/><!-- 2% chain legs -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2050" chance="30000"/><!-- 30% torch -->
-				<item id="2050" chance="30000"/><!-- 30% torch -->
-				<item id="2404" chance="4000"/><!-- 4% combat knife -->
-				<item id="2403" chance="10000"/><!-- 10% knife -->
-				<item id="2189" chance="500"/><!-- 0.5% wand of cosmic energy -->
-			</inside>
-		</item>
+		<item id="2050" chance="50000"/><!-- 50% torch -->
+		<item id="2404" chance="4000"/><!-- 4% combat knife -->
+		<item id="2403" chance="10000"/><!-- 10% knife -->
+		<item id="2189" chance="500"/><!-- 0.5% wand of cosmic energy -->
 	</loot>
 </monster>

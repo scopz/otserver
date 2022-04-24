@@ -41,13 +41,9 @@
 		<item id="2464" chance="3000"/><!-- 3% chain armor -->
 		<item id="2648" chance="1000"/><!-- 1% chain legs -->
 		<item id="2649" chance="15000"/><!-- 15% leather legs -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2387" chance="400"/><!-- 0.4% double axe -->
-				<item id="2388" chance="10000"/><!-- 10% hatchet -->
-				<item id="2513" chance="2000"/><!-- 2% battle shield -->
-				<item id="2580" chance="5000"/><!-- 5% fishing rod -->
-			</inside>
-		</item>
+		<item id="2387" chance="400"/><!-- 0.4% double axe -->
+		<item id="2388" chance="10000"/><!-- 10% hatchet -->
+		<item id="2513" chance="2000"/><!-- 2% battle shield -->
+		<item id="2580" chance="5000"/><!-- 5% fishing rod -->
 	</loot>
 </monster>

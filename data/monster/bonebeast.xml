@@ -58,11 +58,7 @@
 		<item id="2230" chance="50000"/><!-- 50% bone -->
 		<item id="2229" chance="20000"/><!-- 20% skull -->
 		<item id="2463" chance="8000"/><!-- 8% plate armor -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2449" chance="5000"/><!-- 5% bone club -->
-				<item id="2541" chance="2000"/><!-- 2% bone shield -->
-			</inside>
-		</item>
+		<item id="2449" chance="5000"/><!-- 5% bone club -->
+		<item id="2541" chance="2000"/><!-- 2% bone shield -->
 	</loot>
 </monster>

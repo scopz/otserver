@@ -49,7 +49,6 @@
 		<item id="2792" chance="25000" countmax="5"/><!-- 5 25% dark mushroom -->
 		<item id="2671" chance="50000" countmax="2"/><!-- 2 50% ham -->
 		<item id="2666" chance="70000" countmax="4"/><!-- 4 70% meat -->
-		<item id="2148" chance="100000" countmax="28"/><!-- 28 100% gold -->
-		<item id="2148" chance="100000" countmax="90"/><!-- 90 100% gold -->
+		<item id="2148" chance="100000" countmax="118"/><!-- 90 100% gold -->
 	</loot>
 </monster>

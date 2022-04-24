@@ -42,11 +42,7 @@
 		<item id="2220" chance="7700"/><!-- 7.7% dirty fur -->
 		<item id="2482" chance="9000"/><!-- 9% studded helmet -->
 		<item id="2468" chance="10000"/><!-- 10% studded legs -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2389" chance="23000"/><!-- 23% spear -->
-				<item id="2420" chance="10000"/><!-- 10% machete -->
-			</inside>
-		</item>
+		<item id="2389" chance="23000"/><!-- 23% spear -->
+		<item id="2420" chance="10000"/><!-- 10% machete -->
 	</loot>
 </monster>

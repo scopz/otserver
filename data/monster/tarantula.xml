@@ -38,15 +38,10 @@
 	<voices interval="1000" chance="5">
 	</voices>
 	<loot>
-		<item id="2148" chance="70000" countmax="10"/><!-- 10 70% gold coin -->
-		<item id="2148" chance="30000" countmax="30"/><!-- 30 30% gold coin -->
+		<item id="2148" chance="79000" countmax="21"/><!-- 21 79% gold -->
 		<item id="2457" chance="1000"/><!-- 1% steel helmet -->
 		<item id="2478" chance="3000"/><!-- 3% brass legs -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2510" chance="2000"/><!-- 2% plate shield -->
-				<item id="2169" chance="100"/><!-- 0.1% time ring -->
-			</inside>
-		</item>
+		<item id="2510" chance="2000"/><!-- 2% plate shield -->
+		<item id="2169" chance="100"/><!-- 0.1% time ring -->
 	</loot>
 </monster>
