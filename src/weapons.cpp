@@ -323,12 +323,12 @@ bool Weapon::configureEvent(xmlNodePtr p)
 
 bool Weapon::loadFunction(const std::string& functionName)
 {
-	if(asLowerCaseString(functionName) == "internalloadweapon" || asLowerCaseString(functionName) == "default"){
-		if(configureWeapon(Item::items[getID()])){
+	if (asLowerCaseString(functionName) == "default") {
+		if (configureWeapon(Item::items[getID()])) {
 			return true;
 		}
-	}
-	else if(asLowerCaseString(functionName) == "script"){
+
+	} else if (asLowerCaseString(functionName) == "script") {
 		m_scripted = true;
 	}
 	return false;
@@ -356,10 +356,9 @@ int32_t Weapon::playerWeaponCheck(Player* player, Creature* target) const
 
 	int32_t trueRange;
 	const ItemType& it = Item::items[getID()];
-	if(it.weaponType == WEAPON_AMMO){
-		trueRange = player->getShootRange();
-	}
-	else{
+	if (it.weaponType == WEAPON_AMMO) {
+		trueRange = it.shootRange;
+	} else {
 		trueRange = range;
 	}
 
@@ -389,19 +388,18 @@ int32_t Weapon::playerWeaponCheck(Player* player, Creature* target) const
 
 		int32_t damageModifier = 100;
 		if(player->getLevel() < getReqLevel()){
-			if (isWieldedUnproperly())
-			{
-				double penalty = (getReqLevel() - player->getLevel()) * 0.02;
-				if ( penalty > 0.5 )
-					penalty = 0.5;
+			if (isWieldedUnproperly()) {
+				double penalty = (getReqLevel() - player->getLevel()) * 0.05;
+				if (penalty > 0.5) penalty = 0.5;
 
-				damageModifier = damageModifier - (int32_t)(damageModifier * penalty);
-			}
-			else
+				damageModifier = 100 - (int32_t)(100 * penalty);
+
+			} else {
 				damageModifier = 0;
+			}
 		}
 
-		if(player->getMagicLevel() < getReqMagLv()){
+		if (player->getMagicLevel() < getReqMagLv()) {
 			damageModifier = (isWieldedUnproperly()? damageModifier/2 : 0);
 		}
 
@@ -461,19 +459,19 @@ bool Weapon::useFist(Player* player, Creature* target)
 
 bool Weapon::internalUseWeapon(Player* player, Item* item, Creature* target, int32_t damageModifier) const
 {
-	if(m_scripted){
+	if (m_scripted) {
 		LuaVariant var;
 		var.type = VARIANT_NUMBER;
 		var.number = target->getID();
 		executeUseWeapon(player, var);
-	}
-	else{
+
+	} else {
 		int32_t damage = (getWeaponDamage(player, target, item) * damageModifier) / 100;
 		Combat::doCombatHealth(player, target, damage, damage, params);
 		player->useActiveSpellAttack(target);
 	}
 
-	if(g_config.getNumber(ConfigManager::REMOVE_AMMUNITION)){
+	if (g_config.getNumber(ConfigManager::REMOVE_AMMUNITION)) {
 		onUsedAmmo(player, item, target->getTile());
 	}
 	onUsedWeapon(player, item, target->getTile());
@@ -815,16 +813,6 @@ bool WeaponDistance::configureEvent(xmlNodePtr p)
 
 bool WeaponDistance::configureWeapon(const ItemType& it)
 {
-	//default values
-	if(it.amuType != AMMO_NONE){
-		//hit chance on two-handed weapons is limited to 90%
-		maxHitChance = 90;
-	}
-	else{
-		//one-handed is set to 83%
-		maxHitChance = 83;
-	}
-
 	params.distanceEffect = it.shootType;
 	range = it.shootRange;
 	ammuAttackValue = it.attack;
@@ -835,6 +823,10 @@ bool WeaponDistance::configureWeapon(const ItemType& it)
 
 	if(it.maxHitChance > 0){
 		maxHitChance = it.maxHitChance;
+	} else if (it.amuType != AMMO_NONE) {
+		maxHitChance = 90; // default hit chance on two-handed weapons is limited to 90%
+	} else {
+		maxHitChance = 83; // default one-handed is set to 83%
 	}
 
 	if(it.breakChance > 0){
@@ -850,15 +842,6 @@ bool WeaponDistance::configureWeapon(const ItemType& it)
 	}
 
 	return Weapon::configureWeapon(it);
-}
-
-bool WeaponDistance::interruptSwing() const
-{
-	if(!g_config.getNumber(ConfigManager::DISTANCE_WEAPON_INTERRUPT_SWING)){
-		return false;
-	}
-
-	return true;
 }
 
 int32_t WeaponDistance::playerWeaponCheck(Player* player, Creature* target) const
@@ -1104,15 +1087,6 @@ bool WeaponWand::configureWeapon(const ItemType& it)
 	params.distanceEffect = it.shootType;
 
 	return Weapon::configureWeapon(it);
-}
-
-bool WeaponWand::interruptSwing() const
-{
-	if(!g_config.getBoolean(ConfigManager::WANDS_INTERRUPT_SWING)){
-		return false;
-	}
-
-	return true;
 }
 
 int32_t WeaponWand::getWeaponDamage(const Player* player, const Creature* target, const Item* item, bool maxDamage /*= false*/) const

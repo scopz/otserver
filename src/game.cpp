@@ -3917,11 +3917,10 @@ void Game::checkCreatures()
 		creature = (*it);
 
 		if (creature->checkCreatureVectorIndex >= 0 && (size_t)creature->checkCreatureVectorIndex == checkCreatureLastIndex) {
-			if(creature->creatureCheck){
-				if(creature->getHealth() > 0){
+			if (creature->creatureCheck){
+				if (creature->getHealth() > 0) {
 					creature->onThink(EVENT_CREATURE_THINK_INTERVAL);
-				}
-				else{
+				} else {
 					creature->onDie();
 				}
 				++it;

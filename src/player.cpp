@@ -107,7 +107,6 @@ Player::Player(const std::string& _name, ProtocolGame* p) : Creature()
 	lastAttackBlockType = BLOCK_NONE;
 	addAttackSkillPoint = false;
 	lastAttack = 0;
-	shootRange = 1;
 
 	//activeAttackSpell = NULL;
 	attackSpellUsagesLeft = 0;
@@ -449,7 +448,6 @@ Item* Player::getWeapon(bool ignoreAmmu /*= false*/)
 					if(ammuItem && ammuItem->getAmuType() == item->getAmuType()){
 						const Weapon* weapon = g_weapons->getWeapon(ammuItem);
 						if(weapon){
-							shootRange = item->getShootRange();
 							return ammuItem;
 						}
 					}
@@ -457,7 +455,6 @@ Item* Player::getWeapon(bool ignoreAmmu /*= false*/)
 				else{
 					const Weapon* weapon = g_weapons->getWeapon(item);
 					if(weapon){
-						shootRange = item->getShootRange();
 						return item;
 					}
 				}
@@ -3892,8 +3889,7 @@ bool Player::onAttacking(uint32_t interval)
 bool Player::doAttacking(uint32_t interval)
 {
 	if(lastAttack == 0){
-		// - 1 to compensate for timer resolution etc.
-		lastAttack = OTSYS_TIME() - getAttackSpeed() - 1;
+		lastAttack = OTSYS_TIME() - getAttackSpeed();
 	}
 
 	// Can't attack while pacified
@@ -3905,26 +3901,9 @@ bool Player::doAttacking(uint32_t interval)
 		Item* tool = getWeapon();
 		bool result = false;
 		const Weapon* weapon = g_weapons->getWeapon(tool);
-		if(weapon){
-			if(!weapon->interruptSwing()){
-				result = weapon->useWeapon(this, tool, attackedCreature);
-			}
-			else if(!canDoAction()){
-				uint32_t delay = getNextActionTime();
-				SchedulerTask* task = createSchedulerTask(delay, boost::bind(&Game::checkCreatureAttack,		
-					&g_game, getID()));		
-				setNextActionTask(task);
-			}
-			else {
-				// If the player is not exhausted OR if the player's weapon
-				// does not have hasExhaust, use the weapon.
-				if(!hasCondition(CONDITION_EXHAUST_COMBAT))
-				{
-					result = weapon->useWeapon(this, tool, attackedCreature);
-				}
-			}
-		}
-		else{
+		if (weapon) {
+			result = weapon->useWeapon(this, tool, attackedCreature);
+		} else {
 			result = Weapon::useFist(this, attackedCreature);
 		}
 
