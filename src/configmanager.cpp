@@ -178,7 +178,6 @@ bool ConfigManager::loadFile(const std::string& _filename)
 	m_confInteger[DEATH_ASSIST_COUNT] = getGlobalNumber(L, "death_assist_count", 1);
 	m_confInteger[LAST_HIT_PZBLOCK_ONLY] = getGlobalBoolean(L, "last_hit_pzblock_only", true);
 	m_confInteger[DEFENSIVE_PZ_LOCK] = getGlobalBoolean(L, "defensive_pz_lock", false);
-	m_confInteger[DISTANCE_WEAPON_INTERRUPT_SWING] = getGlobalBoolean(L, "distance_weapon_interrupt_swing", true);
 	m_confInteger[RATES_FOR_PLAYER_KILLING] = getGlobalBoolean(L, "rates_for_player_killing", false);
 	m_confInteger[RATE_EXPERIENCE_PVP] = getGlobalNumber(L, "rate_exp_pvp", 0);
 	m_confInteger[FIST_STRENGTH] = getGlobalNumber(L, "fist_strength", 7);
@@ -196,7 +195,6 @@ bool ConfigManager::loadFile(const std::string& _filename)
 	m_confInteger[MOVEITEM_TIME] = getGlobalNumber(L, "move_item_interval", 500);
 	m_confInteger[MAX_STACK_SIZE] = getGlobalNumber(L, "max_stack_size", 1000);
 	m_confInteger[PVP_DAMAGE] = getGlobalNumber(L, "pvp_damage", 50);
-	m_confInteger[WANDS_INTERRUPT_SWING] = getGlobalBoolean(L, "wands_interrupt_swing", true);
 	m_confInteger[PLAYER_QUERYDESTINATION_DEEPNESS] = getGlobalNumber(L, "player_querydestination_deepness", -1);
 	m_confInteger[TILE_LIMIT] = getGlobalNumber(L, "tile_limit", 0);
 	m_confInteger[PROTECTION_TILE_LIMIT] = getGlobalNumber(L, "protection_tile_limit", 0);

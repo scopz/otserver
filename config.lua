@@ -213,14 +213,6 @@ remove_rune_charges = true
 -- Set to false to disable charges disappearing from weapons on use
 remove_weapon_charges = true
 
--- Distance weapon configuration
--- Should exhaustion and action time be checked for using a distance weapon?
-distance_weapon_interrupt_swing = false
-
--- Wands configuration exhaustion
--- Should exhaustion and action time be checked for using wands?
-wands_interrupt_swing = false
-
 -- maximum amount of items inside of a container (including the items inside of any container inside of it)
 -- Use 0 for infinite
 max_amount_items_inside_containers = 2000

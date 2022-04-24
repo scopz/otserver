@@ -375,7 +375,6 @@ public:
 		bool checkDefense = false, bool checkArmor = false);
 	virtual bool doAttacking(uint32_t interval);
 	virtual bool hasExtraSwing() {return lastAttack > 0 && ((OTSYS_TIME() - lastAttack) >= getAttackSpeed());}
-	int32_t getShootRange() const {return shootRange;}
 
 	uint32_t getSkillLevel(skills_t skilltype) const;
 	Skill getSkill(skills_t skilltype) const;
@@ -794,7 +793,6 @@ protected:
 	BlockType_t lastAttackBlockType;
 	bool addAttackSkillPoint;
 	uint64_t lastAttack;
-	int32_t shootRange;
 
 	AttackSpellCallback activeAttackSpellCallback;
 	uint32_t attackSpellUsagesLeft;
