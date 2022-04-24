@@ -44,12 +44,8 @@
 		<item id="1998" chance="4500" dropempty="true"/><!-- 4.5% backpack -->
 		<item id="2649" chance="10000"/><!-- 10% leather legs -->
 		<item id="2478" chance="7000"/><!-- 7% brass legs -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2412" chance="6000"/><!-- 6% katana -->
-				<item id="2425" chance="1200"/><!-- 1.2% obsidian lance -->
-				<item id="2511" chance="5500"/><!-- 5.5% brass shield -->
-			</inside>
-		</item>
+		<item id="2412" chance="6000"/><!-- 6% katana -->
+		<item id="2425" chance="1200"/><!-- 1.2% obsidian lance -->
+		<item id="2511" chance="5500"/><!-- 5.5% brass shield -->
 	</loot>
 </monster>

@@ -55,13 +55,9 @@
 		<item id="1987" chance="11000" dropempty="true"/><!-- 11% bag -->
 		<item id="2458" chance="9000"/><!-- 9% chain helmet -->
 		<item id="2464" chance="9000"/><!-- 9% chain armor -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2389" chance="10000"/><!-- 10% spear -->
-				<item id="2401" chance="7000"/><!-- 7% staff -->
-				<item id="2188" chance="1000"/><!-- 1% wand of plague -->
-				<item id="1973" chance="4500"/><!-- 4.5% grey small book -->
-			</inside>
-		</item>
+		<item id="2389" chance="10000"/><!-- 10% spear -->
+		<item id="2401" chance="7000"/><!-- 7% staff -->
+		<item id="2188" chance="1000"/><!-- 1% wand of plague -->
+		<item id="1973" chance="4500"/><!-- 4.5% grey small book -->
 	</loot>
 </monster>

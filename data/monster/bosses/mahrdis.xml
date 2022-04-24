@@ -69,18 +69,12 @@
 	</voices>
 	<loot>
 		<item id="2353" chance="100000"/><!-- 100% burning heart-->
-		<item id="2148" chance="70000" countmax="80"/><!-- 80 70% gold -->
-		<item id="2148" chance="50000" countmax="85"/><!-- 85 50% gold -->
-		<item id="2148" chance="35000" countmax="95"/><!-- 95 35% gold -->
+		<item id="2148" chance="90250" countmax="148"/><!-- 148 90.25% gold -->
 		<item id="2147" chance1="10000" countmax="3"/><!-- 3 10% small ruby -->
 		<item id="2156" chance="1000"/><!-- 1% red gem -->
 		<item id="2141" chance="100"/><!-- 0.1% holy falcon-->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2432" chance="200"/><!-- 0.2% fire axe -->
-				<item id="2539" chance="100"/><!-- 0.1% phoenix shield -->
-				<item id="2168" chance="5000"/><!-- 5% life ring -->
-			</inside>
-		</item>	
+		<item id="2432" chance="200"/><!-- 0.2% fire axe -->
+		<item id="2539" chance="100"/><!-- 0.1% phoenix shield -->
+		<item id="2168" chance="5000"/><!-- 5% life ring -->
 	</loot>
 </monster>

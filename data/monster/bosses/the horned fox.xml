@@ -59,13 +59,9 @@
 		<item id="2502" chance="9000"/><!-- 9% dwarven helmet -->
 		<item id="2465" chance="14000"/><!-- 14% brass armor -->
 		<item id="2648" chance="15000"/><!-- 15% chain legs -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2387" chance="1000"/><!-- 1% double axe -->
-				<item id="2388" chance="9000"/><!-- 9% hatchet -->
-				<item id="2513" chance="2000"/><!-- 2% battle shield -->
-				<item id="2580" chance="5000"/><!-- 5% fishing rod -->
-			</inside>
-		</item>
+		<item id="2387" chance="1000"/><!-- 1% double axe -->
+		<item id="2388" chance="9000"/><!-- 9% hatchet -->
+		<item id="2513" chance="2000"/><!-- 2% battle shield -->
+		<item id="2580" chance="5000"/><!-- 5% fishing rod -->
 	</loot>
 </monster>

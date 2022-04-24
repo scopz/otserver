@@ -65,19 +65,13 @@
 	</voices>
 	<loot>
 		<item id="2354" chance="100000"/><!-- 100% ornamented ankh-->
-		<item id="2148" chance="70000" countmax="80"/><!-- 80 70% gold -->
-		<item id="2148" chance="50000" countmax="85"/><!-- 85 50% gold -->
-		<item id="2148" chance="35000" countmax="95"/><!-- 95 35% gold -->
+		<item id="2148" chance="90250" countmax="149"/><!-- 149 90.25% gold -->
 		<item id="2146" chance="10000" countmax="3"/><!-- 3 10% small sapphire -->
 		<item id="2158" chance="1000"/><!-- 1% blue gem -->
 		<item id="2178" chance="1000"/><!-- 1% mind stone -->
 		<item id="2193" chance="500"/><!-- 0.5% ankh -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2436" chance="500"/><!-- 0.5% skull staff -->
-				<item id="2446" chance="100"/><!-- 0.1% pharaoh sword -->
-				<item id="2167" chance="5000"/><!-- 5% energy ring -->
-			</inside>
-		</item>	
+		<item id="2436" chance="500"/><!-- 0.5% skull staff -->
+		<item id="2446" chance="100"/><!-- 0.1% pharaoh sword -->
+		<item id="2167" chance="5000"/><!-- 5% energy ring -->
 	</loot>
 </monster>

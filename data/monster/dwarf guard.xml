@@ -41,13 +41,9 @@
 		<item id="2643" chance="40000"/><!-- 40% leather boots -->
 		<item id="2483" chance="10000"/><!-- 10% scale armor -->
 		<item id="2457" chance="2000"/><!-- 2% steel helmet -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2417" chance="4000"/><!-- 4% battle hammer -->
-				<item id="2387" chance="600"/><!-- 0.6% double axe -->
-				<item id="2513" chance="7500"/><!-- 7.5% battle shield -->
-				<item id="2208" chance="200"/><!-- 0.2% slash ring -->
-			</inside>
-		</item>
+		<item id="2417" chance="4000"/><!-- 4% battle hammer -->
+		<item id="2387" chance="600"/><!-- 0.6% double axe -->
+		<item id="2513" chance="7500"/><!-- 7.5% battle shield -->
+		<item id="2208" chance="200"/><!-- 0.2% slash ring -->
 	</loot>
 </monster>

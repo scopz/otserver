@@ -56,9 +56,7 @@
 	<loot>
 		<item id="2672" chance="75000" countmax="10"/><!-- 10 75% dragon ham -->
 		<item id="2796" chance="24000" countmax="7"/><!-- 7 24% green mushroom -->
-		<item id="2148" chance="95000" countmax="100"/><!-- 100 95% gold -->
-		<item id="2148" chance="80000" countmax="100"/><!-- 100 80% gold -->
-		<item id="2148" chance="55000" countmax="50"/><!-- 50 55% gold -->
+		<item id="2148" chance="99550" countmax="206"/><!-- 206 99.55% gold -->
 		<item id="2146" chance="10000"/><!-- 10% small sapphire -->
 		<item id="2547" chance="16000"/><!-- 16% power bolt -->
 		<item id="2033" chance="6000"/><!-- 6% golden mug -->
@@ -67,12 +65,8 @@
 		<item id="2498" chance="400"/><!-- 0.4% royal helmet -->
 		<item id="2479" chance="800"/><!-- 0.8% strange helmet -->
 		<item id="2492" chance="300"/><!-- 0.3% dragon scale mail -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2392" chance="600"/><!-- 0.6% fire sword -->
-				<item id="2528" chance="600"/><!-- 0.6% tower shield -->
-				<item id="2167" chance="10000"/><!-- 10% energy ring -->
-			</inside>
-		</item>
+		<item id="2392" chance="600"/><!-- 0.6% fire sword -->
+		<item id="2528" chance="600"/><!-- 0.6% tower shield -->
+		<item id="2167" chance="10000"/><!-- 10% energy ring -->
 	</loot>
 </monster>

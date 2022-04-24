@@ -59,13 +59,9 @@
 		<item id="2148" chance="30000" countmax="90"/><!-- 90 30% gold coin -->
 		<item id="2663" chance="500"/><!-- 0.5% mystic turban -->
 		<item id="2483" chance="10000"/><!-- 10% scale armor -->
-		<item id="2195" chance="200"/><!-- 0.2% boots of haste -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2436" chance="100"/><!-- 0.1% skull staff -->
-				<item id="2423" chance="1000"/><!-- 1% clerical mace -->
-				<item id="2406" chance="15000"/><!-- 15% short sword -->
-			</inside>
-		</item>
+		<item id="2195" chance="400"/><!-- 0.4% boots of haste -->
+		<item id="2436" chance="100"/><!-- 0.1% skull staff -->
+		<item id="2423" chance="1000"/><!-- 1% clerical mace -->
+		<item id="2406" chance="15000"/><!-- 15% short sword -->
 	</loot>
 </monster>

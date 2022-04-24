@@ -55,15 +55,11 @@
 		<item id="2465" chance="1000"/><!-- 1% brass armor -->
 		<item id="2647" chance="4000"/><!-- 4% plate legs -->
 		<item id="2478" chance="10000"/><!-- 10% brass legs -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2428" chance="15000"/><!-- 15% orcish axe -->
-				<item id="2434" chance="200"/><!-- 0.2% dragon hammer -->
-				<item id="2377" chance="2000"/><!-- 2% two handed sword -->
-				<item id="2419" chance="12000"/><!-- 12% scimitar -->
-				<item id="2200" chance="2000"/><!-- 2% protection amulet -->
-				<item id="2165" chance="100"/><!-- 0.1% stealth ring -->
-			</inside>
-		</item>
+		<item id="2428" chance="15000"/><!-- 15% orcish axe -->
+		<item id="2434" chance="200"/><!-- 0.2% dragon hammer -->
+		<item id="2377" chance="2000"/><!-- 2% two handed sword -->
+		<item id="2419" chance="12000"/><!-- 12% scimitar -->
+		<item id="2200" chance="2000"/><!-- 2% protection amulet -->
+		<item id="2165" chance="100"/><!-- 0.1% stealth ring -->
 	</loot>
 </monster>

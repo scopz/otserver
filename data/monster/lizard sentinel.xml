@@ -42,13 +42,9 @@
 		<item id="2145" chance="100"/><!-- 0.1% small diamond -->
 		<item id="2464" chance="9000"/><!-- 9% chain armor -->
 		<item id="2483" chance="8000"/><!-- 8% scale armor -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2389" chance="10000" countmax="3"/><!-- 3 10% spear -->
-				<item id="2425" chance="1200"/><!-- 1.2% obsidian lance -->
-				<item id="2381" chance="500"/><!-- 0.5% halberd -->
-				<item id="3974" chance="300"/><!-- 0.3% sentinel shield -->
-			</inside>
-		</item>
+		<item id="2389" chance="10000" countmax="3"/><!-- 3 10% spear -->
+		<item id="2425" chance="1200"/><!-- 1.2% obsidian lance -->
+		<item id="2381" chance="500"/><!-- 0.5% halberd -->
+		<item id="3974" chance="300"/><!-- 0.3% sentinel shield -->
 	</loot>
 </monster>

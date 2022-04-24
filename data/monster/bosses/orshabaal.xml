@@ -67,10 +67,7 @@
 		<voice sentence="SOULS FOR ORSHABAAL!" yell="1"/>
 	</voices>
 	<loot>
-		<item id="2148" chance="99900" countmax="100"/><!-- 100 99.9% gold coin -->
-		<item id="2148" chance="88800" countmax="100"/><!-- 100 88.8% gold coin -->
-		<item id="2148" chance="77700" countmax="100"/><!-- 100 77.7% gold coin -->
-		<item id="2148" chance="66600" countmax="100"/><!-- 100 66.6% gold coin -->
+		<item id="2148" chance="100000" countmax="340"/><!-- 334 100% gold -->
 		<item id="2150" chance="13500" countmax="20" /><!-- 20 13.5% small amethyst -->
 		<item id="2145" chance="9500" countmax="5"/><!-- 5 9.5% small diamond -->
 		<item id="2149" chance="15500" countmax="10" /><!-- 10 15.5% small emerald -->
@@ -98,34 +95,30 @@
 		<item id="2470" chance="5000"/><!-- 5% golden legs -->
 		<item id="2195" chance="4000"/><!-- 4% boots of haste -->
 		<item id="2171" chance="4500"/><!-- 4.5% platinum amulet -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2162" chance="11500"/><!-- 11.5% magic light wand -->
-				<item id="2387" chance="20000"/><!-- 20% double axe -->
-				<item id="2377" chance="20000"/><!-- 20% two handed sword -->
-				<item id="2418" chance="4500"/><!-- 4.5% golden sickle -->
-				<item id="2402" chance="15500"/><!-- 15.5% silver dagger -->
-				<item id="2421" chance="13500"/><!-- 13.5% thunder hammer -->
-				<item id="2396" chance="7500"/><!-- 7.5% ice rapier -->
-				<item id="2436" chance="5000"/><!-- 5% skull staff -->
-				<item id="2434" chance="4500"/><!-- 4.5% dragon hammer -->
-				<item id="2432" chance="17000"/><!-- 17% fire axe -->
-				<item id="2393" chance="12500"/><!-- 12.5% giant sword -->
-				<item id="2186" chance="3500"/><!-- 3.5% moonlight rod -->
-				<item id="2182" chance="3500"/><!-- 3.5% snakebit rod -->
-				<item id="2185" chance="3500"/><!-- 3.5% volcanic rod -->
-				<item id="2188" chance="2500"/><!-- 2.5% wand of plague -->
-				<item id="2520" chance="15500"/><!-- 15.5% demon shield -->
-				<item id="2514" chance="7500"/><!-- 7.5% mastermind shield -->
-				<item id="2167" chance="13500"/><!-- 13.5% energy ring -->
-				<item id="2214" chance="13000"/><!-- 13% ring of healing -->
-				<item id="2165" chance="9500"/><!-- 9.5% stealth ring -->
-				<item id="2164" chance="5000"/><!-- 5% might ring -->
-				<item id="2197" chance="4000"/><!-- 4% stone skin amulet -->
-				<item id="2170" chance="13000"/><!-- 13% silver amulet -->
-				<item id="2200" chance="4500"/><!-- 4.5% protection amulet -->
-				<item id="2174" chance="2500"/><!-- 2.5% strange symbol -->
-			</inside>
-		</item>
+		<item id="2162" chance="11500"/><!-- 11.5% magic light wand -->
+		<item id="2387" chance="20000"/><!-- 20% double axe -->
+		<item id="2377" chance="20000"/><!-- 20% two handed sword -->
+		<item id="2418" chance="4500"/><!-- 4.5% golden sickle -->
+		<item id="2402" chance="15500"/><!-- 15.5% silver dagger -->
+		<item id="2421" chance="13500"/><!-- 13.5% thunder hammer -->
+		<item id="2396" chance="7500"/><!-- 7.5% ice rapier -->
+		<item id="2436" chance="5000"/><!-- 5% skull staff -->
+		<item id="2434" chance="4500"/><!-- 4.5% dragon hammer -->
+		<item id="2432" chance="17000"/><!-- 17% fire axe -->
+		<item id="2393" chance="12500"/><!-- 12.5% giant sword -->
+		<item id="2186" chance="3500"/><!-- 3.5% moonlight rod -->
+		<item id="2182" chance="3500"/><!-- 3.5% snakebit rod -->
+		<item id="2185" chance="3500"/><!-- 3.5% volcanic rod -->
+		<item id="2188" chance="2500"/><!-- 2.5% wand of plague -->
+		<item id="2520" chance="15500"/><!-- 15.5% demon shield -->
+		<item id="2514" chance="7500"/><!-- 7.5% mastermind shield -->
+		<item id="2167" chance="13500"/><!-- 13.5% energy ring -->
+		<item id="2214" chance="13000"/><!-- 13% ring of healing -->
+		<item id="2165" chance="9500"/><!-- 9.5% stealth ring -->
+		<item id="2164" chance="5000"/><!-- 5% might ring -->
+		<item id="2197" chance="4000"/><!-- 4% stone skin amulet -->
+		<item id="2170" chance="13000"/><!-- 13% silver amulet -->
+		<item id="2200" chance="4500"/><!-- 4.5% protection amulet -->
+		<item id="2174" chance="2500"/><!-- 2.5% strange symbol -->
 	</loot>
 </monster>

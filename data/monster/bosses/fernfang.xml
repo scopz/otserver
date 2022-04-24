@@ -58,7 +58,7 @@
 	</voices>
 	<loot>
 		<item id="2689" chance="14000"/><!-- 14% bread -->
-		<item id="2148" chance="15000" countmax="18"/><!-- 18 15% gold -->
+		<item id="2148" chance="15000" countmax="20"/><!-- 20 15% gold -->
 		<item id="2154" chance="400"/><!-- 0.4 yellow gem -->
 		<item id="2260" chance="18000"/><!-- 18% blank rune -->
 		<item id="2177" chance="2000"/><!-- 2% life crystal -->
@@ -71,13 +71,9 @@
 		<item id="2129" chance="10000"/><!-- 10% wolf tooth chain -->
 		<item id="2652" chance="9000"/><!-- 9% green tunic -->
 		<item id="2642" chance="9000"/><!-- 9% sandals -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2044" chance="10000"/><!-- 10% lamp -->
-				<item id="2401" chance="11000"/><!-- 11% staff -->
-				<item id="2401" chance="11000"/><!-- 11% staff -->
-				<item id="2166" chance="500"/><!-- 0.5% power ring -->
-			</inside>
-		</item>
+		<item id="2044" chance="10000"/><!-- 10% lamp -->
+		<item id="2401" chance="11000"/><!-- 11% staff -->
+		<item id="2401" chance="11000"/><!-- 11% staff -->
+		<item id="2166" chance="500"/><!-- 0.5% power ring -->
 	</loot>
 </monster>

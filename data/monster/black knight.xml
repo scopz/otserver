@@ -47,8 +47,7 @@
 	</voices>
 	<loot>
 		<item id="2691" chance="20000" countmax="2"/><!-- 2 20% brown bread -->
-		<item id="2148" chance="33300" countmax="60"/><!-- 60 33.3% gold coin -->
-		<item id="2148" chance="22200" countmax="90"/><!-- 90 22.2% gold coin -->
+		<item id="2148" chance="48107.4" countmax="84"/><!-- 84 48.1074% gold -->
 		<item id="2120" chance="15000"/><!-- 15% rope -->
 		<item id="2133" chance="800"/><!-- 0.8% ruby necklace -->
 		<item id="2478" chance="13000"/><!-- 13% brass legs -->
@@ -60,15 +59,11 @@
 		<item id="2476" chance="1000"/><!-- 1% knight armor -->
 		<item id="2477" chance="1000"/><!-- 1% knight legs -->
 		<item id="2195" chance="500"/><!-- 0.5% boots of haste -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2389" chance="30000" countmax="3"/><!-- 3 30% spear -->
-				<item id="2381" chance="13000"/><!-- 13% halberd -->
-				<item id="2417" chance="7000"/><!-- 7% battle hammer -->
-				<item id="2414" chance="300"/><!-- 0.3% dragon lance -->
-				<item id="2430" chance="2500"/><!-- 2.5% knight axe -->
-				<item id="2377" chance="10000"/><!-- 10% two handed sword -->
-			</inside>
-		</item>
+		<item id="2389" chance="30000" countmax="3"/><!-- 3 30% spear -->
+		<item id="2381" chance="13000"/><!-- 13% halberd -->
+		<item id="2417" chance="7000"/><!-- 7% battle hammer -->
+		<item id="2414" chance="300"/><!-- 0.3% dragon lance -->
+		<item id="2430" chance="2500"/><!-- 2.5% knight axe -->
+		<item id="2377" chance="10000"/><!-- 10% two handed sword -->
 	</loot>
 </monster>

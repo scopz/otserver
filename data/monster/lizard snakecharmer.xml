@@ -59,12 +59,8 @@
 		<item id="2237" chance="19900"/><!-- 19.9% dirty cape -->
 		<item id="2654" chance="9000"/><!-- 9% cape -->
 		<item id="3971" chance="100"/><!-- 0.1% charmer's tiara -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2182" chance="100"/><!-- 0.1% snakebite rod -->
-				<item id="2181" chance="1000"/><!-- 1% quagmire rod -->
-				<item id="2168" chance="200"/><!-- 0.2% life ring -->
-			</inside>
-		</item>
+		<item id="2182" chance="100"/><!-- 0.1% snakebite rod -->
+		<item id="2181" chance="1000"/><!-- 1% quagmire rod -->
+		<item id="2168" chance="200"/><!-- 0.2% life ring -->
 	</loot>
 </monster>

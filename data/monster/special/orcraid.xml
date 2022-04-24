@@ -41,13 +41,8 @@
 		<item id="3960" chance="100000" dropempty="true"/><!-- Sam old backpack -->
 		<item id="2482" chance="9000"/><!-- 9% studded helmet -->
 		<item id="2484" chance="12000"/><!-- 12% studded armor -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2386" chance="8000"/><!-- 8% axe -->
-				<item id="2385" chance="6000"/><!-- 6% sabre -->
-				<item id="2526" chance="10000"/><!-- 10% studded shield -->
-			</inside>
-		</item>
-		
+		<item id="2386" chance="8000"/><!-- 8% axe -->
+		<item id="2385" chance="6000"/><!-- 6% sabre -->
+		<item id="2526" chance="10000"/><!-- 10% studded shield -->
 	</loot>
 </monster>

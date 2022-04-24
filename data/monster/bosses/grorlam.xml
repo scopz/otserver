@@ -49,11 +49,7 @@
 		<item id="2124" chance="200"/><!-- 0.2% crystal ring -->
 		<item id="2483" chance="5000"/><!-- 5% scale armor -->
 		<item id="2645" chance="500"/><!-- 0.5% steel boots -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2509" chance="7000"/><!-- 7% steel shield -->
-				<item id="2166" chance="5500"/><!-- 5.5% power ring -->
-			</inside>
-		</item>
+		<item id="2509" chance="7000"/><!-- 7% steel shield -->
+		<item id="2166" chance="5500"/><!-- 5.5% power ring -->
 	</loot>
 </monster>

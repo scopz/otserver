@@ -63,10 +63,6 @@
 		<item id="2747" chance="10000"/><!-- 10% grave flower -->
 		<item id="2359" chance="7500"/><!-- 7.5% small oil lamp -->
 		<item id="2663" chance="100"/><!-- 0.1% mystic turban -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="1980" chance="2500"/><!-- 2.5% green book -->
-			</inside>
-		</item>
+		<item id="1980" chance="2500"/><!-- 2.5% green book -->
 	</loot>
 </monster>

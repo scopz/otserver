@@ -48,13 +48,9 @@
 		<item id="2458" chance="4000"/><!-- 4% chain helmet -->
 		<item id="2464" chance="10000"/><!-- 10% chain armor -->
 		<item id="2463" chance="800"/><!-- 0.8% plate armor -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2389" chance="60000" countmax="3"/><!-- 3 60% spear -->
-				<item id="2379" chance="25000"/><!-- 25% dagger -->
-				<item id="2387" chance="400"/><!-- 0.4% double axe -->
-				<item id="2200" chance="1100"/><!-- 1.1% protection amulet -->	
-			</inside>
-		</item>
+		<item id="2389" chance="60000" countmax="3"/><!-- 3 60% spear -->
+		<item id="2379" chance="25000"/><!-- 25% dagger -->
+		<item id="2387" chance="400"/><!-- 0.4% double axe -->
+		<item id="2200" chance="1100"/><!-- 1.1% protection amulet -->	
 	</loot>
 </monster>

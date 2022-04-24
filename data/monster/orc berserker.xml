@@ -39,12 +39,8 @@
 		<item id="2148" chance="55000" countmax="12"/><!-- 12 55% gold coin -->
 		<item id="2458" chance="11000"/><!-- 11% chain helmet -->
 		<item id="2464" chance="10000"/><!-- 10% chain armor -->
-		<item id="1987" chance="100000"><!-- bag -->
-			<inside>
-				<item id="2044" chance="8000"/><!-- 8% lamp -->
-				<item id="2381" chance="7000"/><!-- 7% halberd -->
-				<item id="2378" chance="6000"/><!-- 6% battle axe -->
-			</inside>
-		</item>
+		<item id="2044" chance="8000"/><!-- 8% lamp -->
+		<item id="2381" chance="7000"/><!-- 7% halberd -->
+		<item id="2378" chance="6000"/><!-- 6% battle axe -->
 	</loot>
 </monster>
