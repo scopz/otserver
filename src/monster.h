@@ -112,7 +112,6 @@ public:
 	virtual bool getCombatValues(int32_t& min, int32_t& max);
 
 	virtual bool doAttacking(uint32_t interval);
-	virtual bool hasExtraSwing() {return extraMeleeAttack;}
 
 	bool searchTarget(TargetSearchType_t searchType = TARGETSEARCH_DEFAULT);
 	bool selectTarget(Creature* creature);
@@ -149,7 +148,6 @@ private:
 	int32_t targetChangeCooldown;
 	bool resetTicks;
 	bool isIdle;
-	bool extraMeleeAttack;
 	bool semiIdle;
 	bool hadRecentBattleVar;
 	bool behaviorActivated;
