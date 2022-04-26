@@ -1899,7 +1899,7 @@
 	<item id="1490" article="a" name="poison field" editorsuffix=" (Not decaying)">
 		<attribute key="type" value="magicfield"/>
 		<attribute key="field" value="poison">
-			<attribute key="ticks" value="5000"/>
+			<attribute key="ticks" value="1000"/>
 			<attribute key="start" value="5"/>
 			<attribute key="damage" value="100"/>
 		</attribute>
@@ -1954,7 +1954,7 @@
 		<attribute key="decayTo" value="0"/>
 		<attribute key="duration" value="120"/>
 		<attribute key="field" value="poison">
-			<attribute key="ticks" value="5000"/>
+			<attribute key="ticks" value="1000"/>
 			<attribute key="start" value="5"/>
 			<attribute key="damage" value="100"/>
 		</attribute>
@@ -2004,7 +2004,7 @@
 		<attribute key="decayTo" value="0"/>
 		<attribute key="duration" value="120"/>
 		<attribute key="field" value="poison">
-			<attribute key="ticks" value="5000"/>
+			<attribute key="ticks" value="1000"/>
 			<attribute key="start" value="5"/>
 			<attribute key="damage" value="100"/>
 		</attribute>
