@@ -498,7 +498,7 @@ bool Monsters::deserializeSpell(xmlNodePtr node, spellBlock_t& sb, MonsterType* 
 
 				minDamage = intValue;
 				maxDamage = intValue;
-				tickInterval = 5000;
+				tickInterval = 1000;
 			}
 			else if(readXMLInteger(node, "energy", intValue)){
 				conditionType = CONDITION_ENERGY;
