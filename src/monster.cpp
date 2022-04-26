@@ -89,7 +89,6 @@ Creature()
 	timeOfLastHit = 0;
 	hadRecentBattleVar = false;
 	resetTicks = false;
-	extraMeleeAttack = false;
 
 	strDescription = mType->nameDescription;
 	toLowerCaseString(strDescription);
@@ -153,7 +152,6 @@ void Monster::onAttackedCreatureDisappear(bool isLogout)
 #endif
 
 	attackTicks = 0;
-	extraMeleeAttack = true;
 }
 
 void Monster::onFollowCreatureDisappear(bool isLogout)
@@ -1031,11 +1029,6 @@ bool Monster::doAttacking(uint32_t interval)
 #endif
 			}
 		}
-
-		if(!inRange && it->isMelee){
-			//melee swing out of reach
-			extraMeleeAttack = true;
-		}
 	}
 
 	if(updateLook){
@@ -1045,7 +1038,7 @@ bool Monster::doAttacking(uint32_t interval)
 	if(resetTicks){
 		attackTicks = 0;
 	}
-	return !extraMeleeAttack;
+	return true;
 }
 
 bool Monster::canUseAttack(const Position& pos, const Creature* target) const
@@ -1097,7 +1090,7 @@ bool Monster::canUseSpell(const Position& pos, const Position& targetPos,
 		return false;
 	}
 	
-	if (!sb.isMelee || !extraMeleeAttack) {
+	if (!sb.isMelee) {
 		if (spell_interval > attackTicks) {
 			resetTicks = false;
 			return false;
@@ -1114,7 +1107,6 @@ bool Monster::canUseSpell(const Position& pos, const Position& targetPos,
 		return false;
 	}
 
-	extraMeleeAttack = false;
 	return true;
 }
 
