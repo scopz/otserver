@@ -983,7 +983,7 @@ bool Monster::canUseSpell(const Position& pos, const Position& targetPos,
 	} else {
 		if (std::max(std::abs(pos.x - targetPos.x), std::abs(pos.y - targetPos.y)) <= 1) {
 			// only monsters that actually melee attack, but since all at melee range no fleeing will we set as default
-			spell_interval = 2000;
+			spell_interval = sb.isMelee? sb.speed : 2000;
 		} else {
 			if (!hasFollowPath) {
 				// monster has no path to reach ideal range (< 4 for range, 0 for melee)
@@ -1067,7 +1067,7 @@ void Monster::onThinkDefense(uint32_t interval)
 			} else {
 				if (std::max(std::abs(pos.x - targetPos.x), std::abs(pos.y - targetPos.y)) <= 1) {
 					// only monsters that actually melee attack, but since all at melee range not fleeing will, we set as default
-					spell_interval = 2000;
+					spell_interval = it->isMelee? it->speed : 2000;
 				} else {
 					if (!hasFollowPath) {
 						// monster has no path to reach ideal range (< 4 for range, 0 for melee)

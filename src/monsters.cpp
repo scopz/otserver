@@ -474,6 +474,10 @@ bool Monsters::deserializeSpell(xmlNodePtr node, spellBlock_t& sb, MonsterType* 
 				}
 			}
 
+			if(readXMLInteger(node, "speed", intValue)){
+				sb.speed = intValue;
+			}
+
 			ConditionType_t conditionType = CONDITION_NONE;
 			int32_t minDamage = 0;
 			int32_t maxDamage = 0;
