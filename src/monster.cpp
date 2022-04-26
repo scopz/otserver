@@ -1068,11 +1068,6 @@ bool Monster::canUseSpell(const Position& pos, const Position& targetPos,
 	const spellBlock_t& sb, uint32_t interval, bool& inRange)
 {
 	inRange = true;
-	
-	if (sb.isMelee && (OTSYS_TIME() - lastMeleeAttack) < 1500) {
-
-		return false;
-	}
 
 	uint32_t spell_interval;
 	
@@ -1096,6 +1091,11 @@ bool Monster::canUseSpell(const Position& pos, const Position& targetPos,
 			}
 		}
 	}
+
+	if (sb.isMelee && OTSYS_TIME() - lastMeleeAttack < spell_interval) {
+		resetTicks = false;
+		return false;
+	}
 	
 	if (!sb.isMelee || !extraMeleeAttack) {
 		if (spell_interval > attackTicks) {
@@ -1114,6 +1114,7 @@ bool Monster::canUseSpell(const Position& pos, const Position& targetPos,
 		return false;
 	}
 
+	extraMeleeAttack = false;
 	return true;
 }
 
