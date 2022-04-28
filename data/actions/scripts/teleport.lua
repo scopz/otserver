@@ -2,14 +2,10 @@
 
 function onUse(cid, item, fromPosition, itemEx, toPosition)
 	npos = {x = fromPosition.x, y = fromPosition.y, z = fromPosition.z}
-	if (isInArray(LADDER, itemEx.itemid) == true) then
-		npos.y = npos.y + 1
-		npos.z = npos.z - 1
-		doTeleportThing(cid, npos)
+	if isInArray(LADDER, itemEx.itemid) == true then
+		doTeleportUpOrDown(cid, npos, true, itemEx.itemid)
 	else
-		npos.z = npos.z + 1
-		doTeleportThing(cid, npos)
+		doTeleportUpOrDown(cid, npos, false, 0)
 	end
-	
 	return true
 end

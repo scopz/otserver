@@ -812,35 +812,37 @@ Cylinder* Tile::__queryDestination(int32_t& index, const Thing* thing, Item** de
 	if(floorChangeDown()){
 		int dx = getTilePosition().x;
 		int dy = getTilePosition().y;
-		int dz = getTilePosition().z + 1;
-		Tile* downTile = g_game.getTile(dx, dy, dz);
+		int dz = getTilePosition().z;
+		Tile* downTile;
+
+		do {
+			downTile = g_game.getTile(dx, dy, ++dz);
+		} while ((!downTile || !downTile->ground) && dz+1 < MAP_MAX_LAYERS);
+
 
 		if(downTile){
 			if(downTile->floorChange(NORTH))
 				dy += 1;
-			if(downTile->floorChange(SOUTH))
+			else if(downTile->floorChange(SOUTH))
 				dy -= 1;
 			if(downTile->floorChange(EAST))
 				dx -= 1;
-			if(downTile->floorChange(WEST))
+			else if(downTile->floorChange(WEST))
 				dx += 1;
 			destTile = g_game.getTile(dx, dy, dz);
 		}
 	}
 	else if(floorChange()){
-		int dx = getTilePosition().x;
-		int dy = getTilePosition().y;
-		int dz = getTilePosition().z - 1;
+		int dy = floorChange(NORTH)? -1 : floorChange(SOUTH)? 1 : 0;
+		int dx = floorChange(WEST)? -1 : floorChange(EAST)? 1 : 0;
 
-		if(floorChange(NORTH))
-			dy -= 1;
-		if(floorChange(SOUTH))
-			dy += 1;
-		if(floorChange(EAST))
-			dx += 1;
-		if(floorChange(WEST))
-			dx -= 1;
-		destTile = g_game.getTile(dx, dy, dz);
+		int px = getTilePosition().x;
+		int py = getTilePosition().y;
+		int pz = getTilePosition().z;
+
+		do {
+			destTile = g_game.getTile(px+dx, py+dy, --pz);
+		} while ((!destTile || !destTile->ground) && pz > 0);
 	}
 
 

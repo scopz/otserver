@@ -1434,6 +1434,9 @@ void LuaScriptInterface::registerFunctions()
 	//doTeleportThing(uid, newpos)
 	lua_register(m_luaState, "doTeleportThing", LuaScriptInterface::luaDoTeleportThing);
 
+	//doTeleportUpOrDown(uid, newpos, up, itemId)
+	lua_register(m_luaState, "doTeleportUpOrDown", LuaScriptInterface::luaDoTeleportUpOrDown);
+
 	//doTransformItem(uid, toitemid, <optional> count/subtype)
 	lua_register(m_luaState, "doTransformItem", LuaScriptInterface::luaDoTransformItem);
 
@@ -2969,6 +2972,83 @@ int LuaScriptInterface::luaDoTeleportThing(lua_State *L)
 	PositionEx pos;
 	popPosition(L, pos);
 	uint32_t uid = popNumber(L);
+
+	ScriptEnviroment* env = getScriptEnv();
+
+	Thing* tmp = env->getThingByUID(uid);
+	if(tmp){
+		if(g_game.internalTeleport(tmp, pos) == RET_NOERROR){
+			lua_pushboolean(L, true);
+		}
+		else{
+			lua_pushboolean(L, false);
+		}
+	}
+	else{
+		reportErrorFunc(getErrorDesc(LUA_ERROR_THING_NOT_FOUND));
+		lua_pushboolean(L, false);
+	}
+	return 1;
+}
+
+int LuaScriptInterface::luaDoTeleportUpOrDown(lua_State *L)
+{
+	//doTeleportUpOrDown(uid, newpos, up, itemId)
+	uint32_t itemId = popNumber(L);
+
+	bool up = popBoolean(L);
+
+	PositionEx pos;
+	popPosition(L, pos);
+
+	uint32_t uid = popNumber(L);
+
+
+	bool found = false;
+
+	while (!found) {
+
+		if (up) {
+			pos.z--;
+			pos.y++;
+		} else {
+			pos.z++;
+		}
+
+		if (0 <= pos.z && pos.z < MAP_MAX_LAYERS) {
+
+			Tile* tile = g_game.getTile(pos);
+
+			if (tile && tile->ground) {
+				found = true;
+
+			} else  {
+
+				if (up) {
+					pos.y--;
+				}
+
+				if (itemId > 0) {
+					tile = g_game.getTile(pos);
+
+					if (tile) {
+						Item* item = tile->getTopTopItem();
+
+						if (!item || item->getID() != itemId)
+							break;
+
+					} else
+						break;
+				}
+			}
+
+		} else
+			break;
+	}
+
+	if (!found) {
+		return 1;
+	}
 
 	ScriptEnviroment* env = getScriptEnv();
 

@@ -350,6 +350,7 @@ protected:
 	static int luaDoSendDefaultCancel(lua_State *L);
 	static int luaDoPlayerSetIdleTime(lua_State *L);
 	static int luaDoTeleportThing(lua_State *L);
+	static int luaDoTeleportUpOrDown(lua_State *L);
 	static int luaDoTransformItem(lua_State *L);
 	static int luaDoSendMagicEffect(lua_State *L);
 	static int luaDoSendDistanceShoot(lua_State *L);
