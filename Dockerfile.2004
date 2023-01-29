@@ -1,0 +1,17 @@
+FROM ubuntu:20.04
+
+RUN export DEBIAN_FRONTEND=noninteractive \
+	&& ln -fs /usr/share/zoneinfo/UTC /etc/localtime
+
+RUN apt-get update && apt-get install -y tzdata build-essential cmake software-properties-common
+RUN dpkg-reconfigure --frontend noninteractive tzdata
+RUN apt-get install -y libmysqlclient-dev libsqlite3-dev libboost-all-dev libgmp3-dev \
+	liblua5.1-dev libxml2-dev
+# mysql-server
+
+RUN add-apt-repository -y ppa:ubuntu-toolchain-r/test && apt-get install -y g++-11
+RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-11 20 && \
+	update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-11 20 && \
+	update-alternatives --install /usr/bin/cpp cpp /usr/bin/cpp-11 20
+
+RUN apt-get clean && apt-get autoclean
