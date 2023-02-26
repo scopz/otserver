@@ -18,8 +18,18 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8 */;
 
 --
--- Database: `tls`
+-- Database: `tibia`
 --
+
+CREATE DATABASE IF NOT EXISTS `tibia` DEFAULT CHARACTER SET utf8 COLLATE utf8_spanish_ci;
+USE `tibia`;
+
+--
+-- User: `tibuser`
+--
+
+CREATE USER 'tibuser'@'localhost' IDENTIFIED BY 'pKalM24Nas';
+GRANT ALL PRIVILEGES ON tibia.* TO 'tibuser'@'localhost';
 
 -- --------------------------------------------------------
 
