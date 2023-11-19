@@ -10,3 +10,6 @@ RUN apt-get install -y libmysqlclient-dev libsqlite3-dev libboost-all-dev libgmp
 # mysql-server
 
 RUN apt-get clean && apt-get autoclean
+
+ENV PATH="/otserver:${PATH}"
+VOLUME /otserver

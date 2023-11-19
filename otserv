@@ -1,1 +1,15 @@
-./build/src/otserv
+#!/bin/bash
+
+if [ -f "/.dockerenv" ] || [ -f "/.dockerinit" ]; then
+  cd "/otserver"
+  ./build/src/otserv
+else
+  echo "# Running command on docker container 'ots'"
+
+  if [ "$(docker inspect -f '{{.State.Running}}' "ots")" = "false" ]; then
+    echo "# Starting container"
+    docker start ots > /dev/null
+  fi
+
+  docker exec ots /otserver/otserv
+fi
