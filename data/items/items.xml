@@ -5775,7 +5775,6 @@
 		<attribute key="damageType" value="thrust"/>
 		<attribute key="ammoType" value="bolt"/>
 		<attribute key="shootType" value="bolt"/>
-		<attribute key="maxHitChance" value="90"/>
 		<attribute key="ammoAction" value="removecount"/>
 		<attribute key="maxstack" value="250"/>
 	</item>
@@ -5787,7 +5786,6 @@
 		<attribute key="damageType" value="thrust"/>
 		<attribute key="ammoType" value="arrow"/>
 		<attribute key="shootType" value="arrow"/>
-		<attribute key="maxHitChance" value="90"/>
 		<attribute key="ammoAction" value="removecount"/>
 		<attribute key="maxstack" value="250"/>
 	</item>
@@ -5799,7 +5797,6 @@
 		<attribute key="damageType" value="poison"/>
 		<attribute key="ammoType" value="arrow"/>
 		<attribute key="shootType" value="poisonarrow"/>
-		<attribute key="maxHitChance" value="90"/>
 		<attribute key="ammoAction" value="removecount"/>
 		<attribute key="maxstack" value="250"/>
 	</item>
@@ -5822,7 +5819,6 @@
 		<attribute key="damageType" value="thrust"/>
 		<attribute key="ammoType" value="bolt"/>
 		<attribute key="shootType" value="powerbolt"/>
-		<attribute key="maxHitChance" value="90"/>
 		<attribute key="ammoAction" value="removecount"/>
 		<attribute key="maxstack" value="250"/>
 	</item>

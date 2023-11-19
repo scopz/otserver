@@ -749,7 +749,7 @@ int32_t WeaponMelee::getWeaponDamage(const Player* player, const Creature* targe
 	}
 
 	if (player->getFightMode() == FIGHTMODE_ATTACK)
-		return -random_range(0, maxValue, DISTRO_CUSTOM_ATTACK, 0.45, 0.1);
+		return -random_range(0, maxValue, DISTRO_CUSTOM_ATTACK, 0.9, 0);
 	else
 		return -random_range(0, maxValue);
 }
@@ -824,9 +824,9 @@ bool WeaponDistance::configureWeapon(const ItemType& it)
 	if(it.maxHitChance > 0){
 		maxHitChance = it.maxHitChance;
 	} else if (it.amuType != AMMO_NONE) {
-		maxHitChance = 90; // default hit chance on two-handed weapons is limited to 90%
+		maxHitChance = 96; // default hit chance on two-handed weapons is limited to 96%
 	} else {
-		maxHitChance = 83; // default one-handed is set to 83%
+		maxHitChance = 90; // default one-handed is set to 90%
 	}
 
 	if(it.breakChance > 0){
@@ -889,7 +889,7 @@ bool WeaponDistance::useWeapon(Player* player, Item* item, Creature* target) con
 		}
 
 		if (distanceFactor > 0) {
-			float skillFactor = (skill-30)/60.f; // (90 - 30) = 60
+			float skillFactor = (skill-20)/60.f; // (80 - 20) = 60
 			if (skillFactor > 1)      skillFactor = 1.f;
 			else if (skillFactor < 0) skillFactor = 0.f;
 
@@ -1002,7 +1002,7 @@ int32_t WeaponDistance::getWeaponDamage(const Player* player, const Creature* ta
 	}
 
 	if (player->getFightMode() == FIGHTMODE_ATTACK)
-		return -random_range(minValue, maxValue, DISTRO_CUSTOM_ATTACK, 0.45, 0.1);
+		return -random_range(minValue, maxValue, DISTRO_CUSTOM_ATTACK, 0.9, 0);
 	else
 		return -random_range(minValue, maxValue);
 }

@@ -289,6 +289,13 @@ int random_range(int lowest_number, int highest_number, DistributionType_t type 
 		return lowest_number + (int)((float)range * value);
 	}
 	else if(type == DISTRO_CUSTOM_ATTACK){
+// maxDeviation defines normal scaling.
+// in a damage range 0-100 and maxDeviation at 0.2,
+// damage in range 80-100 will only happen if the random generated is in between 0.8-1
+
+// deviation defines lowest damage, and will scale proportionally until 1-maxDeviation
+// in a damage range 0-100 with deviation 0.4 output damage will be between 40-100 if maxDeviation is 0
+
 		float value = rand()/(float)RAND_MAX;
 		if (value < 1-maxDeviation) {
 			value = value / (1-maxDeviation) * (1-deviation-maxDeviation) + deviation;
