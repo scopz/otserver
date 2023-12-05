@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 if [ -f "/.dockerenv" ] || [ -f "/.dockerinit" ]; then
   cd "/otserver"
@@ -11,5 +11,5 @@ else
     docker start ots > /dev/null
   fi
 
-  docker exec ots /otserver/otserv
+  docker exec -it ots otserv
 fi
