@@ -1090,10 +1090,11 @@ void ValueCallback::getMinMaxValues(Player* player, int32_t& min, int32_t& max, 
 		switch(type){
 			case FORMULA_LEVELMAGIC:
 			{
-				//"onGetPlayerMinMaxValues"(cid, level, maglevel)
+				//"onGetPlayerMinMaxValues"(cid, level, maglevel, vocation)
 				lua_pushnumber(L, player->getLevel());
 				lua_pushnumber(L, player->getMagicLevel());
-				parameters += 2;
+				lua_pushnumber(L, player->getVocation()->getBaseVocation());
+				parameters += 3;
 				isMagicFormula = true;
 				break;
 			}
