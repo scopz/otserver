@@ -21,6 +21,7 @@
 
 #include "weapons.h"
 #include "combat.h"
+#include "r/attack.h"
 #include "tools.h"
 #include "configmanager.h"
 #include <libxml/xmlmemory.h>
@@ -430,20 +431,18 @@ bool Weapon::useFist(Player* player, Creature* target)
 		int32_t attackSkill = player->getSkillLevel(SKILL_FIST);
 		int32_t attackValue = g_config.getNumber(ConfigManager::FIST_STRENGTH);
 
-		int32_t maxDamage = Weapons::getMaxWeaponDamage(player->getLevel(), attackSkill, attackValue, attackFactor);
+		int32_t damage = Weapons::getMaxWeaponDamage(player->getLevel(), attackSkill, attackValue, attackFactor);
 
 		Vocation* vocation = player->getVocation();
 		if(vocation && vocation->getMeleeBaseDamage(WEAPON_NONE) != 1.0){
-			maxDamage = int32_t(maxDamage * vocation->getMeleeBaseDamage(WEAPON_NONE));
+			damage = int32_t(damage * vocation->getMeleeBaseDamage(WEAPON_NONE));
 		}
-
-		int32_t damage = -random_range(0, maxDamage);
 
 		CombatParams params;
 		params.combatType = COMBAT_PHYSICALDAMAGE;
 		params.blockedByArmor = true;
 		params.blockedByShield = true;
-		Combat::doCombatHealth(player, target, damage, damage, params);
+		Attack::playerAutoattack(player, target, nullptr, -damage, params);
 
 		if(!player->hasFlag(PlayerFlag_NotGainSkill)){
 			if(player->getAddAttackSkill()){
@@ -466,9 +465,8 @@ bool Weapon::internalUseWeapon(Player* player, Item* item, Creature* target, int
 		executeUseWeapon(player, var);
 
 	} else {
-		int32_t damage = (getWeaponDamage(player, target, item) * damageModifier) / 100;
-		Combat::doCombatHealth(player, target, damage, damage, params);
-		player->useActiveSpellAttack(target);
+		int32_t damage = getWeaponDamage(player, target, item) * damageModifier / 100;
+		Attack::playerAutoattack(player, target, this, damage, params);
 	}
 
 	if (g_config.getNumber(ConfigManager::REMOVE_AMMUNITION)) {
@@ -744,14 +742,7 @@ int32_t WeaponMelee::getWeaponDamage(const Player* player, const Creature* targe
 		maxValue = int32_t(maxValue * vocation->getMeleeBaseDamage(item->getWeaponType()));
 	}
 
-	if(maxDamage){
-		return -maxValue;
-	}
-
-	if (player->getFightMode() == FIGHTMODE_ATTACK)
-		return -random_range(0, maxValue, DISTRO_CUSTOM_ATTACK, 0.9, 0);
-	else
-		return -random_range(0, maxValue);
+	return -maxValue;
 }
 
 WeaponDistance::WeaponDistance(LuaScriptInterface* _interface) :
@@ -984,27 +975,7 @@ int32_t WeaponDistance::getWeaponDamage(const Player* player, const Creature* ta
 		maxValue = int32_t(maxValue * vocation->getMeleeBaseDamage(WEAPON_DIST));
 	}
 
-	if(maxDamage){
-		return -maxValue;
-	}
-
-	if(target){
-		if(target->getPlayer()){
-			minValue = (int32_t)std::ceil(player->getLevel() * 0.1);
-		}
-		else{
-			minValue = (int32_t)std::ceil(player->getLevel() * 0.2);
-		}
-	}
-
-	if(vocation && vocation->getMeleeBaseDamage(WEAPON_DIST) != 1.0){
-		minValue = int32_t(minValue * vocation->getMeleeBaseDamage(WEAPON_DIST));
-	}
-
-	if (player->getFightMode() == FIGHTMODE_ATTACK)
-		return -random_range(minValue, maxValue, DISTRO_CUSTOM_ATTACK, 0.9, 0);
-	else
-		return -random_range(minValue, maxValue);
+	return -maxValue;
 }
 
 bool WeaponDistance::getSkillType(const Player* player, const Item* item,

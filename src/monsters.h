@@ -71,7 +71,7 @@ struct spellBlock_t{
 	int32_t minCombatValue;
 	int32_t maxCombatValue;
 	bool combatSpell;
-	bool isMelee;
+	bool isAutoattack;
 };
 
 struct voiceBlock_t{

@@ -433,12 +433,10 @@ ReturnValue Combat::canDoCombat(const Creature* attacker, const Creature* target
 				if (attacker->getPlayer() || (attacker->isSummon() && attacker->getMaster()->getPlayer())) {
 					if (target->getPlayer()) {
 						return RET_YOUMAYNOTATTACKTHISPERSON;
-						std::cout << "RET_YOUMAYNOTATTACKTHISPERSON" << std::endl;
 					}
 
 					if (target->isSummon() && target->getMaster()->getPlayer()) {
 						return RET_YOUMAYNOTATTACKTHISCREATURE;
-						std::cout << "RET_YOUMAYNOTATTACKTHISCREATURE" << std::endl;
 					}
 				}
 			}
@@ -779,10 +777,8 @@ void Combat::postCombatEffects(Creature* caster, const Position& pos, const Comb
 void Combat::addDistanceEffect(Creature* caster, const Position& fromPos, const Position& toPos,
 	uint8_t effect)
 {
-	uint8_t distanceEffect = effect;
-
-	if(caster && distanceEffect != NM_ME_NONE){
-		g_game.addDistanceEffect(fromPos, toPos, distanceEffect);
+	if(caster && effect != NM_ME_NONE){
+		g_game.addDistanceEffect(fromPos, toPos, effect);
 	}
 }
 

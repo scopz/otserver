@@ -339,7 +339,7 @@ bool Monsters::deserializeSpell(xmlNodePtr node, spellBlock_t& sb, MonsterType* 
 	sb.minCombatValue = 0;
 	sb.maxCombatValue = 0;
 	sb.combatSpell = false;
-	sb.isMelee = false;
+	sb.isAutoattack = false;
 
 	std::string name = "";
 	std::string scriptName = "";
@@ -465,10 +465,12 @@ bool Monsters::deserializeSpell(xmlNodePtr node, spellBlock_t& sb, MonsterType* 
 			combat->setArea(area);
 		}
 
-		if(asLowerCaseString(name) == "melee"){
+		if(asLowerCaseString(name) == "melee" || asLowerCaseString(name) == "distance"){
+			bool distanceAttack = asLowerCaseString(name) == "distance";
 			int attack = 0;
 			int skill = 0;
-			sb.isMelee = true;
+			sb.isAutoattack = true;
+			sb.range = 1;
 			if(readXMLInteger(node, "attack", attack)){
 				if(readXMLInteger(node, "skill", skill)){
 					sb.minCombatValue = 0;
@@ -478,6 +480,21 @@ bool Monsters::deserializeSpell(xmlNodePtr node, spellBlock_t& sb, MonsterType* 
 
 			if(readXMLInteger(node, "speed", intValue)){
 				sb.speed = intValue;
+			}
+
+			if (distanceAttack) {
+				if(readXMLInteger(node, "range", intValue)){
+					sb.range = intValue;
+				}
+
+				if(readXMLString(node, "shootEffect", strValue)){
+					ShootType_t shoot = getShootType(strValue);
+					if(shoot != NM_SHOOT_UNK){
+						combat->setParam(COMBATPARAM_DISTANCEEFFECT, shoot);
+					} else {
+						std::cout << "Warning: [Monsters::deserializeSpell] - "  << description << " - Unknown shootEffect: " << strValue << std::endl;
+					}
+				}
 			}
 
 			ConditionType_t conditionType = CONDITION_NONE;
@@ -524,10 +541,9 @@ bool Monsters::deserializeSpell(xmlNodePtr node, spellBlock_t& sb, MonsterType* 
 				combat->setCondition(condition);
 			}
 
-			sb.range = 1;
 			combat->setParam(COMBATPARAM_COMBATTYPE, COMBAT_PHYSICALDAMAGE);
 			combat->setParam(COMBATPARAM_BLOCKEDBYARMOR, 1);
-			combat->setParam(COMBATPARAM_BLOCKEDBYSHIELD, 1);
+			combat->setParam(COMBATPARAM_BLOCKEDBYSHIELD, distanceAttack? 0 : 1);
 		}
 		else if(asLowerCaseString(name) == "physical"){
 			combat->setParam(COMBATPARAM_COMBATTYPE, COMBAT_PHYSICALDAMAGE);

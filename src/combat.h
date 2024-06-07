@@ -357,6 +357,8 @@ protected:
 	double maxb;
 
 	AreaCombat* area;
+
+	friend class Attack;
 };
 
 class MagicField : public Item{

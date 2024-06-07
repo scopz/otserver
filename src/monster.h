@@ -136,7 +136,7 @@ private:
 
 	MonsterType* mType;
 
-	int64_t lastMeleeAttack;
+	int64_t lastAutoattack;
 
 	int32_t minCombatValue;
 	int32_t maxCombatValue;

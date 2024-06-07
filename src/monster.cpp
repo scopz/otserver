@@ -24,6 +24,7 @@
 #include "game.h"
 #include "spells.h"
 #include "combat.h"
+#include "r/attack.h"
 #include "spawn.h"
 #include "configmanager.h"
 #include "party.h"
@@ -75,7 +76,7 @@ Creature()
 	internalLight.level = mType->lightLevel;
 	internalLight.color = mType->lightColor;
 
-	lastMeleeAttack = 0;
+	lastAutoattack = 0;
 
 	minCombatValue = 0;
 	maxCombatValue = 0;
@@ -991,7 +992,7 @@ bool Monster::doAttacking(uint32_t interval)
 			break;
 		}
 		
-		if(it->isMelee && isFleeing()){
+		if(it->isAutoattack && isFleeing()){
 			continue;
 		}
 		
@@ -1018,9 +1019,12 @@ bool Monster::doAttacking(uint32_t interval)
 
 				minCombatValue = it->minCombatValue;
 				maxCombatValue = it->maxCombatValue;
-				it->spell->castSpell(this, attackedCreature);
-				if(it->isMelee){
-					lastMeleeAttack = OTSYS_TIME();
+				if(it->isAutoattack) {
+					CombatSpell* combatSpell = dynamic_cast<CombatSpell*>(it->spell);
+					Attack::monsterAutoattack(this, attackedCreature, combatSpell->getCombat());
+					lastAutoattack = OTSYS_TIME();
+				} else {
+					it->spell->castSpell(this, attackedCreature);
 				}
 #ifdef __DEBUG__
 				static uint64_t prevTicks = OTSYS_TIME();
@@ -1067,9 +1071,9 @@ bool Monster::canUseSpell(const Position& pos, const Position& targetPos,
 	if (isFleeing()) {
 		spell_interval = 1000;
 	} else {
-		if (std::max(std::abs(pos.x - targetPos.x), std::abs(pos.y - targetPos.y)) <= 1) {
+		if (std::max(std::abs(pos.x - targetPos.x), std::abs(pos.y - targetPos.y)) <= (int32_t)sb.range) {
 			// only monsters that actually melee attack, but since all at melee range no fleeing will we set as default
-			spell_interval = sb.isMelee? sb.speed : 2000;
+			spell_interval = sb.isAutoattack? sb.speed : 2000;
 		} else {
 			if (!hasFollowPath) {
 				// monster has no path to reach ideal range (< 4 for range, 0 for melee)
@@ -1085,12 +1089,12 @@ bool Monster::canUseSpell(const Position& pos, const Position& targetPos,
 		}
 	}
 
-	if (sb.isMelee && OTSYS_TIME() - lastMeleeAttack < spell_interval) {
+	if (sb.isAutoattack && OTSYS_TIME() - lastAutoattack < spell_interval) {
 		resetTicks = false;
 		return false;
 	}
 	
-	if (!sb.isMelee) {
+	if (!sb.isAutoattack) {
 		if (spell_interval > attackTicks) {
 			resetTicks = false;
 			return false;
@@ -1158,7 +1162,7 @@ void Monster::onThinkDefense(uint32_t interval)
 			} else {
 				if (std::max(std::abs(pos.x - targetPos.x), std::abs(pos.y - targetPos.y)) <= 1) {
 					// only monsters that actually melee attack, but since all at melee range not fleeing will, we set as default
-					spell_interval = it->isMelee? it->speed : 2000;
+					spell_interval = it->isAutoattack? it->speed : 2000;
 				} else {
 					if (!hasFollowPath) {
 						// monster has no path to reach ideal range (< 4 for range, 0 for melee)
