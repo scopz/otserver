@@ -18,7 +18,6 @@
 //////////////////////////////////////////////////////////////////////
 
 #include "definitions.h"
-#include <boost/shared_ptr.hpp>
 #include <string>
 #include <map>
 
@@ -31,7 +30,7 @@ public:
 	Position pos;
 };
 
-typedef boost::shared_ptr<Waypoint> Waypoint_ptr;
+typedef std::shared_ptr<Waypoint> Waypoint_ptr;
 
 class Waypoints {
 public:

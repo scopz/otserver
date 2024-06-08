@@ -25,7 +25,6 @@
 #include "networkmessage.h"
 #include "connection.h"
 #include "tools.h"
-#include <boost/shared_ptr.hpp>
 #include <iostream>
 #include <list>
 
@@ -168,7 +167,7 @@ protected:
 	OutputMessageState m_state;
 };
 
-typedef boost::shared_ptr<OutputMessage> OutputMessage_ptr;
+typedef std::shared_ptr<OutputMessage> OutputMessage_ptr;
 
 class OutputMessagePool
 {

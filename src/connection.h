@@ -23,21 +23,20 @@
 
 #include "definitions.h"
 #include <list>
+#include <memory>
 #include <boost/asio.hpp>
 #include <boost/utility.hpp>
-#include <boost/shared_ptr.hpp>
-#include <boost/enable_shared_from_this.hpp>
 #include "networkmessage.h"
 
 class Protocol;
 class OutputMessage;
-typedef boost::shared_ptr<OutputMessage> OutputMessage_ptr;
+typedef std::shared_ptr<OutputMessage> OutputMessage_ptr;
 class Connection;
-typedef boost::shared_ptr<Connection> Connection_ptr;
+typedef std::shared_ptr<Connection> Connection_ptr;
 class ServiceBase;
-typedef boost::shared_ptr<ServiceBase> Service_ptr;
+typedef std::shared_ptr<ServiceBase> Service_ptr;
 class ServicePort;
-typedef boost::shared_ptr<ServicePort> ServicePort_ptr;
+typedef std::shared_ptr<ServicePort> ServicePort_ptr;
 
 #ifdef __DEBUG_NET__
 #define PRINT_ASIO_ERROR(desc) \
@@ -74,7 +73,7 @@ protected:
 	std::recursive_mutex m_connectionManagerLock;
 };
 
-class Connection : public boost::enable_shared_from_this<Connection>, boost::noncopyable
+class Connection : public std::enable_shared_from_this<Connection>, boost::noncopyable
 {
 public:
 #ifdef __ENABLE_SERVER_DIAGNOSTIC__
@@ -150,8 +149,8 @@ private:
 	void handleReadError(const boost::system::error_code& error);
 	void handleWriteError(const boost::system::error_code& error);
 
-	static void handleReadTimeout(boost::weak_ptr<Connection> weak_conn, const boost::system::error_code& error);
-	static void handleWriteTimeout(boost::weak_ptr<Connection> weak_conn, const boost::system::error_code& error);
+	static void handleReadTimeout(std::weak_ptr<Connection> weak_conn, const boost::system::error_code& error);
+	static void handleWriteTimeout(std::weak_ptr<Connection> weak_conn, const boost::system::error_code& error);
 
 	void closeConnectionTask();
 	void deleteConnectionTask();

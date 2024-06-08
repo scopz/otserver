@@ -25,10 +25,10 @@
 #include "position.h"
 #include "housetile.h"
 #include "player.h"
-#include <boost/regex.hpp>
 #include <string>
 #include <list>
 #include <map>
+#include <regex>
 
 
 class House;
@@ -54,7 +54,7 @@ private:
 	typedef std::list< std::pair<uint32_t, std::string> > GuildList;
 
 	typedef std::list<std::string> ExpressionList;
-	typedef std::list<std::pair<boost::regex, bool> > RegExList;
+	typedef std::list<std::pair<std::regex, bool> > RegExList;
 	std::string list;
 	PlayerList playerList;
 	GuildList guildList;

@@ -24,21 +24,20 @@
 #include "definitions.h"
 #include <boost/asio.hpp>
 #include <boost/utility.hpp>
-#include <boost/enable_shared_from_this.hpp>
 #include <iostream>
 #include <list>
 #include <map>
 
 class Connection;
-typedef boost::shared_ptr<Connection> Connection_ptr;
+typedef std::shared_ptr<Connection> Connection_ptr;
 class Protocol;
 class NetworkMessage;
 
 class ServiceBase;
 class ServicePort;
 
-typedef boost::shared_ptr<ServiceBase> Service_ptr;
-typedef boost::shared_ptr<ServicePort> ServicePort_ptr;
+typedef std::shared_ptr<ServiceBase> Service_ptr;
+typedef std::shared_ptr<ServicePort> ServicePort_ptr;
 
 // The Service class is very thin, it's only real job is to create dynamic
 // dispatch of the protocol attributes, which would otherwise be very hard,
@@ -73,13 +72,13 @@ public:
 // It accepts connections, and asks each Service running
 // on it if it can accept the connection, and if so passes
 // it on to the service
-class ServicePort : boost::noncopyable, public boost::enable_shared_from_this<ServicePort>
+class ServicePort : boost::noncopyable, public std::enable_shared_from_this<ServicePort>
 {
 public:
 	ServicePort(boost::asio::io_service& io_service);
 	~ServicePort();
 
-	static void openAcceptor(boost::weak_ptr<ServicePort> weak_service, uint16_t port);
+	static void openAcceptor(std::weak_ptr<ServicePort> weak_service, uint16_t port);
 	void open(uint16_t port);
 	void close();
 	bool is_single_socket() const;
@@ -103,7 +102,7 @@ protected:
 	static bool m_logError;
 };
 
-typedef boost::shared_ptr<ServicePort> ServicePort_ptr;
+typedef std::shared_ptr<ServicePort> ServicePort_ptr;
 
 // The ServiceManager simply manages all services and handles startup/closing
 class ServiceManager : boost::noncopyable

@@ -166,8 +166,8 @@ int main(int argc, char** argv)
 
 	// Redirect streams if we need to
 	// use shared_ptr to guarantee file closing no matter what happens
-	boost::shared_ptr<std::ofstream> logfile;
-	boost::shared_ptr<std::ofstream> errfile;
+	std::shared_ptr<std::ofstream> logfile;
+	std::shared_ptr<std::ofstream> errfile;
 	if(g_command_opts.logfile != ""){
 		logfile.reset(new std::ofstream(g_command_opts.logfile.c_str(),
 			(g_command_opts.truncate_log? std::ios::trunc : std::ios::app) | std::ios::out)

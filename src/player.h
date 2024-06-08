@@ -30,6 +30,7 @@
 #include "enums.h"
 #include "vocation.h"
 #include "protocolgame.h"
+#include <functional>
 #include <vector>
 #include <ctime>
 #include <algorithm>

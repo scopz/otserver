@@ -38,7 +38,6 @@
 #include "ioaccount.h"
 #include "connection.h"
 #include "creatureevent.h"
-#include <boost/function.hpp>
 #include <string>
 #include <iostream>
 #include <sstream>

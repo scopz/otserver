@@ -24,14 +24,14 @@
 #include "definitions.h"
 #include <cstdio>
 #include <cstring>
+#include <memory>
 #include <boost/utility.hpp>
-#include <boost/shared_ptr.hpp>
 
 class NetworkMessage;
 class OutputMessage;
 class Connection;
-typedef boost::shared_ptr<OutputMessage> OutputMessage_ptr;
-typedef boost::shared_ptr<Connection> Connection_ptr;
+typedef std::shared_ptr<OutputMessage> OutputMessage_ptr;
+typedef std::shared_ptr<Connection> Connection_ptr;
 class RSA;
 
 // Beware! This server is optimized to work with 7.72 protocol only

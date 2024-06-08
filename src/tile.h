@@ -26,7 +26,7 @@
 #include "definitions.h"
 #include "cylinder.h"
 #include "item.h"
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 class Creature;
 class Teleport;
@@ -39,7 +39,7 @@ class BedItem;
 typedef std::vector<Creature*> CreatureVector;
 typedef std::list<Creature*> SpectatorVec;
 typedef std::list<Player*> PlayerList;
-typedef std::map<Position, boost::shared_ptr<SpectatorVec> > SpectatorCache;
+typedef std::map<Position, std::shared_ptr<SpectatorVec> > SpectatorCache;
 typedef std::vector<Item*> ItemVector;
 
 enum tileflags_t{

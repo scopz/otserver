@@ -25,7 +25,7 @@
 #include "otsystem.h"
 #include "const.h"
 #include <string>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 class Item;
 class Creature;
@@ -224,6 +224,6 @@ protected:
 	uint8_t m_MsgBuf[NETWORKMESSAGE_MAXSIZE];
 };
 
-typedef boost::shared_ptr<NetworkMessage> NetworkMessage_ptr;
+typedef std::shared_ptr<NetworkMessage> NetworkMessage_ptr;
 
 #endif // #ifndef __NETWORK_MESSAGE_H__

@@ -463,7 +463,7 @@ const SpectatorVec& Map::getSpectators(const Position& centerPos)
 			return *it->second;
 		}
 		else{
-			boost::shared_ptr<SpectatorVec> p(new SpectatorVec());
+			std::shared_ptr<SpectatorVec> p(new SpectatorVec());
 			spectatorCache[centerPos] = p;
 			SpectatorVec& list = *p;
 
@@ -505,7 +505,7 @@ const SpectatorVec& Map::getSpectators(const Position& centerPos)
 		}
 	}
 	else{
-		boost::shared_ptr<SpectatorVec> p(new SpectatorVec());
+		std::shared_ptr<SpectatorVec> p(new SpectatorVec());
 		SpectatorVec& list = *p;
 		return list;
 	}

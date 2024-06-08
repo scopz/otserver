@@ -93,7 +93,7 @@ private:
 	RuleViolation(const RuleViolation&);
 };
 
-typedef std::map< uint32_t, shared_ptr<RuleViolation> > RuleViolationsMap;
+typedef std::map< uint32_t, std::shared_ptr<RuleViolation> > RuleViolationsMap;
 typedef std::vector<Player*> PlayerVector;
 
 #define EVENT_LIGHTINTERVAL  10000

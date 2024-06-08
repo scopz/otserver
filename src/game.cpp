@@ -3666,7 +3666,7 @@ bool Game::playerReportRuleViolation(Player* player, const std::string& text)
 
 	cancelRuleViolation(player);
 
-	shared_ptr<RuleViolation> rvr(new RuleViolation(
+	std::shared_ptr<RuleViolation> rvr(new RuleViolation(
 		player,
 		text,
 		std::time(NULL)

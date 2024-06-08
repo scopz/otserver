@@ -29,12 +29,11 @@
 #include "tools.h"
 #include "tile.h"
 #include "waypoints.h"
-#include <boost/shared_ptr.hpp>
 #include <queue>
 #include <bitset>
 #include <map>
-
-using boost::shared_ptr;
+#include <functional>
+#include <memory>
 
 class Creature;
 class Player;
