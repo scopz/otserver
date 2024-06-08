@@ -30,7 +30,6 @@
 #include <fstream>
 #include <ctime>
 #include <boost/pool/pool.hpp>
-#include <boost/thread.hpp>
 
 template<typename T>
 class dummyallocator {
@@ -253,7 +252,7 @@ private:
 		dummyallocator<std::pair<const size_t, t_PoolStats* > > > PoolsStats;
 	PoolsStats poolsStats;
 	#endif
-	boost::recursive_mutex poolLock;
+	std::recursive_mutex poolLock;
 };
 
 #endif

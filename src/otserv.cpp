@@ -23,15 +23,16 @@
 #include "server.h"
 #include "ioplayer.h"
 #include "game.h"
-#include <boost/thread.hpp>
 #include <boost/asio.hpp>
-#include <string>
-#include <iostream>
-#include <iomanip>
-#include <sstream>
-#include <fstream>
 #include <cstdlib>
+#include <condition_variable>
 #include <ctime>
+#include <fstream>
+#include <iomanip>
+#include <iostream>
+#include <mutex>
+#include <sstream>
+#include <string>
 
 #if !defined(__WINDOWS__)
 	#include <unistd.h> // for access()
@@ -73,9 +74,9 @@ Vocations g_vocations;
 IPList serverIPs;
 Guilds g_guilds;
 
-boost::mutex g_loaderLock;
-boost::condition_variable g_loaderSignal;
-boost::unique_lock<boost::mutex> g_loaderUniqueLock(g_loaderLock);
+std::mutex g_loaderLock;
+std::condition_variable g_loaderSignal;
+std::unique_lock<std::mutex> g_loaderUniqueLock(g_loaderLock);
 
 extern AdminProtocolConfig* g_adminConfig;
 
@@ -191,7 +192,7 @@ int main(int argc, char** argv)
 #endif
 #ifdef __OTSERV_ALLOCATOR_STATS__
 	// This keeps track of all allocations, can be used to find memory leak
-	boost::thread(std::bind(&allocatorStatsThread, (void*)NULL));
+	std::thread(std::bind(&allocatorStatsThread, (void*)NULL));
 #endif
 
 	std::cout << "::" << std::endl;
@@ -257,7 +258,7 @@ int main(int argc, char** argv)
 	// Wait for loading to finish
 	g_loaderSignal.wait(g_loaderUniqueLock);
 
-	boost::this_thread::sleep(boost::posix_time::milliseconds(1000));
+	std::this_thread::sleep_for(std::chrono::milliseconds(1000));
 
 	if(servicer.is_running()){
 		std::cout << "[done]" << std::endl;

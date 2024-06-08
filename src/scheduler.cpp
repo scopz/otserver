@@ -32,7 +32,7 @@ Scheduler::Scheduler()
 void Scheduler::start()
 {
 	m_threadState = STATE_RUNNING;
-	m_thread = boost::thread(std::bind(&Scheduler::schedulerThread, (void*)this));
+	m_thread = std::thread(std::bind(&Scheduler::schedulerThread, (void*)this));
 }
 
 void Scheduler::schedulerThread(void* p)
@@ -43,7 +43,7 @@ void Scheduler::schedulerThread(void* p)
 	schedulerExceptionHandler.InstallHandler();
 
 	// NOTE: second argument defer_lock is to prevent from immediate locking
-	boost::unique_lock<boost::mutex> eventLockUnique(scheduler->m_eventLock, boost::defer_lock);
+	std::unique_lock<std::mutex> eventLockUnique(scheduler->m_eventLock, std::defer_lock);
 
 	while(scheduler->m_threadState != STATE_TERMINATED){
 		SchedulerTask* task = NULL;
@@ -63,7 +63,8 @@ void Scheduler::schedulerThread(void* p)
 			#ifdef __DEBUG_SCHEDULER__
 			std::cout << "Scheduler: Waiting for event" << std::endl;
 			#endif
-			ret = scheduler->m_eventSignal.timed_wait(eventLockUnique, scheduler->m_eventList.top()->getCycle());
+			std::cv_status status = scheduler->m_eventSignal.wait_until(eventLockUnique, scheduler->m_eventList.top()->getCycle());
+			ret = status != std::cv_status::timeout;
 		}
 
 		#ifdef __DEBUG_SCHEDULER__

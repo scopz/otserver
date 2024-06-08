@@ -23,9 +23,9 @@
 
 #include "definitions.h"
 #include "creature.h"
-#include <boost/thread.hpp>
 #include <set>
 #include <map>
+#include <mutex>
 
 template<class T> class AutoList
 {
@@ -53,7 +53,7 @@ public:
 class AutoID {
 public:
 	AutoID() {
-		boost::recursive_mutex::scoped_lock lockClass(autoIDLock);
+		std::lock_guard<std::recursive_mutex> lockClass(autoIDLock);
 		count++;
 		if(count >= 0xFFFFFF)
 			count = 1000;
@@ -76,7 +76,7 @@ public:
 	typedef std::set<uint32_t> list_type;
 
 	uint32_t auto_id;
-	static boost::recursive_mutex autoIDLock;
+	static std::recursive_mutex autoIDLock;
 
 protected:
 	static uint32_t count;

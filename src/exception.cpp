@@ -20,7 +20,6 @@
 
 #include "otpch.h"
 
-#include <boost/thread.hpp>
 #include <iostream>
 #include <fstream>
 #include <iomanip>

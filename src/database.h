@@ -22,7 +22,8 @@
 #define __OTSERV_DATABASE_H__
 
 #include "definitions.h"
-#include <boost/thread.hpp>
+#include <map>
+#include <mutex>
 #include <sstream>
 
 #ifdef MULTI_SQL_DRIVERS
@@ -257,7 +258,7 @@ public:
 	virtual ~DBQuery();
 
 protected:
-	static boost::recursive_mutex database_lock;
+	static std::recursive_mutex database_lock;
 };
 
 /**

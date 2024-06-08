@@ -23,8 +23,9 @@
 
 #include "definitions.h"
 #include "enums.h"
-#include <boost/thread.hpp>
 #include <list>
+#include <map>
+#include <mutex>
 #include <vector>
 
 enum BanType_t {
@@ -102,7 +103,7 @@ public:
 	uint32_t getNotationsCount(uint32_t account);
 	std::vector<Ban> getBans(BanType_t type);
 protected:
-	mutable boost::recursive_mutex banLock;
+	mutable std::recursive_mutex banLock;
 
 	IpLoginMap ipLoginMap;
 	IpConnectMap ipConnectMap;

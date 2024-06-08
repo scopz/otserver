@@ -24,9 +24,13 @@
 #include "definitions.h"
 #include "tasks.h"
 #include "otsystem.h"
-#include <vector>
+#include <cassert>
+#include <condition_variable>
+#include <mutex>
 #include <queue>
 #include <set>
+#include <thread>
+#include <vector>
 
 #define SCHEDULER_MINTICKS 50
 
@@ -38,7 +42,7 @@ public:
 	void setEventId(uint32_t eventid) {m_eventid = eventid;}
 	uint32_t getEventId() const {return m_eventid;}
 
-	boost::system_time getCycle() const {return m_expiration;}
+	std::chrono::system_clock::time_point getCycle() const {return m_expiration;}
 
 	bool operator<(const SchedulerTask& other) const
 	{
@@ -97,9 +101,9 @@ public:
 protected:
 	static void schedulerThread(void* p);
 
-	boost::thread m_thread;
-	boost::mutex m_eventLock;
-	boost::condition_variable m_eventSignal;
+	std::thread m_thread;
+	std::mutex m_eventLock;
+	std::condition_variable m_eventSignal;
 
 	uint32_t m_lastEventId;
 	std::priority_queue<SchedulerTask*, std::vector<SchedulerTask*>, lessSchedTask > m_eventList;

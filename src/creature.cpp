@@ -39,7 +39,7 @@
 #include "exception.h"
 #endif
 
-boost::recursive_mutex AutoID::autoIDLock;
+std::recursive_mutex AutoID::autoIDLock;
 uint32_t AutoID::count = 1000;
 AutoID::list_type AutoID::list;
 

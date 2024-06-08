@@ -42,7 +42,7 @@
 extern ConfigManager g_config;
 #endif
 
-boost::recursive_mutex DBQuery::database_lock;
+std::recursive_mutex DBQuery::database_lock;
 
 Database* _Database::_instance = NULL;
 

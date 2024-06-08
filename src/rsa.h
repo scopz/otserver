@@ -24,8 +24,8 @@
 
 #include "definitions.h"
 #include "gmp.h"
+#include <mutex>
 #include <string.h>
-#include <boost/thread.hpp>
 
 class RSA{
 public:
@@ -43,7 +43,7 @@ protected:
 
 	bool m_keySet;
 
-	boost::recursive_mutex rsaLock;
+	std::recursive_mutex rsaLock;
 
 	//use only GMP
 	mpz_t m_p, m_q, m_u, m_d, m_dp, m_dq, m_mod;

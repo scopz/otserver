@@ -129,7 +129,7 @@ AC_CHECK_LIB(gmp, __gmpz_init2, ,[AC_MSG_ERROR("Linking against GMP failed.")])
 AC_CHECK_LIB(boost_thread-gcc-mt, main, , [
 	AC_CHECK_LIB(boost_thread-mt, main, , [
 		AC_CHECK_LIB(boost_thread, main, , [
-			AC_MSG_ERROR("Linking against boost::thread library failed.")])
+			AC_MSG_ERROR("Linking against std::thread library failed.")])
 	])
 ])
 AC_CHECK_LIB(boost_regex-gcc-mt, main, , [
