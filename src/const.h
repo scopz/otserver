@@ -304,12 +304,13 @@ enum item_t {
 	ITEM_FEMALE_CORPSE	  = 3065,
 
 	ITEM_MEAT             = 2666,
+	ITEM_FISH             = 2667,
+	ITEM_SALMON           = 2668,
 	ITEM_HAM              = 2671,
-	ITEM_GRAPE            = 2681,
-	ITEM_APPLE            = 2674,
+	ITEM_ORANGE           = 2675,
+	ITEM_COCONUT          = 2678,
 	ITEM_BREAD            = 2689,
-	ITEM_ROLL             = 2690,
-	ITEM_CHEESE           = 2696,
+	ITEM_BROWN_MUSHROOM   = 2789,
 
 	ITEM_FULLSPLASH       = 2016,
 	ITEM_SMALLSPLASH      = 2019,

@@ -293,9 +293,10 @@
 		<vocation id="1"/>
 	</conjure>
 
-	<conjure name="Food" words="exevo pan" type="conjure" price="150" maglv="0" needlearn="1" lvl="14" mana="60" soul="1" selftarget="1" aggressive="0" function="conjureFood">
+	<conjure name="Food" words="exevo pan" type="conjure" price="150" maglv="0" needlearn="1" lvl="14" mana="40" soul="1" selftarget="1" aggressive="0" function="conjureFood">
 		<vocation id="1"/>
 		<vocation id="2"/>
+		<vocation id="3"/>
 	</conjure>
 	<conjure name="Ultimate Healing Rune" type="rune" words="adura vita" price="1500" maglv="11" needlearn="1" lvl="24" mana="400" soul="3" reagentId="2260" conjureId="2273" conjureCount="1" function="conjureRune">
 		<vocation id="1"/>
