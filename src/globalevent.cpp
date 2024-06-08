@@ -85,7 +85,7 @@ bool GlobalEvents::registerEvent(Event* event, xmlNodePtr)
 			if(timerEventId == 0)
 			{
 				timerEventId = g_scheduler.addEvent(createSchedulerTask(TIMER_INTERVAL,
-					boost::bind(&GlobalEvents::timer, this)));
+					std::bind(&GlobalEvents::timer, this)));
 			}
 			return true;
 		}
@@ -108,7 +108,7 @@ bool GlobalEvents::registerEvent(Event* event, xmlNodePtr)
 			if(thinkEventId == 0)
 			{
 				thinkEventId = g_scheduler.addEvent(createSchedulerTask(SCHEDULER_MINTICKS,
-					boost::bind(&GlobalEvents::think, this)));
+					std::bind(&GlobalEvents::think, this)));
 			}
 			return true;
 		}
@@ -137,7 +137,7 @@ void GlobalEvents::timer()
 	}
 
 	g_scheduler.addEvent(createSchedulerTask(TIMER_INTERVAL,
-		boost::bind(&GlobalEvents::timer, this)));
+		std::bind(&GlobalEvents::timer, this)));
 }
 
 void GlobalEvents::think()
@@ -154,7 +154,7 @@ void GlobalEvents::think()
 	}
 
 	g_scheduler.addEvent(createSchedulerTask(SCHEDULER_MINTICKS,
-		boost::bind(&GlobalEvents::think, this)));
+		std::bind(&GlobalEvents::think, this)));
 }
 
 void GlobalEvents::execute(GlobalEvent_t type)

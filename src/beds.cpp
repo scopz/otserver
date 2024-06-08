@@ -168,7 +168,7 @@ void BedItem::sleep(Player* player)
 
 		// make the player walk onto the bed and kick him
 		player->getTile()->moveCreature(player, getTile());
-		g_scheduler.addEvent(createSchedulerTask(SCHEDULER_MINTICKS, boost::bind(&Game::kickPlayer, &g_game, player->getID())));
+		g_scheduler.addEvent(createSchedulerTask(SCHEDULER_MINTICKS, std::bind(&Game::kickPlayer, &g_game, player->getID())));
 
 		// change self and partner's appearance
 		updateAppearance(player);

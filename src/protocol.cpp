@@ -103,7 +103,7 @@ void Protocol::releaseProtocol()
 	if(m_refCount > 0){
 		//Reschedule it and try again.
 		g_scheduler.addEvent( createSchedulerTask(SCHEDULER_MINTICKS,
-			boost::bind(&Protocol::releaseProtocol, this)));
+			std::bind(&Protocol::releaseProtocol, this)));
 	}
 	else{
 		deleteProtocolTask();

@@ -8047,7 +8047,7 @@ int LuaScriptInterface::luaAddEvent(lua_State *L)
 
 	script_interface->m_lastEventTimerId++;
 
-	eventDesc.eventId = g_scheduler.addEvent(createSchedulerTask(delay, boost::bind(&LuaScriptInterface::executeTimerEvent,
+	eventDesc.eventId = g_scheduler.addEvent(createSchedulerTask(delay, std::bind(&LuaScriptInterface::executeTimerEvent,
 		script_interface, script_interface->m_lastEventTimerId)));
 
 	script_interface->m_timerEvents[script_interface->m_lastEventTimerId] = eventDesc;
@@ -8204,7 +8204,7 @@ int LuaScriptInterface::luaDoReloadInfo(lua_State *L)
 	}
 	else{
 		g_dispatcher.addTask(
-			createTask(boost::bind(&Game::reloadInfo, &g_game, (reloadTypes_t)info)));
+			createTask(std::bind(&Game::reloadInfo, &g_game, (reloadTypes_t)info)));
 		lua_pushboolean(L, true);
 	}
 	return 1;

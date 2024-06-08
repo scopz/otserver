@@ -89,7 +89,7 @@ void ServiceManager::stop()
 		it != m_acceptors.end(); ++it)
 	{
 		try{
-			m_io_service.post(boost::bind(&ServicePort::onStopServer, it->second));
+			m_io_service.post(std::bind(&ServicePort::onStopServer, it->second));
 		}
 		catch(boost::system::system_error& e){
 			LOG_MESSAGE("NETWORK", LOGTYPE_ERROR, 1, e.what());
@@ -101,7 +101,7 @@ void ServiceManager::stop()
 
 	// Give the server 3 seconds to process all messages before death
 	death_timer.expires_from_now(boost::posix_time::seconds(3));
-	death_timer.async_wait(boost::bind(&ServiceManager::die, this));
+	death_timer.async_wait(std::bind(&ServiceManager::die, this));
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -150,8 +150,8 @@ void ServicePort::accept()
 		boost::asio::ip::tcp::socket* socket = new boost::asio::ip::tcp::socket(m_io_service);
 
 		m_acceptor->async_accept(*socket,
-			boost::bind(&ServicePort::onAccept, this, socket,
-			boost::asio::placeholders::error));
+			std::bind(&ServicePort::onAccept, this, socket,
+			std::placeholders::_1));
 	}
 	catch(boost::system::system_error& e){
 		if(m_logError){
@@ -212,7 +212,7 @@ void ServicePort::onAccept(boost::asio::ip::tcp::socket* socket, const boost::sy
 			if(!m_pendingStart){
 				m_pendingStart = true;
 				g_scheduler.addEvent(createSchedulerTask(5000,
-					boost::bind(&ServicePort::openAcceptor, boost::weak_ptr<ServicePort>(shared_from_this()), m_serverPort)));
+					std::bind(&ServicePort::openAcceptor, boost::weak_ptr<ServicePort>(shared_from_this()), m_serverPort)));
 			}
 		}
 		else{
@@ -287,7 +287,7 @@ void ServicePort::open(uint16_t port)
 
 		m_pendingStart = true;
 		g_scheduler.addEvent(createSchedulerTask(5000,
-			boost::bind(&ServicePort::openAcceptor, boost::weak_ptr<ServicePort>(shared_from_this()), port)));
+			std::bind(&ServicePort::openAcceptor, boost::weak_ptr<ServicePort>(shared_from_this()), port)));
 	}
 }
 

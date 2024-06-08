@@ -31,7 +31,6 @@
 #include "player.h"
 #include "configmanager.h"
 #include <boost/config.hpp>
-#include <boost/bind.hpp>
 #include <cstdio>
 #include <iomanip>
 #include <string>

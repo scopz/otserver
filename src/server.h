@@ -22,7 +22,6 @@
 #define __OTSERV_SERVER_H__
 
 #include "definitions.h"
-#include <boost/bind.hpp>
 #include <boost/asio.hpp>
 #include <boost/utility.hpp>
 #include <boost/enable_shared_from_this.hpp>

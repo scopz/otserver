@@ -3857,7 +3857,7 @@ bool Player::setAttackedCreature(Creature* creature)
 
 	if(creature){
 		g_dispatcher.addTask(createTask(
-			boost::bind(&Game::checkCreatureAttack, &g_game, getID())));
+			std::bind(&Game::checkCreatureAttack, &g_game, getID())));
 	}
 
 	return true;
@@ -4553,7 +4553,7 @@ void Player::addUnjustifiedDead(const Player* attacked)
 		if (g_bans.addPlayerBan(getName(), std::time(NULL) + g_config.getNumber(ConfigManager::BAN_LENGTH), 1 /* Type here your gamemaster ID */, "Automatic", "", 28, ACTION_BANISHMENT))
 		{
 			g_game.addMagicEffect(getPosition(), NM_ME_MAGIC_POISON);
-			g_scheduler.addEvent(createSchedulerTask(1000, boost::bind(&Player::kickPlayer, this)));
+			g_scheduler.addEvent(createSchedulerTask(1000, std::bind(&Player::kickPlayer, this)));
 		}
 	}
 

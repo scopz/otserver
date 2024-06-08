@@ -35,7 +35,7 @@ Dispatcher::Dispatcher()
 void Dispatcher::start()
 {
 	m_threadState = STATE_RUNNING;
-	m_thread = boost::thread(boost::bind(&Dispatcher::dispatcherThread, (void*)this));
+	m_thread = boost::thread(std::bind(&Dispatcher::dispatcherThread, (void*)this));
 }
 
 void Dispatcher::dispatcherThread(void* p)

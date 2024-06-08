@@ -455,11 +455,11 @@ bool TalkAction::forceRaid(Player* player, const std::string& words, const std::
 	uint32_t ticks = event->getDelay();
 	if(ticks > 0){
 		g_scheduler.addEvent(createSchedulerTask(ticks,
-			boost::bind(&Raid::executeRaidEvent, raid, event)));
+			std::bind(&Raid::executeRaidEvent, raid, event)));
 	}
 	else{
 		g_dispatcher.addTask(createTask(
-		boost::bind(&Raid::executeRaidEvent, raid, event)));
+		std::bind(&Raid::executeRaidEvent, raid, event)));
 	}
 
 	player->sendTextMessage(MSG_STATUS_CONSOLE_BLUE, "Raid started.");

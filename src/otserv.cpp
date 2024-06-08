@@ -191,7 +191,7 @@ int main(int argc, char** argv)
 #endif
 #ifdef __OTSERV_ALLOCATOR_STATS__
 	// This keeps track of all allocations, can be used to find memory leak
-	boost::thread(boost::bind(&allocatorStatsThread, (void*)NULL));
+	boost::thread(std::bind(&allocatorStatsThread, (void*)NULL));
 #endif
 
 	std::cout << "::" << std::endl;
@@ -252,7 +252,7 @@ int main(int argc, char** argv)
 	g_scheduler.start();
 
 	// Add load task
-	g_dispatcher.addTask(createTask(boost::bind(mainLoader, g_command_opts, &servicer)));
+	g_dispatcher.addTask(createTask(std::bind(mainLoader, g_command_opts, &servicer)));
 
 	// Wait for loading to finish
 	g_loaderSignal.wait(g_loaderUniqueLock);

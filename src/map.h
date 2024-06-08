@@ -84,7 +84,7 @@ private:
 	uint32_t curNode;
 };
 
-template<class T> class lessPointer : public std::binary_function<T*, T*, bool>
+template<class T> class lessPointer : public std::function<bool(T*, T*)>
 {
 public:
 	bool operator()(T*& t1, T*& t2) {

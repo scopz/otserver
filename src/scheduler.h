@@ -24,7 +24,6 @@
 #include "definitions.h"
 #include "tasks.h"
 #include "otsystem.h"
-#include <boost/bind.hpp>
 #include <vector>
 #include <queue>
 #include <set>
@@ -48,16 +47,16 @@ public:
 
 protected:
 
-	SchedulerTask(uint32_t delay, const boost::function<void (void)>& f) : Task(delay, f) {
+	SchedulerTask(uint32_t delay, const std::function<void (void)>& f) : Task(delay, f) {
 		m_eventid = 0;
 	}
 
 	uint32_t m_eventid;
 
-	friend SchedulerTask* createSchedulerTask(uint32_t, const boost::function<void (void)>&);
+	friend SchedulerTask* createSchedulerTask(uint32_t, const std::function<void (void)>&);
 };
 
-inline SchedulerTask* createSchedulerTask(uint32_t delay, const boost::function<void (void)>& f)
+inline SchedulerTask* createSchedulerTask(uint32_t delay, const std::function<void (void)>& f)
 {
 	assert(delay != 0);
 	if(delay < SCHEDULER_MINTICKS){
@@ -66,7 +65,7 @@ inline SchedulerTask* createSchedulerTask(uint32_t delay, const boost::function<
 	return new SchedulerTask(delay, f);
 }
 
-class lessSchedTask : public std::binary_function<SchedulerTask*&, SchedulerTask*&, bool>
+class lessSchedTask : public std::function<bool(SchedulerTask*&, SchedulerTask*&)>
 {
 public:
 	bool operator()(SchedulerTask*& t1, SchedulerTask*& t2)

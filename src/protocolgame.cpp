@@ -229,7 +229,7 @@ bool ProtocolGame::login(const std::string& name, bool isSetGM)
 			_player->isConnecting = true;
 			addRef();
 			eventConnect = g_scheduler.addEvent(
-				createSchedulerTask(1000, boost::bind(&ProtocolGame::connect, this, _player->getID(), true)));
+				createSchedulerTask(1000, std::bind(&ProtocolGame::connect, this, _player->getID(), true)));
 			return true;
 		}
 
@@ -364,7 +364,7 @@ bool ProtocolGame::parseFirstPacket(NetworkMessage& msg)
 	g_bans.addLoginAttempt(getIP(), true);
 
 	g_dispatcher.addTask(
-		createTask(boost::bind(&ProtocolGame::login, this, name, isSetGM)));
+		createTask(std::bind(&ProtocolGame::login, this, name, isSetGM)));
 
 	return true;
 }
@@ -415,11 +415,11 @@ void ProtocolGame::parsePacket(NetworkMessage &msg)
 
 	switch(recvbyte){
 	case 0x14: // logout
-		g_dispatcher.addTask(createTask(boost::bind(&ProtocolGame::logout, this, false)));
+		g_dispatcher.addTask(createTask(std::bind(&ProtocolGame::logout, this, false)));
 		break;
 
 	case 0x1E: // keep alive / ping response
-		g_dispatcher.addTask(createTask(boost::bind(&Game::playerReceivePing, &g_game, player->getID())));
+		g_dispatcher.addTask(createTask(std::bind(&Game::playerReceivePing, &g_game, player->getID())));
 		break;
 
 	case 0x1D: // ping
