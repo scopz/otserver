@@ -45,7 +45,7 @@ Makefile
 /cotire/
 otserv_CXX_cotire.cmake
 
-#Eclipse
+# Eclipse
 .project
 .cproject
 .settings
@@ -55,3 +55,6 @@ otserv_CXX_cotire.cmake
 otlog.txt
 build/
 compile_commands.json
+
+# Visual Studio Code
+.vscode/
