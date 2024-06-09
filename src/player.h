@@ -702,6 +702,7 @@ public:
 protected:
 	void checkTradeState(const Item* item);
 	bool hasCapacity(const Item* item, uint32_t count) const;
+	void incrementBlockCount(const uint32_t& interval) override;
 
 	void gainExperience(uint64_t& gainExp, bool fromMonster);
 	void addExperience(uint64_t exp);

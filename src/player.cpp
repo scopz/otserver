@@ -529,7 +529,7 @@ int32_t Player::getArmor() const
 		calcArmor(getInventoryItem(SLOT_RING), false)
 	);
 
-	return (vocation->getArmorDefense() != 1.0 ? int32_t(armor * vocation->getArmorDefense()) : armor);
+	return vocation->getArmorDefense() == 1.0 ? armor : int32_t(armor * vocation->getArmorDefense());
 }
 
 float Player::calcArmor(const Item* item, bool useRank /*= true*/) const
@@ -2043,6 +2043,32 @@ void Player::onThink(uint32_t interval)
 #ifdef __SKULLSYSTEM__
 	checkSkullTicks(interval);
 #endif
+}
+
+void Player::incrementBlockCount(const uint32_t& interval) {
+
+	uint32_t vocId = vocation->getBaseVocation();
+	uint32_t maxBlockCount;
+	uint8_t blockCountSpeed;
+	if (vocId == VOCATION_KNIGHT) {
+		maxBlockCount = 4;
+		blockCountSpeed = 2;
+	} else if (vocId == VOCATION_PALADIN) {
+		maxBlockCount = 3;
+		blockCountSpeed = 1;
+	} else if (vocId == VOCATION_MAGE) {
+		maxBlockCount = 2;
+		blockCountSpeed = 1;
+	} else {
+		Creature::incrementBlockCount(interval);
+		return;
+	}
+
+	blockTicks += interval;
+	if(blockTicks >= 1000 && blockCount < maxBlockCount) {
+		blockCount = std::min(blockCount + blockCountSpeed, maxBlockCount);
+		blockTicks = 0;
+	}
 }
 
 uint32_t Player::getMuteTime()

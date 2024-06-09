@@ -241,11 +241,7 @@ void Creature::onThink(uint32_t interval)
 		internalCreatureDisappear(attackedCreature, false);
 	}
 
-	blockTicks += interval;
-	if(blockTicks >= 1000){
-		blockCount = std::min((uint32_t)blockCount + 1, (uint32_t)2);
-		blockTicks = 0;
-	}
+	incrementBlockCount(interval);
 
 	if(followCreature){
 		walkUpdateTicks += interval;
@@ -263,6 +259,14 @@ void Creature::onThink(uint32_t interval)
 
 	onAttacking(interval);
 	executeConditions(interval);
+}
+
+void Creature::incrementBlockCount(const uint32_t& interval) {
+	blockTicks += interval;
+	if(blockTicks >= 1000 && blockCount < 2) {
+		blockCount = std::min((uint32_t)blockCount + 1, (uint32_t)2);
+		blockTicks = 0;
+	}
 }
 
 bool Creature::onAttacking(uint32_t interval)

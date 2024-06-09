@@ -431,6 +431,7 @@ protected:
 	bool localMapCache[mapWalkHeight][mapWalkWidth];
 
 	virtual bool useCacheMap() const {return false;}
+	virtual void incrementBlockCount(const uint32_t& interval);
 
 	Tile* _tile;
 	uint32_t id;
