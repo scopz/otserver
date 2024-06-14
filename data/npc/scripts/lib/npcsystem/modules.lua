@@ -612,9 +612,10 @@ if(Modules == nil) then
 		npcHandler = nil,
 		noText = '',
 		maxCount = 500,
-		autosellConfirm = "Here you are.",
+		autosellConfirm = "You sold |ITEMNAME| for |TOTALCOST| gold coins.",
 		autosellCancel = "You can't sell that.",
 	}
+
 	-- Add it to the parseable module list.
 	Modules.parseableModules['module_shop'] = ShopModule
 	
@@ -761,9 +762,26 @@ if(Modules == nil) then
 		end
 
 		if self.sellableItems[itemId] ~= nil then 
-			local ret = doPlayerSellItemByPosition(cid, posX, posY, posZ, stackPos, itemId, self.sellableItems[itemId])
-			if(ret == LUA_NO_ERROR) then
-				self.npcHandler:playerSay(cid, ShopModule.autosellConfirm, false)
+			local cost = self.sellableItems[itemId]
+			local count = doPlayerSellItemByPosition(cid, posX, posY, posZ, stackPos, itemId, cost)
+
+			if count >= 0 then
+
+				local name = nil
+				local itemDescription = getItemDescriptions(itemId)
+				if count > 1 then
+					name = tostring(count) .. ' ' .. itemDescription.plural
+				else
+					name = itemDescription.article .. ' ' .. itemDescription.name
+				end
+
+				local parseInfo = {
+					[TAG_TOTALCOST] = cost * count,
+					[TAG_ITEMNAME] = name,
+				}
+
+				local msg = self.npcHandler:parseMessage(ShopModule.autosellConfirm, parseInfo)
+				self.npcHandler:playerSay(cid, msg, false)
 			else
 				self.npcHandler:playerSay(cid, ShopModule.autosellCancel, false)
 			end

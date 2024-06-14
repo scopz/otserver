@@ -886,9 +886,9 @@ function doPlayerSellItemByPosition(cid, posX, posY, posZ, stackPos, itemId, cos
 		if not doPlayerAddMoney(cid, cost) then
 			error('Could not add money to ' .. getPlayerName(cid) .. '(' .. cost .. 'gp)')
 		end
-		return LUA_NO_ERROR
+		return totalCount
 	end
-	return LUA_ERROR
+	return -1
 end
 
 function getContainerCapById(itemid)
