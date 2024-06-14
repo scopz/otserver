@@ -24,7 +24,6 @@
 #include "configmanager.h"
 #include <iostream>
 #include <sstream>
-#include <boost/algorithm/string/predicate.hpp>
 
 extern ConfigManager g_config;
 
@@ -43,7 +42,7 @@ WaitListIterator WaitingList::findClient(const Player* player, uint32_t& slot)
 	slot = 1;
 	for(WaitListIterator it = waitList.begin(); it != waitList.end(); ++it){
 		if((*it)->acc == player->getAccountId() && (*it)->ip == player->getIP() &&
-			boost::algorithm::iequals((*it)->name, player->getName())){
+			iequals((*it)->name, player->getName())){
 				return it;
 		}
 

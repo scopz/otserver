@@ -30,7 +30,6 @@
 #include "const.h"
 #include <libxml/xmlmemory.h>
 #include <libxml/parser.h>
-#include <boost/algorithm/string/predicate.hpp>
 #include <sstream>
 
 extern Game g_game;
@@ -317,7 +316,7 @@ RuneSpell* Spells::getRuneSpell(uint32_t id)
 RuneSpell* Spells::getRuneSpellByName(const std::string& name)
 {
 	for(RunesMap::iterator it = runes.begin(); it != runes.end(); ++it){
-		if(boost::algorithm::iequals(it->second->getName(), name)){
+		if(iequals(it->second->getName(), name)){
 			return it->second;
 		}
 	}
@@ -612,7 +611,7 @@ bool Spell::configureSpell(xmlNodePtr p)
 		};
 
 		for(unsigned int i = 0; i < sizeof(reservedList)/sizeof(const char*); ++i){
-			if(boost::algorithm::iequals(reservedList[i], name.c_str())){
+			if(iequals(reservedList[i], name.c_str())){
 				std::cout << "Error: [Spell::configureSpell] Spell is using a reserved name: " << reservedList[i] << std::endl;
 				return false;
 			}

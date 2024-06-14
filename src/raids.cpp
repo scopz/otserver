@@ -23,7 +23,6 @@
 #include "game.h"
 #include "player.h"
 #include "configmanager.h"
-#include <boost/algorithm/string/predicate.hpp>
 #include <sstream>
 #include <algorithm>
 
@@ -212,7 +211,7 @@ Raid* Raids::getRaidByName(const std::string& name)
 {
 	RaidList::iterator it;
 	for(it = raidList.begin(); it != raidList.end(); ++it){
-		if(boost::algorithm::iequals((*it)->getName(), name)){
+		if(iequals((*it)->getName(), name)){
 			return (*it);
 		}
 	}

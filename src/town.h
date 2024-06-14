@@ -24,7 +24,6 @@
 
 #include "definitions.h"
 #include "position.h"
-#include <boost/algorithm/string/predicate.hpp>
 #include <string>
 #include <list>
 #include <map>
@@ -78,7 +77,7 @@ public:
 	Town* getTown(const std::string& townname)
 	{
 		for(TownMap::iterator it = townMap.begin(); it != townMap.end(); ++it){
-			if(boost::algorithm::iequals(it->second->getName(), townname)){
+			if(iequals(it->second->getName(), townname)){
 				return it->second;
 			}
 		}

@@ -30,7 +30,6 @@
 #include <iomanip>
 #include <algorithm>
 #include <limits>
-#include <boost/algorithm/string/predicate.hpp>
 
 extern ConfigManager g_config;
 
@@ -543,7 +542,7 @@ AmmoActionNames ammoActionNames[] = {
 MagicEffectClasses getMagicEffect(const std::string& strValue)
 {
 	for(uint32_t i = 0; i < sizeof(magicEffectNames)/sizeof(MagicEffectNames); ++i){
-		if(boost::algorithm::iequals(strValue.c_str(), magicEffectNames[i].name)){
+		if(iequals(strValue.c_str(), magicEffectNames[i].name)){
 			return magicEffectNames[i].effect;
 		}
 	}
@@ -553,7 +552,7 @@ MagicEffectClasses getMagicEffect(const std::string& strValue)
 ShootType_t getShootType(const std::string& strValue)
 {
 	for(uint32_t i = 0; i < sizeof(shootTypeNames)/sizeof(ShootTypeNames); ++i){
-		if(boost::algorithm::iequals(strValue.c_str(), shootTypeNames[i].name)){
+		if(iequals(strValue.c_str(), shootTypeNames[i].name)){
 			return shootTypeNames[i].shoot;
 		}
 	}
@@ -563,7 +562,7 @@ ShootType_t getShootType(const std::string& strValue)
 Ammo_t getAmmoType(const std::string& strValue)
 {
 	for(uint32_t i = 0; i < sizeof(ammoTypeNames)/sizeof(AmmoTypeNames); ++i){
-		if(boost::algorithm::iequals(strValue.c_str(), ammoTypeNames[i].name)){
+		if(iequals(strValue.c_str(), ammoTypeNames[i].name)){
 			return ammoTypeNames[i].ammoType;
 		}
 	}
@@ -573,7 +572,7 @@ Ammo_t getAmmoType(const std::string& strValue)
 AmmoAction_t getAmmoAction(const std::string& strValue)
 {
 	for(uint32_t i = 0; i < sizeof(ammoActionNames)/sizeof(AmmoActionNames); ++i){
-		if(boost::algorithm::iequals(strValue.c_str(), ammoActionNames[i].name)){
+		if(iequals(strValue.c_str(), ammoActionNames[i].name)){
 			return ammoActionNames[i].ammoAction;
 		}
 	}
@@ -855,3 +854,11 @@ std::string parseParams(tokenizer::iterator &it, tokenizer::iterator end)
 	}
 }
 
+bool iequals(const std::string& a, const std::string& b) {
+    if (a.size() != b.size()) {
+        return false;
+    }
+    return std::equal(a.begin(), a.end(), b.begin(), [](char a, char b) {
+		return std::tolower(a) == std::tolower(b);
+	});
+}

@@ -35,7 +35,6 @@
 #include "party.h"
 #include "guild.h"
 #include "town.h"
-#include <boost/algorithm/string/predicate.hpp>
 #include <string>
 #include <sstream>
 #include <iostream>
@@ -4623,7 +4622,7 @@ bool Player::hasLearnedInstantSpell(const std::string& name) const
 
 	for(LearnedInstantSpellList::const_iterator it = learnedInstantSpellList.begin();
 			it != learnedInstantSpellList.end(); ++it){
-		if(boost::algorithm::iequals((*it), name)){
+		if(iequals((*it), name)){
 			return true;
 		}
 	}

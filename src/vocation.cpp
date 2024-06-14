@@ -26,7 +26,6 @@
 #include <libxml/parser.h>
 #include <iostream>
 #include <cmath>
-#include <boost/algorithm/string/predicate.hpp>
 
 extern ConfigManager g_config;
 
@@ -222,7 +221,7 @@ bool Vocations::getVocation(const uint32_t vocationId, Vocation*& vocation)
 bool Vocations::getVocationId(const std::string& name, int32_t& vocationId) const
 {
 	for(VocationsMap::const_iterator it = vocationsMap.begin(); it != vocationsMap.end(); ++it){
-		if(boost::algorithm::iequals(it->second->name, name)){
+		if(iequals(it->second->name, name)){
 			vocationId = it->first;
 			return true;
 		}

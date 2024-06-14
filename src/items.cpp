@@ -26,7 +26,6 @@
 #include <libxml/xmlmemory.h>
 #include <libxml/parser.h>
 #include <libxml/xmlschemas.h>
-#include <boost/algorithm/string/predicate.hpp>
 #include <iostream>
 #include <string>
 
@@ -1712,7 +1711,7 @@ int32_t Items::getItemIdByName(const std::string& name)
 		do{
 			iType = items.getElement(i);
 			if(iType){
-				if(boost::algorithm::iequals(name, iType->name)){
+				if(iequals(name, iType->name)){
 					return i;
 				}
 			}
