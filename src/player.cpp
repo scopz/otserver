@@ -108,7 +108,6 @@ Player::Player(const std::string& _name, ProtocolGame* p) : Creature()
 	lastAttack = 0;
 
 	//activeAttackSpell = NULL;
-	attackSpellUsagesLeft = 0;
 
 	chaseMode = CHASEMODE_STANDSTILL;
 	fightMode = FIGHTMODE_ATTACK;
@@ -235,7 +234,7 @@ bool Player::setVocation(uint32_t vocId)
 	vocation_id = (Vocation_t)vocId;
 
 	//Update health/mana gain condition
-	Condition* condition = getCondition(CONDITION_REGENERATION, CONDITIONID_DEFAULT, 0);
+	Condition* condition = getCondition(CONDITION_REGENERATION_FOOD, CONDITIONID_DEFAULT, 0);
 	if(condition){
 		condition->setParam(CONDITIONPARAM_HEALTHGAIN, vocation->getHealthGainAmount());
 		condition->setParam(CONDITIONPARAM_HEALTHTICKS, vocation->getHealthGainTicks() * 1000);
@@ -638,18 +637,37 @@ float Player::getDefenseFactor() const
 	}
 }
 
-uint16_t Player::getIcons() const
+PlayerIconsData Player::getIcons() const
 {
-	uint16_t icons = ICON_NONE;
+    PlayerIconsData data;
+	data.icons = ICON_NONE;
 
-	ConditionList::const_iterator it;
-	for(it = conditions.begin(); it != conditions.end(); ++it){
-		if(!isSuppress((*it)->getType())){
-			icons |= (*it)->getIcons();
+	ConditionList sortedConditions = conditions;
+
+	sortedConditions.sort([](const Condition* lhs, const Condition* rhs) {
+    	return lhs->getIcons() < rhs->getIcons();
+	});
+
+	for (Condition* const condition : sortedConditions) {
+		if(!isSuppress(condition->getType())){
+			uint16_t icon = condition->getIcons();
+			data.icons |= icon;
+
+			if (icon > 0) {
+				ConditionExhaust_t exhaustMode = condition->getExhaustMode();
+
+				if (exhaustMode == CONDITIONEXHAUST_DURATION || exhaustMode == CONDITIONEXHAUST_DURATION_FROZEN) {
+					data.ticks.push_back(condition->getClientTicks()/1000);
+				} else {
+					data.ticks.push_back(condition->getClientTicks());
+				}
+
+				data.modes.push_back(exhaustMode);
+			}
 		}
 	}
 
-	return icons;
+	return data;
 }
 
 void Player::sendIcons() const
@@ -1583,7 +1601,7 @@ void Player::onCreatureAppear(const Creature* creature, bool isLogin)
 
 		if(!storedConditionList.empty()){
 			for(ConditionList::const_iterator it = storedConditionList.begin(); it != storedConditionList.end(); ++it){
-				if((*it)->getType() == CONDITION_REGENERATION && (*it)->getSubId() == 0){
+				if((*it)->getType() == CONDITION_REGENERATION_FOOD && (*it)->getSubId() == 0){
 					(*it)->setParam(CONDITIONPARAM_HEALTHGAIN, vocation->getHealthGainAmount());
 					(*it)->setParam(CONDITIONPARAM_HEALTHTICKS, vocation->getHealthGainTicks() * 1000);
 				}
@@ -2636,7 +2654,7 @@ void Player::die()
 			condition->endCondition(this, conditionEndReason);
 
 			bool lastCondition = !hasCondition(condition->getType(), false);
-			onEndCondition(condition->getType(), lastCondition);
+			onEndCondition(condition, lastCondition);
 			delete condition;
 		}
 		else{
@@ -2779,13 +2797,14 @@ void Player::addInFightTicks(uint32_t ticks, bool pzlock /*= false*/)
 
 void Player::addFoodRegeneration(uint32_t addTicks)
 {
-	Condition* condition = getCondition(CONDITION_REGENERATION, CONDITIONID_DEFAULT, 0);
+	Condition* condition = getCondition(CONDITION_REGENERATION_FOOD, CONDITIONID_DEFAULT, 0);
 
 	if(condition){
 		condition->setTicks(condition->getTicks() + addTicks);
+		sendIcons();
 
 	} else {
-		condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_REGENERATION, addTicks, 0);
+		condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_REGENERATION_FOOD, addTicks, 0);
 		condition->setParam(CONDITIONPARAM_HEALTHGAIN, vocation->getHealthGainAmount());
 		condition->setParam(CONDITIONPARAM_HEALTHTICKS, vocation->getHealthGainTicks() * 1000);
 		condition->setParam(CONDITIONPARAM_HEALTH_AFFECTEDBYFIRE, 1);
@@ -4039,10 +4058,12 @@ void Player::updateItemsLight(bool internal /*=false*/)
 	}
 }
 
-void Player::onAddCondition(ConditionType_t type, bool hadCondition)
+void Player::onAddCondition(const Condition* condition, bool hadCondition)
 {
-	Creature::onAddCondition(type, hadCondition);
-	sendIcons();
+	Creature::onAddCondition(condition, hadCondition);
+	if (condition->getIcons() > 0) {
+		sendIcons();
+	}
 }
 
 void Player::onAddCombatCondition(ConditionType_t type, bool hadCondition)
@@ -4052,11 +4073,11 @@ void Player::onAddCombatCondition(ConditionType_t type, bool hadCondition)
 	}
 }
 
-void Player::onEndCondition(ConditionType_t type, bool lastCondition)
+void Player::onEndCondition(const Condition* condition, bool lastCondition)
 {
-	Creature::onEndCondition(type, lastCondition);
+	Creature::onEndCondition(condition, lastCondition);
 
-	if(type == CONDITION_INFIGHT){
+	if(condition->getType() == CONDITION_INFIGHT){
 		onIdleStatus();
 		pzLocked = false;
 
@@ -4069,7 +4090,9 @@ void Player::onEndCondition(ConditionType_t type, bool lastCondition)
 #endif
 	}
 
-	sendIcons();
+	if (condition->getIcons() > 0 && condition->getType() != CONDITION_INFIGHT_PRE) {
+		sendIcons();
+	}
 }
 
 void Player::onCombatRemoveCondition(const Creature* attacker, Condition* condition)
@@ -4329,20 +4352,24 @@ bool Player::isAttackable() const
 void Player::setAttackSpell(AttackSpellCallback attackSpellCallback, uint32_t usages)
 {
 	activeAttackSpellCallback = attackSpellCallback;
-	attackSpellUsagesLeft = usages;
-	addCondition(new ConditionBuff(CONDITIONID_COMBAT, CONDITION_BUFF_ATTACK, -1));
+	addCondition(new ConditionBuff(CONDITIONID_COMBAT, CONDITION_BUFF_ATTACK, usages));
 }
 
 
 bool Player::useActiveSpellAttack(Creature* target)
 {
-	if (attackSpellUsagesLeft > 0) {
+	ConditionBuff* condition = (ConditionBuff*) getCondition(CONDITION_BUFF_ATTACK, CONDITIONID_COMBAT, 0);
+	if (condition) {
 		activeAttackSpellCallback(this, target);
-		attackSpellUsagesLeft--;
 
-		if (attackSpellUsagesLeft == 0) {
+		ConditionBuff* condition = (ConditionBuff*) getCondition(CONDITION_BUFF_ATTACK, CONDITIONID_COMBAT, 0);
+		condition->use();
+
+		if (condition->isConsumed()) {
 			activeAttackSpellCallback = NULL;
 			removeCondition(CONDITION_BUFF_ATTACK);
+		} else {
+			sendIcons();
 		}
 		return true;
 	}

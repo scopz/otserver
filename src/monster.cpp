@@ -895,9 +895,10 @@ void Monster::updateIdleStatus()
 	setIdle(idle);
 }
 
-void Monster::onAddCondition(ConditionType_t type, bool hadCondition)
+void Monster::onAddCondition(const Condition* condition, bool hadCondition)
 {
-	Creature::onAddCondition(type, hadCondition);
+	Creature::onAddCondition(condition, hadCondition);
+	ConditionType_t type = condition->getType();
 
 	//the walkCache need to be updated if the monster becomes "resistent" to the damage, see Tile::__queryAdd()
 	if(type == CONDITION_FIRE || type == CONDITION_ENERGY || type == CONDITION_POISON){
@@ -907,9 +908,11 @@ void Monster::onAddCondition(ConditionType_t type, bool hadCondition)
 	updateIdleStatus();
 }
 
-void Monster::onEndCondition(ConditionType_t type, bool lastCondition)
+void Monster::onEndCondition(const Condition* condition, bool lastCondition)
 {
-	Creature::onEndCondition(type, lastCondition);
+	Creature::onEndCondition(condition, lastCondition);
+
+	ConditionType_t type = condition->getType();
 
 	//the walkCache need to be updated if the monster loose the "resistent" to the damage, see Tile::__queryAdd()
 	if(type == CONDITION_FIRE || type == CONDITION_ENERGY || type == CONDITION_POISON){

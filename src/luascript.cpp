@@ -2174,7 +2174,7 @@ int LuaScriptInterface::internalGetPlayerInfo(lua_State *L, PlayerInfo_t info)
 		{
 			int32_t value = 0;
 
-			Condition* condition = player->getCondition(CONDITION_REGENERATION, CONDITIONID_DEFAULT, 0);
+			Condition* condition = player->getCondition(CONDITION_REGENERATION_FOOD, CONDITIONID_DEFAULT, 0);
 			if(condition){
 				value = condition->getTicks() / 1000;
 			}

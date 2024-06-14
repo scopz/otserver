@@ -1314,8 +1314,9 @@ void Creature::addHealPoints(Creature* caster, int32_t healthPoints)
 	}
 }
 
-void Creature::onAddCondition(ConditionType_t type, bool hadCondition)
+void Creature::onAddCondition(const Condition* condition, bool hadCondition)
 {
+	ConditionType_t type = condition->getType();
 	if(type == CONDITION_INVISIBLE && !hadCondition){
 		g_game.internalCreatureChangeVisible(this, false);
 	}
@@ -1332,8 +1333,10 @@ void Creature::onAddCombatCondition(ConditionType_t type, bool hadCondition)
 	//
 }
 
-void Creature::onEndCondition(ConditionType_t type, bool lastCondition)
+void Creature::onEndCondition(const Condition* condition, bool lastCondition)
 {
+	ConditionType_t type = condition->getType();
+
 	if(type == CONDITION_INVISIBLE && lastCondition){
 		g_game.internalCreatureChangeVisible(this, true);
 	}
@@ -1467,13 +1470,19 @@ bool Creature::addCondition(Condition* condition)
 
 	if(prevCond){
 		prevCond->addCondition(this, condition);
+		if (Player* player = getPlayer()) {
+			if (condition->getIcons() > 0 && condition->getExhaustMode() != CONDITIONEXHAUST_NONE &&
+					condition->getExhaustMode() != CONDITIONEXHAUST_DURATION_FROZEN) {
+				player->sendIcons();
+			}
+		}
 		delete condition;
 		return true;
 	}
 
 	if(condition->startCondition(this)){
 		conditions.push_back(condition);
-		onAddCondition(condition->getType(), hadCondition);
+		onAddCondition(condition, hadCondition);
 		return true;
 	}
 
@@ -1495,7 +1504,7 @@ bool Creature::addCombatCondition(Condition* condition)
 	return true;
 }
 
-void Creature::removeCondition(ConditionType_t type)
+void Creature::removeCondition(ConditionType_t type, bool silent /* = false */)
 {
 	for(ConditionList::iterator it = conditions.begin(); it != conditions.end();){
 		if((*it)->getType() == type){
@@ -1503,18 +1512,20 @@ void Creature::removeCondition(ConditionType_t type)
 			it = conditions.erase(it);
 
 			condition->endCondition(this, CONDITIONEND_ABORT);
-			bool lastCondition = !hasCondition(condition->getType(), false);
-			onEndCondition(type, lastCondition);
+
+			if (!silent) {
+				bool lastCondition = !hasCondition(condition->getType(), false);
+				onEndCondition(condition, lastCondition);
+			}
 
 			delete condition;
-		}
-		else{
+		} else {
 			++it;
 		}
 	}
 }
 
-void Creature::removeCondition(ConditionType_t type, ConditionId_t id)
+void Creature::removeCondition(ConditionType_t type, ConditionId_t id, bool silent /* = false */)
 {
 	for(ConditionList::iterator it = conditions.begin(); it != conditions.end();){
 		if((*it)->getType() == type && (*it)->getId() == id){
@@ -1522,12 +1533,14 @@ void Creature::removeCondition(ConditionType_t type, ConditionId_t id)
 			it = conditions.erase(it);
 
 			condition->endCondition(this, CONDITIONEND_ABORT);
-			bool lastCondition = !hasCondition(condition->getType(), false);
-			onEndCondition(type, lastCondition);
+
+			if (!silent) {
+				bool lastCondition = !hasCondition(condition->getType(), false);
+				onEndCondition(condition, lastCondition);
+			}
 
 			delete condition;
-		}
-		else{
+		} else {
 			++it;
 		}
 	}
@@ -1544,7 +1557,7 @@ void Creature::removeCondition(const Creature* attacker, ConditionType_t type)
 	}
 }
 
-void Creature::removeCondition(Condition* condition)
+void Creature::removeCondition(Condition* condition, bool silent /* = false */)
 {
 	ConditionList::iterator it = std::find(conditions.begin(), conditions.end(), condition);
 
@@ -1553,8 +1566,10 @@ void Creature::removeCondition(Condition* condition)
 		it = conditions.erase(it);
 
 		condition->endCondition(this, CONDITIONEND_ABORT);
-		bool lastCondition = !hasCondition(condition->getType(), false);
-		onEndCondition(condition->getType(), lastCondition);
+		if (!silent) {
+			bool lastCondition = !hasCondition(condition->getType(), false);
+			onEndCondition(condition, lastCondition);
+		}
 
 		delete condition;
 	}
@@ -1583,7 +1598,7 @@ void Creature::executeConditions(uint32_t interval)
 
 			condition->endCondition(this, CONDITIONEND_TICKS);
 			bool lastCondition = !hasCondition(condition->getType(), false);
-			onEndCondition(condition->getType(), lastCondition);
+			onEndCondition(condition, lastCondition);
 
 			delete condition;
 		}

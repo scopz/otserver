@@ -90,6 +90,12 @@ struct Skill {
 	uint64_t tries;
 };
 
+struct PlayerIconsData {
+    uint16_t icons;
+    std::vector<uint8_t> modes;
+    std::vector<uint16_t> ticks;
+};
+
 typedef std::pair<uint32_t, Container*> containervector_pair;
 typedef std::vector<containervector_pair> ContainerVector;
 typedef std::map<uint32_t, int32_t> StorageMap;
@@ -354,7 +360,7 @@ public:
 	fightMode_t getFightMode() const {return fightMode;}
 	void setSafeMode(bool _safeMode) {safeMode = _safeMode;}
 	bool hasSafeMode() const {return safeMode;}
-	uint16_t getIcons() const;
+	PlayerIconsData getIcons() const;
 
 	//combat functions
 	virtual bool setAttackedCreature(Creature* creature);
@@ -408,9 +414,9 @@ public:
 	void getGainExperience(uint64_t& gainExp, bool fromMonster);
 
 	//combat event functions
-	virtual void onAddCondition(ConditionType_t type, bool hadCondition);
+	virtual void onAddCondition(const Condition* condition, bool hadCondition);
 	virtual void onAddCombatCondition(ConditionType_t type, bool hadCondition);
-	virtual void onEndCondition(ConditionType_t type, bool lastCondition);
+	virtual void onEndCondition(const Condition* condition, bool lastCondition);
 	virtual void onCombatRemoveCondition(const Creature* attacker, Condition* condition);
 	virtual void onTickCondition(ConditionType_t type, int32_t interval, bool& bRemove);
 	virtual void onAttackedCreature(Creature* target);
@@ -797,7 +803,6 @@ protected:
 	uint64_t lastAttack;
 
 	AttackSpellCallback activeAttackSpellCallback;
-	uint32_t attackSpellUsagesLeft;
 
 	chaseMode_t chaseMode;
 	fightMode_t fightMode;

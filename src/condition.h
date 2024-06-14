@@ -33,36 +33,45 @@ class Player;
 class PropStream;
 
 enum ConditionType_t {
-	CONDITION_NONE              = 0,
-	CONDITION_POISON            = 1 << 0,
-	CONDITION_FIRE              = 1 << 1,
-	CONDITION_ENERGY            = 1 << 2,
-	CONDITION_LIFEDRAIN         = 1 << 3,
-	CONDITION_HASTE             = 1 << 4,
-	CONDITION_PARALYZE          = 1 << 5,
-	CONDITION_OUTFIT            = 1 << 6,
-	CONDITION_INVISIBLE         = 1 << 7,
-	CONDITION_LIGHT             = 1 << 8,
-	CONDITION_MANASHIELD        = 1 << 9,
-	CONDITION_INFIGHT           = 1 << 10,
-	CONDITION_DRUNK             = 1 << 11,
-	CONDITION_EXHAUST_YELL      = 1 << 12,
-	CONDITION_REGENERATION      = 1 << 13,
-	CONDITION_REGENERATION_ICON = 1 << 14,
-	CONDITION_REGENERATION_MANA = 1 << 15,
-	CONDITION_MUTED             = 1 << 16,
-	CONDITION_ATTRIBUTES        = 1 << 17,
-	CONDITION_BUFF_ATTACK       = 1 << 18,
-	//CONDITION_FREEZING          = 1 << 18,
-	//CONDITION_DAZZLED           = 1 << 19,
-	//CONDITION_CURSED            = 1 << 20,
-	CONDITION_EXHAUST_COMBAT    = 1 << 21,
-	CONDITION_EXHAUST_HEAL      = 1 << 22,
-	CONDITION_PACIFIED          = 1 << 23, // Cannot attack anything
-	CONDITION_HUNTING           = 1 << 24, // Killing monsters
-	CONDITION_TRADE_MUTED       = 1 << 25, // Cannot talk on trade channels
-	CONDITION_EXHAUST_OTHERS    = 1 << 26, // 65536 -> maxValue
-	CONDITION_FROZEN            = 1 << 27
+	CONDITION_NONE,
+	CONDITION_POISON,
+	CONDITION_FIRE,
+	CONDITION_ENERGY,
+	CONDITION_LIFEDRAIN,
+	CONDITION_HASTE,
+	CONDITION_PARALYZE,
+	CONDITION_OUTFIT,
+	CONDITION_INVISIBLE,
+	CONDITION_LIGHT,
+	CONDITION_MANASHIELD,
+	CONDITION_INFIGHT,
+	CONDITION_DRUNK,
+	CONDITION_EXHAUST_YELL,
+	CONDITION_REGENERATION,
+	CONDITION_REGENERATION_FOOD,
+	CONDITION_REGENERATION_ICON,
+	CONDITION_REGENERATION_MANA,
+	CONDITION_MUTED,
+	CONDITION_ATTRIBUTES,
+	CONDITION_BUFF_ATTACK,
+	//CONDITION_FREEZING,
+	//CONDITION_DAZZLED,
+	//CONDITION_CURSED,
+	CONDITION_EXHAUST_COMBAT,
+	CONDITION_EXHAUST_HEAL,
+	CONDITION_PACIFIED,       // Cannot attack anything
+	CONDITION_HUNTING,        // Killing monsters
+	CONDITION_TRADE_MUTED,    // Cannot talk on trade channels
+	CONDITION_EXHAUST_OTHERS, // 65536 -> maxValue
+	CONDITION_FROZEN,
+	CONDITION_INFIGHT_PRE,
+};
+
+enum ConditionExhaust_t : uint8_t {
+	CONDITIONEXHAUST_NONE = 0,
+	CONDITIONEXHAUST_TICKS = 1,
+	CONDITIONEXHAUST_DURATION = 2,
+	CONDITIONEXHAUST_DURATION_FROZEN = 3
 };
 
 enum ConditionEnd_t{
@@ -118,7 +127,7 @@ struct IntervalInfo{
 class Condition{
 public:
 	Condition(ConditionId_t _id, ConditionType_t _type, int32_t _ticks);
-	virtual ~Condition(){};
+	virtual ~Condition() = default;
 
 	virtual bool startCondition(Creature* creature);
 	virtual bool executeCondition(Creature* creature, int32_t interval);
@@ -133,7 +142,9 @@ public:
 	ConditionType_t getType() const { return conditionType;}
 	int64_t getEndTime() const {return ticks == -1? 0 : endTime;}
 	int32_t getTicks() const { return ticks; }
+	virtual int32_t getClientTicks() const { return ticks; }
 	void setTicks(int32_t newTicks);
+	ConditionExhaust_t getExhaustMode() const { return exhaustMode; }
 
 	static bool canBeAggressive(ConditionType_t type);
 	static Condition* createCondition(ConditionId_t _id, ConditionType_t _type, int32_t ticks, int32_t param = 0);
@@ -154,6 +165,7 @@ protected:
 	int32_t ticks;
 	int64_t endTime;
 	ConditionType_t conditionType;
+	ConditionExhaust_t exhaustMode;
 	bool isBuff;
 
 	virtual bool updateCondition(const Condition* addCondition);
@@ -163,7 +175,8 @@ class ConditionGeneric: public Condition
 {
 public:
 	ConditionGeneric(ConditionId_t _id, ConditionType_t _type, int32_t _ticks);
-	virtual ~ConditionGeneric(){};
+
+	int32_t getClientTicks() const override;
 
 	virtual bool startCondition(Creature* creature);
 	virtual bool executeCondition(Creature* creature, int32_t interval);
@@ -172,6 +185,9 @@ public:
 	virtual uint16_t getIcons() const;
 
 	virtual ConditionGeneric* clone()  const { return new ConditionGeneric(*this); }
+
+protected:
+	int32_t internalTicks;
 };
 
 class ConditionManaShield : public ConditionGeneric
@@ -187,7 +203,6 @@ class ConditionAttributes : public ConditionGeneric
 {
 public:
 	ConditionAttributes(ConditionId_t _id, ConditionType_t _type, int32_t _ticks);
-	virtual ~ConditionAttributes(){};
 
 	virtual bool startCondition(Creature* creature);
 	virtual bool executeCondition(Creature* creature, int32_t interval);
@@ -220,7 +235,7 @@ class ConditionRegeneration : public ConditionGeneric
 {
 public:
 	ConditionRegeneration(ConditionId_t _id, ConditionType_t _type, int32_t _ticks);
-	virtual ~ConditionRegeneration(){};
+
 	virtual void addCondition(Creature* creature, const Condition* addCondition);
 	virtual bool executeCondition(Creature* creature, int32_t interval);
 	virtual uint16_t getIcons() const;
@@ -249,7 +264,6 @@ class ConditionInvisible: public ConditionGeneric
 {
 public:
 	ConditionInvisible(ConditionId_t _id, ConditionType_t _type, int32_t _ticks);
-	virtual ~ConditionInvisible(){};
 
 	virtual bool startCondition(Creature* creature);
 	virtual void endCondition(Creature* creature, ConditionEnd_t reason);
@@ -261,7 +275,6 @@ class ConditionDamage: public Condition
 {
 public:
 	ConditionDamage(ConditionId_t _id, ConditionType_t _type);
-	virtual ~ConditionDamage(){};
 
 	static void generateDamageList(int32_t amount, int32_t start, std::list<int32_t>& list);
 
@@ -326,7 +339,6 @@ class ConditionSpeed: public Condition
 {
 public:
 	ConditionSpeed(ConditionId_t _id, ConditionType_t _type, int32_t _ticks, int32_t changeSpeed);
-	virtual ~ConditionSpeed(){};
 
 	virtual bool startCondition(Creature* creature);
 	virtual bool executeCondition(Creature* creature, int32_t interval);
@@ -360,7 +372,6 @@ class ConditionOutfit: public Condition
 {
 public:
 	ConditionOutfit(ConditionId_t _id, ConditionType_t _type, int32_t _ticks);
-	virtual ~ConditionOutfit(){};
 
 	virtual bool startCondition(Creature* creature);
 	virtual bool executeCondition(Creature* creature, int32_t interval);
@@ -385,7 +396,6 @@ class ConditionLight: public Condition
 {
 public:
 	ConditionLight(ConditionId_t _id, ConditionType_t _type, int32_t _ticks, int32_t _lightlevel, int32_t _lightcolor);
-	virtual ~ConditionLight(){};
 
 	virtual bool startCondition(Creature* creature);
 	virtual bool executeCondition(Creature* creature, int32_t interval);
@@ -410,7 +420,7 @@ class ConditionFrozen: public Condition
 {
 public:
 	ConditionFrozen(ConditionId_t _id, ConditionType_t _type, int32_t _duration, Item* _item);
-	virtual ~ConditionFrozen();
+	~ConditionFrozen() override;
 
 	virtual bool startCondition(Creature* creature);
 	virtual uint16_t getIcons() const;
@@ -430,14 +440,21 @@ private:
 class ConditionBuff: public Condition
 {
 public:
-	ConditionBuff(ConditionId_t _id, ConditionType_t _type, int32_t _duration);
-	virtual ~ConditionBuff(){};
+	ConditionBuff(ConditionId_t _id, ConditionType_t _type, int32_t _usages);
 
-	virtual uint16_t getIcons() const;
+	virtual uint16_t getIcons() const override;
 
-	virtual void endCondition(Creature* creature, ConditionEnd_t reason) {};
-	virtual void addCondition(Creature* creature, const Condition* addCondition) {};
-	virtual ConditionBuff* clone() const { return new ConditionBuff(*this); }
+	int32_t getClientTicks() const override { return usages; };
+
+	void endCondition(Creature* creature, ConditionEnd_t reason) override {};
+	void addCondition(Creature* creature, const Condition* addCondition) override;
+	ConditionBuff* clone() const override { return new ConditionBuff(*this); };
+	void use() { if (usages > 0) usages--; }
+	bool isConsumed() const { return usages <= 0; }
+
+private:
+	int32_t usages;
+	int32_t maxUsages;
 };
 
 #endif

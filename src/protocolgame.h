@@ -44,6 +44,7 @@ class Container;
 class Tile;
 class Connection;
 class Quest;
+struct PlayerIconsData;
 
 class ProtocolGame : public Protocol
 {
@@ -166,7 +167,7 @@ private:
 	void sendRemoveReport(const std::string& name);
 	void sendLockRuleViolation();
 	void sendRuleViolationCancel(const std::string& name);
-	void sendIcons(uint16_t icons);
+	void sendIcons(PlayerIconsData iconsData);
 	void sendTargetRequirement(const uint8_t &reason, const std::string &text);
 	void sendSpellTree();
 

@@ -83,7 +83,7 @@ stairhop_exhausted = 0
 exhaustedadd = 5000
 
 -- how long does the player has to stay out of fight to get pz unlocked in ms (1000 = 1 second)
-in_fight_duration = 1000
+in_fight_duration = 5000
 
 -- how long a field belongs to a player before it no longer causes PZ lock for the owner
 field_ownership_duration = 5000

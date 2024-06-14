@@ -35,6 +35,7 @@ subId(0),
 ticks(_ticks),
 endTime(0),
 conditionType(_type),
+exhaustMode(CONDITIONEXHAUST_DURATION),
 isBuff(false)
 {
 	//
@@ -206,57 +207,46 @@ Condition* Condition::createCondition(ConditionId_t _id, ConditionType_t _type, 
 		case CONDITION_POISON:
 		case CONDITION_FIRE:
 		case CONDITION_ENERGY:
-		{
 			return new ConditionDamage(_id, _type);
-			break;
-		}
 
 		case CONDITION_HASTE:
 		case CONDITION_PARALYZE:
-		{
 			return new ConditionSpeed(_id, _type, _ticks, param);
-			break;
-		}
 
 		case CONDITION_INVISIBLE:
-		{
 			return new ConditionInvisible(_id, _type, _ticks);
-			break;
-		}
 
 		case CONDITION_OUTFIT:
-		{
 			return new ConditionOutfit(_id, _type, _ticks);
-			break;
-		}
 
 		case CONDITION_LIGHT:
-		{
 			return new ConditionLight(_id, _type, _ticks, param & 0xFF, (param & 0xFF00) >> 8);
-			break;
-		}
 
 		case CONDITION_REGENERATION:
+		case CONDITION_REGENERATION_FOOD:
 		case CONDITION_REGENERATION_MANA:
 		case CONDITION_REGENERATION_ICON:
-		{
 			return new ConditionRegeneration(_id, _type, _ticks);
-			break;
-		}
 
 		case CONDITION_MANASHIELD:
-		{
 			return new ConditionManaShield(_id, _type,_ticks);
-			break;
-		}
 
 		case CONDITION_ATTRIBUTES:
-		{
 			return new ConditionAttributes(_id, _type,_ticks);
-			break;
-		}
 
 		case CONDITION_INFIGHT:
+		{
+			Condition* condition;
+			if (param > 0) {
+				condition = new ConditionGeneric(_id, _type, _ticks);
+			} else {
+				condition = new ConditionGeneric(_id, CONDITION_INFIGHT_PRE, _ticks);
+				condition->exhaustMode = CONDITIONEXHAUST_DURATION_FROZEN;
+			}
+
+			return condition;
+		}
+
 		case CONDITION_HUNTING:
 		case CONDITION_DRUNK:
 		case CONDITION_EXHAUST_YELL:
@@ -266,16 +256,10 @@ Condition* Condition::createCondition(ConditionId_t _id, ConditionType_t _type, 
 		case CONDITION_MUTED:
 		case CONDITION_TRADE_MUTED:
 		case CONDITION_PACIFIED:
-		{
 			return new ConditionGeneric(_id, _type,_ticks);
-			break;
-		}
 
 		default:
-		{
 			return NULL;
-			break;
-		}
 	}
 }
 
@@ -366,6 +350,7 @@ bool Condition::canBeAggressive(ConditionType_t type) //static
 		case CONDITION_INVISIBLE:
 		case CONDITION_LIGHT:
 		case CONDITION_REGENERATION:
+		case CONDITION_REGENERATION_FOOD:
 		case CONDITION_REGENERATION_MANA:
 		case CONDITION_REGENERATION_ICON:
 			return false;
@@ -376,15 +361,23 @@ bool Condition::canBeAggressive(ConditionType_t type) //static
 }
 
 ConditionGeneric::ConditionGeneric(ConditionId_t _id, ConditionType_t _type, int32_t _ticks) :
-Condition(_id, _type, _ticks)
+Condition(_id, _type, _ticks),
+internalTicks(_ticks)
 {
-	//
+	if (_type == CONDITION_INFIGHT_PRE) {
+		internalTicks = _ticks;
+		ticks = 1000;
+	}
 }
 
 bool ConditionGeneric::startCondition(Creature* creature)
 {
 	if(!Condition::startCondition(creature)){
 		return false;
+	}
+
+	if (conditionType == CONDITION_INFIGHT_PRE) {
+		creature->removeCondition(CONDITION_INFIGHT, CONDITIONID_DEFAULT, true);
 	}
 
 	return true;
@@ -397,7 +390,10 @@ bool ConditionGeneric::executeCondition(Creature* creature, int32_t interval)
 
 void ConditionGeneric::endCondition(Creature* creature, ConditionEnd_t reason)
 {
-	//
+	if (conditionType == CONDITION_INFIGHT_PRE) {
+		Condition* condition = Condition::createCondition(CONDITIONID_DEFAULT, CONDITION_INFIGHT, internalTicks, 1);
+		creature->addCondition(condition);
+	}
 }
 
 void ConditionGeneric::addCondition(Creature* creature, const Condition* addCondition)
@@ -405,6 +401,14 @@ void ConditionGeneric::addCondition(Creature* creature, const Condition* addCond
 	if(updateCondition(addCondition)){
 		setTicks( addCondition->getTicks() );
 	}
+}
+
+int32_t ConditionGeneric::getClientTicks() const
+{
+	if (conditionType == CONDITION_INFIGHT_PRE) {
+		return internalTicks;
+	}
+	return getTicks();
 }
 
 uint16_t ConditionGeneric::getIcons() const
@@ -417,6 +421,7 @@ uint16_t ConditionGeneric::getIcons() const
 			break;
 
 		case CONDITION_INFIGHT:
+		case CONDITION_INFIGHT_PRE:
 			icons |= ICON_SWORDS;
 			break;
 
@@ -938,7 +943,10 @@ uint16_t ConditionRegeneration::getIcons() const
 {
 	uint16_t icons = Condition::getIcons();
 
-	if (conditionType == CONDITION_REGENERATION_ICON)
+	if (conditionType == CONDITION_REGENERATION_FOOD)
+		icons |= ICON_FOOD_FULL;
+
+	else if (conditionType == CONDITION_REGENERATION_ICON)
 		icons |= ICON_HEALING;
 
 	return icons;
@@ -1945,6 +1953,10 @@ uint16_t ConditionFrozen::getIcons() const
 
 bool ConditionFrozen::startCondition(Creature* creature)
 {
+	if(!Condition::startCondition(creature)){
+		return false;
+	}
+
 	eventId = g_scheduler.addEvent(createSchedulerTask(getTicks(), [&, creature]{
 		endTime = 0;
 		if (relatedItem) {
@@ -1953,13 +1965,25 @@ bool ConditionFrozen::startCondition(Creature* creature)
 		creature->removeCondition(this);
 	}));
 
-	return Condition::startCondition(creature);
+	return true;
 }
 
 
-ConditionBuff::ConditionBuff(ConditionId_t _id, ConditionType_t _type, int32_t _duration) :
-Condition(_id, _type, _duration)
+ConditionBuff::ConditionBuff(ConditionId_t _id, ConditionType_t _type, int32_t _usages) :
+Condition(_id, _type, -1)
 {
+	usages = _usages;
+	maxUsages = _usages * 2;
+	exhaustMode = CONDITIONEXHAUST_TICKS;
+}
+
+void ConditionBuff::addCondition(Creature* creature, const Condition* addCondition)
+{
+	if (conditionType != addCondition->getType() || id != addCondition->getId()) {
+		return;
+	}
+	
+	usages = std::min(maxUsages, usages + addCondition->getClientTicks());
 }
 
 uint16_t ConditionBuff::getIcons() const

@@ -205,18 +205,20 @@ enum TextColor_t {
 };
 
 enum Icons_t{
-	ICON_NONE        = 0, // unused, 7.7 client debugs if sent
-	ICON_POISON      = 1,
-	ICON_BURN        = 2,
-	ICON_ENERGY      = 4,
-	ICON_DRUNK       = 8,
-	ICON_MANASHIELD  = 16,
-	ICON_PARALYZE    = 32,
-	ICON_HASTE       = 64,
-	ICON_SWORDS      = 128,
-	ICON_FROZEN      = 256,
-	ICON_ATTACK_BUFF = 512,
-	ICON_HEALING     = 1024,
+	ICON_NONE         = 0, // unused, 7.7 client debugs if sent
+	ICON_POISON       = 1,
+	ICON_BURN         = 2,
+	ICON_ENERGY       = 4,
+	ICON_DRUNK        = 8,
+	ICON_MANASHIELD   = 16,
+	ICON_PARALYZE     = 32,
+	ICON_HASTE        = 64,
+	ICON_SWORDS       = 128,
+	ICON_FROZEN       = 256,
+	ICON_FOOD_FULL    = 512,
+	ICON_HEALING      = 1024,
+	ICON_ATTACK_BUFF  = 2048,
+	ICON_DEFENSE_BUFF = 4096,
 };
 
 enum WeaponType_t {

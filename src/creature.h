@@ -302,9 +302,9 @@ public:
 
 	bool addCondition(Condition* condition);
 	bool addCombatCondition(Condition* condition);
-	void removeCondition(ConditionType_t type, ConditionId_t id);
-	void removeCondition(ConditionType_t type);
-	void removeCondition(Condition* condition);
+	void removeCondition(ConditionType_t type, ConditionId_t id, bool silent = false);
+	void removeCondition(ConditionType_t type, bool silent = false);
+	void removeCondition(Condition* condition, bool silent = false);
 	void removeCondition(const Creature* attacker, ConditionType_t type);
 	Condition* getCondition(ConditionType_t type, ConditionId_t id, uint32_t subId) const;
 	void executeConditions(uint32_t interval);
@@ -335,9 +335,9 @@ public:
 	bool hasBeenAttacked(uint32_t attackerId) const;
 
 	//combat event functions
-	virtual void onAddCondition(ConditionType_t type, bool hadCondition);
+	virtual void onAddCondition(const Condition* condition, bool hadCondition);
 	virtual void onAddCombatCondition(ConditionType_t type, bool hadCondition);
-	virtual void onEndCondition(ConditionType_t type, bool lastCondition);
+	virtual void onEndCondition(const Condition* condition, bool lastCondition);
 	virtual void onTickCondition(ConditionType_t type, int32_t interval, bool& bRemove);
 	virtual void onCombatRemoveCondition(const Creature* attacker, Condition* condition);
 	virtual void onAttackedCreature(Creature* target) {};

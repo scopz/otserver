@@ -177,8 +177,8 @@ private:
 	void setIdle(bool _idle);
 	void updateIdleStatus();
 
-	virtual void onAddCondition(ConditionType_t type, bool hadCondition);
-	virtual void onEndCondition(ConditionType_t type, bool lastCondition);
+	virtual void onAddCondition(const Condition* condition, bool hadCondition);
+	virtual void onEndCondition(const Condition* condition, bool lastCondition);
 	virtual void onCreatureConvinced(const Creature* convincer, const Creature* creature);
 
 	bool canUseAttack(const Position& pos, const Creature* target) const;

@@ -1542,11 +1542,19 @@ void ProtocolGame::sendLockRuleViolation()
 	writeToOutputBuffer(msg);
 }
 
-void ProtocolGame::sendIcons(uint16_t icons)
+void ProtocolGame::sendIcons(PlayerIconsData iconsData)
 {
 	NetworkMessage msg;
 	msg.addByte(0xA2);
-	msg.addU16(icons);
+	msg.addU16(iconsData.icons);
+
+	msg.addByte(iconsData.modes.size());
+
+	for (std::size_t i = 0; i < iconsData.modes.size(); ++i) {
+		msg.addByte(iconsData.modes[i]);
+		msg.addU16(iconsData.ticks[i]);
+	}
+
 	writeToOutputBuffer(msg);
 }
 
