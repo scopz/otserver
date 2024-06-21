@@ -297,6 +297,7 @@ bool ProtocolGame::logout(bool forced)
 
 void ProtocolGame::writeToOutputBuffer(const NetworkMessage& msg)
 {
+	// TODO: split messages if size > NETWORKMESSAGE_MAXSIZE
 	OutputMessage_ptr out = getOutputBuffer(msg.getMessageLength());
 	if (msg.isPriorized()) out->priorize();
 	
@@ -1878,6 +1879,9 @@ void ProtocolGame::sendAddCreature(const Creature* creature, const Position& pos
 
 			addServerParams(msg);
 			addMapDescription(msg, pos);
+
+			writeToOutputBuffer(msg);
+			msg = NetworkMessage();
 
 			if (isLoggingIn){
 				addMagicEffect(msg, player->getPosition(), NM_ME_TELEPORT);
