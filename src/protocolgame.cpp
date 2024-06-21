@@ -297,7 +297,6 @@ bool ProtocolGame::logout(bool forced)
 
 void ProtocolGame::writeToOutputBuffer(const NetworkMessage& msg)
 {
-	// TODO: split messages if size > NETWORKMESSAGE_MAXSIZE
 	OutputMessage_ptr out = getOutputBuffer(msg.getMessageLength());
 	if (msg.isPriorized()) out->priorize();
 	

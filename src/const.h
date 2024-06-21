@@ -23,7 +23,7 @@
 
 #include "definitions.h"
 
-#define NETWORKMESSAGE_MAXSIZE 15340
+#define NETWORKMESSAGE_MAXSIZE 19996
 
 //Ranges for ID Creatures
 #define PLAYER_ID_RANGE 0x10000000
