@@ -18,10 +18,10 @@
 		<flag runonhealth="0"/>
 	</flags>
 	<attacks>
-		<attack name="melee" skill="24" attack="20" speed="1000"/>
+		<attack name="melee" skill="15" attack="10" speed="600"/>
 	</attacks>
 	<defenses armor="5" defense="40">
-		<defense name="healing" chance="50" min="500" max="600"/>
+		<defense name="healing" chance="50" min="1000" max="1200"/>
 	</defenses>
 	<elements>
 		<element physicalPercent="0"/>
