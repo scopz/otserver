@@ -11,6 +11,7 @@ if(NpcSystem == nil) then
 	dofile('data/npc/scripts/lib/npcsystem/keywordhandler.lua')
 	dofile('data/npc/scripts/lib/npcsystem/queue.lua')
 	dofile('data/npc/scripts/lib/npcsystem/npchandler.lua')
+	dofile('data/npc/scripts/lib/npcsystem/npcpresets.lua')
 	dofile('data/npc/scripts/lib/npcsystem/modules.lua')
 	
 	
