@@ -1,4 +1,4 @@
-local MAX_FOOD = 1200/15
+local MAX_FOOD = 150
 
 function onUse(cid, item, fromPosition, itemEx, toPosition)
 	if (FOODS[item.itemid] == nil) then
